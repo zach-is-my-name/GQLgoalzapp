@@ -2,10 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/container/App';
 import store from './store';
-import {ApolloProvider, ApolloClient} from 'react-apollo';
+import {ApolloProvider, ApolloClient, createNetworkInterface} from 'react-apollo';
 import './index.css';
 
-const client = new ApolloClient();
+const networkInterface = createNetworkInterface({
+  uri: 'http://localhost:3001'
+});
+
+const client = new ApolloClient({
+  networkInterface: networkInterface,
+  connectToDevTools: true
+});
 
 ReactDOM.render(
   <ApolloProvider store={store} client={client}>

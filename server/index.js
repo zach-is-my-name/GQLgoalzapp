@@ -9,6 +9,17 @@ const mongoose = require('mongoose');
 const {Goals} = require('./models');
 
 
+const allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', ' http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    next();
+}
+app.use(allowCrossDomain);
+
+app.use(express.static(config.CLIENT_ROOT));
+
 const schema = buildSchema(`
 
   type Query {
@@ -71,12 +82,17 @@ const root = {
    return new GoalDocPrototype(goalDocUpdate);
 }}
 // Model.findByIdAndUpdate(id, { $set: { name: 'jason borne' }}, options, callback)
-app.use(express.static(config.CLIENT_ROOT)); /*/what the hell does this do?*/
+
+//Enable CORS for development
+
+
+
+
 app.use('/graphql', graphqlHTTP((request) => ({schema, graphiql: true, rootValue: root})))
 
 
 let server;
-function runServer(dbUrl, host, port) {
+function runServer(dbUrl, host, port=3001) {
   return new Promise((resolve, reject) => {
     mongoose.Promise = global.Promise;
     mongoose.connect(dbUrl, err => {

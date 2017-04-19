@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../App.css';
-import GoalSelectorData from '/home/zmg/GoalZapp/client/src/components/presentational/select-goal.js'
+import GoalSelectorData from '/home/zmg/GoalZapp/client/src/components/presentational/GoalSelector.js'
 
 export default class App extends Component {
   render() {
