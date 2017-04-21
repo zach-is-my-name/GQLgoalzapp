@@ -1,5 +1,5 @@
 const HOST = process.env.SERVER_HOST || process.env.HOST || 'localhost';
-const PORT = process.env.SERVER_PORT || process.env.PORT || 8080;
+const PORT = process.env.SERVER_PORT || process.env.PORT || 3001;
 const ROOT = `http://${HOST}:${PORT}`;
 const CLIENT_HOST = process.env.CLIENT_HOST || 'localhost';
 const CLIENT_PORT = process.env.CLIENT_PORT || 3000;

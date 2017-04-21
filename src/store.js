@@ -6,8 +6,8 @@ const client = new ApolloClient();
 
 const store = createStore(
   combineReducers ({
-    goals:reducers.goalReducer,
-    apollo:client.reducer(),
+    // goals:reducers.goalReducer,
+    apollo: client.reducer(),
   }), {}, //initial state
 compose (
   applyMiddleware(client.middleware()),

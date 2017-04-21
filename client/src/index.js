@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/container/App';
-import store from './store';
+// import store from './store';
 import {ApolloProvider, ApolloClient, createNetworkInterface} from 'react-apollo';
 import './index.css';
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:3001'
+  uri: '/graphql'
 });
 
 const client = new ApolloClient({
@@ -15,7 +15,7 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <ApolloProvider store={store} client={client}>
+  <ApolloProvider  client={client}>
     <App />
   </ApolloProvider>,
     document.getElementById('root')

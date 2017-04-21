@@ -8,15 +8,20 @@ const config = require('./config');
 const mongoose = require('mongoose');
 const {Goals} = require('./models');
 
+// app.use('/graphql', graphqlHTTP({schema, graphiql: true, rootValue: root})))
 
-const allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', ' http://localhost:3000');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+app.use('/graphql', graphqlHTTP(request =>{
+   return {
+   schema: schema,
+   graphiql: true,
+   rootValue: root
+} }));
 
-    next();
-}
-app.use(allowCrossDomain);
+// app.use('/graphql', graphqlHTTP({
+//   schema: MyGraphQLSchema,
+//   graphiql: true
+// }));
+
 
 app.use(express.static(config.CLIENT_ROOT));
 
@@ -88,7 +93,6 @@ const root = {
 
 
 
-app.use('/graphql', graphqlHTTP((request) => ({schema, graphiql: true, rootValue: root})))
 
 
 let server;
@@ -100,7 +104,7 @@ function runServer(dbUrl, host, port=3001) {
         return reject(err);
       }
       server = app.listen(port, host, () => {
-        // console.log(`Your app is listening on port ${port}`);
+        console.log(`Your app is listening on port ${port}`);
         resolve();
       })
       .on('error', err => {
