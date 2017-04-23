@@ -16,9 +16,9 @@ else {
         ws: true, // Proxy websockets too
         router: {
             // Anything to /api goes to our backend
-            'localhost:8080/api': 'http://localhost:3001',
-            'localhost:8080/graphql': 'http://localhost:3001/graphql',
-            'localhost:3000/graphql': 'http://localhost:3001/graphql'
+            'http://localhost:8080/api': 'http://localhost:3001',
+            'http://localhost:8080/graphql': 'http://localhost:3001/graphql',
+            'http://localhost:3000/graphql': 'http://localhost:3001/graphql'
         }
     }));
 
