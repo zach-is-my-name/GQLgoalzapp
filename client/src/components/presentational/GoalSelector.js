@@ -1,8 +1,6 @@
 import React from 'react';
 import {gql, graphql} from 'react-apollo';
 
-
-
 function GoalSelector({data: {loading, error, goal}}) {
 
 if (!loading){
@@ -20,7 +18,6 @@ query	{
   }
 }
 `;
-
 
 const GoalSelectorData = graphql(goalQuery)(GoalSelector);
 export default GoalSelectorData;

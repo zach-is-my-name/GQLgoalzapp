@@ -1,6 +1,5 @@
 //import 'babel-polyfill';
 const express = require('express');
-const app = express();
 //const HOST = process.env.HOST;
 const graphqlHTTP = require('express-graphql');
 const {buildSchema} = require('graphql');
@@ -9,6 +8,9 @@ const mongoose = require('mongoose');
 const {Goals} = require('./models');
 
 // app.use('/graphql', graphqlHTTP({schema, graphiql: true, rootValue: root})))
+
+
+const app = express();
 
 app.use('/graphql', graphqlHTTP(request =>{
    return {
@@ -22,6 +24,8 @@ app.use('/graphql', graphqlHTTP(request =>{
 //   graphiql: true
 // }));
 
+
+app.get(`/api`,(req, res) => res.send('Got the api endpoint'));
 
 app.use(express.static(config.CLIENT_ROOT));
 
@@ -128,7 +132,7 @@ function closeServer() {
      });
   });
 }
-console.log(`Server running on ${config.ROOT}`);
+console.log(`1 Server running on ${config.ROOT}`);
 
 if (require.main === module) {
     runServer(config.DB_URL, config.HOST, config.PORT);
