@@ -2,13 +2,13 @@ const express = require('express');
 const proxy = require('http-proxy-middleware');
 const app = express();
 const runServer = require('./server').runServer;
-
+console.log("THIS RAN");
 if (process.env.NODE_ENV === 'production') {
     // Just run the server
     runServer(process.env.PORT || 8080);
 }
 else {
-    
+
     const app = express();
     // Proxy everything through to Create React App
     app.use(proxy('http://localhost:3000/', {

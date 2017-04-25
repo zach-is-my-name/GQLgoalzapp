@@ -4,6 +4,7 @@ import {gql, graphql} from 'react-apollo';
 function GoalSelector({data: {loading, error, goal}}) {
 
 if (!loading){
+console.log('HIT')
 console.error(error);
 console.log(goal);
 }
