@@ -1,26 +1,36 @@
+
 import React from 'react';
-import {gql, graphql} from 'react-apollo';
+import {graphql} from 'react-apollo';
+import gql from 'graphql-tag';
 
-function GoalSelector({data: {loading, error, goal}}) {
+function GoalSelector({data: {loading, error, goalDocs}}) {
 
-if (!loading){
+if (loading) {
+console.log('loading:',true);
 console.log('HIT')
-console.error(error);
-console.log(goal);
 }
 
-return <p>test</p>
+if (error) {
+  console.log(error.message);
 }
 
-const goalQuery = gql`
-query	{
+if (goalDocs)
+console.log('yes');
+console.log(goalDocs);
+return <p>testing</p>
+
+}
+
+
+const GoalQuery = gql`
+query  {
   goalDocs {
     goal
   }
 }
 `;
 
-const GoalSelectorData = graphql(goalQuery)(GoalSelector);
+const GoalSelectorData = graphql(GoalQuery)(GoalSelector);
 export default GoalSelectorData;
 
 // if (!loading) {
@@ -28,7 +38,3 @@ export default GoalSelectorData;
 // goals.map((goal,index) => {
 //   return <option value={index} key={index}> {goal} </option>
 // })}
-
-
-
-// export default GoalSelectorData;
