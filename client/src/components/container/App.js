@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import '../../App.css';
-import GoalSelectorData from '../presentational/GoalSelector.js'
-import GoalInput from '../presentational/GoalInput.js'
-
+import Goal from './Goal'
 
 
 export default class App extends Component {
@@ -11,12 +9,10 @@ export default class App extends Component {
       <div className="App">
         <div>
           <h1>GoalZapp</h1>
+          <br/>
+          <Goal />
         </div>
-        <GoalSelectorData />
-        <GoalInput />
-        <p className="App-intro">
-        </p>
-      </div>
-    );
-  }
-}
+        </div>
+          );
+          }
+          }

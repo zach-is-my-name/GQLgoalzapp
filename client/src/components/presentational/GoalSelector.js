@@ -63,5 +63,4 @@ if (loading){
 }
 }
 
-const GoalSelectorData = graphql(GoalQuery)(GoalSelector);
-export default GoalSelectorData;
+export default  graphql(GoalQuery)(GoalSelector);
