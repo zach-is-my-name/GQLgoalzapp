@@ -10,13 +10,12 @@ query root {
 }
 `;
 
-function GoalSelector({
-    data: {
-        loading,
-        error,
-        goalDocs
-    }
-}) {
+class GoalSelector extends React.Component {
+  constructor(props){
+  super(props)
+  this.selectGoal = this.selectGoal.bind(this);
+  // this.state = {currentGoal: ''};
+}
     // if (loading) {
     //   return <div>Loading</div>;
     // } else {
@@ -30,26 +29,39 @@ function GoalSelector({
     //     </ul>
     //   );
     // }
-    const selectGoal = event => console.log(this.refs.select.value);
+  selectGoal (event) {
+  this.setState({value: event.target.value});
+  this.state = {value: 'select a goal..'}
+  }
 
+
+render() {
+  const {data:{ loading, error, goalDocs} } = this.props;
 if (loading){
         return <div>loading...</div>;
-      } else {
-        const goalSelectInputValues = goalDocs.map((goal, index) => {
-          return   <option value={index} key={index}>{goal.goal}</option>
+      }
+        else if (error) {
+          return <p>Error!</p>
+        } else {
+        // console.log(this.props.data.goalDocs);
+
+      let  goalDocs = this.props.data.goalDocs;
+
+        const goalSelectInputValues = this.props.data.goalDocs.map((goal, index) => {
+          return   <option value={this.props.data.goalDocs.goal} key={index}>{goal.goal}</option>
         });
 
-        const goalSelectInput = <form className="goal-select" >
-          <select ref="select" onChange={selectGoal}>
+        const goalSelectInput = <form className="goal-select">
+          <select value={this.props.data.goalDocs.goal} onSelect={this.selectGoal}>
             {goalSelectInputValues}
-              </select>
-              </form>
+          </select>
+        </form>
 
-        console.log(goalDocs.map(goal => goal))
+        // console.log(this.props.data.goalDocs.map(goal => goal))
         return (goalSelectInput)
 }
 }
-
+}
 
 const GoalSelectorData = graphql(GoalQuery)(GoalSelector);
 export default GoalSelectorData;
