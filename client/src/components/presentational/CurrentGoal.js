@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 
-export default function CurrentGoal() {
+export default function CurrentGoal(props) {
 
-return <div></div>
+    return <p>Current Goal: {props.selectedGoal}</p>
 
 }

@@ -4,7 +4,7 @@ import * as reducers from './Reducers/reducers';
 
 const client = new ApolloClient();
 
-const store = createStore(
+export const store = createStore(
   combineReducers ({
     goals:reducers.goalReducer,
     apollo:client.reducer(),
@@ -13,5 +13,3 @@ compose (
   applyMiddleware(client.middleware()),
   )
 );
-
-export default store;

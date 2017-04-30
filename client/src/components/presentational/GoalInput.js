@@ -1,6 +1,8 @@
 import React from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
+import {connect} from 'react-redux';
+import * as actions from '../../Actions/actions'
 
  class GoalInput extends React.Component {
     constructor(props) {
@@ -15,13 +17,14 @@ submitGoal = (event) => {
   event.preventDefault()
   const {varGoal} = this.state;
   const mutateArg =  {varGoaldoc: {goal: varGoal}}
-  // this.props.mutate({variables: {createGoalDoc: mutateArg } })
+  // Original Attempt this.props.mutate({variables: {createGoalDoc: mutateArg } })
      this.props.mutate({variables: mutateArg})
     .then(({data}) => {
       console.log('GOT DATA', data);
     }).catch((error) => {
       console.log('there was an error sending the query', error);
-    });
+    })
+      .then(this.props.dispatch(actions.setGoal()))
     }
 
     render() {
@@ -34,10 +37,19 @@ submitGoal = (event) => {
         return (input);
     }}
 
-export default graphql (gql`
+const GoalInputWithData = graphql(gql`
     mutation ($varGoaldoc: GoalDocInput) {
   createGoalDoc(input: $varGoaldoc) {
     goal
   }
 }
 `)(GoalInput);
+
+
+const mapStateToProps = (state, props) => {
+  return {
+    currentGoal: state.currentGoal
+  }
+}
+
+export default connect(mapStateToProps)(GoalInputWithData)
