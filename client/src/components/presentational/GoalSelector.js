@@ -1,28 +1,29 @@
 import React from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
+import * as actions from '../../Actions/actions'
+import {connect} from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
+
 
 import CurrentGoal from './CurrentGoal'
+import GoalSelectForm from '../Form/GoalSelectForm'
 
 class GoalSelector extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
-    this.state = {
-      currentGoal: ''
-    };
-  }
-//Find out how to give the dropdown an initial default option value, along with the options data being fetched
-//Find out why you can not console.log and event
-  selectGoal(event) {
-    console.log('this was triggered');
-    console.log(event.target.value);
-    this.setState({currentGoal: event.target.value});
+    }
+
+  selectGoal = (values) => {
+    event.preventDefault();
+    // console.log('this was triggered');
+    this.props.dispatch(actions.setGoal(values.goalSelector))
   }
 
-  // selectGoalSubmit(event){
-  //
-  // }
+
+//Find out how to give the dropdown an initial default option value, along with the options data being fetched
+//Find out why you can not console.log and event
 
   render() {
     const {
@@ -38,28 +39,17 @@ class GoalSelector extends React.Component {
       return <p>Error!</p>
     } else {
 
-      let goalDocs = this.props.data.goalDocs;
-
-      const goalSelectInputValues = this.props.data.goalDocs.map((goalDoc, index) => {
-        return <option value={goalDoc.goal} key={index}>{goalDoc.goal}</option>
-      });
-
-      const goalSelectInput = <form className="goal-select" onSubmit={this.selectGoal}>
-        <select value={this.state.currentGoal} onChange={this.selectGoal}>
-          {goalSelectInputValues}
-        </select>
-      </form>
 
       return (
         <div>
-          {goalSelectInput}
-          <CurrentGoal selectedGoal={this.state.currentGoal} />
+          <GoalSelectForm currentGoal={this.props.currentGoal} goalDocs={this.props.data.goalDocs} onChange={this.selectGoal}/>
+          <CurrentGoal selectedGoal={this.props.currentGoal} />
         </div>
       )
 
     }
-  }
-}
+  }}
+
 
 const GoalQuery = gql `
             query root {
@@ -69,4 +59,13 @@ const GoalQuery = gql `
             }
             `;
 
-export default graphql(GoalQuery)(GoalSelector);
+const mapStateToProps = (state, props) => {
+  // console.log(state)
+  return {
+    currentGoal: state.goals.currentGoal,
+  }
+}
+
+const ComponentWithData = graphql(GoalQuery)(GoalSelector);
+
+export default connect(mapStateToProps)(ComponentWithData)

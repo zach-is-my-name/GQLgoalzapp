@@ -9,6 +9,7 @@ const initialState = {
 
 export const goalReducer = (state = initialState, action) => {
 if (action.type === 'SET_GOAL') {
+  console.log(action.goal)
   return update(state, {
     currentGoal: {$set:action.goal}
   })
