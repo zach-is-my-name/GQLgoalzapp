@@ -7,13 +7,15 @@ class GoalSelectForm extends Component {
 
 
     const goalSelectInputValues = this.props.goalDocs.map((goalDoc, index) => {
-      return <option value={goalDoc.goal} key={index}>{goalDoc.goal}</option>
+      // console.log(goalDoc);
+      return <option value={goalDoc.id} key={goalDoc.id}>{goalDoc.goal}</option>
     });
 
 
       return (<form className="goal-select">
         <Field name="goalSelector" component="select"
           onChange={this.props.onChange}>
+
           {goalSelectInputValues}
         </Field>
       </form>)

@@ -3,14 +3,13 @@ import {Field, reduxForm} from 'redux-form';
 
 class StepInputForm extends Component {
   render() {
-    return(
-    <form onSubmit={this.props.onSubmit} >
-      <Field name="stepInput" component="input" type="text">
+    return (
+      <form onSubmit={this.props.onSubmit}>
+        <Field name="stepInput" component="input" type="text"/>
+        <button type="submit">
+          Suggest Step
+        </button>
+      </form>
+        )}}
 
-      </Field>
-    </form>
-    }
-  )}
-    StepInputForm = reduxForm({form: 'stepInputForm'})(stepInputForm)
-
-    export default StepInputForm;
+    StepInputForm = reduxForm({form : 'stepInputForm'}

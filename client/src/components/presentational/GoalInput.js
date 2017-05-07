@@ -21,12 +21,13 @@ submitGoal = (event) => {
      this.props.mutate({variables: mutateArg})
     .then(({data}) => {
       console.log('GOT DATA', data);
+      this.props.dispatch(actions.setGoalDoc(data.createGoalDoc))
     }).catch((error) => {
       console.log('there was an error sending the query', error);
     })
-      .then(this.props.dispatch(actions.setGoal()))
     }
-
+//you can probably dispatch setGoal with the returned value of the mutation (which
+// should include an id and the goal
     render() {
         const input = <form className="goal-input" onSubmit={this.submitGoal}>
           <input type="text" id="form-text" placeholder="Your Goal"
@@ -41,6 +42,8 @@ const GoalInputWithData = graphql(gql`
     mutation ($varGoaldoc: GoalDocInput) {
   createGoalDoc(input: $varGoaldoc) {
     goal
+    id
+    steps
   }
 }
 `)(GoalInput);

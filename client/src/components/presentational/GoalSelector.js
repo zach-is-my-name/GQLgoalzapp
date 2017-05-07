@@ -5,8 +5,6 @@ import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 
-
-import CurrentGoal from './CurrentGoal'
 import GoalSelectForm from '../Form/GoalSelectForm'
 
 class GoalSelector extends React.Component {
@@ -16,14 +14,13 @@ class GoalSelector extends React.Component {
     }
 
   selectGoal = (values) => {
+    console.log(values.goalSelector);
     event.preventDefault();
-    // console.log('this was triggered');
-    this.props.dispatch(actions.setGoal(values.goalSelector))
+    this.props.dispatch(actions.setGoalDoc(values.goalSelector))
   }
 
 
 //Find out how to give the dropdown an initial default option value, along with the options data being fetched
-//Find out why you can not console.log and event
 
   render() {
     const {
@@ -33,17 +30,16 @@ class GoalSelector extends React.Component {
         goalDocs
       }
     } = this.props;
+
     if (loading) {
       return <div>loading...</div>;
     } else if (error) {
       return <p>Error!</p>
     } else {
 
-
       return (
         <div>
-          <GoalSelectForm currentGoal={this.props.currentGoal} goalDocs={this.props.data.goalDocs} onChange={this.selectGoal}/>
-          <CurrentGoal selectedGoal={this.props.currentGoal} />
+          <GoalSelectForm  goalDocs={this.props.data.goalDocs} onChange={this.selectGoal}/>
         </div>
       )
 
@@ -55,6 +51,8 @@ const GoalQuery = gql `
             query root {
               goalDocs {
                 goal
+                id
+                steps
               }
             }
             `;

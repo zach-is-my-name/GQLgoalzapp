@@ -10,6 +10,7 @@ export default function Goal() {
     <div>
       <GoalSelectorData/>
       <GoalInput />
+      <CurrentGoal />
     </div>
       )
       }

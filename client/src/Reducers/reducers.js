@@ -5,14 +5,32 @@ import {store} from '../store';
 
 const initialState = {
   currentGoal: '',
+  currentGoalID:'',
+  currentGoalSteps:[]
 }
 
 export const goalReducer = (state = initialState, action) => {
-if (action.type === 'SET_GOAL') {
-  console.log(action.goal)
+
+if (action.type === 'SET_GOALDOC_ID') {
   return update(state, {
-    currentGoal: {$set:action.goal}
+    currentGoalID: {$set:action.goalDocID},
   })
 }
+// if (action.type === 'SET_STEP') {
+//   return update(state, {
+//     currentGoalID: {$set:action.id},
+//     currentGoalStep:{$set:action.step},
+//   })
+// }
+
+  if (action.type === 'SET_GOAL_DOC') {
+    // console.log(action.goaldoc);
+    return update (state, {
+      currentGoal: {$set:action.goaldoc.goal},
+    currentGoalID: {$set:action.goaldoc.id},
+    currentGoalSteps: {$set:action.goaldoc.steps},
+    })
+  }
+
 return state;
 }

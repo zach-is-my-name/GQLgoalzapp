@@ -12,7 +12,6 @@ const {Goals} = require('./models');
 const app = express();
 
 app.use('/graphql', graphqlHTTP(request => {
-    console.log('API REQUEST', request.body)
     return {schema: schema, graphiql: true, rootValue: root}
 }));
 
@@ -35,6 +34,10 @@ const schema = buildSchema(`
     id: ID!,
     goal: String,
     steps: [String],
+  }
+
+  type GoalDocsByID {
+    goalDocsByID(id:ID!): [GoalDocType]
   }
 
   type Mutation {
@@ -67,6 +70,17 @@ const root = {
             return res.status(500).json({error: 'something went wrong'})
         }
     },
+
+    goalDocsByID: async(args) => {
+    try {
+      const goalDocQueryByID = await Goals.findById(args.id);
+      return goalDocQueryByID.map(goalDoc => new GoalDocPrototype(goalDoc)) 
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({error: 'something went wrong'})
+        }
+    },
+
     createGoalDoc: async(args) => {
         try {
             // console.log('console.log(args.input) =', args.input)
