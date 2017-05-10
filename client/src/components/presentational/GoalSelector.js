@@ -1,3 +1,7 @@
+/* This component queries for the goalDocs and renders a select form with each goalDoc,
+It dispatches an action to set the current goal id == to selected goal */
+
+
 import React from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
@@ -6,19 +10,22 @@ import {connect} from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 
 import GoalSelectForm from '../Form/GoalSelectForm'
+import CurrentGoal from '../presentational/CurrentGoal'
+
 
 class GoalSelector extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
+    // this.idProps = this.idProps.bind(this)
     }
+
 
   selectGoal = (values) => {
     console.log(values.goalSelector);
     event.preventDefault();
-    this.props.dispatch(actions.setGoalDoc(values.goalSelector))
+    this.props.dispatch(actions.setGoalID(values.goalSelector))
   }
-
 
 //Find out how to give the dropdown an initial default option value, along with the options data being fetched
 
@@ -40,12 +47,11 @@ class GoalSelector extends React.Component {
       return (
         <div>
           <GoalSelectForm  goalDocs={this.props.data.goalDocs} onChange={this.selectGoal}/>
+          <CurrentGoal id={this.props.currentGoalID} />
         </div>
       )
-
     }
   }}
-
 
 const GoalQuery = gql `
             query root {
@@ -61,6 +67,7 @@ const mapStateToProps = (state, props) => {
   // console.log(state)
   return {
     currentGoal: state.goals.currentGoal,
+    currentGoalID: state.goals.currentGoalID
   }
 }
 

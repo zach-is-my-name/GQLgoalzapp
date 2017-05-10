@@ -22,6 +22,8 @@ class GoalSelectForm extends Component {
         }
         }
 
+
+
         GoalSelectForm = reduxForm({form: 'goalSelectForm'})(GoalSelectForm);
 
         export default GoalSelectForm;

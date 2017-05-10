@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 const {Goals} = require('./models');
 
 // app.use('/graphql', graphqlHTTP({schema, graphiql: true, rootValue: root})))
-//
 const app = express();
 
 app.use('/graphql', graphqlHTTP(request => {
@@ -28,16 +27,13 @@ const schema = buildSchema(`
 
   type Query {
     goalDocs:[GoalDocType]
+    goalDocsByID(id:String): GoalDocType
 }
 
   type GoalDocType {
     id: ID!,
     goal: String,
     steps: [String],
-  }
-
-  type GoalDocsByID {
-    goalDocsByID(id:ID!): [GoalDocType]
   }
 
   type Mutation {
@@ -64,6 +60,7 @@ const root = {
     goalDocs: async(args) => {
         try {
             const goalDocQueryAll = await Goals.find();
+              // console.log(goalDocQueryAll);
             return goalDocQueryAll.map(goalDocQueryAll => new GoalDocPrototype(goalDocQueryAll))
         } catch (err) {
             console.error(err);
@@ -74,7 +71,8 @@ const root = {
     goalDocsByID: async(args) => {
     try {
       const goalDocQueryByID = await Goals.findById(args.id);
-      return goalDocQueryByID.map(goalDoc => new GoalDocPrototype(goalDoc)) 
+        // console.log(goalDocQueryByID);
+      return goalDocQueryByID
     } catch (err) {
       console.error(err);
       return res.status(500).json({error: 'something went wrong'})
@@ -102,7 +100,7 @@ const root = {
     }
 }
 // Model.findByIdAndUpdate(id, { $set: { name: 'jason borne' }}, options, callback)
-
+//
 //Enable CORS for development
 
 let server;

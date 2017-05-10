@@ -22,6 +22,7 @@ submitStep = (values) => {
     })
       .then(this.props.dispatch(actions.setStep(varGoaldoc)))
     }
+
 return(
   <StepInputForm onSubmit={this.submitStep}/>
 )
