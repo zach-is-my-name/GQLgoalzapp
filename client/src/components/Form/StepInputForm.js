@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 
@@ -12,4 +13,4 @@ class StepInputForm extends Component {
       </form>
         )}}
 
-    StepInputForm = reduxForm({form : 'stepInputForm'}
+     export default StepInputForm = reduxForm({form : 'stepInputForm'})

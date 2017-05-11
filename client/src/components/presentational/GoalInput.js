@@ -4,6 +4,8 @@ import gql from 'graphql-tag';
 import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions'
 
+
+/*Class Declaration */
  class GoalInput extends React.Component {
     constructor(props) {
         super(props)
@@ -13,6 +15,7 @@ import * as actions from '../../Actions/actions'
     }
     }
 
+/* Event Handler*/
 submitGoal = (event) => {
   event.preventDefault()
   const {varGoal} = this.state;
@@ -21,11 +24,14 @@ submitGoal = (event) => {
      this.props.mutate({variables: mutateArg})
     .then(({data}) => {
       console.log('GOT DATA', data);
+
+      /*Action Dispatch */
       this.props.dispatch(actions.setGoalDoc(data.createGoalDoc))
     }).catch((error) => {
       console.log('there was an error sending the query', error);
     })
     }
+
 //you can probably dispatch setGoal with the returned value of the mutation (which
 // should include an id and the goal
     render() {
@@ -38,6 +44,8 @@ submitGoal = (event) => {
         return (input);
     }}
 
+
+/*GraphQL Query */
 const GoalInputWithData = graphql(gql`
     mutation ($varGoaldoc: GoalDocInput) {
   createGoalDoc(input: $varGoaldoc) {
@@ -48,7 +56,7 @@ const GoalInputWithData = graphql(gql`
 }
 `)(GoalInput);
 
-
+/*Redux */
 const mapStateToProps = (state, props) => {
   return {
     currentGoal: state.currentGoal

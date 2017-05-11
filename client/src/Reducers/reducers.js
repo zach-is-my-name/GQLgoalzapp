@@ -1,3 +1,4 @@
+/* eslint-disable */
 import update from 'immutability-helper';
 import * as actions from '../Actions/actions';
 import {store} from '../store';
@@ -23,7 +24,7 @@ if (action.type === 'SET_GOALDOC_ID') {
 //   })
 // }
 
-  if (action.type === 'SET_GOAL_DOC') {
+  if (action.type === 'SET_GOALDOC') {
     // console.log(action.goaldoc);
     return update (state, {
       currentGoal: {$set:action.goaldoc.goal},

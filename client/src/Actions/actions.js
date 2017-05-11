@@ -1,7 +1,7 @@
 import 'isomorphic-fetch';
 
 export const SET_GOALDOC_ID = 'SET_GOALDOC_ID';
-export const setGoalID = goalDocID => ({
+export const setGoalDocID = goalDocID => ({
   type: SET_GOALDOC_ID,
   goalDocID
 });
@@ -12,9 +12,9 @@ export const setGoalID = goalDocID => ({
 //   goalDoc
 // });
 
-export const SET_GOAL_DOC = 'SET_GOAL_DOC'
+export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goaldoc => ({
 
-  type: SET_GOAL_DOC,
+  type: SET_GOALDOC,
   goaldoc
 });

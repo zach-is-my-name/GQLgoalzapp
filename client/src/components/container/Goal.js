@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {Component} from 'react'
 import GoalInput  from '../presentational/GoalInput'
 import GoalSelectorData from '../presentational/GoalSelector'

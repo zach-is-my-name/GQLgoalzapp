@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* This component queries for the goalDocs and renders a select form with each goalDoc,
 It dispatches an action to set the current goal id == to selected goal */
 
@@ -12,7 +13,7 @@ import { Field, reduxForm } from 'redux-form';
 import GoalSelectForm from '../Form/GoalSelectForm'
 import CurrentGoal from '../presentational/CurrentGoal'
 
-
+/*CLASS DECLARATION */
 class GoalSelector extends React.Component {
   constructor(props) {
     super(props)
@@ -20,15 +21,16 @@ class GoalSelector extends React.Component {
     // this.idProps = this.idProps.bind(this)
     }
 
-
+/*EVENT HANDLER */
   selectGoal = (values) => {
     console.log(values.goalSelector);
     event.preventDefault();
-    this.props.dispatch(actions.setGoalID(values.goalSelector))
+
+    /*ACTION DISPATCH */
+    this.props.dispatch(actions.setGoalDocID(values.goalSelector))
   }
 
-//Find out how to give the dropdown an initial default option value, along with the options data being fetched
-
+/*RENDER METHOD */
   render() {
     const {
       data: {
@@ -44,6 +46,8 @@ class GoalSelector extends React.Component {
       return <p>Error!</p>
     } else {
 
+//Find out how to give the dropdown an initial default option value, along with the options data being fetched
+
       return (
         <div>
           <GoalSelectForm  goalDocs={this.props.data.goalDocs} onChange={this.selectGoal}/>
@@ -53,16 +57,19 @@ class GoalSelector extends React.Component {
     }
   }}
 
+/*GRAPHQL QUERY */
 const GoalQuery = gql `
             query root {
               goalDocs {
                 goal
                 id
-                steps
               }
             }
             `;
 
+const ComponentWithData = graphql(GoalQuery)(GoalSelector);
+
+/*REDUX CONNECT */
 const mapStateToProps = (state, props) => {
   // console.log(state)
   return {
@@ -70,7 +77,5 @@ const mapStateToProps = (state, props) => {
     currentGoalID: state.goals.currentGoalID
   }
 }
-
-const ComponentWithData = graphql(GoalQuery)(GoalSelector);
 
 export default connect(mapStateToProps)(ComponentWithData)

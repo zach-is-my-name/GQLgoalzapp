@@ -27,7 +27,7 @@ const schema = buildSchema(`
 
   type Query {
     goalDocs:[GoalDocType]
-    goalDocsByID(id:String): GoalDocType
+    goalDocByID(id:String): GoalDocType
 }
 
   type GoalDocType {
@@ -68,7 +68,7 @@ const root = {
         }
     },
 
-    goalDocsByID: async(args) => {
+    goalDocByID: async(args) => {
     try {
       const goalDocQueryByID = await Goals.findById(args.id);
         // console.log(goalDocQueryByID);

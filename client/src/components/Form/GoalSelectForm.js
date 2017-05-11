@@ -1,10 +1,10 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 
 class GoalSelectForm extends Component {
   render() {
     let goalDocs = this.props.goalDocs;
-
 
     const goalSelectInputValues = this.props.goalDocs.map((goalDoc, index) => {
       // console.log(goalDoc);
@@ -21,7 +21,7 @@ class GoalSelectForm extends Component {
       </form>)
         }
         }
-
+//dropdown doesn't update on GoalInput
 
 
         GoalSelectForm = reduxForm({form: 'goalSelectForm'})(GoalSelectForm);

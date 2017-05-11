@@ -1,49 +1,60 @@
+/* eslint-disable */
 import React, {Component} from 'react'
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions'
 
-import StepInputForm form '../Form/StepInputForm'
+import StepInputForm from '../Form/StepInputForm'
 
-class StepsInput extends Component {
+export default class StepsInput extends Component {
+  constructor(props) {
+    super(props)
+    this.submitStep = this.submitStep.bind(this);
+  }
 
-render() {
-submitStep = (values) => {
-  event.preventDefault()
-  const varStep = values.stepInput
+  submitStep = (values) => {
+    event.preventDefault()
+    const varStep = values.stepInput
 
-  const mutateArg =  {varGoaldoc: {step: varStep, id: this.props.currentGoalID}}
-     this.props.mutate({variables: mutateArg})
-    .then(({data}) => {
+    const mutateArg = {
+      updateGoalDoc: {
+        steps: varStep,
+        id: this.props.currentGoalID
+      }
+    }
+    this.props.mutate({variables: mutateArg}).then(({data}) => {
       console.log('GOT DATA', data);
     }).catch((error) => {
       console.log('there was an error sending the query', error);
     })
-      .then(this.props.dispatch(actions.setStep(varGoaldoc)))
-    }
+    // .then(this.props.dispatch(actions.setStep()))
+  }
 
-return(
-  <StepInputForm onSubmit={this.submitStep}/>
-)
+  render() {
 
-
-}
-
+    return (
+      <div>
+        null
+        {/* <StepInputForm onSubmit={this.submitStep}/> */}
+      </div>
+    )
+  }
 }
 //need to insert step by id
-const StepsInputWithData = graphql (gql`
-    mutation ($varGoaldoc: GoalDocInput) {
-  createGoalDoc(input: $varGoaldoc) {
-    steps,
-    id
-  }
-}
-`)(StepsInput);
+const StepsMutation = gql `mutation root ($varID: ID!, $varStep: String) {
+  updateGoalDoc(id: $varID, input: {
+    steps: $varStep
+  })
+    {
+      goal
+      steps
+      id
+    }
+  }`;
 
+const StepsInputWithMutation = graphql(StepsMutation )(StepsInput)
 //not being used currently
 const mapStateToProps = (state, props) => {
-  return {
-    currentGoal: state.currentGoal,
-    currentGoalID: state.currentGoalID,
-  }
+  return {currentGoal: state.currentGoal, currentGoalID: state.currentGoalID}
+}
