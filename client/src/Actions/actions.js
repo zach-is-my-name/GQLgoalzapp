@@ -6,11 +6,14 @@ export const setGoalDocID = goalDocID => ({
   goalDocID
 });
 
-// export const SET_STEP = 'SET_STEP';
-// export const setSteps = goalDoc => ({
-//   type: SET_STEP,
-//   goalDoc
-// });
+export const SET_STEP = 'SET_STEP';
+export const setSteps = step =>{
+let stepArr = [step]
+console.log('STEP ARR', stepArr)
+return ( {
+  type: SET_STEP,
+  step: stepArr
+})};
 
 export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goaldoc => ({

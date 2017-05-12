@@ -17,12 +17,11 @@ if (action.type === 'SET_GOALDOC_ID') {
     currentGoalID: {$set:action.goalDocID},
   })
 }
-// if (action.type === 'SET_STEP') {
-//   return update(state, {
-//     currentGoalID: {$set:action.id},
-//     currentGoalStep:{$set:action.step},
-//   })
-// }
+if (action.type === 'SET_STEP') {
+  return update(state.goals.currentGoalSteps,
+    {$push:action.step},
+  )
+}
 
   if (action.type === 'SET_GOALDOC') {
     // console.log(action.goaldoc);

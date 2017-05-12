@@ -23,6 +23,7 @@ import StepInputForm from '../Form/StepInputForm'
     this.props.mutate({variables:{varStep: step, varID: this.props.currentGoalID }})
     .then(({data}) => {
       console.log('GOT DATA STEP INPUT', data);
+        this.props.dispatch(actions.setSteps(step))
     }).catch((error) => {
       console.log('there was an error sending the query', error);
     })
