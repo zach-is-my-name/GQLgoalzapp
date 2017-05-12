@@ -93,11 +93,19 @@ const root = {
         }
     },
     updateGoalDoc: async(args) => {
-        const goalDocUpdate = await Goals.findByIdAndUpdate(args.id, {
-            $set: args.input
-        }, {new: true});
+        try {
+        let argsArr = [args.input.steps]
+        console.log('ARGS INPUT STEPS', args.input.steps )
+        console.log('ARGS INPUT (current)', args.input )
+        console.log('ARGS ARR', argsArr)
+        const goalDocUpdate = await Goals.findByIdAndUpdate(args.id,
+            {$push: {steps: argsArr }},
+         {new: true});
         return new GoalDocPrototype(goalDocUpdate);
-    }
+    }catch (err) {
+      console.error(err);
+      return res.status(500).json({error: 'something went wrong'})
+    }}
 }
 // Model.findByIdAndUpdate(id, { $set: { name: 'jason borne' }}, options, callback)
 //

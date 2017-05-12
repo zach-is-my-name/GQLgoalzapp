@@ -15,6 +15,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 
+
   /* CLASS DECLARATION */
 class CurrentGoal extends Component {
     constructor(props) {
@@ -26,7 +27,6 @@ class CurrentGoal extends Component {
 
 /* RENDER METHOD */
     render (){
-      console.log('RENDER',this.props);
       if (this.props.data){
         const { data: { loading, error, goalDocByID } } = this.props;
         if (!loading){
@@ -40,7 +40,7 @@ class CurrentGoal extends Component {
       }
     componentWillReceiveProps(nextProps){
         if(nextProps.data && nextProps.data.loading == false) {
-        console.log('NEXTPROPS',nextProps.data.goalDocByID)
+        // console.log('NEXTPROPS',nextProps.data.goalDocByID)
           this.props.dispatch(actions.setGoalDoc(nextProps.data.goalDocByID))
 }}
 }

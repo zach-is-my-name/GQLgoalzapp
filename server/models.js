@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const goalSchema = mongoose.Schema({
-    goal: String, steps: [String],
+    goal: String, steps:{type: Array} ,
     // owner: ObjectId
 })
 

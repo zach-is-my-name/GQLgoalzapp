@@ -4,13 +4,17 @@ import {Field, reduxForm} from 'redux-form';
 
 class StepInputForm extends Component {
   render() {
+    const {handleSubmit} = this.props;
     return (
-      <form onSubmit={this.props.onSubmit}>
+      <form  onSubmit={handleSubmit}>
         <Field name="stepInput" component="input" type="text"/>
         <button type="submit">
-          Suggest Step
+          Suggest a Step
         </button>
       </form>
         )}}
 
-     export default StepInputForm = reduxForm({form : 'stepInputForm'})
+ StepInputForm = reduxForm({
+   form : 'stepInputForm'
+ })(StepInputForm)
+ export default StepInputForm

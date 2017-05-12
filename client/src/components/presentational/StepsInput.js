@@ -7,41 +7,39 @@ import * as actions from '../../Actions/actions'
 
 import StepInputForm from '../Form/StepInputForm'
 
-export default class StepsInput extends Component {
+/* CLASS DEFINITION */
+ class StepsInput extends React.Component {
   constructor(props) {
     super(props)
     this.submitStep = this.submitStep.bind(this);
   }
 
-  submitStep = (values) => {
-    event.preventDefault()
-    const varStep = values.stepInput
 
-    const mutateArg = {
-      updateGoalDoc: {
-        steps: varStep,
-        id: this.props.currentGoalID
-      }
-    }
-    this.props.mutate({variables: mutateArg}).then(({data}) => {
-      console.log('GOT DATA', data);
+
+/* EVENT HANDLER */
+  submitStep = (values) => {
+    let step = values.stepInput;
+    console.log(values.stepInput)
+    this.props.mutate({variables:{varStep: step, varID: this.props.currentGoalID }})
+    .then(({data}) => {
+      console.log('GOT DATA STEP INPUT', data);
     }).catch((error) => {
       console.log('there was an error sending the query', error);
     })
-    // .then(this.props.dispatch(actions.setStep()))
-  }
+}
 
+/* RENDER METHOD */
   render() {
 
     return (
-      <div>
-        null
-        {/* <StepInputForm onSubmit={this.submitStep}/> */}
-      </div>
+        <StepInputForm onSubmit={this.submitStep}/>
     )
   }
 }
-//need to insert step by id
+
+
+
+/* GRAPHQL QUERY */
 const StepsMutation = gql `mutation root ($varID: ID!, $varStep: String) {
   updateGoalDoc(id: $varID, input: {
     steps: $varStep
@@ -51,10 +49,14 @@ const StepsMutation = gql `mutation root ($varID: ID!, $varStep: String) {
       steps
       id
     }
-  }`;
+  }`
 
-const StepsInputWithMutation = graphql(StepsMutation )(StepsInput)
-//not being used currently
+const StepsInputWithMutation = graphql(StepsMutation)(StepsInput)
+
+/* REDUX */
 const mapStateToProps = (state, props) => {
-  return {currentGoal: state.currentGoal, currentGoalID: state.currentGoalID}
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID}
 }
+
+const StepInputWithState = connect(mapStateToProps)(StepsInputWithMutation)
+export default StepInputWithState

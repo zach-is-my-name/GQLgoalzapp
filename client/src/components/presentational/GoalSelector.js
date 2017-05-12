@@ -23,7 +23,7 @@ class GoalSelector extends React.Component {
 
 /*EVENT HANDLER */
   selectGoal = (values) => {
-    console.log(values.goalSelector);
+    // console.log(values.goalSelector);
     event.preventDefault();
 
     /*ACTION DISPATCH */
