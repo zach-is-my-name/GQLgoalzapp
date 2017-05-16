@@ -9,6 +9,7 @@
   "author": "Joe Turner <jturner@thinkful.com>",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.24.1",
     "nodemon": "^1.11.0"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "express": "^4.14.1",
     "express-graphql": "^0.6.3",
     "graphql": "^0.9.1",
+    "graphql-tools": "^0.11.0",
     "mongoose": "^4.8.5"
   }
 }

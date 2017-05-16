@@ -5,58 +5,54 @@ const graphqlHTTP = require('express-graphql');
 const {buildSchema} = require('graphql');
 const config = require('./config');
 const mongoose = require('mongoose');
+
 const {Goals} = require('./models');
 
-// app.use('/graphql', graphqlHTTP({schema, graphiql: true, rootValue: root})))
-const app = express();
+const {executabaleSchema} = require('./schema')
 
-app.use('/graphql', graphqlHTTP(request => {
-    return {schema: schema, graphiql: true, rootValue: root}
-}));
+const schema = buildSchema (`
+  type User {
+    id: ID!
+    userName: String
+    friends: [String]
+    interests: [String]
+    }
 
-// app.use('/graphql', graphqlHTTP({
-//   schema: MyGraphQLSchema,
-//   graphiql: true
-// }));
-
-app.get(`/api`, (req, res) => res.send('Got the api endpoint'));
-
-app.use(express.static(config.CLIENT_ROOT));
-//
-const schema = buildSchema(`
-
-  type Query {
-    goalDocs:[GoalDocType]
+   type Query {
+    goalDocs: [GoalDocType]
     goalDocByID(id:String): GoalDocType
+    users: [User]
 }
 
   type GoalDocType {
-    id: ID!,
-    goal: String,
-    steps: [String],
+    id: ID!
+    goal: String
+    steps: [String]
   }
 
-  type Mutation {
+  input GoalDocInput {
+    goal: String
+    steps: String
+}
+   type Mutation {
     createGoalDoc(input:GoalDocInput): GoalDocType
     updateGoalDoc(id:ID!, input: GoalDocInput): GoalDocType
 }
 
 
-  input GoalDocInput {
-    goal: String,
-    steps: String
-}
-`)
-
-class GoalDocPrototype {
-    constructor(goalDocCreate) {
-        this.id = goalDocCreate.id;
-        this.goal = goalDocCreate.goal
-        this.steps = goalDocCreate.steps
+  extend type Mutation {
+    createUser(input: UserInput): User
+    updateUser(id: ID!, input: UserInput): User
     }
-}
 
-const root = {
+  input UserInput {
+    userName : String
+    friends: String
+    interests: String
+}
+    `)
+
+const root =  {
     goalDocs: async(args) => {
         try {
             const goalDocQueryAll = await Goals.find();
@@ -94,19 +90,46 @@ const root = {
     },
     updateGoalDoc: async(args) => {
         try {
-        let argsArr = [args.input.steps]
-        console.log('ARGS INPUT STEPS', args.input.steps )
-        console.log('ARGS INPUT (current)', args.input )
-        console.log('ARGS ARR', argsArr)
-        const goalDocUpdate = await Goals.findByIdAndUpdate(args.id,
-            {$push: {steps: argsArr }},
-         {new: true});
-        return new GoalDocPrototype(goalDocUpdate);
-    }catch (err) {
-      console.error(err);
-      return res.status(500).json({error: 'something went wrong'})
-    }}
-}
+            let argsArr = [args.input.steps]
+            console.log('ARGS INPUT STEPS', args.input.steps )
+            console.log('ARGS INPUT (current)', args.input )
+            console.log('ARGS ARR', argsArr)
+            const goalDocUpdate = await Goals.findByIdAndUpdate(args.id,
+                {$push: {steps: argsArr }},
+             {new: true});
+            return new GoalDocPrototype(goalDocUpdate);
+        } catch (err) {
+          console.error(err);
+          return res.status(500).json({error: 'something went wrong'})
+    }},
+  users: async(args) => {
+          const users = await User.find()
+
+          console.log('users =', users)
+          // return users
+          return users.map(user => new UserType(user))
+      },
+createUser: async(args) => {
+          const user = await User
+                .create(args.input)
+                return new UserType(user);
+            }
+          }
+
+
+// app.use('/graphql', graphqlHTTP({schema, graphiql: true, rootValue: root})))
+const app = express();
+
+app.use('/graphql', graphqlHTTP(request => {
+    return {schema, graphiql: true, rootValue: root}
+}));
+
+
+app.get(`/api`, (req, res) => res.send('Got the api endpoint'));
+
+app.use(express.static(config.CLIENT_ROOT));
+//
+
 // Model.findByIdAndUpdate(id, { $set: { name: 'jason borne' }}, options, callback)
 //
 //Enable CORS for development
