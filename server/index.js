@@ -10,120 +10,117 @@ const {Goals} = require('./models');
 
 const {executabaleSchema} = require('./schema')
 
-const schema = buildSchema (`
-  type User {
-    id: ID!
-    userName: String
-    friends: [String]
-    interests: [String]
-    }
-
-   type Query {
+const schema = buildSchema(`
+  type Query {
     goalDocs: [GoalDocType]
     goalDocByID(id:String): GoalDocType
     users: [User]
 }
 
+  type User {
+    id: ID!
+    name: String
+    ownGoals: [String]
+    }
+
   type GoalDocType {
     id: ID!
     goal: String
     steps: [String]
+    owner: [String]
   }
+
+  type Mutation {
+    createGoalDoc(input:GoalDocInput): GoalDocType
+    updateGoalDoc(id:ID!, input: GoalDocInput): GoalDocType
+    createUser(input: UserInput): User
+    updateUser(id: ID!, input: UserInput): User
+}
 
   input GoalDocInput {
     goal: String
     steps: String
 }
-   type Mutation {
-    createGoalDoc(input:GoalDocInput): GoalDocType
-    updateGoalDoc(id:ID!, input: GoalDocInput): GoalDocType
-}
-
-
-  extend type Mutation {
-    createUser(input: UserInput): User
-    updateUser(id: ID!, input: UserInput): User
-    }
 
   input UserInput {
-    userName : String
+    name : String
     friends: String
     interests: String
 }
     `)
 
-const root =  {
-    goalDocs: async(args) => {
-        try {
-            const goalDocQueryAll = await Goals.find();
-              // console.log(goalDocQueryAll);
-            return goalDocQueryAll.map(goalDocQueryAll => new GoalDocPrototype(goalDocQueryAll))
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({error: 'something went wrong'})
-        }
-    },
+const root = {
+  goalDocs: async(args) => {
+    try {
+      const goalDocQueryAll = await Goals.find();
+      // console.log(goalDocQueryAll);
+      return goalDocQueryAll.map(goalDocQueryAll => new GoalDocPrototype(goalDocQueryAll))
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({error: 'something went wrong'})
+    }
+  },
 
-    goalDocByID: async(args) => {
+  goalDocByID: async(args) => {
     try {
       const goalDocQueryByID = await Goals.findById(args.id);
-        // console.log(goalDocQueryByID);
+      // console.log(goalDocQueryByID);
       return goalDocQueryByID
     } catch (err) {
       console.error(err);
       return res.status(500).json({error: 'something went wrong'})
-        }
-    },
+    }
+  },
 
-    createGoalDoc: async(args) => {
-        try {
-            // console.log('console.log(args.input) =', args.input)
-            const GoalDocInputObj = args.input;
-            console.log('ARGS.INPUT', GoalDocInputObj)
-            const goalDocCreate = await Goals.create(GoalDocInputObj);
-            console.log('ASYNC DB INSERT OBJECT', goalDocCreate)
-            return new GoalDocPrototype(goalDocCreate);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({error: 'something went wrong'})
+  createGoalDoc: async(args) => {
+    try {
+      // console.log('console.log(args.input) =', args.input)
+      const GoalDocInputObj = args.input;
+      console.log('ARGS.INPUT', GoalDocInputObj)
+      const goalDocCreate = await Goals.create(GoalDocInputObj);
+      console.log('ASYNC DB INSERT OBJECT', goalDocCreate)
+      return new GoalDocPrototype(goalDocCreate);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({error: 'something went wrong'})
+    }
+  },
+  updateGoalDoc: async(args) => {
+    try {
+      let argsArr = [args.input.steps]
+      console.log('ARGS INPUT STEPS', args.input.steps)
+      console.log('ARGS INPUT (current)', args.input)
+      console.log('ARGS ARR', argsArr)
+      const goalDocUpdate = await Goals.findByIdAndUpdate(args.id, {
+        $push: {
+          steps: argsArr
         }
-    },
-    updateGoalDoc: async(args) => {
-        try {
-            let argsArr = [args.input.steps]
-            console.log('ARGS INPUT STEPS', args.input.steps )
-            console.log('ARGS INPUT (current)', args.input )
-            console.log('ARGS ARR', argsArr)
-            const goalDocUpdate = await Goals.findByIdAndUpdate(args.id,
-                {$push: {steps: argsArr }},
-             {new: true});
-            return new GoalDocPrototype(goalDocUpdate);
-        } catch (err) {
-          console.error(err);
-          return res.status(500).json({error: 'something went wrong'})
-    }},
+      }, {new: true});
+      return new GoalDocPrototype(goalDocUpdate);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({error: 'something went wrong'})
+    }
+  },
   users: async(args) => {
-          const users = await User.find()
+    const users = await User.find()
 
-          console.log('users =', users)
-          // return users
-          return users.map(user => new UserType(user))
-      },
-createUser: async(args) => {
-          const user = await User
-                .create(args.input)
-                return new UserType(user);
-            }
-          }
+    console.log('USERS', users)
 
+    return users.map(user => new UserType(user))
+  },
+  createUser: async(args) => {
+    const user = await User.create(args.input)
+    return new UserType(user);
+  }
+}
 
 // app.use('/graphql', graphqlHTTP({schema, graphiql: true, rootValue: root})))
 const app = express();
 
 app.use('/graphql', graphqlHTTP(request => {
-    return {schema, graphiql: true, rootValue: root}
+  return {schema, graphiql: true, rootValue: root}
 }));
-
 
 app.get(`/api`, (req, res) => res.send('Got the api endpoint'));
 
@@ -136,42 +133,42 @@ app.use(express.static(config.CLIENT_ROOT));
 
 let server;
 function runServer(dbUrl, host, port = 3001) {
-    return new Promise((resolve, reject) => {
-        mongoose.Promise = global.Promise;
-        mongoose.connect(dbUrl, err => {
-            if (err) {
-                return reject(err);
-            }
-            server = app.listen(port, host, () => {
-                console.log(`Your app is listening on port ${port}`);
-                resolve();
-            }).on('error', err => {
-                mongoose.disconnect();
-                reject(err);
-            });
-        });
+  return new Promise((resolve, reject) => {
+    mongoose.Promise = global.Promise;
+    mongoose.connect(dbUrl, err => {
+      if (err) {
+        return reject(err);
+      }
+      server = app.listen(port, host, () => {
+        console.log(`Your app is listening on port ${port}`);
+        resolve();
+      }).on('error', err => {
+        mongoose.disconnect();
+        reject(err);
+      });
     });
+  });
 }
 
 function closeServer() {
-    return mongoose.disconnect().then(() => {
-        return new Promise((resolve, reject) => {
-            console.log('Closing server');
-            server.close(err => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve();
-            });
-        });
+  return mongoose.disconnect().then(() => {
+    return new Promise((resolve, reject) => {
+      console.log('Closing server');
+      server.close(err => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
     });
+  });
 }
 console.log(`1 Server running on ${config.ROOT}`);
 
 if (require.main === module) {
-    runServer(config.DB_URL, config.HOST, config.PORT);
+  runServer(config.DB_URL, config.HOST, config.PORT);
 }
 module.exports = {
-    app,
-    runServer
+  app,
+  runServer
 };

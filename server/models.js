@@ -11,7 +11,7 @@ const goalSchema = mongoose.Schema({
 const userSchema = mongoose.Schema({
     //id: _id,
     userName: String,
-    goalDocRefs: [ObjectID]
+    ownGoals: [ObjectID]
 })
 
 const User = mongoose.model('User', userSchema);
