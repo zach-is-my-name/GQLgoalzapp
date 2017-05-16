@@ -19,7 +19,7 @@ const schema = buildSchema(`
 
   type User {
     id: ID!
-    name: String
+    userName: String
     ownGoals: [String]
     }
 
@@ -33,21 +33,40 @@ const schema = buildSchema(`
   type Mutation {
     createGoalDoc(input:GoalDocInput): GoalDocType
     updateGoalDoc(id:ID!, input: GoalDocInput): GoalDocType
-    createUser(input: UserInput): User
-    updateUser(id: ID!, input: UserInput): User
+    createUser(input: userDocInput): User
+    updateUser(id: ID!, input: userDocInput): User
 }
 
   input GoalDocInput {
     goal: String
     steps: String
+    owner: String
 }
 
-  input UserInput {
-    name : String
-    friends: String
-    interests: String
+  input userDocInput {
+    userName : String
+    ownGoals: String
 }
     `)
+
+class GoalDocPrototype {
+    constructor(goalDocCreate) {
+        this.id = goalDocCreate.id;
+        this.goal = goalDocCreate.goal
+        this.steps = goalDocCreate.steps
+        this.owner = goalDocCreate.owner
+    }
+}
+
+class UserType {
+    constructor(userCreate) {
+        this.id = userCreate.id
+        this.name  = userCreate.name
+        this.ownGoals = userCreate.ownGoals
+    }
+}
+
+
 
 const root = {
   goalDocs: async(args) => {
@@ -85,6 +104,7 @@ const root = {
       return res.status(500).json({error: 'something went wrong'})
     }
   },
+
   updateGoalDoc: async(args) => {
     try {
       let argsArr = [args.input.steps]
@@ -102,16 +122,27 @@ const root = {
       return res.status(500).json({error: 'something went wrong'})
     }
   },
+
   users: async(args) => {
+    try {
     const users = await User.find()
-
-    console.log('USERS', users)
-
+    // console.log('USERS', users)
     return users.map(user => new UserType(user))
-  },
+  } catch(err) {
+    console.error(err);
+    return res.status(500).json({error: 'something went wrong'})
+  }},
+
   createUser: async(args) => {
-    const user = await User.create(args.input)
+    try {
+    const UserDocInput = args.input;
+    console.log('ARGS.INPUT', UserDocInput)
+    const userDocCreate =  await User.create(args.input)
     return new UserType(user);
+  } catch(err) {
+    console.error(err);
+    return res.status(500).json({error: 'something went wrong'})
+    }
   }
 }
 
