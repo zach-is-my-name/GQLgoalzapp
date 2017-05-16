@@ -5,13 +5,13 @@ const ObjectID = mongoose.Schema.Types.ObjectId;
 const goalSchema = mongoose.Schema({
     goal: String,
     steps:{type: Array} ,
-    owner: [ObjectID]
+    owner: String,
 })
 
 const userSchema = mongoose.Schema({
     //id: _id,
     userName: String,
-    ownGoals: [ObjectID]
+    ownGoals:[String],
 })
 
 const User = mongoose.model('User', userSchema);

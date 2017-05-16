@@ -6,7 +6,7 @@ const {buildSchema} = require('graphql');
 const config = require('./config');
 const mongoose = require('mongoose');
 
-const {Goals} = require('./models');
+const {Goals,User} = require('./models');
 
 const {executabaleSchema} = require('./schema')
 
@@ -14,10 +14,10 @@ const schema = buildSchema(`
   type Query {
     goalDocs: [GoalDocType]
     goalDocByID(id:String): GoalDocType
-    users: [User]
+    userDocs: [UserDocType]
 }
 
-  type User {
+  type UserDocType {
     id: ID!
     userName: String
     ownGoals: [String]
@@ -33,8 +33,8 @@ const schema = buildSchema(`
   type Mutation {
     createGoalDoc(input:GoalDocInput): GoalDocType
     updateGoalDoc(id:ID!, input: GoalDocInput): GoalDocType
-    createUser(input: userDocInput): User
-    updateUser(id: ID!, input: userDocInput): User
+    createUserDoc(input: userDocInput): UserDocType
+    updateUserDoc(id: ID!, input: userDocInput):UserDocType
 }
 
   input GoalDocInput {
@@ -61,7 +61,7 @@ class GoalDocPrototype {
 class UserType {
     constructor(userCreate) {
         this.id = userCreate.id
-        this.name  = userCreate.name
+        this.userName  = userCreate.userName
         this.ownGoals = userCreate.ownGoals
     }
 }
@@ -123,7 +123,7 @@ const root = {
     }
   },
 
-  users: async(args) => {
+  userDocs: async(args) => {
     try {
     const users = await User.find()
     // console.log('USERS', users)
@@ -133,12 +133,12 @@ const root = {
     return res.status(500).json({error: 'something went wrong'})
   }},
 
-  createUser: async(args) => {
+  createUserDoc: async(args) => {
     try {
-    const UserDocInput = args.input;
-    console.log('ARGS.INPUT', UserDocInput)
-    const userDocCreate =  await User.create(args.input)
-    return new UserType(user);
+    const userDocInputObj = args.input;
+    console.log('ARGS.INPUT', userDocInputObj)
+    const userDocCreate =  await User.create(userDocInputObj)
+    return new UserType(userDocCreate);
   } catch(err) {
     console.error(err);
     return res.status(500).json({error: 'something went wrong'})
