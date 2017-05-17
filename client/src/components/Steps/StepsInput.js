@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions'
 
-import StepInputForm from '../Form/StepInputForm'
+import StepInputForm from './Form/StepInputForm'
 
 /* CLASS DEFINITION */
  class StepsInput extends React.Component {

@@ -10,8 +10,8 @@ import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 
-import GoalSelectForm from '../Form/GoalSelectForm'
-import CurrentGoal from '../presentational/CurrentGoal'
+import GoalSelectForm from './Form/GoalSelectForm'
+import CurrentGoal from './CurrentGoal'
 
 /*CLASS DECLARATION */
 class GoalSelector extends React.Component {

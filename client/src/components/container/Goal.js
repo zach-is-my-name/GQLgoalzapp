@@ -1,9 +1,8 @@
 /* eslint-disable */
 
 import React, {Component} from 'react'
-import GoalInput  from '../presentational/GoalInput'
-import GoalSelectorData from '../presentational/GoalSelector'
-import CurrentGoal from '../presentational/CurrentGoal'
+import GoalInput  from '../Goal/GoalInput'
+import GoalSelectorData from '../Goal/GoalSelector'
 
 // , GoalSelectorData, CurrentGoal
 export default function Goal() {

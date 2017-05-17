@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React, {Component} from 'react'
-import StepsInput from '../presentational/StepsInput'
+import StepsInput from '../Steps/StepsInput'
 
 export default function Steps() {
   return (
