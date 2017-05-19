@@ -11,7 +11,6 @@ render() {
 
   let stepsList = <ul>{steps}</ul>
 
-  console.log(this.props.text)
   return  (<div>{this.props.currentGoalSteps ? stepsList : null}</div>)
 }}
 

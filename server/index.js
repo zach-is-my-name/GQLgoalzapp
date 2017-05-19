@@ -15,6 +15,7 @@ const schema = buildSchema(`
     goalDocs: [GoalDocType]
     goalDocByID(id:String): GoalDocType
     userDocs: [UserDocType]
+    userDocByID(id:String): UserDocType
 }
 
   type UserDocType {
@@ -84,7 +85,7 @@ const root = {
     try {
       const goalDocQueryByID = await Goals.findById(args.id);
       // console.log(goalDocQueryByID);
-      return goalDocQueryByID
+      return goalDocQueryByID;
     } catch (err) {
       console.error(err);
       return res.status(500).json({error: 'something went wrong'})
@@ -133,6 +134,17 @@ const root = {
     return res.status(500).json({error: 'something went wrong'})
   }},
 
+  userDocByID: async(args) => {
+    try {
+      const userDocQueryByID = await User.findById(args.id);
+      console.log(userDocQueryByID);
+      return userDocQueryByID;
+    } catch(err) {
+      console.error(err);
+      return res.status(500).json({error: 'something went wrong'})
+    }
+  },
+
   createUserDoc: async(args) => {
     try {
     const userDocInputObj = args.input;
@@ -143,7 +155,14 @@ const root = {
     console.error(err);
     return res.status(500).json({error: 'something went wrong'})
     }
-  }
+  },
+
+  // updateUserDoc: async(args) => {
+  //   try {
+  //
+  //   }
+  // }
+
 }
 
 // app.use('/graphql', graphqlHTTP({schema, graphiql: true, rootValue: root})))

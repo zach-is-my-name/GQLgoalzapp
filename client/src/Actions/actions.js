@@ -16,8 +16,20 @@ return ( {
 })};
 
 export const SET_GOALDOC = 'SET_GOALDOC'
-export const setGoalDoc = goaldoc => ({
+export const setGoalDoc = goalDoc => ({
 
   type: SET_GOALDOC,
-  goaldoc
+  goalDoc
 });
+
+export const SET_USERDOC_ID = 'SET_USERDOC_ID';
+export const setUserDocID = userDocID => ({
+  type: SET_USERDOC_ID,
+  userDocID
+})
+
+export const SET_USERDOC = 'SET_USERDOC';
+export const setUserDoc = userDoc => ({
+  type: SET_USERDOC,
+  userDoc
+})

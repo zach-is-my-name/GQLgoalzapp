@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 
-class GoalSelectForm extends Component {
+class SelectGoalForm extends Component {
   render() {
     let goalDocs = this.props.goalDocs;
 
@@ -24,6 +24,6 @@ class GoalSelectForm extends Component {
 //dropdown doesn't update on GoalInput
 
 
-        GoalSelectForm = reduxForm({form: 'goalSelectForm'})(GoalSelectForm);
+        SelectGoalForm = reduxForm({form: 'goalSelectForm'})(SelectGoalForm);
 
-        export default GoalSelectForm;
+        export default SelectGoalForm;

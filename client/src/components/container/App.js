@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import '../../App.css';
+
 import Goal from './Goal'
 import Steps from './Steps'
+import User from './User'
 
 
 export default class App extends Component {
@@ -13,6 +15,7 @@ export default class App extends Component {
           <br/>
           <Goal />
           <Steps />
+          <User />
         </div>
         </div>
           );

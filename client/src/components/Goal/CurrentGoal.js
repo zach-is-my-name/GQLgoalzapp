@@ -20,7 +20,6 @@ import * as actions from '../../Actions/actions'
 class CurrentGoal extends Component {
     constructor(props) {
         super(props)
-    // this.setGoalDoc = this.setGoalDoc.bind(this);
     }
 
 
@@ -38,18 +37,14 @@ class CurrentGoal extends Component {
     }
     return null;
       }
+      /*Check Query was sent and Data Received */
     componentWillReceiveProps(nextProps){
         if(nextProps.data && nextProps.data.loading == false) {
         // console.log('NEXTPROPS',nextProps.data.goalDocByID)
+      /* ACTION DISPATCH */
           this.props.dispatch(actions.setGoalDoc(nextProps.data.goalDocByID))
 }}
 }
-
-      // componentDidUpdate(prevProps, prevState){
-      // console.log('PREVIOUS PROPS', prevProps);
-      // console.log('PREVIOUS STATES', prevState)
-          // this.props.dispatch(actions.setGoalDoc(goalDocByID))
-    // }
 
     //could add a loading spinner here
     //Nit-pick issue: Current behavior is the entire 'Current Goal' text re-renders when a goal
