@@ -14,23 +14,20 @@ import * as actions from '../../Actions/actions'
       varGoal : ''
     }
     }
-
+// Original Attempt this.props.mutate({variables: {createGoalDoc: mutateArg } })
+//      this.props.mutate({variables: mutateArg})
 /* Event Handler*/
-submitGoal = (event) => {
+
+submitGoal(event)  {
   event.preventDefault()
   const {varGoal} = this.state;
-  const mutateArg =  {varGoaldoc: {goal: varGoal}}
-  // Original Attempt this.props.mutate({variables: {createGoalDoc: mutateArg } })
-     this.props.mutate({variables: mutateArg})
+  // const mutateArg =  {varGoaldoc: {goal: varGoal}}
+    this.props.inputGoal(varGoal)
     .then(({data}) => {
-      console.log('GOT DATA', data);
-
       /*Action Dispatch */
-      this.props.dispatch(actions.setGoalDoc(data.createGoalDoc))
-    }).catch((error) => {
-      console.log('there was an error sending the query', error);
-    })
-    }
+      this.props.dispatch(actions.setGoal(data.createGoalDoc))
+    })}
+
 
 //you can probably dispatch setGoal with the returned value of the mutation (which
 // should include an id and the goal
@@ -46,15 +43,37 @@ submitGoal = (event) => {
 
 
 /*GraphQL Query */
-const GoalInputWithData = graphql(gql`
-    mutation ($varGoaldoc: GoalDocInput) {
-  createGoalDoc(input: $varGoaldoc) {
+
+const goalInputMutation = gql `mutation($varGoal: String) {
+  createGoalDoc(goal:$varGoal) {
     goal
     id
-    steps
   }
+}`
+
+// gql`
+//     mutation ($varGoaldoc: GoalDocInput) {
+//   createGoalDoc(input: $varGoaldoc) {
+//     goal
+//     id
+//     steps
+//   }
+// }
+// `
+
+const GoalInputWithData = graphql(goalInputMutation,
+{
+    props: ({mutate}) => ({
+      inputGoal(goal, steps) {
+        return mutate({
+          variables: {goal:goal}
+        })
+    .catch((error) => {
+      console.log('there was an error sending the query', error);
+    })
 }
-`)(GoalInput);
+})
+})(GoalInput);
 
 /*Redux */
 const mapStateToProps = (state, props) => {

@@ -5,77 +5,84 @@ with that ID, render the goal name with that query and set the current goal with
 /*Expect problems reading the current goal, when the page first loads and there is no current
 goal selected */
 
-/* Find out how to conditionally query, based upon if there is a currentGoalID in state
---Answer: should be with skip(), why though is it not working? See my Stackoverflow question
-*/
-
-import React,{Component} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 
-
-  /* CLASS DECLARATION */
+/* CLASS DECLARATION */
 class CurrentGoal extends Component {
-    constructor(props) {
-        super(props)
-    }
+  constructor(props) {
+    super(props)
+  }
 
-
-
-/* RENDER METHOD */
-    render (){
-      if (this.props.data){
-        const { data: { loading, error, goalDocByID } } = this.props;
-        if (!loading){
-          return(
-            <p>Current Goal: { !this.props.id  ?
-            null : goalDocByID.goal  }</p>
-
-)}
+  /* RENDER METHOD */
+  render() {
+    // console.log('ID_PROPS',this.props.id )
+    if (this.props.data) {
+      // console.log('DATA', this.props.data)
+      const {
+        data: {
+          loading,
+          error,
+          GoalDoc
+        }
+      } = this.props;
+      if (!loading) {
+        error ? console.log(error) : null
+        // console.log('GOALDOC',  GoalDoc)
+        return (
+          <p>Current Goal: {!this.props.id
+            ? null
+          : GoalDoc.goal}</p>
+        )
+      }
     }
     return null;
-      }
-      /*Check Query was sent and Data Received */
-    componentWillReceiveProps(nextProps){
-        if(nextProps.data && nextProps.data.loading == false) {
-        // console.log('NEXTPROPS',nextProps.data.goalDocByID)
+  }
+
+  /*Check if Query was sent and Data Received */
+  componentWillReceiveProps(nextProps) {
+    // console.log('NEXTPROPS_ID', nextProps.id)
+    if (nextProps.data && nextProps.data.loading == false) {
+      // console.log('NEXTPROPS',nextProps.data.GoalDoc)
       /* ACTION DISPATCH */
-          this.props.dispatch(actions.setGoalDoc(nextProps.data.goalDocByID))
-}}
+      this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
+    }
+  }
 }
 
-    //could add a loading spinner here
-    //Nit-pick issue: Current behavior is the entire 'Current Goal' text re-renders when a goal
-     // is selected.  Before, only the selected goal rendered.  How to keep the latter...?
+//could add a loading spinner here
+//Nit-pick issue: Current behavior is the entire 'Current Goal' text re-renders when a goal
+// is selected.  Before, only the selected goal rendered.  How to keep the latter...?
 
 /* REDUX CONNECT */
 const mapStateToProps = (state, props) => {
-    return {
-        currentGoal: state.goals.currentGoal,
-        currentGoalID: state.goals.currentGoalID,
-        currentGoalSteps: state.goals.currentGoalSteps
-    }
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, currentGoalSteps: state.goals.currentGoalSteps}
 }
 
 const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoal);
 
 /* GRAPHQL QUERY */
 const FetchGoalDocByID = gql `
-query root($varID:String) {
-  goalDocByID(id:$varID) {
-    goal
-    steps
-    id
+query ($varID: ID) {
+  GoalDoc(id: $varID) {
+   goal
+   id
+   steps(orderBy:createdAt_ASC) {
+     step
+   }
   }
 }`;
 
 const CurrentGoalWithData = graphql(FetchGoalDocByID, {
- skip: (props) => !props.id,
- options: ({id}) =>( {variables: {varID: id} })
+  skip: (props) => !props.id,
+  options: ({id}) => ({
+    variables: {
+      varID: id
+    }
+  })
 })(CurrentGoalWithState);
-
-
 
 export default CurrentGoalWithData

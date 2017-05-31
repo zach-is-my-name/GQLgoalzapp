@@ -1,0 +1,16 @@
+1.) I've been exposed to several different patterns of keeping state.
+
+One thing which I've been surprised about is how is how none of the major GraphQl Apollo examples use Redux.
+
+They are keeping state many times on the server using Subscriptions (Githunt) and local state (Handsup)
+
+In the Githunt case, state is being kept on the Modal only (Votes)
+In the Handsup case state is being kept locally, with a mutation on the server (Votes)
+
+2.) Rendering Logic (ie. isLoading)
+
+Watch for how this accomplished in both
+
+3.) Passing Props Down Generally
+
+Watch for which props are being passed down to components

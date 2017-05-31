@@ -17,9 +17,9 @@ class SelectGoal extends React.Component {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
     // this.idProps = this.idProps.bind(this)
-    }
+  }
 
-/*EVENT HANDLER */
+  /*EVENT HANDLER */
   selectGoal = (values) => {
     // console.log(values.goalSelector);
     event.preventDefault();
@@ -28,15 +28,9 @@ class SelectGoal extends React.Component {
     this.props.dispatch(actions.setGoalDocID(values.goalSelector))
   }
 
-/*RENDER METHOD */
+  /*RENDER METHOD */
   render() {
-    const {
-      data: {
-        loading,
-        error,
-        goalDocs
-      }
-    } = this.props;
+    const { data: {loading,error,allGoalDocs} } = this.props;
 
     if (loading) {
       return <div>loading...</div>;
@@ -44,36 +38,33 @@ class SelectGoal extends React.Component {
       return <p>Error!</p>
     } else {
 
-//Find out how to give the dropdown an initial default option value, along with the options data being fetched
+      //Find out how to give the dropdown an initial default option value, along with the options data being fetched
 
       return (
         <div>
-          <SelectGoalForm  goalDocs={this.props.data.goalDocs} onChange={this.selectGoal}/>
-          <CurrentGoal id={this.props.currentGoalID} />
+          <SelectGoalForm goalDocs={this.props.data.allGoalDocs} onChange={this.selectGoal}/>
+          <CurrentGoal id={this.props.currentGoalID}/>
         </div>
       )
     }
-  }}
+  }
+}
 
 /*GRAPHQL QUERY */
-const GoalQuery = gql `
-            query root {
-              goalDocs {
-                goal
-                id
-              }
-            }
-            `;
+const GoalQuery = gql `query {
+      allGoalDocs(orderBy:updatedAt_DESC){
+        goal
+        id
+        }
+      }`;
+
 
 const ComponentWithData = graphql(GoalQuery)(SelectGoal);
 
 /*REDUX CONNECT */
 const mapStateToProps = (state, props) => {
   // console.log(state)
-  return {
-    currentGoal: state.goals.currentGoal,
-    currentGoalID: state.goals.currentGoalID
-  }
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID}
 }
 
 export default connect(mapStateToProps)(ComponentWithData)

@@ -1,6 +1,7 @@
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import {ApolloClient} from 'react-apollo';
 import { reducer as formReducer } from 'redux-form'
+// import { client } from './index'
 
 import * as Goal_Reducer from './Reducers/Goal_Reducer';
 import * as User_Reducer from './Reducers/User_Reducer';

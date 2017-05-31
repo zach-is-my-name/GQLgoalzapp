@@ -14,21 +14,23 @@ import StepInputForm from './Form/StepInputForm'
     this.submitStep = this.submitStep.bind(this);
   }
 
-
+    // this.props.mutate({variables:{varStep: step, varID: this.props.currentGoalID }})
+    // .then(({data}) => {
+    //   console.log('GOT DATA STEP INPUT', data);
 
 /* EVENT HANDLER */
   submitStep = (values) => {
     let step = values.stepInput;
-    console.log(values.stepInput)
-    this.props.mutate({variables:{varStep: step, varID: this.props.currentGoalID }})
-    .then(({data}) => {
-      console.log('GOT DATA STEP INPUT', data);
-        this.props.dispatch(actions.setSteps(step))
-    }).catch((error) => {
-      console.log('there was an error sending the query', error);
-    })
-}
-
+    console.log('STEP INPUT',values.stepInput)
+    console.log('ID INPUT', this.props.currentGoalID)
+    this.props.createStep(step, this.props.currentGoalID)
+        .then(( {data} ) => {
+          console.log('DATA SUBMITTED', data);
+        /* DISPATCH ACTION */
+        this.props.dispatch(actions.setStep(step))
+        })
+    }
+//18519328
 /* RENDER METHOD */
   render() {
 
@@ -37,22 +39,38 @@ import StepInputForm from './Form/StepInputForm'
     )
   }
 }
-
-
-
+// mutation root ($varID: ID!, $varStep: String) {
+//   updateGoalDoc(id: $varID, input: {
+//     steps: $varStep
+//   })
+//     {
+//       goal
+//       steps
+//       id
+//     }
+//   }
 /* GRAPHQL QUERY */
-const StepsMutation = gql `mutation root ($varID: ID!, $varStep: String) {
-  updateGoalDoc(id: $varID, input: {
-    steps: $varStep
-  })
-    {
-      goal
-      steps
-      id
-    }
-  }`
+const StepsMutation = gql`
+  mutation($varStep:String!, $varGoalDocId: ID) {
+  createStep(step:$varStep, goalDocId:$varGoalDocId) {
+    step
+    id
+  }
+}`
 
-const StepsInputWithMutation = graphql(StepsMutation)(StepsInput)
+const StepsInputWithMutation = graphql(StepsMutation,
+{
+    props:({mutate}) => ({
+      createStep(step, goalDocId) {
+        return mutate({
+          variables: {varStep: step, varGoalDocId: goalDocId }
+        })
+        .catch((error) => {
+          console.log('there was an error sending the query', error)
+        })
+      }
+    })
+})(StepsInput)
 
 /* REDUX */
 const mapStateToProps = (state, props) => {

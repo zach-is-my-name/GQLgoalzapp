@@ -2,16 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/container/App';
 import {store} from './store';
-import {ApolloProvider, ApolloClient, createNetworkInterface} from 'react-apollo';
+import {ApolloProvider, ApolloClient} from 'react-apollo';
+// import Authorization from './services/authorization'
 import './index.css';
+import {networkInterface} from './networkinterface'
 
 
-const client = new ApolloClient({
-  networkInterface: createNetworkInterface({
-  uri:"/graphql",
-}),
+export const client = new ApolloClient({
+  networkInterface: networkInterface,
   connectToDevTools: true
 });
+
+// const auth = new Authroisation()
 
 ReactDOM.render(
   <ApolloProvider store={store} client={client}>
