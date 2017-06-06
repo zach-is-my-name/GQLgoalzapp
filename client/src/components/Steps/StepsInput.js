@@ -14,10 +14,6 @@ import StepInputForm from './Form/StepInputForm'
     this.submitStep = this.submitStep.bind(this);
   }
 
-    // this.props.mutate({variables:{varStep: step, varID: this.props.currentGoalID }})
-    // .then(({data}) => {
-    //   console.log('GOT DATA STEP INPUT', data);
-
 /* EVENT HANDLER */
   submitStep = (values) => {
     let step = values.stepInput;
@@ -30,7 +26,7 @@ import StepInputForm from './Form/StepInputForm'
         this.props.dispatch(actions.setStep(step))
         })
     }
-//18519328
+
 /* RENDER METHOD */
   render() {
 
@@ -39,16 +35,7 @@ import StepInputForm from './Form/StepInputForm'
     )
   }
 }
-// mutation root ($varID: ID!, $varStep: String) {
-//   updateGoalDoc(id: $varID, input: {
-//     steps: $varStep
-//   })
-//     {
-//       goal
-//       steps
-//       id
-//     }
-//   }
+
 /* GRAPHQL QUERY */
 const StepsMutation = gql`
   mutation($varStep:String!, $varGoalDocId: ID) {

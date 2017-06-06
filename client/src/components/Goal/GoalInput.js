@@ -14,8 +14,6 @@ import * as actions from '../../Actions/actions'
       varGoal : ''
     }
     }
-// Original Attempt this.props.mutate({variables: {createGoalDoc: mutateArg } })
-//      this.props.mutate({variables: mutateArg})
 /* Event Handler*/
 
 submitGoal(event)  {
@@ -50,16 +48,6 @@ const goalInputMutation = gql `mutation($varGoal: String) {
     id
   }
 }`
-
-// gql`
-//     mutation ($varGoaldoc: GoalDocInput) {
-//   createGoalDoc(input: $varGoaldoc) {
-//     goal
-//     id
-//     steps
-//   }
-// }
-// `
 
 const GoalInputWithData = graphql(goalInputMutation,
 {

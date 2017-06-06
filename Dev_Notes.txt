@@ -1,6 +1,6 @@
 1.) I've been exposed to several different patterns of keeping state.
 
-One thing which I've been surprised about is how is how none of the major GraphQl Apollo examples use Redux.
+One thing which I've been surprised about is how none of the major GraphQl Apollo examples use Redux.
 
 They are keeping state many times on the server using Subscriptions (Githunt) and local state (Handsup)
 
@@ -14,3 +14,15 @@ Watch for how this accomplished in both
 3.) Passing Props Down Generally
 
 Watch for which props are being passed down to components
+
+4.) To accomplish the "local WRITE", you must rely on upon a conditional if the user is logged in.
+  Dispatch to the immediately to store if the user is !logged, dispatch to store after writing if the user is logged in.
+  This will need to be solved in the event handlers.
+
+
+** Auth branch Summary **
+
+1.) Followed Graphcool Auth Tutorial 3.3 (Note:) - 3.4
+2.) Added Routes in src/index.js
+3.) Re-factored <Goal> and <Steps> components into a src/Routes/UserFeed component representing 1 of 2 planned Routes
+4.) Render <UserFeed> in <App>
