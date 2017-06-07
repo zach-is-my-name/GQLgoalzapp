@@ -27,21 +27,27 @@ setUserName = () => {
 
   componentDidMount() {
     this._lock.on('authenticated', (authResult) => {
-      console.log('IDTOKEN', authResult.idToken)
-      window.localStorage.setItem('auth0IdToken', authResult.idToken)
-      this.setUserName()
+       window.localStorage.setItem('auth0IdToken', authResult.idToken)
+        console.log(window.localStorage)
+        const token =  window.localStorage.getItem('auth0IdToken')
+      console.log(token  ? 'TOKEN IN LOCALSTORAGE === TRUE': 'TOKEN IN LOCALSTORAGE === FALSE')
 
-      //check if the user exists on the User Model
-      if (this.props.data.user || window.localStorage.getItem('auth0IdToken') === null) {
-        console.warn('not a new user or already logged in')
+      //check if user exists in db
+    if (this.props.data.user || window.localStorage.getItem('auth0IdToken') === null) {
 
+        console.log(this.props.data.user ? 'USER QUERY TRUE'  : 'USER QUERY FALSE'
+        )
+        // console.warn('not a new user or already logged in')
+        return
       } else {
+        // console.log('TOKEN IN LOCALSTORAGE? :TRUE')
+        // console.log('THIS.PROPS.DATA.USER? : TRUE ')
+      console.log('GREAT SUCCCES', this.props.data.user, token)
+        return
+      }
 
-      // Run create User Mutation
-        const token = window.localStorage.getItem('auth0IdToken')
-
-        console.log(typeof token)
-        console.log('TOKEN', token)
+        // this.setUserName()
+        console.log('HAVE TOKEN?:', token ? 'TRUE': 'FALSE')
         this.props.createUser(token, this.state.username)
         .then((response) => {
                   console.log(response);
@@ -50,12 +56,7 @@ setUserName = () => {
                 console.error(e)
                 // this.props.history.replace('/')
               })
-          }
-        }
-  )    }
-
-
-
+        })}
 
     _showLogin = () => {
       this._lock.show()
@@ -63,6 +64,9 @@ setUserName = () => {
 
 
   render() {
+    if (!this.props.data.loading && this.props.data.error) {
+      console.error(this.props.data.error)
+    }
     return (
       <div>
         <button onClick={this._showLogin}>
@@ -70,12 +74,11 @@ setUserName = () => {
         </button>
       </div>
     )
-}
-}
+}}
 
 
-const createUserMutation = gql`
-  mutation($idToken: String!, $userName: String!) {
+
+const  createUserMutation = gql`mutation($idToken: String!, $userName: String!) {
     createUser(authProvider: { auth0: { idToken: $idToken } },
       userName: $userName){
       id
@@ -83,7 +86,7 @@ const createUserMutation = gql`
   }`
 
   const userQuery = gql`
-    query {
+    query user{
       user {
         id
       }
@@ -98,5 +101,6 @@ export default graphql(createUserMutation,
   }
 })
 },
-{name: 'createUser'})(
+{name: 'createUser'},
+)(
   graphql(userQuery, { options: {fetchPolicy: 'network-only'}})(withRouter(LoginAuth0)))

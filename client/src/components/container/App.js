@@ -25,20 +25,30 @@ export class App extends Component {
   }
 
   render() {
+    const token = window.localStorage.getItem('auth0IdToken')
+    console.log(token  ? 'LOCALSTORAGE === TRUE': 'LOCALSTORAGE === FALSE')
+    if (this.props.data.error) {
+    return console.error(this.props.data.error)
+    }
     if (this.props.data.loading) {
       return (
         <div>Loading</div>
       )
     }
+  console.log('USER QUERY:',this.props.data.user ? 'TRUE': 'FALSE')
 
     if (this._isLoggedIn()) {
+
+    console.log('ISLOGGEDIN: TRUE')
       return this.renderLoggedIn()
     } else {
+    console.log('_ISLOGGEDIN: FALSE')
       return this.renderLoggedOut()
     }
   }
 
   renderLoggedIn() {
+    console.log('RENDERLOGGEDIN9()')
     return (
       <div className="App">
         <div>
@@ -64,9 +74,11 @@ renderLoggedOut() {
     )}
         }
 
-        const userQuery = gql` query userQuery {
-          user {
-            id}
-          }`
-
+        const userQuery = gql`
+          query userQuery {
+            user {
+              id
+            }
+          }
+        `
 export default graphql(userQuery, {options : {fetchPolicy: 'network-only'}})(withRouter(App))

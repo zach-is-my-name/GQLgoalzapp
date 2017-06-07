@@ -30,6 +30,9 @@ submitGoal(event)  {
 //you can probably dispatch setGoal with the returned value of the mutation (which
 // should include an id and the goal
     render() {
+        // if (!this.props.data.loading) {
+        //   console.error(this.props.data.error)
+        
         const input = <form className="goal-input" onSubmit={this.submitGoal}>
           <input type="text" id="form-text" placeholder="Your Goal"
             onChange={(e)=> this.setState({varGoal: e.target.value})}/>
