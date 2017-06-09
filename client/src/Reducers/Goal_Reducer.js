@@ -13,6 +13,12 @@ const initialState = {
 
 export const goalReducer = (state = initialState, action) => {
 
+if (action.type === 'SET_USERID') {
+  return update(state, {
+    currentGoalOwner: {$set: action.id}
+  })
+}
+
 if (action.type === 'SET_GOAL') {
   return update(state, {
     currentGoal: {$set:action.goal},

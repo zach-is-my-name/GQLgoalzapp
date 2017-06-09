@@ -1,5 +1,12 @@
 import 'isomorphic-fetch';
 
+export const SET_USERID ='SET_USERID'
+export const setUserId = id => ({
+  type: SET_USERID,
+  id
+})
+
+
 export const SET_GOAL = 'SET_GOAL';
 export const setGoal = goal => ({
   type: SET_GOAL,
