@@ -10,8 +10,8 @@ class CurrentSteps extends Component {
     let stepsList = <ul>{steps}</ul>
     return (
       <div>{this.props.currentGoalSteps
-          ? stepsList
-          : null}</div>
+        ? stepsList
+      : null}</div>
     )
   }
 }

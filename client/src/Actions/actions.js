@@ -31,8 +31,9 @@ return ( {
 export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goalDoc => {
 const {goal, id, steps} = goalDoc
-const flatSteps = steps.map(step => step.step)
-const flatGoalDoc = { goal,id, flatSteps }
+let  flatSteps = steps.map(step => step.step)
+// const flatGoalDoc = { goal, id, }
+const flatGoalDoc = { goal, id, flatSteps }
 return  {
   type: SET_GOALDOC,
   flatGoalDoc

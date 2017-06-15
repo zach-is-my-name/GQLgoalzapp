@@ -20,11 +20,15 @@ import * as actions from '../../Actions/actions'
 submitGoal(event)  {
   event.preventDefault()
   const {goal} = this.state;
-  console.log(goal)
+  // console.log(goal)
   const ownersId = this.props.currentGoalOwner
-    console.log(this.props.currentGoalOwner)
+    // console.log(this.props.currentGoalOwner)
     this.props.inputGoal({variables: { goal, ownersId }} )
+    .catch((error) => {
+      console.log('there was an error sending the query', error)
+    })
     .then(({data}) => {
+      console.log("Mutation Sent!")
       /*Action Dispatch */
       this.props.dispatch(actions.setGoal(data.createGoalDoc))
     })}
@@ -46,9 +50,7 @@ submitGoal(event)  {
         }}/>
       )
     }
-    console.log(this.props.data.user)
-    const token = window.localStorage.getItem('auth0IdToken')
-    console.log(token)
+
         const input = <form  onSubmit={this.submitGoal}>
           <input type="text" id="form-text" placeholder="Your Goal"
             onChange={(e)=> this.setState({goal: e.target.value})}/>
@@ -76,19 +78,19 @@ const userQuery = gql`
   }
 `
 
-const GoalInputWithData = graphql(goalInputMutation,
-{
-    props: ({mutate}) => ({
-      inputGoal({variables} ) {
-        return mutate({
-          variables: {...variables}
-        })
-    .catch((error) => {
-      console.log('there was an error sending the query', error);
-    })
-}
-})
-})(graphql(userQuery, { options: {fetchPolicy: 'network-only'}} )(withRouter(GoalInput)));
+const GoalInputWithData = graphql(userQuery,
+{ options: {fetchPolicy: 'network-only'}})(graphql(goalInputMutation,{
+  props: ({mutate}) => ({
+    inputGoal({variables}) {
+      return mutate({
+        variables: {...variables}
+      })
+      .catch((error) => {
+        console.log('there was an error sending the query', error)
+      })
+    }
+  })
+})(withRouter(GoalInput)));
 
 /*Redux */
 const mapStateToProps = (state, props) => {

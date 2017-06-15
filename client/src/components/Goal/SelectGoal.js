@@ -19,7 +19,7 @@ class SelectGoal extends React.Component {
     // this.idProps = this.idProps.bind(this)
   }
 
-  /*EVENT HANDLER */
+  /* EVENT HANDLER */
   selectGoal = (values) => {
     // console.log(values.goalSelector);
     event.preventDefault();

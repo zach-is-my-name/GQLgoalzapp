@@ -26,3 +26,21 @@ Watch for which props are being passed down to components
 2.) Added Routes in src/index.js
 3.) Re-factored <Goal> and <Steps> components into a src/Routes/UserFeed component representing 1 of 2 planned Routes
 4.) Render <UserFeed> in <App>
+
+
+5. Why doesn't the Goal Input load when logged out?
+
+6. Consider Using componentWillUpdate or componentDidUpdate to act on changes of GraphQl operations (from https://daveceddia.com/react-gotchas/
+and https://engineering.musefind.com/react-lifecycle-methods-how-and-when-to-use-them-2111a1b692b1)
+
+7. SelectGoal.js:28 Should NOT dispatch action with value of the form, rather the returned value of the async fetch
+
+8. CurrentGoal.js:90 Repeat GraphCool Example pattern of passing in 'variables' with the spread operator ...variables
+
+9. Carry over from comments CurrentGoal.js
+Nit-pick issue: Current behavior is the entire 'Current Goal' text re-renders when a goal
+is selected.  Before, only the selected goal rendered.  How to keep the latter...?
+  Verify if this is still the case
+
+10. Figure out why inputted mutation varible name have to match.  And more importantly why, the mutation succeeded when
+  I gave $goalDocId "id"?"

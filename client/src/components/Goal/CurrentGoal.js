@@ -17,18 +17,12 @@ class CurrentGoal extends Component {
     super(props)
   }
 
+
+
   /* RENDER METHOD */
   render() {
-    // console.log('ID_PROPS',this.props.id )
     if (this.props.data) {
-      // console.log('DATA', this.props.data)
-      const {
-        data: {
-          loading,
-          error,
-          GoalDoc
-        }
-      } = this.props;
+      const {data: {loading,error,GoalDoc}} = this.props;
       if (!loading) {
         error ? console.log(error) : null
         // console.log('GOALDOC',  GoalDoc)
@@ -44,18 +38,14 @@ class CurrentGoal extends Component {
 
   /*Check if Query was sent and Data Received */
   componentWillReceiveProps(nextProps) {
-    // console.log('NEXTPROPS_ID', nextProps.id)
-    if (nextProps.data && nextProps.data.loading == false) {
-      // console.log('NEXTPROPS',nextProps.data.GoalDoc)
+    if (nextProps.data && nextProps.data.loading == false && nextProps.data.GoalDoc) {
+    if (this.props.data.GoalDoc !=nextProps.data.GoalDoc){
       /* ACTION DISPATCH */
       this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
     }
-  }
+  }}
 }
 
-//could add a loading spinner here
-//Nit-pick issue: Current behavior is the entire 'Current Goal' text re-renders when a goal
-// is selected.  Before, only the selected goal rendered.  How to keep the latter...?
 
 /* REDUX CONNECT */
 const mapStateToProps = (state, props) => {

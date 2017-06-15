@@ -15,7 +15,6 @@ export const networkInterface = createNetworkInterface({
 
 networkInterface.use([{
   applyMiddleware (req, next) {
-    console.log(req);
     if (!req.options.headers) {
       req.options.headers = {}
     }
@@ -23,7 +22,7 @@ networkInterface.use([{
     // get the authentication token from local storage if it exists
     if (localStorage.getItem('auth0IdToken')) {
       req.options.headers.authorization = `Bearer ${localStorage.getItem('auth0IdToken')}`
-      console.log(req.options.headers.authorization)
+      // console.log(req.options.headers.authorization)
     }
     next()
   },

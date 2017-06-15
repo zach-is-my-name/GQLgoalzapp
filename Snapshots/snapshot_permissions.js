@@ -18,15 +18,14 @@ import StepInputForm from './Form/StepInputForm'
 /* EVENT HANDLER */
   submitStep = (values) => {
     let step = values.stepInput;
-    const goalDocId  = this.props.currentGoalID
-    console.log('STEP INPUT',step)
-    console.log('ID INPUT', goalDocId)
-    console.log('TYPE OF ID', typeof goalDocId)
-    this.props.createStep({variables: {step, goalDocId}})
+    const id = this.props.currentGoalID
+    const ownersId = this.props.currentGoalOwnerID
+    console.log('STEP INPUT',values.stepInput)
+    console.log('ID INPUT', this.props.currentGoalID)
+    this.props.createStep({variables: {step, id, ownersId}})
         .then(( {data} ) => {
           console.log('DATA SUBMITTED', data);
         /* DISPATCH ACTION */
-        console.log('this is step', step)
         this.props.dispatch(actions.setStep(step))
         })
     }
@@ -41,9 +40,9 @@ import StepInputForm from './Form/StepInputForm'
 }
 
 /* GRAPHQL QUERY */
-const StepsMutation = gql                                         `
-  mutation($step:String!, $goalDocId: ID) {
-  createStep(step:$step, goalDocId:$goalDocId) {
+const StepsMutation = gql`
+  mutation($step:String!, $id: ID) {
+  updateGoalDoc(step:$step, goalDocId:$id, ownersId:$ownersId) {
     step
     id
   }
@@ -56,6 +55,13 @@ const userQuery = gql`
     }
   }
 `
+
+
+/* REDUX */
+const mapStateToProps = (state, props) => {
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID,
+  currentGoalOwnerID: state.goals.currentGoalOwnerID}
+}
 
 const StepsInputWithMutation =graphql(userQuery,
   {options: {fetchPolicy: 'network-only'}})
@@ -71,11 +77,5 @@ const StepsInputWithMutation =graphql(userQuery,
       }
     })
 })(withRouter(StepsInput)))
-
-/* REDUX */
-const mapStateToProps = (state, props) => {
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID,
-  }
-}
 
 export default connect(mapStateToProps)(StepsInputWithMutation)

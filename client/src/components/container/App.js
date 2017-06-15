@@ -25,7 +25,7 @@ export class App extends Component {
 
   render() {
     // console.log(token  ? 'LOCALSTORAGE === TRUE': 'LOCALSTORAGE === FALSE')
-    console.log(this.props)
+    // console.log(this.props)
     if (this.props.data.error) {
       return console.error(this.props.data.error)
     }
@@ -37,7 +37,7 @@ export class App extends Component {
 
     if (this._isLoggedIn()) {
       this.props.dispatch(actions.setUserId(this.props.data.user.id))
-      console.log('ISLOGGEDIN: TRUE')
+      // console.log('ISLOGGEDIN: TRUE')
       return this.renderLoggedIn()
     } else {
       console.log('_ISLOGGEDIN: FALSE')
@@ -57,7 +57,7 @@ export class App extends Component {
   // }
 
   renderLoggedIn() {
-    console.log('RENDERLOGGEDIN9()')
+    console.log('renderLoggedIn()')
     return (
       <div className="App">
         <div>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Auth0Lock from 'auth0-lock'
-import {withRouter, Redirect} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import {graphql, gql} from 'react-apollo'
 
 export class LoginAuth0 extends Component {
@@ -26,8 +26,10 @@ export class LoginAuth0 extends Component {
   componentDidMount() {
     this._lock.on('authenticated', (authResult) => {
       window.localStorage.setItem('auth0IdToken', authResult.idToken)
+      const token = window.localStorage.getItem('auth0IdToken', authResult.idToken)
+      console.log(token)
     if (this.state.userExists.false) {
-    this.setUserName()
+    // this.setUserName()
     const token = window.localStorage.getItem('auth0IdToken')
     this.props.createUser(token, this.state.username).then((response) => {
       console.log(response);
@@ -53,6 +55,7 @@ export class LoginAuth0 extends Component {
     && this.props.data.user)   {
     this.setState({userExists:true})
     }
+      console.error(this.props.data.error)
     return (
       <div>
         <button onClick={this._showLogin}>
@@ -60,7 +63,6 @@ export class LoginAuth0 extends Component {
         </button>
       </div>
     )
-      console.error(this.props.data.error)
 
   }
 }

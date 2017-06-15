@@ -40,9 +40,10 @@ if (action.type === 'SET_GOALDOC') {
 }
 
 if (action.type === 'SET_STEP') {
-  return update(state.goals.currentGoalSteps,
-    {$push:action.step},
-  )}
+  console.log(action.step)
+  return update(state, {
+  currentGoalSteps:  {$push:action.step},
+})}
 
 return state;
 }
