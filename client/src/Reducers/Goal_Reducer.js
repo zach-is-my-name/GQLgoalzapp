@@ -8,7 +8,7 @@ const initialState = {
   currentGoal: '',
   currentGoalID:'',
   currentGoalSteps:[],
-  currentGoalOwnerID:'',
+  currentGoalOwner:'',
 }
 
 export const goalReducer = (state = initialState, action) => {

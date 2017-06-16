@@ -17,15 +17,12 @@ class CurrentGoal extends Component {
     super(props)
   }
 
-
-
   /* RENDER METHOD */
   render() {
     if (this.props.data) {
       const {data: {loading,error,GoalDoc}} = this.props;
       if (!loading) {
         error ? console.log(error) : null
-        // console.log('GOALDOC',  GoalDoc)
         return (
           <p>Current Goal: {!this.props.id
             ? null

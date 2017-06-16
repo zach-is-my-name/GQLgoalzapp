@@ -7,9 +7,10 @@ import * as actions from '../../Actions/actions'
 
 
 /*Class Declaration */
- class GoalInput extends React.Component {
+ class InputGoal extends React.Component {
     constructor(props) {
         super(props)
+    this.handleChange = this.handleChange.bind(this);
     this.submitGoal = this.submitGoal.bind(this);
     this.state = {
       goal : ''
@@ -20,9 +21,8 @@ import * as actions from '../../Actions/actions'
 submitGoal(event)  {
   event.preventDefault()
   const {goal} = this.state;
-  // console.log(goal)
+  this.setState({goal:''})
   const ownersId = this.props.currentGoalOwner
-    // console.log(this.props.currentGoalOwner)
     this.props.inputGoal({variables: { goal, ownersId }} )
     .catch((error) => {
       console.log('there was an error sending the query', error)
@@ -33,14 +33,15 @@ submitGoal(event)  {
       this.props.dispatch(actions.setGoal(data.createGoalDoc))
     })}
 
-
+handleChange(e) {
+  this.setState({goal: e.target.value });
+    }
 //you can probably dispatch setGoal with the returned value of the mutation (which
 // should include an id and the goal
     render() {
     if (this.props.data.loading) {
       return (<div>Loading</div>)
     }
-
     // redirect if no user is logged in
     if (!this.props.data.user) {
       console.warn('only logged in users can create new posts')
@@ -51,15 +52,16 @@ submitGoal(event)  {
       )
     }
 
-        const input = <form  onSubmit={this.submitGoal}>
-          <input type="text" id="form-text" placeholder="Your Goal"
-            onChange={(e)=> this.setState({goal: e.target.value})}/>
-          <input type="submit" name="submit step" value="ZappIt"/>
+        const input =
+        <form  onSubmit={this.submitGoal}>
+          <input type="text" id="form-text" placeholder=""
+            onChange={this.handleChange}
+            value={this.state.goal}/>
+          <input type="submit" value="ZappIt"/>
         </form>
 
         return (input);
     }}
-
 
 /* GraphQL */
 
@@ -78,7 +80,7 @@ const userQuery = gql`
   }
 `
 
-const GoalInputWithData = graphql(userQuery,
+const InputGoalWithData = graphql(userQuery,
 { options: {fetchPolicy: 'network-only'}})(graphql(goalInputMutation,{
   props: ({mutate}) => ({
     inputGoal({variables}) {
@@ -90,7 +92,7 @@ const GoalInputWithData = graphql(userQuery,
       })
     }
   })
-})(withRouter(GoalInput)));
+})(withRouter(InputGoal)));
 
 /*Redux */
 const mapStateToProps = (state, props) => {
@@ -100,4 +102,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(GoalInputWithData)
+export default connect(mapStateToProps)(InputGoalWithData)

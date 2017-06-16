@@ -8,7 +8,7 @@ import * as Goal_Reducer from './Reducers/Goal_Reducer';
 
 const logger = createLogger({
  collapsed: (getState, action, logEntry) => !logEntry.error,
- predicate:(getState, action) => action.type !== 'action.redux-form/REGISTER_FIELD' || 'action.redux-form/FOCUS' || '@@redux-form/BLUR'
+ predicate:(getState, action) => !action.type.includes('@@redux-form')
 })
 
 const client = new ApolloClient();

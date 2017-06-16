@@ -1,13 +1,13 @@
 /* eslint-disable */
 import React, {Component} from 'react'
 
-import StepsInput from '../Steps/StepsInput'
+import InputSteps from '../Steps/InputSteps'
 import CurrentSteps from '../Steps/CurrentSteps'
 
 export default function Steps() {
   return (
     <div>
-      <StepsInput />
+      <InputSteps />
       <CurrentSteps />
     </div>
   )

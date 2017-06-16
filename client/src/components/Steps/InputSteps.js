@@ -6,18 +6,23 @@ import {connect} from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom'
 import * as actions from '../../Actions/actions'
 
-import StepInputForm from './Form/StepInputForm'
 
 /* CLASS DEFINITION */
- class StepsInput extends React.Component {
+ class InputSteps extends React.Component {
   constructor(props) {
     super(props)
     this.submitStep = this.submitStep.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      step: ''
+    }
   }
 
 /* EVENT HANDLER */
-  submitStep = (values) => {
-    let step = values.stepInput;
+  submitStep (event) {
+    event.preventDefault()
+    const {step} = this.state;
+    this.setState({step:''})
     const goalDocId  = this.props.currentGoalID
     console.log('STEP INPUT',step)
     console.log('ID INPUT', goalDocId)
@@ -30,13 +35,28 @@ import StepInputForm from './Form/StepInputForm'
         this.props.dispatch(actions.setStep(step))
         })
     }
+  handleChange (e) {
+    this.setState({step: e.target.value});
+  }
 
 /* RENDER METHOD */
   render() {
+    if (this.props.data.loading) {
+      return( <div> Loading </div>)
 
+    if (!this.props.data.user) {
+      console.warn('only logged in users can create new posts')
+
+  }}
+const input =
+<form onSubmit={this.submitStep}>
+  <input type="text" onChange={this.handleChange} placeholder=""
+    value={this.state.step}/>
+  <input type="submit" value="Submit Step"/>
+</form>
     return (
-        <StepInputForm onSubmit={this.submitStep}/>
-    )
+          input
+          )
   }
 }
 
@@ -57,7 +77,7 @@ const userQuery = gql`
   }
 `
 
-const StepsInputWithMutation =graphql(userQuery,
+const InputStepsWithMutation =graphql(userQuery,
   {options: {fetchPolicy: 'network-only'}})
 (graphql(StepsMutation,{
     props:({mutate}) => ({
@@ -70,7 +90,7 @@ const StepsInputWithMutation =graphql(userQuery,
         })
       }
     })
-})(withRouter(StepsInput)))
+})(withRouter(InputSteps)))
 
 /* REDUX */
 const mapStateToProps = (state, props) => {
@@ -78,4 +98,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(StepsInputWithMutation)
+export default connect(mapStateToProps)(InputStepsWithMutation)

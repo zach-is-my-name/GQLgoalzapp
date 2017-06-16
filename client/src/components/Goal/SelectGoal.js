@@ -20,31 +20,26 @@ class SelectGoal extends React.Component {
   }
 
   /* EVENT HANDLER */
-  selectGoal = (values) => {
-    // console.log(values.goalSelector);
+  selectGoal(values) {
     event.preventDefault();
-
+    const goalDocID = values.goalSelector
     /*ACTION DISPATCH */
-    this.props.dispatch(actions.setGoalDocID(values.goalSelector))
+    this.props.dispatch(actions.setGoalDocID(goalDocID))
   }
 
   /*RENDER METHOD */
   render() {
     const { data: {loading,error,allGoalDocs} } = this.props;
-
     if (loading) {
       return <div>loading...</div>;
     } else if (error) {
       return <p>Error!</p>
     } else {
-
-      //Find out how to give the dropdown an initial default option value, along with the options data being fetched
-
-      return (
-        <div>
-          <SelectGoalForm goalDocs={this.props.data.allGoalDocs} onChange={this.selectGoal}/>
-          <CurrentGoal id={this.props.currentGoalID}/>
-        </div>
+    return (
+      <div>
+        <SelectGoalForm goalDocs={this.props.data.allGoalDocs} onChange={this.selectGoal}/>
+        <CurrentGoal id={this.props.currentGoalID}/>
+      </div>
       )
     }
   }

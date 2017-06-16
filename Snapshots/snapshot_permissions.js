@@ -9,7 +9,7 @@ import * as actions from '../../Actions/actions'
 import StepInputForm from './Form/StepInputForm'
 
 /* CLASS DEFINITION */
- class StepsInput extends React.Component {
+ class InputSteps extends React.Component {
   constructor(props) {
     super(props)
     this.submitStep = this.submitStep.bind(this);
@@ -63,7 +63,7 @@ const mapStateToProps = (state, props) => {
   currentGoalOwnerID: state.goals.currentGoalOwnerID}
 }
 
-const StepsInputWithMutation =graphql(userQuery,
+const InputStepsWithMutation =graphql(userQuery,
   {options: {fetchPolicy: 'network-only'}})
 (graphql(StepsMutation,{
     props:({mutate}) => ({
@@ -76,6 +76,6 @@ const StepsInputWithMutation =graphql(userQuery,
         })
       }
     })
-})(withRouter(StepsInput)))
+})(withRouter(InputSteps)))
 
-export default connect(mapStateToProps)(StepsInputWithMutation)
+export default connect(mapStateToProps)(InputStepsWithMutation)
