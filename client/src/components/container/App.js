@@ -12,16 +12,11 @@ const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
 const domain = 'userzach.auth0.com'
 
 export class App extends Component {
-constructor(props) {
-  super(props)
-  this.state = {
-    isLoggedIn: false
-  }
-}
+  
   _logout = () => {
     console.log('CLICKED LOGOUT')
     // remove token from local storage and reload page to reset apollo client
-    window.localStorage.clear()
+    window.localStorage.removeItem('auth0IdToken')
     console.log('Token Removed')
     location.reload()
   }
@@ -33,21 +28,17 @@ constructor(props) {
 
 
   render() {
-    // console.log(token  ? 'LOCALSTORAGE === TRUE': 'LOCALSTORAGE === FALSE')
-    // console.log(this.props)
     if (this.props.data.error) {
       return console.error(this.props.data.error)
     }
     if (this.props.data.loading) {
       return  <div>Loading</div>
     }
-    // if (window.localStorage.getItem('auth0IdToken') === null) {
-    //   }
+
       /*Check User Query */
     if (window.localStorage.getItem('auth0IdToken') && this._isLoggedIn()) {
       this.props.dispatch(actions.setLoginStatus())
       this.props.dispatch(actions.setUserId(this.props.data.user.id))
-      // console.log('ISLOGGEDIN: TRUE')
       return this.renderLoggedIn()
     }
       return (
@@ -72,7 +63,6 @@ constructor(props) {
   }
 
   renderLoggedOut() {
-    window.localStorage.clear()
     console.log('renderLoggedOut()')
     return (
       <div className="App">

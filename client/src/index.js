@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/container/App';
+import CreateUser from './components/User/CreateUser';
 import {store} from './store';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import {ApolloProvider, ApolloClient} from 'react-apollo';
@@ -21,10 +22,13 @@ export const client = new ApolloClient({
 ReactDOM.render(
   <ApolloProvider store={store} client={client}>
     <Router>
-      <Route exact path='/' component={App} />
-      {/* <Route exact path='/login' component={App} /> */}
-      {/* <Route path='/user' component={App} /> */}
-    </Router>
+      <div>
+        <Route exact path='/' component={App} />
+        <Route path='/signup' component={CreateUser} />
+        {/* <Route exact path='/login' component={App} /> */}
+        {/* <Route path='/user' component={App} /> */}
+      </div>
+      </Router>
   </ApolloProvider>,
     document.getElementById('root')
 );
