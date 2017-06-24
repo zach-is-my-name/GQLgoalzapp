@@ -47,34 +47,25 @@ class SelectGoal extends React.Component {
 
 /*GRAPHQL QUERY */
 
-// const userQuery = gql `
-//           query userQuery {
-//             user {
-//               id
-//             }
-//           }
-//         `
-
-const GoalQuery = gql `query {
-      allGoalDocs(orderBy:updatedAt_DESC){
-        goal
-        id
-        }
-      }`;
-
-
-// const ComponentWithUserQuery =  graphql(userQuery, {skip: (props) => !props.loggedIn,
-//   options: {fetchPolicy: 'network-only'}})(SelectGoal)
+const GoalQuery = gql `query ($currentGoalOwner: ID) {
+  allGoalDocs(filter:
+    {owners :{id: $currentGoalOwner}})
+  {
+     goal
+    id
+  }
+}`;
 
 const ComponentWithData = graphql(GoalQuery,
-{skip:(props) => !props.loggedIn})(SelectGoal);
+{options: ( {currentGoalOwner} ) => ({ variables: {currentGoalOwner} }),
+})(SelectGoal);
 
 
 
 /*REDUX CONNECT */
 const mapStateToProps = (state, props) => {
   // console.log(state)
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedIn: state.goals.loggedIn}
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedIn: state.goals.loggedIn, currentGoalOwner: state.goals.currentGoalOwner}
 }
 
 export default connect(mapStateToProps)(ComponentWithData)
