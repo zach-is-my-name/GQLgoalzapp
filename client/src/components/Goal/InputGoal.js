@@ -53,7 +53,7 @@ handleChange(e) {
     }
 
         const input =
-        <form  onSubmit={this.submitGoal}>
+        <form onSubmit={this.submitGoal}>
           <input type="text" id="form-text" placeholder=""
             onChange={this.handleChange}
             value={this.state.goal}/>

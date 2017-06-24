@@ -6,7 +6,6 @@ export const setUserId = id => ({
   id
 })
 
-
 export const SET_GOAL = 'SET_GOAL';
 export const setGoal = goal => ({
   type: SET_GOAL,
@@ -49,4 +48,9 @@ export const SET_USERDOC = 'SET_USERDOC';
 export const setUserDoc = userDoc => ({
   type: SET_USERDOC,
   userDoc
+})
+
+export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS'
+export const setLoginStatus = () => ({
+  type: SET_LOGIN_STATUS,
 })

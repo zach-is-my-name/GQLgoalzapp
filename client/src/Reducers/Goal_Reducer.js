@@ -9,6 +9,7 @@ const initialState = {
   currentGoalID:'',
   currentGoalSteps:[],
   currentGoalOwner:'',
+  loggedIn: false,
 }
 
 export const goalReducer = (state = initialState, action) => {
@@ -45,5 +46,10 @@ if (action.type === 'SET_STEP') {
   currentGoalSteps:  {$push:action.step},
 })}
 
+if (action.type === 'SET_LOGIN_STATUS'){
+  return update( state, {
+    loggedIn: {$set: true}
+  })
+}
 return state;
 }

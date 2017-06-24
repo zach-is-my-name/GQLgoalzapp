@@ -26,36 +26,34 @@ export class LoginAuth0 extends Component {
   componentDidMount() {
     this._lock.on('authenticated', (authResult) => {
       window.localStorage.setItem('auth0IdToken', authResult.idToken)
-      const token = window.localStorage.getItem('auth0IdToken', authResult.idToken)
-      console.log(token)
-    if (this.state.userExists.false) {
-    // this.setUserName()
-    const token = window.localStorage.getItem('auth0IdToken')
-    this.props.createUser(token, this.state.username).then((response) => {
-      console.log(response);
-      // this.props.history.replace('/')
-    }).catch((e) => {
-      console.error(e)
+      console.log('token set')
+      console.log('Auth Token Got:', window.localStorage.getItem('auth0IdToken', authResult.idToken))
+      if (this.state.userExists.false) {
+        const token = window.localStorage.getItem('auth0IdToken')
+        this.props.createUser(token, this.state.username).then((response) => {
+          console.log(response);
+        }).catch((e) => {
+          console.error(e)
+          // this.props.history.replace('/')
+        })
+        // this.props.history.replace('/')
+      }
       // this.props.history.replace('/')
     })
 
-      }
-})}
-
-
+  }
 
   _showLogin = () => {
+    console.log('CLICKED LOGIN')
     this._lock.show()
   }
 
   render() {
 
-    if (!this.props.data.loading && !this.props.data.error &&
-      window.localStorage.getItem('auth0IdToken') !== null
-    && this.props.data.user)   {
-    this.setState({userExists:true})
-    }
+    if (!this.props.data.loading && !this.props.data.error && window.localStorage.getItem('auth0IdToken') !== null && this.props.data.user) {
+      this.setState({userExists: true})
       console.error(this.props.data.error)
+    }
     return (
       <div>
         <button onClick={this._showLogin}>

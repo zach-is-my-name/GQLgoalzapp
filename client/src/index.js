@@ -22,8 +22,9 @@ ReactDOM.render(
   <ApolloProvider store={store} client={client}>
     <Router>
       <Route exact path='/' component={App} />
+      {/* <Route exact path='/login' component={App} /> */}
       {/* <Route path='/user' component={App} /> */}
     </Router>
-    </ApolloProvider>,
+  </ApolloProvider>,
     document.getElementById('root')
 );

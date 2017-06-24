@@ -12,16 +12,25 @@ const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
 const domain = 'userzach.auth0.com'
 
 export class App extends Component {
-
+constructor(props) {
+  super(props)
+  this.state = {
+    isLoggedIn: false
+  }
+}
   _logout = () => {
+    console.log('CLICKED LOGOUT')
     // remove token from local storage and reload page to reset apollo client
-    window.localStorage.removeItem('auth0IdToken')
+    window.localStorage.clear()
+    console.log('Token Removed')
     location.reload()
   }
 
   _isLoggedIn = () => {
+    console.log('this.props.data', this.props.data)
     return this.props.data.user
   }
+
 
   render() {
     // console.log(token  ? 'LOCALSTORAGE === TRUE': 'LOCALSTORAGE === FALSE')
@@ -30,31 +39,21 @@ export class App extends Component {
       return console.error(this.props.data.error)
     }
     if (this.props.data.loading) {
-      return (
-        <div>Loading</div>
-      )
+      return  <div>Loading</div>
     }
-
-    if (this._isLoggedIn()) {
+    // if (window.localStorage.getItem('auth0IdToken') === null) {
+    //   }
+      /*Check User Query */
+    if (window.localStorage.getItem('auth0IdToken') && this._isLoggedIn()) {
+      this.props.dispatch(actions.setLoginStatus())
       this.props.dispatch(actions.setUserId(this.props.data.user.id))
       // console.log('ISLOGGEDIN: TRUE')
       return this.renderLoggedIn()
-    } else {
-      console.log('_ISLOGGEDIN: FALSE')
-      return this.renderLoggedOut()
     }
+      return (
+          this.renderLoggedOut()
+          )
   }
-
-
-/*If they have a token but this.props.data.user.id === false, run CreateUser */
-
-// user already logged in
-  // if (!this.props.data.user) {
-  //   console.log('no user data')
-  //   const token = window.localStorage.getItem('auth0IdToken')
-  //   console.log(typeof token)
-  //   console.log('TOKEN', token)
-  // }
 
   renderLoggedIn() {
     console.log('renderLoggedIn()')
@@ -73,13 +72,15 @@ export class App extends Component {
   }
 
   renderLoggedOut() {
+    window.localStorage.clear()
+    console.log('renderLoggedOut()')
     return (
       <div className="App">
         <h1>GoalZapp</h1>
         <br/>
         <LoginAuth0 clientId={clientId} domain={domain}/>
         <br/>
-        <UserFeed/>
+        {/* <UserFeed/> */}
       </div>
     )
   }
