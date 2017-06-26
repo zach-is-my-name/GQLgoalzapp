@@ -3,18 +3,22 @@ import { graphql, gql } from 'react-apollo'
 
 import GlobalFeed from '../components/container/GlobalFeed'
 
-export default class GlobalFeedPage extends Component {
+class GlobalFeedPage extends Component {
 
-const {data: {loading, error, allGoalDocs } = this.props
   render() {
+const {loading, error, allGoalDocs}  = this.props;
+    console.log(allGoalDocs)
+
     return(
       <div>
         <h4>Global Feed</h4>
         <GlobalFeed
-          entries={allGoalDocs}/>
+          entries={allGoalDocs || []}
+        />
         {loading ? <p>loading</p>: null}
-          </div>
-        )}
+      </div>
+        )
+  }
 }
 
 const AllGoalDocs = gql `
@@ -30,6 +34,12 @@ query {
 }
 `
 
-const withData = graphql(AllGoalDocs)(GlobalFeedPage)
+const withData = graphql(AllGoalDocs, {
+props: ({data: {loading, error, allGoalDocs }}) => ({
+  loading,
+  error,
+  allGoalDocs
+})
+})(GlobalFeedPage)
 
 export default withData
