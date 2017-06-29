@@ -7,7 +7,7 @@ class GlobalFeedPage extends Component {
 
   render() {
 const {loading, error, allGoalDocs}  = this.props;
-    console.log(allGoalDocs)
+    // console.log(allGoalDocs)
 
     return(
       <div>

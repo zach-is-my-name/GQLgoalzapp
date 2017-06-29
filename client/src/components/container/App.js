@@ -3,7 +3,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import '../../App.css';
 import {withRouter} from 'react-router-dom'
-import UserFeed from '../../Routes/UserFeed'
+import UserFeedPage from '../../Routes/UserFeedPage'
 import GlobalFeedPage from '../../Routes/GlobalFeedPage'
 import LoginAuth0 from '../LoginAuth0'
 import {connect} from 'react-redux';
@@ -23,7 +23,7 @@ export class App extends Component {
   }
 
   _isLoggedIn = () => {
-    console.log('this.props.data', this.props.data)
+    // console.log('this.props.data', this.props.data)
     return this.props.data.user
   }
 
