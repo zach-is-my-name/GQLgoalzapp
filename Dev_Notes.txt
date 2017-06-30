@@ -47,4 +47,6 @@ is selected.  Before, only the selected goal rendered.  How to keep the latter..
 
 11. Adding LoggedIn to the state. Usefull for conditionally rendering and initiating Gql operations
 
-12. In <App>, Commneted out <UserFeed> for renderLoggedOut. This will be changed when we shift to allowing users to create Goals and Steps in memory and submit them upon registration. 
+12. In <App>, Commneted out <UserFeed> for renderLoggedOut. This will be changed when we shift to allowing users to create Goals and Steps in memory and submit them upon registration.
+
+13. For <CurrentUser> could have added userName to UserQuery payload in <App> and passed down the userName as props to <CurrentUser>

@@ -9,7 +9,7 @@ export default function Goal() {
 
   return (
     <div>
-      <SelectGoal/>
+      <SelectGoal />
       <InputGoal />
     </div>
       )

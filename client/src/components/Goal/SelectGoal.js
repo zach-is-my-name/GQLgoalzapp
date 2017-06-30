@@ -37,7 +37,7 @@ class SelectGoal extends React.Component {
     } else {
     return (
       <div>
-        <SelectGoalForm goalDocs={this.props.data.allGoalDocs} onChange={this.selectGoal}/>
+        <SelectGoalForm goalDocs={allGoalDocs} onChange={this.selectGoal}/>
         <CurrentGoal id={this.props.currentGoalID}/>
       </div>
       )
@@ -47,17 +47,17 @@ class SelectGoal extends React.Component {
 
 /*GRAPHQL QUERY */
 
-const GoalQuery = gql `query ($currentGoalOwner: ID) {
+const GoalDocQuery = gql `query ($loggedInUserID: ID) {
   allGoalDocs(filter:
-    {owners :{id: $currentGoalOwner}})
+    {owners :{id: $loggedInUserID}})
   {
-     goal
+    goal
     id
   }
 }`;
 
-const ComponentWithData = graphql(GoalQuery,
-{options: ( {currentGoalOwner} ) => ({ variables: {currentGoalOwner} }),
+const ComponentWithData = graphql(GoalDocQuery,
+{options: ( {loggedInUserID} ) => ({ variables: {loggedInUserID} }),
 })(SelectGoal);
 
 
@@ -65,7 +65,7 @@ const ComponentWithData = graphql(GoalQuery,
 /*REDUX CONNECT */
 const mapStateToProps = (state, props) => {
   // console.log(state)
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedIn: state.goals.loggedIn, currentGoalOwner: state.goals.currentGoalOwner}
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedIn: state.goals.loggedIn, loggedInUserID: state.goals.loggedInUserID}
 }
 
 export default connect(mapStateToProps)(ComponentWithData)

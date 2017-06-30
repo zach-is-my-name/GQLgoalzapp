@@ -8,7 +8,7 @@ const initialState = {
   currentGoal: '',
   currentGoalID:'',
   currentGoalSteps:[],
-  currentGoalOwner:'',
+  loggedInUserID:'',
   loggedIn: false,
 }
 
@@ -16,7 +16,7 @@ export const goalReducer = (state = initialState, action) => {
 
 if (action.type === 'SET_USERID') {
   return update(state, {
-    currentGoalOwner: {$set: action.id}
+    loggedInUserID: {$set: action.id}
   })
 }
 

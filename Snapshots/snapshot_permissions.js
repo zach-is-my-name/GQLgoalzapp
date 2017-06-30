@@ -19,7 +19,7 @@ import StepInputForm from './Form/StepInputForm'
   submitStep = (values) => {
     let step = values.stepInput;
     const id = this.props.currentGoalID
-    const ownersId = this.props.currentGoalOwnerID
+    const ownersId = this.props.loggedInUserIDID
     console.log('STEP INPUT',values.stepInput)
     console.log('ID INPUT', this.props.currentGoalID)
     this.props.createStep({variables: {step, id, ownersId}})
@@ -60,7 +60,7 @@ const userQuery = gql`
 /* REDUX */
 const mapStateToProps = (state, props) => {
   return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID,
-  currentGoalOwnerID: state.goals.currentGoalOwnerID}
+  loggedInUserIDID: state.goals.loggedInUserIDID}
 }
 
 const InputStepsWithMutation =graphql(userQuery,

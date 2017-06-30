@@ -44,10 +44,10 @@ export const setUserDocID = userDocID => ({
   userDocID
 })
 
-export const SET_USERDOC = 'SET_USERDOC';
-export const setUserDoc = userDoc => ({
-  type: SET_USERDOC,
-  userDoc
+export const SET_CURRENT_USERNAME = 'SET_CURRENT_USERNAME';
+export const setCurrentUserName = userName => ({
+  type: SET_CURRENT_USERNAME,
+  userName
 })
 
 export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS'

@@ -7,39 +7,33 @@ import * as actions from '../../Actions/actions'
 
 /* CLASS DECLARATION */
 class CurrentUser extends Component {
-  constructor(props) {
-    super(props)
 
-  }
-
+dispatchCurrentUser() {
+  this.props.dispatch(setCurrentUserName(User.username))
+}
 
 /* RENDER METHOD */
     render () {
       if (this.props.data) {
-        const { data: { loading, error, userDocByID } } = this.props;
+        const { data: { loading, error, User } } = this.props;
         if (!loading){
           return(
-            <p>Current User: {!this.props.id ?
-            null : userDocByID.userName}</p>
-
+            <div>
+              <p>Logged In As: {User? User.userName : null}
+              </p>
+            </div>
           )
         }}
 return null;
       }
 
-      componentWillReceiveProps(nextProps) {
-        if(nextProps.data && nextProps.data.loading == false) {
-          // console.log('NEXTPROPS', nextProps.data.userDocByID)
-          this.props.dispatch(actions.setUserDoc(nextProps.data.userDocByID))
-      }}
-    }
+      }
+
 
 /* REDUX */
 const mapStateToProps = (state, props) => {
   return {
-    currentUser: state.users.currentUser,
-    currentUserID: state.users.currentUserID,
-    ownGoals: state.users.ownGoals,
+    currentUserID: state.goals.loggedInUserID,
   }
 }
 
@@ -49,18 +43,16 @@ const CurrentUserWithState = connect(mapStateToProps)(CurrentUser);
 
 /* GRAPHQL QUERY */
 
-const FetchUserDocByID = gql `
-query root($varID:String) {
-  userDocByID(id:$varID) {
-      id
-      userName
+const CurrentUserName = gql `
+query($userId: ID) {
+  User (id: $userId)
+  {userName
   }
 }
 `;
 
-const CurrentUserWithData = graphql(FetchUserDocByID, {
-  skip: (props) => !props.id,
-  options: ({id}) => ( {variables: {varID: id} })
+const CurrentUserWithData = graphql(CurrentUserName, {
+  options: ({currentUserID}) => ( {variables: {userId: currentUserID} })
 })(CurrentUserWithState);
 
-export default CurrentUserWithData;
+export default connect(mapStateToProps)(CurrentUserWithData);

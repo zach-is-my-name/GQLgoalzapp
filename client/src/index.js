@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/container/App';
@@ -24,9 +25,11 @@ ReactDOM.render(
   <ApolloProvider store={store} client={client}>
     <Router>
       <div>
-        <Route path='/' exact component={App} />
+        <Route  path='/' component={App} />
+        {/* <Route path='/userfeed/:userid' component={UserFeedPage} /> */}
         <Route path='/signup' component={CreateUser} />
-        <Route path='/userfeed' component={UserFeedPage} />
+        {/* <Route exact path='/userfeed' component={UserFeedPage} /> */}
+        {/* <Route  path='/userfeed/:userid' component={UserFeedPage} /> */}
         {/* <Route component={NotFound} /> */}
       </div>
     </Router>

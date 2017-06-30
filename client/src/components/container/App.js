@@ -1,12 +1,15 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import '../../App.css';
-import {withRouter} from 'react-router-dom'
+import {withRouter, Switch, Route, BrowserRouter as Router} from 'react-router-dom'
+import {connect} from 'react-redux';
+
 import UserFeedPage from '../../Routes/UserFeedPage'
 import GlobalFeedPage from '../../Routes/GlobalFeedPage'
 import LoginAuth0 from '../LoginAuth0'
-import {connect} from 'react-redux';
+import CurrentUser from '../User/CurrentUser'
 import * as actions from '../../Actions/actions'
 
 const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
@@ -35,7 +38,6 @@ export class App extends Component {
     if (this.props.data.loading) {
       return  <div>Loading</div>
     }
-
       /*Check User Query */
     if (window.localStorage.getItem('auth0IdToken') && this._isLoggedIn()) {
       this.props.dispatch(actions.setLoginStatus())
@@ -48,21 +50,27 @@ export class App extends Component {
   }
 
   renderLoggedIn() {
+    const {match} = this.props;
     console.log('renderLoggedIn()')
+    console.log(match)
     return (
       <div className="App">
         <div>
           <h1>GoalZapp</h1>
           <br/>
+          <CurrentUser user={this.props.data.user.userName}/>
           <button onClick={this._logout}>
             logout
           </button>
-          <GlobalFeedPage />
-          {/* <UserFeed/> */}
+          <Switch>
+            <Route path={`${match.url}:userid`} component={UserFeedPage} />
+            <Route exact path="/" component={GlobalFeedPage}  />
+          </Switch>
+
         </div>
       </div>
-    )
-  }
+          )
+          }
 
   renderLoggedOut() {
     console.log('renderLoggedOut()')
@@ -70,6 +78,7 @@ export class App extends Component {
       <div className="App">
         <h1>GoalZapp</h1>
         <br/>
+
         <LoginAuth0 clientId={clientId} domain={domain}/>
         <br/>
         {/* <UserFeed/> */}
@@ -82,6 +91,7 @@ const userQuery = gql `
           query userQuery {
             user {
               id
+              userName
             }
           }
         `

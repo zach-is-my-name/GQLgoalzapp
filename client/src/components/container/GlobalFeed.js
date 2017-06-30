@@ -1,9 +1,10 @@
+/* eslint-disable */
 import React from 'react';
-import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link, withRouter, Switch} from 'react-router-dom';
 import FeedEntry from '../Feed/FeedEntry'
 import UserFeedPage from '../../Routes/UserFeedPage'
 
- const GlobalFeed = ({entries = [], match}  )  => {
+ const GlobalFeed = ({entries = []}  )  => {
   if (entries && entries.length) {
     return (
       <div>
@@ -17,7 +18,10 @@ import UserFeedPage from '../../Routes/UserFeedPage'
           ))
         }</div>
         <div>
-          <Link to="/userfeed">
+          {/* <Switch>
+            <Route  path={`/userfeed/:userid`} component={UserFeedPage} />
+          </Switch> */}
+          <Link to={`/userfeed/1`}>
             UserFeed
           </Link>
         </div>
@@ -26,6 +30,5 @@ import UserFeedPage from '../../Routes/UserFeedPage'
       }
         return <div />;
         };
-        export default withRouter(GlobalFeed)
-        {/* <Link to={`${match.url}/userfeed`}> */}
-        {/* <Route path={`${match.url}/userfeed`} component={UserFeed}/> */}
+
+export default GlobalFeed

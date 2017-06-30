@@ -21,8 +21,8 @@ submitGoal(event)  {
   event.preventDefault()
   const {goal} = this.state;
   // console.log(goal)
-  const ownersId = this.props.currentGoalOwner
-    // console.log(this.props.currentGoalOwner)
+  const ownersId = this.props.loggedInUserID
+    // console.log(this.props.loggedInUserID)
     this.props.inputGoal({variables: { goal, ownersId }} )
     .catch((error) => {
       console.log('there was an error sending the query', error)
@@ -97,7 +97,7 @@ const GoalInputWithData = graphql(userQuery,
 const mapStateToProps = (state, props) => {
   return {
     currentGoal: state.currentGoal,
-    currentGoalOwner: state.goals.currentGoalOwner
+    loggedInUserID: state.goals.loggedInUserID
   }
 }
 
