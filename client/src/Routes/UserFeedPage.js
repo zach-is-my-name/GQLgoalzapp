@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link, withRouter} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import * as actions from '../Actions/actions'
 
