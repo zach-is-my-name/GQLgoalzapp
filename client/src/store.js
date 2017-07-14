@@ -4,7 +4,7 @@ import { createLogger } from 'redux-logger'
 import { reducer as formReducer } from 'redux-form'
 // import { client } from './index'
 
-import * as Goal_Reducer from './Reducers/Goal_Reducer';
+import * as Goal_Reducer from './Reducers/Global_Reducer';
 
 const logger = createLogger({
  collapsed: (getState, action, logEntry) => !logEntry.error,

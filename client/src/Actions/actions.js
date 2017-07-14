@@ -27,12 +27,21 @@ return ( {
   step: stepArr
 })};
 
+export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
+export const setSuggestedStep = suggestedStep => {
+  let suggestedStepArr = [suggestedStep]
+  return ( {
+    type: SET_SUGGESTED_STEP,
+    suggestedStep: suggestedStepArr
+  })
+}
+
 export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goalDoc => {
-const {goal, id, steps} = goalDoc
+const {goal, id, steps, suggestedSteps} = goalDoc
 let  flatSteps = steps.map(step => step.step)
-// const flatGoalDoc = { goal, id, }
-const flatGoalDoc = { goal, id, flatSteps }
+let flatSuggestedSteps = suggestedSteps.map(suggestedStep => suggestedStep.suggestedStep )
+const flatGoalDoc = { goal, id, flatSteps,flatSuggestedSteps}
 return  {
   type: SET_GOALDOC,
   flatGoalDoc

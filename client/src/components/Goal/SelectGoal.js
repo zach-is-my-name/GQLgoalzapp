@@ -23,7 +23,9 @@ class SelectGoal extends React.Component {
     event.preventDefault();
     const goalDocID = values.goalSelector
     /*ACTION DISPATCH */
+    if (values.goalSelector) {
     this.props.dispatch(actions.setGoalDocID(goalDocID))
+    }
   }
 
   /*RENDER METHOD */

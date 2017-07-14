@@ -60,6 +60,9 @@ query ($varID: ID) {
    steps(orderBy:createdAt_ASC) {
      step
    }
+   suggestedSteps(orderBy:createdAt_ASC){
+     suggestedStep
+   }
   }
 }`;
 

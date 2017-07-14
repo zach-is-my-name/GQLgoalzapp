@@ -8,6 +8,7 @@ const initialState = {
   currentGoal: '',
   currentGoalID:'',
   currentGoalSteps:[],
+  currentSuggestedSteps:[],
   loggedInUserID:'',
   loggedIn: false,
   targetUser: '',
@@ -38,6 +39,7 @@ if (action.type === 'SET_GOALDOC') {
     currentGoal: {$set:action.flatGoalDoc.goal},
   currentGoalID: {$set:action.flatGoalDoc.id},
   currentGoalSteps: {$set:action.flatGoalDoc.flatSteps},
+  currentSuggestedSteps: {$set:action.flatGoalDoc.flatSuggestedSteps},
   })
 }
 
@@ -45,6 +47,12 @@ if (action.type === 'SET_STEP') {
   console.log(action.step)
   return update(state, {
   currentGoalSteps:  {$push:action.step},
+  })
+}
+
+if (action.type === 'SET_SUGGESTED_STEP'){
+  return update(state, {
+    currentSuggestedSteps: {$push:action.suggestedStep},
   })
 }
 
