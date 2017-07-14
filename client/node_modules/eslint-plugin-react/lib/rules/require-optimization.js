@@ -4,6 +4,7 @@
  */
 'use strict';
 
+var has = require('has');
 var Components = require('../util/Components');
 
 module.exports = {
@@ -113,10 +114,10 @@ module.exports = {
       }
 
       return Boolean(
-          node &&
-          node.key.name === 'mixins' &&
-          hasPR
-        );
+        node &&
+        node.key.name === 'mixins' &&
+        hasPR
+      );
     };
 
     /**
@@ -219,7 +220,7 @@ module.exports = {
 
         // Report missing shouldComponentUpdate for all components
         for (var component in list) {
-          if (!list.hasOwnProperty(component) || list[component].hasSCU) {
+          if (!has(list, component) || list[component].hasSCU) {
             continue;
           }
           reportMissingOptimization(list[component]);

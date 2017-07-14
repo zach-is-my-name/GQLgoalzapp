@@ -16,7 +16,6 @@ class SelectGoal extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
-    // this.idProps = this.idProps.bind(this)
   }
 
   /* EVENT HANDLER */
@@ -29,10 +28,11 @@ class SelectGoal extends React.Component {
 
   /*RENDER METHOD */
   render() {
-    const { data: {loading,error,allGoalDocs} } = this.props;
+    const { data: {loading,error,allGoalDocs} } = this.props
     if (loading) {
       return <div>loading...</div>;
     } else if (error) {
+      console.error(error)
       return <p>Error!</p>
     } else {
     return (
@@ -45,11 +45,18 @@ class SelectGoal extends React.Component {
   }
 }
 
-/*GRAPHQL QUERY */
+/*REDUX */
+const mapStateToProps = (state, props) => {
+  // console.log(state)
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUser: state.goals.targetUser,}
+}
 
-const GoalDocQuery = gql `query ($loggedInUserID: ID) {
+const SelectGoalWithState = connect(mapStateToProps)(SelectGoal)
+
+/*GRAPHQL QUERY */
+const GoalDocQuery = gql `query ($userid: ID) {
   allGoalDocs(filter:
-    {owners :{id: $loggedInUserID}})
+    {owners :{id: $userid}})
   {
     goal
     id
@@ -57,15 +64,9 @@ const GoalDocQuery = gql `query ($loggedInUserID: ID) {
 }`;
 
 const ComponentWithData = graphql(GoalDocQuery,
-{options: ( {loggedInUserID} ) => ({ variables: {loggedInUserID} }),
-})(SelectGoal);
+{ options: ({targetUser}) => ({ variables: {userid:targetUser}}),
+})(SelectGoalWithState);
 
 
-
-/*REDUX CONNECT */
-const mapStateToProps = (state, props) => {
-  // console.log(state)
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedIn: state.goals.loggedIn, loggedInUserID: state.goals.loggedInUserID}
-}
 
 export default connect(mapStateToProps)(ComponentWithData)

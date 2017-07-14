@@ -6,6 +6,7 @@
  */
 'use strict';
 
+var has = require('has');
 var Components = require('../util/Components');
 var versionUtil = require('../util/version');
 
@@ -285,12 +286,29 @@ module.exports = {
       });
     }
 
+    /**
+     * Mark a ClassDeclaration as having used decorators
+     * @param {ASTNode} node The AST node being checked.
+     */
+    function markDecoratorsAsUsed(node) {
+      components.set(node, {
+        useDecorators: true
+      });
+    }
+
+    function visitClass(node) {
+      if (ignorePureComponents && utils.isPureComponent(node)) {
+        markSCUAsDeclared(node);
+      }
+
+      if (node.decorators && node.decorators.length) {
+        markDecoratorsAsUsed(node);
+      }
+    }
+
     return {
-      ClassDeclaration: function (node) {
-        if (ignorePureComponents && utils.isPureComponent(node)) {
-          markSCUAsDeclared(node);
-        }
-      },
+      ClassDeclaration: visitClass,
+      ClassExpression: visitClass,
 
       // Mark `this` destructuring as a usage of `this`
       VariableDeclarator: function(node) {
@@ -371,12 +389,13 @@ module.exports = {
         var list = components.list();
         for (var component in list) {
           if (
-            !list.hasOwnProperty(component) ||
+            !has(list, component) ||
             hasOtherProperties(list[component].node) ||
             list[component].useThis ||
             list[component].useRef ||
             list[component].invalidReturn ||
             list[component].hasChildContextTypes ||
+            list[component].useDecorators ||
             (!utils.isES5Component(list[component].node) && !utils.isES6Component(list[component].node))
           ) {
             continue;
@@ -385,7 +404,6 @@ module.exports = {
           if (list[component].hasSCU && list[component].usePropsOrContext) {
             continue;
           }
-
           context.report({
             node: list[component].node,
             message: 'Component should be written as a pure function'

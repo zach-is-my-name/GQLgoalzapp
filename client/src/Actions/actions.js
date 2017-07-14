@@ -54,3 +54,9 @@ export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS'
 export const setLoginStatus = () => ({
   type: SET_LOGIN_STATUS,
 })
+
+export const SET_TARGET_USER = 'SET_TARGET_USER'
+export const setTargetUser = targetUser => ({
+  type: SET_TARGET_USER,
+  targetUser
+})

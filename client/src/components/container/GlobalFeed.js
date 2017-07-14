@@ -21,7 +21,7 @@ import UserFeedPage from '../../Routes/UserFeedPage'
           {/* <Switch>
             <Route  path={`/userfeed/:userid`} component={UserFeedPage} />
           </Switch> */}
-          <Link to={`/userfeed/1`}>
+          <Link to={`/userfeed/cj4blh52ofkt00137q5wi7ukl`}>
             UserFeed
           </Link>
         </div>

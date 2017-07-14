@@ -52,7 +52,7 @@ export class App extends Component {
   renderLoggedIn() {
     const {match} = this.props;
     console.log('renderLoggedIn()')
-    console.log(match)
+    // console.log(match)
     return (
       <div className="App">
         <div>
@@ -63,7 +63,7 @@ export class App extends Component {
             logout
           </button>
           <Switch>
-            <Route path={`${match.url}:userid`} component={UserFeedPage} />
+            <Route path="/userfeed/:userid" component={UserFeedPage} />
             <Route exact path="/" component={GlobalFeedPage}  />
           </Switch>
 

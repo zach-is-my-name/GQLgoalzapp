@@ -42,7 +42,6 @@ const mapStateToProps = (state, props) => {
 const CurrentUserWithState = connect(mapStateToProps)(CurrentUser);
 
 /* GRAPHQL QUERY */
-
 const CurrentUserName = gql `
 query($userId: ID) {
   User (id: $userId)

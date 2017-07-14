@@ -54,9 +54,10 @@ const input =
     value={this.state.step}/>
   <input type="submit" value="Submit Step"/>
 </form>
-    return (
-          input
-          )
+  if (this.props.loggedInUserID === this.props.targetUserID){
+  return (input)
+}
+  return (null)
   }
 }
 
@@ -94,7 +95,8 @@ const InputStepsWithMutation =graphql(userQuery,
 
 /* REDUX */
 const mapStateToProps = (state, props) => {
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID,
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedInUserID: state.goals.loggedInUserID,
+    targetUser: state.goals.targetUser,
   }
 }
 

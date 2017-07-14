@@ -3,6 +3,8 @@
  */
 'use strict';
 
+var variableUtil = require('../util/variable');
+
 // ------------------------------------------------------------------------------
 // Rule Definition
 // ------------------------------------------------------------------------------
@@ -150,11 +152,32 @@ module.exports = {
       },
 
       MemberExpression: function(node) {
-        if (isPropTypesDeclaration(node.property)) {
-          var right = node.parent.right;
-          if (right && right.type === 'ObjectExpression') {
-            checkSorted(right.properties);
-          }
+        if (!isPropTypesDeclaration(node.property)) {
+          return;
+        }
+        var right = node.parent.right;
+        var declarations;
+        switch (right && right.type) {
+          case 'ObjectExpression':
+            declarations = right.properties;
+            break;
+          case 'Identifier':
+            var variable = variableUtil.variablesInScope(context).find(function (item) {
+              return item.name === right.name;
+            });
+            if (
+              !variable || !variable.defs[0] ||
+              !variable.defs[0].node.init || !variable.defs[0].node.init.properties
+            ) {
+              break;
+            }
+            declarations = variable.defs[0].node.init.properties;
+            break;
+          default:
+            break;
+        }
+        if (declarations) {
+          checkSorted(declarations);
         }
       },
 
