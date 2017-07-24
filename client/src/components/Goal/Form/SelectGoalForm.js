@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 
+import '../../../style/SelectGoalForm.css'
+
 class SelectGoalForm extends Component {
   render() {
 

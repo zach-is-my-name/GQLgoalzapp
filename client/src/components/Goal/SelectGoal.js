@@ -9,13 +9,13 @@ import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
 
 import SelectGoalForm from './Form/SelectGoalForm'
-import CurrentGoal from './CurrentGoal'
 
 /*CLASS DECLARATION */
 class SelectGoal extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
+
   }
 
   /* EVENT HANDLER */
@@ -40,7 +40,6 @@ class SelectGoal extends React.Component {
     return (
       <div>
         <SelectGoalForm goalDocs={allGoalDocs} onChange={this.selectGoal}/>
-        <CurrentGoal id={this.props.currentGoalID}/>
       </div>
       )
     }
@@ -50,7 +49,7 @@ class SelectGoal extends React.Component {
 /*REDUX */
 const mapStateToProps = (state, props) => {
   // console.log(state)
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUser: state.goals.targetUser,}
+  return {currentGoal: state.goals.currentGoal,  loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUser: state.goals.targetUser,}
 }
 
 const SelectGoalWithState = connect(mapStateToProps)(SelectGoal)

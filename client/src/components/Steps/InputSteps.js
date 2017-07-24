@@ -27,6 +27,7 @@ import * as actions from '../../Actions/actions'
     console.log('STEP INPUT',step)
     console.log('ID INPUT', goalDocId)
     console.log('TYPE OF ID', typeof goalDocId)
+    if(this.props.currentGoalID){
     this.props.createStep({variables: {step, goalDocId}})
         .then(( {data} ) => {
           console.log('DATA SUBMITTED', data);
@@ -34,6 +35,8 @@ import * as actions from '../../Actions/actions'
         console.log('this is step', step)
         this.props.dispatch(actions.setStep(step))
         })
+      }
+      alert("Select a Goal to Enter a Step on")
     }
   handleChange (e) {
     this.setState({step: e.target.value});
@@ -41,7 +44,7 @@ import * as actions from '../../Actions/actions'
 
 /* RENDER METHOD */
   render() {
-    if (this.props.data.loading) {
+    if (this.props.data.loading && !this.props.targetUser) {
       return( <div> Loading </div>)
 
     if (!this.props.data.user) {
@@ -57,6 +60,7 @@ const input =
   if (this.props.loggedInUserID === this.props.targetUserID){
   return (input)
 }
+  console.log('conditional failed')
   return (null)
   }
 }
@@ -96,7 +100,7 @@ const InputStepsWithMutation =graphql(userQuery,
 /* REDUX */
 const mapStateToProps = (state, props) => {
   return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedInUserID: state.goals.loggedInUserID,
-    targetUser: state.goals.targetUser,
+    targetUserID: state.goals.targetUser,
   }
 }
 

@@ -4,6 +4,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import { withRouter, Redirect } from 'react-router-dom'
 import * as actions from '../../Actions/actions'
+import '../../style/SuggestStep.css'
 
 class SuggestStep extends React.Component {
   constructor(props) {
@@ -52,7 +53,7 @@ if (!this.props.data.user) {
   </form>
 
 if (this.props.loggedInUserID !== this.props.targetUser) {
-return (<div> {input} </div>)
+return (<div className="suggest-step-input"> {input} </div>)
   }
 return null
 }

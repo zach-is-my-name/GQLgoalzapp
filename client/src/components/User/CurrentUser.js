@@ -6,11 +6,16 @@ import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 import {Link} from 'react-router-dom';
 
+
 /* CLASS DECLARATION */
 class CurrentUser extends Component {
+  constructor(props){
+    super()
+    this.dispatchCurrentUser = this.dispatchCurrentUser.bind(this)
+  }
 
-  dispatchCurrentUser() {
-    this.props.dispatch(setCurrentUserName(User.username))
+  dispatchCurrentUser(currentUser) {
+    this.props.dispatch(actions.setCurrentUserName(currentUser))
   }
 
   /* RENDER METHOD */
@@ -26,7 +31,8 @@ class CurrentUser extends Component {
       // const currentUserID = User.userName
     const currentUserID = this.props.currentUserID
     const currentUser = User.userName
-      const link = <Link to={`/userfeed/${currentUserID}`}>{currentUser}</Link>
+    this.dispatchCurrentUser(currentUser)
+    const link = <Link to={`/userfeed/${currentUserID}`}>{currentUser}</Link>
       if (!loading) {
         return (
           <div>

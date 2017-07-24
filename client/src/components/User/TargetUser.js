@@ -4,14 +4,16 @@ import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 
+import '../../style/TargetUser.css'
+
 class TargetUser extends React.Component {
   render() {
     if(this.props.data){
     const {data: {loading, error, User}} = this.props
     if (!loading){
     return (
-      <div>
-        <p>Target User: {User ? User.userName : null} </p>
+      <div className="target-user-wrapper">
+        <p className="target-user-p">Target User: {User ? User.userName : null} </p>
       </div>
         )
     }

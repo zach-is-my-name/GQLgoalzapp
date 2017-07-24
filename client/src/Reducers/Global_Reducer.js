@@ -10,8 +10,10 @@ const initialState = {
   currentGoalSteps:[],
   currentSuggestedSteps:[],
   loggedInUserID:'',
+  loggedInUserName:'',
   loggedIn: false,
   targetUser: '',
+
 }
 
 export const goalReducer = (state = initialState, action) => {
@@ -25,6 +27,7 @@ if (action.type === 'SET_USERID') {
 if (action.type === 'SET_GOAL') {
   return update(state, {
     currentGoal: {$set:action.goal},
+
   })
 }
 
@@ -65,6 +68,12 @@ if (action.type === 'SET_LOGIN_STATUS'){
 if (action.type ==='SET_TARGET_USER'){
   return update( state, {
     targetUser: {$set: action.targetUser}
+  })
+}
+
+if (action.type === 'SET_CURRENT_USERNAME'){
+  return update( state, {
+    loggedInUserName: {$set:action.userName}
   })
 }
 

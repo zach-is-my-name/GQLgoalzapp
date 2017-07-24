@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
-
+import '../../style/CurrentGoal.css'
 /* CLASS DECLARATION */
 class CurrentGoal extends Component {
   constructor(props) {
@@ -24,9 +24,12 @@ class CurrentGoal extends Component {
       if (!loading) {
         error ? console.log(error) : null
         return (
-          <p>Current Goal: {!this.props.id
-            ? null
+          <div className="currentgoal-container">
+            <p className="currentgoal-label">Current Goal: </p>
+            <p className="currentgoal"> {!this.props.id
+              ? null
           : GoalDoc.goal}</p>
+        </div>
         )
       }
     }

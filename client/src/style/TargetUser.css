@@ -1,0 +1,12 @@
+* {
+  box-sizing: border-box;
+}
+
+.target-user-wrapper {
+  text-align: center;
+  margin-top: .5em;
+}
+
+.target-user-p {
+  margin-top: 5px;
+}

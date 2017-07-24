@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
-import '../../App.css';
+import '../../style/App.css';
 import {withRouter, Switch, Route, BrowserRouter as Router} from 'react-router-dom'
 import {connect} from 'react-redux';
 
@@ -55,19 +55,20 @@ export class App extends Component {
     // console.log(match)
     return (
       <div className="App">
-        <div>
-          <h1>GoalZapp</h1>
-          <br/>
-          <CurrentUser user={this.props.data.user.userName}/>
-          <button onClick={this._logout}>
+        <div className="user-top-right-wrapper">
+          <div className="current-user">
+            <CurrentUser  user={this.props.data.user.userName} />
+          </div>
+          <button className="logout-button" onClick={this._logout}>
             logout
           </button>
-          <Switch>
-            <Route path="/userfeed/:userid" component={UserFeedPage} />
-            <Route exact path="/" component={GlobalFeedPage}  />
-          </Switch>
-
         </div>
+        <h1>GoalZapp</h1>
+        <Switch>
+          <Route path="/userfeed/:userid" component={UserFeedPage} />
+          <Route exact path="/" component={GlobalFeedPage}  />
+        </Switch>
+
       </div>
           )
           }

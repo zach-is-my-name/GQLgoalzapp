@@ -9,20 +9,36 @@ import Steps from '../components/container/Steps.js'
 import App from '../components/container/App'
 import CurrentUser from '../components/User/CurrentUser'
 import GlobalFeedPage from './GlobalFeedPage'
+import '../style/UserFeedPage.css'
+import CurrentGoal from '../components/Goal/CurrentGoal'
 
  class UserFeedPage extends Component {
+   constructor(props){
+    super(props)
+    this.dispatchTargetUser = this.dispatchTargetUser.bind(this)
+   }
+
+  dispatchTargetUser(userid) {
+    const {match} = this.props;
+    this.props.dispatch(actions.setTargetUser(match.params.userid))
+   }
+
   render() {
   const {match} = this.props;
+  this.dispatchTargetUser(match.params.userid)
+
     // console.log('UserFeedPage props',match)
-  this.props.dispatch(actions.setTargetUser(match.params.userid))
     return (
 
-  <div className="UserFeedPage">
-    <h4> UserFeed </h4>
-    <Goal  />
-    <Steps  />
+  <div className="userfeedpage-container">
+    <h2> UserFeed </h2>
+    <Goal />
+    <Steps />
+    <CurrentGoal id={this.props.currentGoalID}/>
+
     {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
-    <Link to="/">
+
+    <Link className="globalfeed" to="/">
       GlobalFeed
     </Link>
   </div>
@@ -30,6 +46,12 @@ import GlobalFeedPage from './GlobalFeedPage'
   }
   }
 
+const mapStateToProps = (state, props) => {
+  return {
+currentGoalID: state.goals.currentGoalID,
+  }
+}
 
-const ConnectedUserFeedPage = connect()(UserFeedPage)
+
+const ConnectedUserFeedPage = connect(mapStateToProps)(UserFeedPage)
 export default ConnectedUserFeedPage

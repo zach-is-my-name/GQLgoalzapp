@@ -1,9 +1,9 @@
 /* eslint-disable */
 
 import React, {Component} from 'react'
-import InputGoal  from '../Goal/InputGoal'
-import SelectGoal from '../Goal/SelectGoal'
 import TargetUser from '../User/TargetUser'
+import SelectGoal from '../Goal/SelectGoal'
+import InputGoal  from '../Goal/InputGoal'
 
 // , SelectGoalData, CurrentGoal
 export default function Goal(props) {

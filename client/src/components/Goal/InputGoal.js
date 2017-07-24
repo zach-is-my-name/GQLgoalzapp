@@ -16,8 +16,8 @@ import * as actions from '../../Actions/actions'
       goal : ''
     }
     }
-/* Event Handler*/
 
+/* Event Handler*/
 submitGoal(event)  {
   event.preventDefault()
   const {goal} = this.state;

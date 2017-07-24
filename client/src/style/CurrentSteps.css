@@ -1,0 +1,27 @@
+.currentsteps-wrapper {
+  margin-left: 410px;
+}
+
+.currentsteps-label {
+  margin-left: 255px;
+}
+
+
+.currentsteps {
+  display: inline-block;
+  text-align: left;
+}
+
+
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  padding-bottom: 5px;
+}
+
+
+.steps-container {
+
+  padding-top: 5px;
+}

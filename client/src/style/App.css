@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+}
+.App  {
+  width: 1055px;
+  margin: 0 auto;
+  border-style: solid;
+  border-width: 1px;
+  padding: 20px;
+  /*text-align: center;*/
+}
+
+h1 {
+  text-align: center;
+}
+
+.user-top-right-wrapper {
+  width: 100%;
+}
+
+.current-user {
+  /*padding-left: 1em;*/
+  display: inline-block;
+  margin-left: 78%;
+}
+
+.logout-button {
+  margin-left: 1em;
+}
