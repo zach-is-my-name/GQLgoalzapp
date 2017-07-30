@@ -6,7 +6,7 @@ import '../../style/CurrentSuggestedSteps.css'
 class CurrentSuggestedSteps extends Component {
   render() {
     let suggestedStep = this.props.currentSuggestedSteps.map((suggestedStep, index) => {
-      return <li key={index}>{suggestedStep}</li>
+      return <li className="suggested-step" key={index}>{suggestedStep}</li>
     });
     let suggestedStepsList =<div><p className="suggestedsteps-label"> Suggested Steps: </p><div className="suggestedstep-wrapper">  <ul className="suggestedsteps">{suggestedStep}</ul></div></div>;
       return (

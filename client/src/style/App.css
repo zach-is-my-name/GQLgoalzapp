@@ -1,20 +1,54 @@
 * {
   box-sizing: border-box;
 }
+
+@font-face {
+    font-family: 'bentonreg';
+    src: url('./fonts/bentonsans_regular-webfont.woff2') format('woff2'),
+         url('./fonts/bentonsans_regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'streamsterregular';
+    src: url('./fonts/streamster-webfont.woff2') format('woff2'),
+         url('./fonts/streamster-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'lazer84regular';
+    src: url('./fonts/lazer84-webfont.woff2') format('woff2'),
+         url('./fonts/lazer84-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 .App  {
   width: 1055px;
   margin: 0 auto;
   border-style: solid;
   border-width: 1px;
   padding: 20px;
+  /*font-family: bentonreg;*/
   /*text-align: center;*/
 }
 
 h1 {
+  display: inline-block;
+  /*margin: 0 auto;*/
   text-align: center;
+  width: 162px;
+  font-family: streamsterregular;
+  color: #FC60A8;
+  /*border: solid 1px black;*/
 }
 
-.user-top-right-wrapper {
+.header {
   width: 100%;
 }
 
@@ -22,8 +56,19 @@ h1 {
   /*padding-left: 1em;*/
   display: inline-block;
   margin-left: 78%;
+  font-family: bentonreg;
+  font-size: 14pt;
 }
 
-.logout-button {
+/*.logout-button {
   margin-left: 1em;
-}
+  color: #222;
+  font-weight: 600;
+  border: solid #222 2px;
+  border-radius: 5px;
+  background-color: #83ffcd;
+  box-shadow: 4px 4px 0 #222;
+  font-size: 14px;
+  text-align: left;
+  font: 13.333px Arial;
+}*/

@@ -6,7 +6,6 @@ import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 import {Link} from 'react-router-dom';
 
-
 /* CLASS DECLARATION */
 class CurrentUser extends Component {
   constructor(props){
@@ -17,6 +16,10 @@ class CurrentUser extends Component {
   dispatchCurrentUser(currentUser) {
     this.props.dispatch(actions.setCurrentUserName(currentUser))
   }
+
+  // myFunction() {
+  //   document.getElement
+  // }
 
   /* RENDER METHOD */
   render() {
@@ -32,22 +35,25 @@ class CurrentUser extends Component {
     const currentUserID = this.props.currentUserID
     const currentUser = User.userName
     this.dispatchCurrentUser(currentUser)
-    const link = <Link to={`/userfeed/${currentUserID}`}>{currentUser}</Link>
-      if (!loading) {
+
+
         return (
-          <div>
-            <p>Logged In As: {User
-                ? link
-                : null}
-            </p>
-          </div>
+            <div>
+            </div>
+          // <div className="user-dropdown">
+          //   <button onClick={myFunction} className="dropdown-button"> {currentUser}
+          //   </button>
+          //   <div id="myFunction" className="dropdown-content">
+              // <Link to={`/userfeed/${currentUserID}`}>Logout</Link>
+          //   </div>
+          // </div>
         )
-      }
     }
     return null;
   }
+  }
 
-}
+
 
 /* REDUX */
 const mapStateToProps = (state, props) => {

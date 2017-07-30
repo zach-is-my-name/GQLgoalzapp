@@ -28,8 +28,8 @@ class CurrentGoal extends Component {
             <p className="currentgoal-label">Current Goal: </p>
             <p className="currentgoal"> {!this.props.id
               ? null
-          : GoalDoc.goal}</p>
-        </div>
+            : GoalDoc.goal}</p>
+          </div>
         )
       }
     }

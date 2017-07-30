@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import '../../style/App.css';
+import '../../style/fonts/bentonsans_regular-webfont.woff'
 import {withRouter, Switch, Route, BrowserRouter as Router} from 'react-router-dom'
 import {connect} from 'react-redux';
 
@@ -11,6 +12,8 @@ import GlobalFeedPage from '../../Routes/GlobalFeedPage'
 import LoginAuth0 from '../LoginAuth0'
 import CurrentUser from '../User/CurrentUser'
 import * as actions from '../../Actions/actions'
+import {Link} from 'react-router-dom';
+import MenuButton from '../User/MenuButton'
 
 const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
 const domain = 'userzach.auth0.com'
@@ -32,6 +35,7 @@ export class App extends Component {
 
 
   render() {
+    console.log(this.props.currentUser)
     if (this.props.data.error) {
       return console.error(this.props.data.error)
     }
@@ -56,19 +60,16 @@ export class App extends Component {
     return (
       <div className="App">
         <div className="user-top-right-wrapper">
+          <h1 className="logo">GoalZapp</h1>
           <div className="current-user">
             <CurrentUser  user={this.props.data.user.userName} />
           </div>
-          <button className="logout-button" onClick={this._logout}>
-            logout
-          </button>
+          <MenuButton logout={this._logout} currentUser={this.props.currentUser}  />
         </div>
-        <h1>GoalZapp</h1>
         <Switch>
           <Route path="/userfeed/:userid" component={UserFeedPage} />
           <Route exact path="/" component={GlobalFeedPage}  />
         </Switch>
-
       </div>
           )
           }
@@ -103,4 +104,12 @@ const WithQuery = graphql(userQuery, {
   }
 })(withRouter(App))
 
-export default connect()(WithQuery)
+
+const mapStateToProps = (state,props) => {
+  return {
+    currentUser: state.goals.loggedInUserName,
+  }
+}
+
+
+export default connect(mapStateToProps)(WithQuery)

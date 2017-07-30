@@ -1,0 +1,27 @@
+.MenuButton {
+  display: inline-block;
+  /*border: solid 1px black;*/
+}
+
+.MenuButton-button {
+  color: #222;
+  font-weight: 600;
+  border: solid #222 2px;
+  border-radius: 5px;
+  background-color: #83ffcd;
+  box-shadow: 4px 4px 0 #222;
+  font-size: 14px;
+  text-align: left;
+  font: 13.333px Arial;
+  cursor: pointer;
+}
+
+.menuitem-userfeed {
+  color: black ;
+  text-decoration: underline;
+}
+
+.menuitem-logout {
+  cursor: pointer;
+  text-decoration: underline;
+}

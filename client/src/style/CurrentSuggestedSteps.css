@@ -1,14 +1,23 @@
 .suggestedstep-wrapper{
   margin-left: 410px;
+  cursor: default;
 }
 
 
 .suggestedsteps-label {
   margin-left: 255px;
   padding-top: 35px;
+  font-family: bentonreg;
 }
 
 .suggestedsteps {
   display: inline-block;
   text-align: left;
+  font-family: bentonreg;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.suggested-step:hover {
+  background-color: #f5f5f5;
 }
