@@ -1,12 +1,13 @@
 .goal-select {
   margin-left: 728px;
     }
-    
+
 select {
       -webkit-appearance: none;
       border-color: transparent;
       background-color: transparent;
       text-decoration: underline;
-      font-family: Arial;
+      font-family: bentonreg;
     }
+
 /*js bin has goal-select 135px off edge of last letter of h1 (with same margin), this is 175*/

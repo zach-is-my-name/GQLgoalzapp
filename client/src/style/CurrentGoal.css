@@ -3,10 +3,12 @@
   display: inline-block;
   padding-top: 100px;
   margin-left: 255px;
+  font-family: bentonreg;
 }
 
 .currentgoal {
   padding-left: 67px;
   display: inline-block;
   text-align: center;
+  font-family: bentonreg;
 }

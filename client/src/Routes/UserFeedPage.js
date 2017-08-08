@@ -15,17 +15,17 @@ import CurrentGoal from '../components/Goal/CurrentGoal'
  class UserFeedPage extends Component {
    constructor(props){
     super(props)
-    this.dispatchTargetUser = this.dispatchTargetUser.bind(this)
+    // this.dispatchTargetUser = this.dispatchTargetUser.bind(this)
    }
 
-  dispatchTargetUser(userid) {
+componentWillMount(){
     const {match} = this.props;
     this.props.dispatch(actions.setTargetUser(match.params.userid))
-   }
+  }
 
   render() {
   const {match} = this.props;
-  this.dispatchTargetUser(match.params.userid)
+  // this.dispatchTargetUser(match.params.userid)
 
     // console.log('UserFeedPage props',match)
     return (

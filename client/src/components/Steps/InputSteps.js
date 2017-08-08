@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import {connect} from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom'
 import * as actions from '../../Actions/actions'
+import '../../style/InputSteps.css'
 
 
 /* CLASS DEFINITION */
@@ -52,15 +53,17 @@ import * as actions from '../../Actions/actions'
 
   }}
 const input =
-<form onSubmit={this.submitStep}>
-  <input type="text" onChange={this.handleChange} placeholder=""
-    value={this.state.step}/>
-  <input type="submit" value="Submit Step"/>
-</form>
+<div className="stepinput-form">
+  <form onSubmit={this.submitStep}>
+    <input type="text" onChange={this.handleChange} placeholder=""
+      value={this.state.step}/>
+    <input type="submit" value="Submit Step"/>
+  </form>
+</div>
   if (this.props.loggedInUserID === this.props.targetUserID){
   return (input)
 }
-  console.log('conditional failed')
+  // console.log('target user is not logged in user')
   return (null)
   }
 }

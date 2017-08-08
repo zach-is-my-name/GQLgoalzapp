@@ -1,3 +1,9 @@
 .suggest-step-input {
-  margin-left: 410px;
+  /*border: solid 1px black;*/
+  padding-top: 10px;
+  width: 2702px;
+}
+
+.suggest-step-button {
+  display: inline-block;
 }

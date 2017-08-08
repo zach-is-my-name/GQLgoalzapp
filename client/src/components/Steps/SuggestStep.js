@@ -49,7 +49,7 @@ if (!this.props.data.user) {
   <form onSubmit={this._submitSuggestedStep}>
     <input type="text" onChange={this.handleChange} placeholder=""
       value={this.state.suggestedStep}/>
-    <input type="submit" value="Suggest Step"/>
+    <input className="suggest-step-button" type="submit" value="Suggest Step"/>
   </form>
 
 if (this.props.loggedInUserID !== this.props.targetUser) {

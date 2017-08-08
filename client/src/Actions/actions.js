@@ -69,3 +69,10 @@ export const setTargetUser = targetUser => ({
   type: SET_TARGET_USER,
   targetUser
 })
+
+// export const TOGGLE_SUGGEST_STEP_INPUT = 'TOGGLE_SUGGEST_STEP_INPUT'
+// export const toggleSuggestStepInput = state => ({
+//   type:TOGGLE_SUGGEST_STEP_INPUT,
+//   state
+// }
+// )

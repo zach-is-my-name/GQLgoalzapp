@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 
 import InputSteps from '../Steps/InputSteps'
 import CurrentSteps from '../Steps/CurrentSteps'
-import InputSuggestStep from '../Steps/SuggestStep'
+import SuggestStep from '../Steps/SuggestStep'
 import CurrentSuggestedSteps from '../Steps/CurrentSuggestedSteps'
 
 export default function Steps() {
@@ -11,7 +11,7 @@ export default function Steps() {
     <div>
       <InputSteps />
       <CurrentSteps />
-      <InputSuggestStep />
+      {/* <SuggestStep /> */}
       <CurrentSuggestedSteps />
     </div>
   )

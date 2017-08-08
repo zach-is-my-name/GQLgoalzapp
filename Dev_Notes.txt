@@ -53,3 +53,7 @@ is selected.  Before, only the selected goal rendered.  How to keep the latter..
 
 14. Comment from <InputGoal />:39 "//you can probably dispatch setGoal with the returned value of the mutation (which
 // should include an id and the goal"
+
+15. This setState warning might be able to be resolved with Container Components. Maybe ask somebody at a co-working space or Meetup.
+
+16. To fix <SuggestStep /> rendering issue in <CurrentSteps/> you could render a small component for the just the input, and then try to render the smart component by passing in the value once the input component has focus.

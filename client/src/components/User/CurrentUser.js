@@ -5,21 +5,16 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 import {Link} from 'react-router-dom';
+import CurrentUserDispatch from './CurrentUserDispatch'
 
 /* CLASS DECLARATION */
 class CurrentUser extends Component {
   constructor(props){
     super()
-    this.dispatchCurrentUser = this.dispatchCurrentUser.bind(this)
+    this.state = {
+      _isMounted: false
+    }
   }
-
-  dispatchCurrentUser(currentUser) {
-    this.props.dispatch(actions.setCurrentUserName(currentUser))
-  }
-
-  // myFunction() {
-  //   document.getElement
-  // }
 
   /* RENDER METHOD */
   render() {
@@ -34,11 +29,12 @@ class CurrentUser extends Component {
       // const currentUserID = User.userName
     const currentUserID = this.props.currentUserID
     const currentUser = User.userName
-    this.dispatchCurrentUser(currentUser)
-
+    // this.dispatchCurrentUser(currentUser)
 
         return (
+
             <div>
+              <CurrentUserDispatch currentUser={currentUser} />
             </div>
           // <div className="user-dropdown">
           //   <button onClick={myFunction} className="dropdown-button"> {currentUser}
@@ -52,8 +48,6 @@ class CurrentUser extends Component {
     return null;
   }
   }
-
-
 
 /* REDUX */
 const mapStateToProps = (state, props) => {

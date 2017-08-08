@@ -29,23 +29,31 @@ export class App extends Component {
   }
 
   _isLoggedIn = () => {
-    // console.log('this.props.data', this.props.data)
-    return this.props.data.user
+    // console.log('this.props.userQuery', this.props.userQuery)
+    return this.props.userQuery.user
   }
 
+  dispatchUserIdCallback() {
+      this.props.dispatch(actions.setUserId(this.props.userQuery.user.id))
+  }
 
+  dispatchLoginStatusCallback() {
+      this.props.dispatch(actions.setLoginStatus())
+}
   render() {
-    console.log(this.props.currentUser)
-    if (this.props.data.error) {
-      return console.error(this.props.data.error)
+    if (this.props.userQuery.error) {
+      return console.error(this.props.userQuery.error)
     }
-    if (this.props.data.loading) {
+    if (this.props.userQuery.loading) {
       return  <div>Loading</div>
     }
       /*Check User Query */
     if (window.localStorage.getItem('auth0IdToken') && this._isLoggedIn()) {
-      this.props.dispatch(actions.setLoginStatus())
-      this.props.dispatch(actions.setUserId(this.props.data.user.id))
+      /*use callback to avoid warning*/
+      this.dispatchLoginStatusCallback()
+      this.dispatchUserIdCallback()
+
+      // this.props.dispatch(actions.setUserId(this.props.userQuery.user.id))
       return this.renderLoggedIn()
     }
       return (
@@ -59,13 +67,11 @@ export class App extends Component {
     // console.log(match)
     return (
       <div className="App">
-        <div className="user-top-right-wrapper">
-          <h1 className="logo">GoalZapp</h1>
-          <div className="current-user">
-            <CurrentUser  user={this.props.data.user.userName} />
-          </div>
-          <MenuButton logout={this._logout} currentUser={this.props.currentUser}  />
+        <h1 className="logo">GoalZapp</h1>
+        <div className="current-user">
+          <CurrentUser  user={this.props.userQuery.user.userName} />
         </div>
+        <MenuButton logout={this._logout} currentUser={this.props.currentUser}  />
         <Switch>
           <Route path="/userfeed/:userid" component={UserFeedPage} />
           <Route exact path="/" component={GlobalFeedPage}  />
@@ -98,11 +104,20 @@ const userQuery = gql `
           }
         `
 
-const WithQuery = graphql(userQuery, {
-  options: {
-    fetchPolicy: 'network-only'
+const CurrentUserName = gql `
+query($userId: ID) {
+  User (id: $userId)
+  {userName
   }
-})(withRouter(App))
+}
+`;
+
+const WithQueries = (graphql(userQuery, {
+name: 'userQuery',
+  options: {
+    fetchPolicy: 'network-only',
+  }
+}))(withRouter(App))
 
 
 const mapStateToProps = (state,props) => {
@@ -112,4 +127,4 @@ const mapStateToProps = (state,props) => {
 }
 
 
-export default connect(mapStateToProps)(WithQuery)
+export default connect(mapStateToProps)(WithQueries)

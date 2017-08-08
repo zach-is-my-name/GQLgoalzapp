@@ -16,6 +16,10 @@
   cursor: pointer;
 }
 
+.MenuButton-menu {
+  position: absolute;
+}
+
 .menuitem-userfeed {
   color: black ;
   text-decoration: underline;

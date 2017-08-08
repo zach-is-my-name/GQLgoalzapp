@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import {connect} from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom'
 import * as actions from '../../Actions/actions'
-
+import '../../style/InputGoal.css'
 
 /*Class Declaration */
  class InputGoal extends React.Component {
@@ -51,13 +51,15 @@ handleChange(e) {
       )
     }
         const input =
-        <form onSubmit={this.submitGoal}>
-          <input type="text" id="form-text" placeholder=""
-            onChange={this.handleChange}
-            value={this.state.goal}/>
-          <input type="submit" value="ZappIt"/>
-        </form>
-    if (this.props.loggedInUserID === this.props.targetUserID) {
+        <div className="goalinput-form">
+          <form onSubmit={this.submitGoal}>
+            <input type="text" id="form-text" placeholder=""
+              onChange={this.handleChange}
+              value={this.state.goal}/>
+            <input type="submit" value="ZappIt"/>
+          </form>
+        </div>
+          if (this.props.loggedInUserID === this.props.targetUserID) {
      return (input)
    }
       return (null)
