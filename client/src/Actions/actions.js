@@ -70,6 +70,13 @@ export const setTargetUser = targetUser => ({
   targetUser
 })
 
+export const REMOVE_STEP = 'REMOVE_STEP'
+export const removeStep = index => ({
+  type: REMOVE_STEP,
+  index
+})
+
+
 // export const TOGGLE_SUGGEST_STEP_INPUT = 'TOGGLE_SUGGEST_STEP_INPUT'
 // export const toggleSuggestStepInput = state => ({
 //   type:TOGGLE_SUGGEST_STEP_INPUT,

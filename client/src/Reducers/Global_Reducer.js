@@ -77,5 +77,10 @@ if (action.type === 'SET_CURRENT_USERNAME'){
   })
 }
 
+if (action.type === 'REMOVE_STEP'){
+  return update( state, {
+  currentGoalSteps: {$splice: [[action.index, action.index + 1]]}
+})}
+
 return state;
 }
