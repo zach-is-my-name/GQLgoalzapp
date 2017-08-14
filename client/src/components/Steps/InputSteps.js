@@ -45,7 +45,7 @@ import '../../style/InputSteps.css'
 
 /* RENDER METHOD */
   render() {
-    if (this.props.data.loading && !this.props.targetUser) {
+    if (this.props.data.loading && !this.props.targetUserID) {
       return( <div> Loading </div>)
 
     if (!this.props.data.user) {
@@ -60,7 +60,7 @@ const input =
     <input type="submit" value="Submit Step"/>
   </form>
 </div>
-  if (this.props.loggedInUserID === this.props.targetUserID){
+  if (this.props.loggedInUserID === this.props.targetUserIDID){
   return (input)
 }
   // console.log('target user is not logged in user')
@@ -103,7 +103,7 @@ const InputStepsWithMutation =graphql(userQuery,
 /* REDUX */
 const mapStateToProps = (state, props) => {
   return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedInUserID: state.goals.loggedInUserID,
-    targetUserID: state.goals.targetUser,
+    targetUserIDID: state.goals.targetUserID,
   }
 }
 

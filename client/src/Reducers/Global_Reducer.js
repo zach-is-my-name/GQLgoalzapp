@@ -9,11 +9,12 @@ const initialState = {
   currentGoalID:'',
   currentGoalSteps:[],
   currentSuggestedSteps:[],
+  currentSuggestedRemoveSteps: [],
   loggedInUserID:'',
   loggedInUserName:'',
   loggedIn: false,
-  targetUser: '',
-
+  targetUserID: '',
+  targetUserName: '' ,
 }
 
 export const goalReducer = (state = initialState, action) => {
@@ -65,9 +66,15 @@ if (action.type === 'SET_LOGIN_STATUS'){
   })
 }
 
-if (action.type ==='SET_TARGET_USER'){
+if (action.type ==='SET_TARGET_USER_ID'){
   return update( state, {
-    targetUser: {$set: action.targetUser}
+    targetUserID: {$set: action.targetUserID}
+  })
+}
+
+if (action.type === 'SET_TARGET_USER_NAME') {
+  return update( state, {
+    targetUserName: {$set: action.targetUserName}
   })
 }
 
@@ -81,6 +88,13 @@ if (action.type === 'REMOVE_STEP'){
   return update( state, {
   currentGoalSteps: {$splice: [[action.index, action.index + 1]]}
 })}
+
+if (action.type === 'SUGGEST_REMOVE_STEP') {
+    // console.log(action.index)
+  return update( state, {
+  currentSuggestedRemoveSteps: {$push: action.indexArr}
+  })
+}
 
 return state;
 }

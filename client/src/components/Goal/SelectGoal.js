@@ -49,7 +49,7 @@ class SelectGoal extends React.Component {
 /*REDUX */
 const mapStateToProps = (state, props) => {
   // console.log(state)
-  return {currentGoal: state.goals.currentGoal,  loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUser: state.goals.targetUser,}
+  return {currentGoal: state.goals.currentGoal,  loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUserID: state.goals.targetUserID,}
 }
 
 const SelectGoalWithState = connect(mapStateToProps)(SelectGoal)
@@ -65,7 +65,7 @@ const GoalDocQuery = gql `query ($userid: ID) {
 }`;
 
 const ComponentWithData = graphql(GoalDocQuery,
-{ options: ({targetUser}) => ({ variables: {userid:targetUser}}),
+{ options: ({targetUserID}) => ({ variables: {userid:targetUserID}}),
 })(SelectGoalWithState);
 
 

@@ -59,7 +59,7 @@ handleChange(e) {
             <input type="submit" value="ZappIt"/>
           </form>
         </div>
-          if (this.props.loggedInUserID === this.props.targetUserID) {
+          if (this.props.loggedInUserID === this.props.targetUserIDID) {
      return (input)
    }
       return (null)
@@ -101,7 +101,7 @@ const mapStateToProps = (state, props) => {
   return {
     currentGoal: state.currentGoal,
     loggedInUserID: state.goals.loggedInUserID,
-    targetUserID: state.goals.targetUser,
+    targetUserIDID: state.goals.targetUserID,
   }
 }
 

@@ -9,7 +9,7 @@ import CurrentSuggestedSteps from '../Steps/CurrentSuggestedSteps'
 export default function Steps() {
   return (
     <div>
-      <InputSteps />
+      {/* <InputSteps /> */}
       <CurrentSteps />
       {/* <SuggestStep /> */}
       <CurrentSuggestedSteps />

@@ -52,7 +52,7 @@ if (!this.props.data.user) {
     <input className="suggest-step-button" type="submit" value="Suggest Step"/>
   </form>
 
-if (this.props.loggedInUserID !== this.props.targetUser) {
+if (this.props.loggedInUserID !== this.props.targetUserID) {
 return (<div className="suggest-step-input"> {input} </div>)
   }
 return null
@@ -87,7 +87,7 @@ const SuggestStepWithMutation = graphql(userQuery,
 
 const mapStateToProps = (state,props) => {
   return {loggedInUserID: state.goals.loggedInUserID,
-    targetUser: state.goals.targetUser, currentGoalID: state.goals.currentGoalID,
+    targetUserID: state.goals.targetUserID, currentGoalID: state.goals.currentGoalID,
   }
 }
 

@@ -64,19 +64,30 @@ export const setLoginStatus = () => ({
   type: SET_LOGIN_STATUS,
 })
 
-export const SET_TARGET_USER = 'SET_TARGET_USER'
-export const setTargetUser = targetUser => ({
-  type: SET_TARGET_USER,
-  targetUser
+export const SET_TARGET_USER_ID = 'SET_TARGET_USER_ID'
+export const setTargetUserID = targetUserID => ({
+  type: SET_TARGET_USER_ID,
+  targetUserID
 })
 
+export const SET_TARGET_USER_NAME = 'SET_TARGET_USER_NAME'
+export const setTargetUserName = targetUserName => ({
+  type: SET_TARGET_USER_NAME,
+  targetUserName
+})
 export const REMOVE_STEP = 'REMOVE_STEP'
 export const removeStep = index => ({
   type: REMOVE_STEP,
   index
 })
 
-
+export const SUGGEST_REMOVE_STEP = 'SUGGEST_REMOVE_STEP'
+export const suggestRemoveStep = index => {
+  const indexArr = [index]
+return   {
+  type: SUGGEST_REMOVE_STEP,
+  indexArr
+}}
 // export const TOGGLE_SUGGEST_STEP_INPUT = 'TOGGLE_SUGGEST_STEP_INPUT'
 // export const toggleSuggestStepInput = state => ({
 //   type:TOGGLE_SUGGEST_STEP_INPUT,

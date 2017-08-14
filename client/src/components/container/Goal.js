@@ -12,7 +12,7 @@ export default function Goal(props) {
     <div>
       <TargetUser />
       <SelectGoal userid={props.userid} />
-      <InputGoal />
+      {/* <InputGoal /> */}
     </div>
       )
       }

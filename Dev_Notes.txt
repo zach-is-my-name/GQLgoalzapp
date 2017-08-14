@@ -57,3 +57,8 @@ is selected.  Before, only the selected goal rendered.  How to keep the latter..
 15. This setState warning might be able to be resolved with Container Components. Maybe ask somebody at a co-working space or Meetup.
 
 16. To fix <SuggestStep /> rendering issue in <CurrentSteps/> you could render a small component for the just the input, and then try to render the smart component by passing in the value once the input component has focus.
+
+17. The CurrentSteps Component Will Probably be the most important component where everything happens.
+You must try not to make it bloated.
+
+18. In the model that you're pursuing, you can make each suggested step a component...
