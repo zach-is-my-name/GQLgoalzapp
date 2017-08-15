@@ -96,5 +96,12 @@ if (action.type === 'SUGGEST_REMOVE_STEP') {
   })
 }
 
+if(action.type === 'EDIT_STEP') {
+  return update( state, {
+  currentGoalSteps: {[action.index]: {$set:action.editedStep }}
+  }
+  )
+}
+
 return state;
 }

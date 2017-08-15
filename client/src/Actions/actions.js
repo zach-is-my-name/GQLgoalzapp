@@ -94,3 +94,12 @@ return   {
 //   state
 // }
 // )
+
+export const EDIT_STEP = 'EDIT_STEP'
+export const editStep = (index, editedStep) => {
+  return  {
+    type: EDIT_STEP,
+    index,
+    editedStep
+  }
+}

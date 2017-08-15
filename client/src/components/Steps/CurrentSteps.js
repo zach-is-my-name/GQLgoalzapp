@@ -10,17 +10,23 @@ import YesNoPrompt from './YesNoPrompt.js'
 import ForeignCurrentSteps from './ForeignCurrentSteps.js'
 
 import InputStep from './InputSteps.js'
+import EditStep from './EditStep.js'
 
 class CurrentSteps extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeIndex: null,
+      activeIndexAddStep: null,
       toggleOnYesNoPrompt: false,
-      indexToRemove: null
+      indexToRemove: null,
+      activeIndexEditStep: null,
+      editStepOn: false,
+      editedStep: ''
     }
     this.clickHandlerYes = this.clickHandlerYes.bind(this)
     this.clickHandlerNo = this.clickHandlerNo.bind(this)
+    this.handleChangeEditForm = this.handleChangeEditForm.bind(this);
+    this.submitEditedStep = this.submitEditedStep.bind(this);
   }
 
   clickHandlerYes(event) {
@@ -48,9 +54,27 @@ class CurrentSteps extends Component {
   }
 
   clickHandlerAdd(event, index) {
-    this.setState({activeIndex: index})
+    this.setState({activeIndexAddStep: index})
   }
 
+  clickHandlerEdit(event, index) {
+    this.setState(prevState => ({
+      editStepOn: !prevState.editStepOn
+    }))
+    this.setState({activeIndexEditStep: index})
+  }
+
+  handleChangeEditForm (e) {
+    this.setState({editedStep: e.target.value})
+  }
+
+  submitEditedStep(event, index, editedStep) {
+    event.preventDefault()
+    console.log(index)
+    console.log(editedStep)
+    this.props.dispatch(actions.editStep(index, editedStep))
+    this.setState({editedStep: ""})
+  }
   render() {
 
 let steps
@@ -66,15 +90,18 @@ if (this.props.loggedInUser !== this.props.targetUser) {
 
           <li className="plus-image"><img key={`imageKey-plus${index}`} onClick={e => this.clickHandlerAdd(e, index)} alt="" src={plus}/></li>
 
-          <li className="current-step" key={index}>{step}</li>
+          <li className="current-step" onClick={e => this.clickHandlerEdit(e, index)} key={index}>{step}</li>
 
-          {this.state.activeIndex === index
+          {this.state.activeIndexAddStep === index
             ? <InputStep /> : null}
 
           {this.state.toggleOnYesNoPrompt && this.state.indexToRemove === index ? <div className="prompt">
             <p>Remove Step?</p>
             <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
           : null}
+
+          {this.state.editStepOn && this.state.activeIndexEditStep === index
+            ? <EditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep}   submitEditedStep={this.submitEditedStep} step={step} index={index} /> : null}
         </div>
       )
     })
