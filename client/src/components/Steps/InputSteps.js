@@ -45,13 +45,13 @@ import '../../style/InputSteps.css'
 
 /* RENDER METHOD */
   render() {
-    if (this.props.data.loading && !this.props.targetUserID) {
-      return( <div> Loading </div>)
+    // if ( !this.props.targetUserID) {
+    //   return( <div> Loading </div>)
 
-    if (!this.props.data.user) {
-      console.warn('only logged in users can create new posts')
-
-  }}
+  //   if (!this.props.data.user) {
+  //     console.warn('only logged in users can create new posts')
+  //
+  // }}
 const input =
 <div className="stepinput-form">
   <form onSubmit={this.submitStep}>
@@ -77,17 +77,16 @@ const StepsMutation = gql                                         `
   }
 }`
 
-const userQuery = gql`
-  query userQuery {
-    user {
-      id
-    }
-  }
-`
+// const userQuery = gql`
+//   query userQuery {
+//     user {
+//       id
+//     }
+//   }
+// `
 
-const InputStepsWithMutation =graphql(userQuery,
-  {options: {fetchPolicy: 'network-only'}})
-(graphql(StepsMutation,{
+const InputStepsWithMutation =
+graphql(StepsMutation,{
     props:({mutate}) => ({
       createStep({variables}) {
         return mutate({
@@ -98,7 +97,7 @@ const InputStepsWithMutation =graphql(userQuery,
         })
       }
     })
-})(withRouter(InputSteps)))
+})(withRouter(InputSteps))
 
 /* REDUX */
 const mapStateToProps = (state, props) => {

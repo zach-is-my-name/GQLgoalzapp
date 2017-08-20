@@ -101,5 +101,12 @@ export const editStep = (index, editedStep) => {
     type: EDIT_STEP,
     index,
     editedStep
+  }}
+
+export const MOVE_STEP = 'MOVE_STEP'
+export const moveStep = (newStepOrder) => {
+  return {
+    type: MOVE_STEP,
+    newStepOrder
   }
 }

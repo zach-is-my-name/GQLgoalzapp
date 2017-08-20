@@ -103,5 +103,11 @@ if(action.type === 'EDIT_STEP') {
   )
 }
 
+if (action.type === 'MOVE_STEP' ){
+  return update( state, {
+    currentGoalSteps: {$set:action.newStepOrder}
+  })
+}
+
 return state;
 }
