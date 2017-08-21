@@ -21,11 +21,13 @@ class StepWithButtons extends Component {
       indexToRemove: null,
       activeIndexAddStep: null,
       toggleActiveStep: false,
+      eventIndex: null,
     }
       this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
       this.clickHandlerYes = this.clickHandlerYes.bind(this)
       this.clickHandlerNo = this.clickHandlerNo.bind(this)
       this.clickHandlerAdd = this.clickHandlerAdd.bind(this)
+      this.changeEventIndex = this.changeEventIndex.bind(this)
     }
 
 
@@ -35,7 +37,8 @@ class StepWithButtons extends Component {
       this.setState(prevState => ({
         toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
       }))
-      this.setState({indexToRemove: index})
+      this.setState({indexToRemove: index,
+      eventIndex: this.props.eventIndex})
     }
 
     clickHandlerYes(event) {
@@ -55,6 +58,7 @@ class StepWithButtons extends Component {
     }
 
     clickHandlerAdd(event, index) {
+      console.log(index)
       // this.setState({})
       this.setState(prevState => ({
         activeIndexAddStep: index,
@@ -62,22 +66,38 @@ class StepWithButtons extends Component {
       }))
   }
 
+  changeEventIndex (newIndex) {
+    this.setState({eventIndex: newIndex})
+  }
+
+componentWillReceiveProps(nextProps) {
+  if (this.props !== nextProps) {
+    this.setState({eventIndex: nextProps.newIndex})
+  }
+}
+
 render() {
-const {value} = this.props
-const {eventIndex} = this.props
+const {value,eventIndex,newIndex,oldIndex,indexInMotion} = this.props
+
+// if (indexInMotion !== null &&  indexInMotion === oldIndex){
+//   this.changeEventIndex(newIndex)
+// }
 return (
     <div className="sortable-item-wrapper">
 
-      <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={(e,index) => this.clickHandlerRemove(event,eventIndex)} alt="" src={minus}/></li>
-      {this.state.toggleOnYesNoPrompt && this.state.indexToRemove === eventIndex ? <div className="prompt">
-        <p>Remove Step?</p>
-        <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
-      : null}
+      <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={(e,index) => this.clickHandlerRemove(e,eventIndex)} alt="" src={minus}/>
+        {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove  === this.state.eventIndex))
+          ? <div className="prompt">
+            <button onClick={this.clickHandlerYes} value="Yes">Yes</button>
+            <button onClick={this.clickHandlerNo} value="No">No</button>
+            <p>Remove Step?</p>
+          </div>
+        : null}</li>
 
       <li className="current-step">{value}</li>
 
       <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={(e,index) => this.clickHandlerAdd(e, eventIndex)} alt="" src={plus}/></li>
-      {this.state.toggleActiveStep && this.state.activeIndexAddStep === eventIndex
+      {this.state.toggleActiveStep && this.props.newIndex  === eventIndex
         ? <InputStep /> : null}
     </div>
   )
@@ -88,11 +108,18 @@ const SortableStepWithButtons = connect()(SortableElement(StepWithButtons))
 
 
   const SortableList = SortableContainer(
-    ({items}) => {
+    (props) => {
+      console.log(props)
+      const {newIndex} = props
+      const {oldIndex} = props
+      const {items} = props
+      const {indexInMotion}= props
+
       return (
             <ul className="sortable-container">
               {items.map((value, index) => (
-                <SortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index}  value={value} />
+                <SortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index}  value={value} newIndex={newIndex} oldIndex={oldIndex}
+                  indexInMotion={indexInMotion}/>
 
               ))}
             </ul>
@@ -109,13 +136,14 @@ class CurrentSteps extends Component {
       indexToRemove: null,
       activeIndexEditStep: null,
       editStepOn: false,
-      editedStep: ''
+      editedStep: '',
+      newIndex: null,
+      oldIndex: null,
+      indexInMotion: null,
     }
     this.handleChangeEditForm = this.handleChangeEditForm.bind(this);
     this.submitEditedStep = this.submitEditedStep.bind(this);
   }
-
-
 
 
 
@@ -155,20 +183,34 @@ if (this.props.loggedInUser !== this.props.targetUser) {
                 <SortableList
                   items={steps}
                   onSortEnd={this.onSortEnd.bind(this)}
+                  onSortStart={this.onSortStart.bind(this)}
                   helperClass="sortable-helper"
                   hideSortableGhost={true}
                   pressDelay={100}
+                  newIndex={this.state.newIndex}
+                  oldIndex={this.state.oldIndex}
+                  indexInMotion={this.state.indexInMotion}
                 />
+
               </div>
             )
           }
 
           onSortEnd({oldIndex, newIndex}){
+                this.setState({newIndex:newIndex,
+                oldIndex:oldIndex})
                 const newOrderedList =  arrayMove(this.props.currentGoalSteps, oldIndex, newIndex)
                 this.props.dispatch(actions.moveStep(newOrderedList))
           }
 
+
+      onSortStart({index, collection}) {
+            this.setState({indexInMotion: index})
         }
+
+
+}
+
 
 
 const mapStateToProps = (state, props) => {
