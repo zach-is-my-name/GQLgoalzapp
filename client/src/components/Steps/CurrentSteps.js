@@ -84,23 +84,25 @@ const {value,eventIndex,newIndex,oldIndex,indexInMotion} = this.props
 // }
 return (
     <div className="sortable-item-wrapper">
+      <div className="row-1">
+        <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={(e,index) => this.clickHandlerRemove(e,eventIndex)} alt="" src={minus}/></li>
 
-      <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={(e,index) => this.clickHandlerRemove(e,eventIndex)} alt="" src={minus}/>
+        <li className="current-step">{value}</li>
+
+        <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={(e,index) => this.clickHandlerAdd(e, eventIndex)} alt="" src={plus}/></li>
+      </div>
+      <div className="row-2">
+        {this.state.toggleActiveStep && this.props.newIndex  === eventIndex
+          ? <InputStep /> : null}
+
         {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove  === this.state.eventIndex))
-          ? <div className="prompt">
-            <button onClick={this.clickHandlerYes} value="Yes">Yes</button>
-            <button onClick={this.clickHandlerNo} value="No">No</button>
+          ?  <div className="prompt">
             <p>Remove Step?</p>
-          </div>
-        : null}</li>
-
-      <li className="current-step">{value}</li>
-
-      <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={(e,index) => this.clickHandlerAdd(e, eventIndex)} alt="" src={plus}/></li>
-      {this.state.toggleActiveStep && this.props.newIndex  === eventIndex
-        ? <InputStep /> : null}
+            <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
+        : null}
+      </div>
     </div>
-  )
+      )
 }
 }
 const SortableStepWithButtons = connect()(SortableElement(StepWithButtons))
