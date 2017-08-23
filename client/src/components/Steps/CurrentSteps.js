@@ -1,4 +1,6 @@
 /* eslint-disable */
+//index is passed down as eventIndex because it is restricted in react-sortable
+
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
@@ -22,26 +24,61 @@ class StepWithButtons extends Component {
       activeIndexAddStep: null,
       toggleActiveStep: false,
       eventIndex: null,
+      activeIndexEditStep: null,
+      editStepOn: false,
+      editedStep: '',
     }
-      this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
+      // this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
       this.clickHandlerYes = this.clickHandlerYes.bind(this)
       this.clickHandlerNo = this.clickHandlerNo.bind(this)
       this.clickHandlerAdd = this.clickHandlerAdd.bind(this)
       this.changeEventIndex = this.changeEventIndex.bind(this)
+      this.handleChangeEditForm = this.handleChangeEditForm.bind(this);
+      this.submitEditedStep = this.submitEditedStep.bind(this)
+      this.clickHandlerEdit = this.clickHandlerEdit.bind(this)
     }
 
-
-    clickHandlerRemove(event, index) {
-      console.log('clickHandlerRemove triggered')
-      console.log('index to remove', index)
+    clickHandlerEdit(eventIndex,event) {
       this.setState(prevState => ({
-        toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
+        editStepOn: !prevState.editStepOn
       }))
-      this.setState({indexToRemove: index,
+      this.setState({activeIndexEditStep: eventIndex,
       eventIndex: this.props.eventIndex})
     }
 
-    clickHandlerYes(event) {
+    handleChangeEditForm (event) {
+        this.setState({editedStep: event.target.value})
+      }
+
+    submitEditedStep(event,eventIndex, editedStep) {
+       event.preventDefault()
+       console.log(eventIndex)
+       console.log(editedStep)
+       this.props.dispatch(actions.editStep(eventIndex, editedStep))
+       this.setState({editedStep: ""})
+     }
+
+    clickHandlerRemove(eventIndex) {
+      console.log('clickHandlerRemove triggered')
+      console.log('index to remove', eventIndex)
+      this.setState(prevState => ({
+        toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
+      }))
+      this.setState({indexToRemove: eventIndex,
+      eventIndex: this.props.eventIndex})
+    }
+
+    clickHandlerAdd(eventIndex) {
+          console.log(eventIndex)
+          // this.setState({})
+          this.setState(prevState => ({
+            activeIndexAddStep: eventIndex,
+            toggleActiveStep: !prevState.toggleActiveStep,
+            eventIndex: this.props.eventIndex,
+          }))
+      }
+
+    clickHandlerYes() {
       console.log('yes clicked')
       this.props.dispatch(actions.removeStep(this.state.indexToRemove))
       this.setState(prevState => ({
@@ -49,7 +86,7 @@ class StepWithButtons extends Component {
       }))
     }
 
-    clickHandlerNo(event) {
+    clickHandlerNo() {
       console.log('no clicked')
       this.setState(prevState => ({
         toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
@@ -57,18 +94,11 @@ class StepWithButtons extends Component {
       }))
     }
 
-    clickHandlerAdd(event, index) {
-      console.log(index)
-      // this.setState({})
-      this.setState(prevState => ({
-        activeIndexAddStep: index,
-        toggleActiveStep: !prevState.toggleActiveStep
-      }))
-  }
 
-  changeEventIndex (newIndex) {
-    this.setState({eventIndex: newIndex})
-  }
+
+    changeEventIndex (newIndex) {
+      this.setState({eventIndex: newIndex})
+    }
 
 componentWillReceiveProps(nextProps) {
   if (this.props !== nextProps) {
@@ -84,23 +114,27 @@ const {value,eventIndex,newIndex,oldIndex,indexInMotion} = this.props
 // }
 return (
     <div className="sortable-item-wrapper">
-      <div className="row-1">
-        <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={(e,index) => this.clickHandlerRemove(e,eventIndex)} alt="" src={minus}/></li>
+        <div className="row-1">
+            <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={() => this.clickHandlerRemove(eventIndex)} alt="" src={minus}/></li>
 
-        <li className="current-step">{value}</li>
+            <li className="current-step" onClick={(event) => this.clickHandlerEdit(eventIndex,event)} key={eventIndex}>{value}</li>
 
-        <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={(e,index) => this.clickHandlerAdd(e, eventIndex)} alt="" src={plus}/></li>
-      </div>
-      <div className="row-2">
-        {this.state.toggleActiveStep && this.props.newIndex  === eventIndex
-          ? <InputStep /> : null}
+            <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerAdd(eventIndex)} alt="" src={plus}/></li>
+        </div>
+        <div className="row-2">
+            {(this.state.toggleActiveStep && (this.state.eventIndex !== null)  && (this.state.activeIndexAddStep === this.state.eventIndex))
+                ? <InputStep /> : null}
 
-        {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove  === this.state.eventIndex))
-          ?  <div className="prompt">
-            <p>Remove Step?</p>
-            <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
-        : null}
-      </div>
+            {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove  === this.state.eventIndex))
+                ?  <div className="prompt">
+                    <p>Remove Step?</p>
+                    <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
+            : null}
+
+            {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
+                ? <EditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep}   submitEditedStep={this.submitEditedStep} step={value} index={eventIndex} /> : null}
+
+        </div>
     </div>
       )
 }
@@ -149,12 +183,6 @@ class CurrentSteps extends Component {
 
 
 
-  clickHandlerEdit(event, index) {
-    this.setState(prevState => ({
-      editStepOn: !prevState.editStepOn
-    }))
-    this.setState({activeIndexEditStep: index})
-  }
 
   handleChangeEditForm (e) {
     this.setState({editedStep: e.target.value})
@@ -198,12 +226,12 @@ if (this.props.loggedInUser !== this.props.targetUser) {
             )
           }
 
-          onSortEnd({oldIndex, newIndex}){
-                this.setState({newIndex:newIndex,
-                oldIndex:oldIndex})
-                const newOrderedList =  arrayMove(this.props.currentGoalSteps, oldIndex, newIndex)
-                this.props.dispatch(actions.moveStep(newOrderedList))
-          }
+      onSortEnd({oldIndex, newIndex}){
+            this.setState({newIndex:newIndex,
+            oldIndex:oldIndex})
+            const newOrderedList =  arrayMove(this.props.currentGoalSteps, oldIndex, newIndex)
+            this.props.dispatch(actions.moveStep(newOrderedList))
+      }
 
 
       onSortStart({index, collection}) {

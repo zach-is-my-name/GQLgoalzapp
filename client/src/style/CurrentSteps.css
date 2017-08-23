@@ -37,6 +37,7 @@ ul.sortable-container {
     width: 100%;
     /* align-self: center; */
     justify-content: center;
+    user-select: none;
     /*border: solid 1px orange;*/
     /*margin-bottom: 21px;*/
 }
@@ -47,7 +48,7 @@ ul.sortable-container {
 
 li.minus-image {
     position: relative;
-    top: -5px;
+    /*top: -5px;*/
     margin-right: 29px;
     height: 30px;
     width: 30px;
@@ -56,12 +57,13 @@ li.minus-image {
 li.current-step {
     height: 30px;
     cursor: default;
+    user-select: none;
 }
 
 .plus-image {
     margin-left: 29px;
     position: relative;
-    top: -4px;
+    /*top: -4px;*/
 
 
 }
