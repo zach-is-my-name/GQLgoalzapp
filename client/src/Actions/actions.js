@@ -110,3 +110,11 @@ export const moveStep = (newStepOrder) => {
     newStepOrder
   }
 }
+
+export const SUGGEST_EDIT_STEP = 'SUGGEST_EDIT_STEP'
+export const suggestEditStep = (suggestedEdit) => {
+    return {
+      type: SUGGEST_EDIT_STEP,
+      suggestedEdit
+    }
+}

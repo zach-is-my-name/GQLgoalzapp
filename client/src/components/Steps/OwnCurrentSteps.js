@@ -39,9 +39,11 @@ class OwnSortabelStepWithButtons extends Component {
 
   clickHandlerEdit(eventIndex, event) {
     this.setState(prevState => ({
-      editStepOn: !prevState.editStepOn
+      editStepOn: !prevState.editStepOn,
+      activeIndexEditStep: eventIndex,
+      eventIndex: this.props.eventIndex,
     }))
-    this.setState({activeIndexEditStep: eventIndex, eventIndex: this.props.eventIndex})
+    // this.setState({activeIndexEditStep: eventIndex, eventIndex: this.props.eventIndex})
   }
 
   handleChangeEditForm(event) {
@@ -124,7 +126,7 @@ class OwnSortabelStepWithButtons extends Component {
           {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove === this.state.eventIndex))
             ? <div className="prompt">
               <p>Remove Step?</p>
-              <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
+              <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEv entNo={this.clickHandlerNo}/></div>
           : null}
 
           {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)

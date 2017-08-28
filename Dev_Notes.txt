@@ -62,3 +62,8 @@ is selected.  Before, only the selected goal rendered.  How to keep the latter..
 You must try not to make it bloated.
 
 18. In the model that you're pursuing, you can make each suggested step a component...
+
+19. At this point, implementing Suggest Edit, Suggest Move, and Suggest In-Sequence becomes more difficult.
+Previously, I was just listing suggested items to add/remove.  Now, obviiously we are talking about adding and removing those items to the owner's master list, and providing functions to re-order it, and change arbitrary items.
+
+The question becomes wether to begin migrating to a dual-list model where we diff the two lists (own and suggested), or we have been trending that way from the begining.   
