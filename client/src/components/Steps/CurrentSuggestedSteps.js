@@ -33,7 +33,7 @@ class CurrentSuggestedSteps extends Component {
     .map((_suggestedStepToRemove,index) => { return  <li key={index} className={`suggested-remove-step`} >{_suggestedStepToRemove}</li>}
             )
 
-        console.log(suggestedStepToRemove)
+        // console.log(suggestedStepToRemove)
 // console.log(typeof suggestedStepsToRemove)
     // let _suggestedStepToRemove = <li key={index} className={`suggested-remove-step`} >{suggestedStepToRemove}</li>
 

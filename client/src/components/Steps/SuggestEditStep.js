@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import YesNoPrompt from './YesNoPrompt.js'
 
-export default class EditStep extends Component {
+export default class SuggestEditStep extends Component {
 
 render() {
  return (
