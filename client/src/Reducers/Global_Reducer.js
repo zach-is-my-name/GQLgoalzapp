@@ -28,7 +28,6 @@ if (action.type === 'SET_USERID') {
 if (action.type === 'SET_GOAL') {
   return update(state, {
     currentGoal: {$set:action.goal},
-
   })
 }
 
@@ -48,11 +47,10 @@ if (action.type === 'SET_GOALDOC') {
 }
 
 if (action.type === 'SET_STEP') {
-  console.log(action.step)
   return update(state, {
-  currentGoalSteps:  {$push:action.step},
-  })
-}
+    currentGoalSteps: {$splice:[[action.index , 0, action.step]]
+  }
+})}
 
 if (action.type === 'SET_SUGGESTED_STEP'){
   return update(state, {

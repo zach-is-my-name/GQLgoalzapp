@@ -119,9 +119,6 @@ class OwnSortabelStepWithButtons extends Component {
           <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerAdd(eventIndex)} alt="" src={plus}/></li>
         </div>
         <div className="row-2">
-          {(this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex))
-            ? <InputStep/>
-          : null}
 
           {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove === this.state.eventIndex))
             ? <div className="prompt">
@@ -131,6 +128,10 @@ class OwnSortabelStepWithButtons extends Component {
 
           {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
             ? <EditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>
+          : null}
+
+          {(this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex))
+            ? <InputStep index={eventIndex}/>
           : null}
 
         </div>
