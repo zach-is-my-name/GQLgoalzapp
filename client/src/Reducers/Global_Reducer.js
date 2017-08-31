@@ -9,6 +9,7 @@ const initialState = {
   currentGoalID:'',
   currentGoalSteps:[],
   currentSuggestedSteps:[],
+  currentGoalStepsClone: [],
   currentSuggestedRemoveSteps: [],
   loggedInUserID:'',
   loggedInUserName:'',
@@ -42,7 +43,7 @@ if (action.type === 'SET_GOALDOC') {
     currentGoal: {$set:action.flatGoalDoc.goal},
   currentGoalID: {$set:action.flatGoalDoc.id},
   currentGoalSteps: {$set:action.flatGoalDoc.flatSteps},
-  currentSuggestedSteps: {$set:action.flatGoalDoc.flatSuggestedSteps},
+  // currentSuggestedSteps: {$set:action.flatGoalDoc.flatSuggestedSteps},
   })
 }
 
@@ -106,6 +107,19 @@ if (action.type === 'MOVE_STEP' ){
     currentGoalSteps: {$set:action.newStepOrder}
   })
 }
+
+if (action.type === 'MOVE_STEP_ON_CLONE' ){
+  return update( state, {
+    currentGoalStepsClone: {$set:action.newStepOrder}
+  })
+}
+
+if (action.type === 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS') {
+  return update (state, {
+    currentGoalStepsClone: {$set: action.flatSteps}
+  })
+}
+
 
 return state;
 }

@@ -41,15 +41,22 @@ class CurrentGoal extends Component {
     if (nextProps.data && nextProps.data.loading == false && nextProps.data.GoalDoc) {
     if (this.props.data.GoalDoc !=nextProps.data.GoalDoc){
       /* ACTION DISPATCH */
+      console.log(nextProps.data.GoalDoc)
       this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
+
+      if (this.props.loggedInUser !== this.props.targetUser) {
+        console.log('THISSSSSSSSSSSSSSS', nextProps.data.GoalDoc.steps)
+      this.props.dispatch(actions.cloneCurrentStepsToSuggestedSteps(nextProps.data.GoalDoc.steps))
     }
-  }}
+  }
+    }
+  }
 }
 
 
 /* REDUX CONNECT */
 const mapStateToProps = (state, props) => {
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, currentGoalSteps: state.goals.currentGoalSteps}
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, currentGoalSteps: state.goals.currentGoalSteps,  loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID}
 }
 
 const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoal);

@@ -105,7 +105,7 @@ submitEditedStep(event, eventIndex, editedStep) {
         </div>
         <div className="row-2">
           {this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex)
-            ? <SuggestStep />
+            ? <SuggestStep index={eventIndex}/>
           : null}
 
           {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove === this.state.eventIndex))
@@ -155,17 +155,17 @@ submitEditedStep(event, eventIndex, editedStep) {
             }
 
             render() {
-                let currentGoalSteps = this.props.currentGoalSteps
+                let currentGoalStepsClone = this.props.currentGoalStepsClone
               return (
                 <div className="steps-container">
-                  <SuggestSortableList items={currentGoalSteps} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
-        </div>
+                  <SuggestSortableList items={currentGoalStepsClone} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
+                </div>
 )
   }
   onSortEnd({oldIndex, newIndex}) {
     this.setState({newIndex: newIndex, oldIndex: oldIndex})
-    const newOrderedList = arrayMove(this.props.currentGoalSteps, oldIndex, newIndex)
-    this.props.dispatch(actions.moveStep(newOrderedList))
+    const newOrderedList = arrayMove(this.props.currentGoalStepsClone, oldIndex, newIndex)
+    this.props.dispatch(actions.moveStepOnClone(newOrderedList))
   }
 
   onSortStart({index, collection}) {
@@ -174,7 +174,7 @@ submitEditedStep(event, eventIndex, editedStep) {
 }
 
 const mapStateToProps = (state, props) => {
-  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID}
+  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone}
 }
 
 export default connect(mapStateToProps)(ForeignCurrentSteps);

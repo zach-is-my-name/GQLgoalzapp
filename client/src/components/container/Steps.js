@@ -12,7 +12,7 @@ export default function Steps() {
       {/* <InputSteps /> */}
       <CurrentSteps />
       {/* <SuggestStep /> */}
-      <CurrentSuggestedSteps />
+      {/* <CurrentSuggestedSteps /> */}
     </div>
   )
 }

@@ -1,7 +1,6 @@
 // /* eslint-disable */
 // //index is passed down as eventIndex because it is restricted in react-sortable
 //
-// import * as actions from '../../Actions/actions.js'
 // import plus from '../../style/images/plus_websize.png'
 // import ForeignCurrentSteps from './ForeignCurrentSteps.js'
 // import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
@@ -149,14 +148,25 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import * as actions from '../../Actions/actions.js'
 
 import '../../style/CurrentSteps.css'
 import OwnCurrentSteps from  './OwnCurrentSteps.js'
 import ForeignCurrentSteps from './ForeignCurrentSteps.js'
 
 
+
+
+
 class CurrentSteps extends Component {
 
+
+
+  componentWillMount() {
+    if (this.props.loggedInUser !== this.props.targetUser) {
+      this.props.dispatch(actions.cloneCurrentStepsToSuggestedSteps(this.props.currentGoalSteps))
+    }
+  }
 
   render() {
 
@@ -164,7 +174,7 @@ class CurrentSteps extends Component {
 
     if (this.props.loggedInUser !== this.props.targetUser) {
       console.log('Foreign Steps')
-      currentSteps = <ForeignCurrentSteps currentGoalSteps={this.props.currentGoalSteps}/>
+      currentSteps = <ForeignCurrentSteps />
     } else {
       console.log('this.props.loggedInUser', this.props.loggedInUser)
       console.log('this.props.targetUser', this.props.targetUser)

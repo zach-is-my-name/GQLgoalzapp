@@ -52,7 +52,8 @@ import '../../style/InputSteps.css'
   //     console.warn('only logged in users can create new posts')
   //
   // }}
-const input =
+if (this.props.loggedInUserID === this.props.targetUserIDID){
+  return (
 <div className="stepinput-form">
   <form onSubmit={this.submitStep}>
     <input type="text" onChange={this.handleChange} placeholder=""
@@ -60,8 +61,7 @@ const input =
     <input type="submit" value="Submit Step"/>
   </form>
 </div>
-  if (this.props.loggedInUserID === this.props.targetUserIDID){
-  return (input)
+)
 }
   // console.log('target user is not logged in user')
   return (null)

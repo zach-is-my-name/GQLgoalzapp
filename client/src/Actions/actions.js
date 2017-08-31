@@ -29,11 +29,11 @@ return ( {
 })};
 
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
-export const setSuggestedStep = suggestedStep => {
-  let suggestedStepArr = [suggestedStep]
+export const setSuggestedStep = (suggestedStep,index) => {
   return ( {
     type: SET_SUGGESTED_STEP,
-    suggestedStep: suggestedStepArr
+    suggestedStep: [suggestedStep],
+    index: [index]
   })
 }
 
@@ -112,10 +112,28 @@ export const moveStep = (newStepOrder) => {
   }
 }
 
+export const MOVE_STEP_ON_CLONE = 'MOVE_STEP_ON_CLONE'
+export const moveStepOnClone = (newStepOrder) => {
+  return {
+    type: MOVE_STEP_ON_CLONE,
+    newStepOrder
+  }
+}
+
 export const SUGGEST_EDIT_STEP = 'SUGGEST_EDIT_STEP'
 export const suggestEditStep = (suggestedEdit) => {
     return {
       type: SUGGEST_EDIT_STEP,
       suggestedEdit
     }
+}
+
+export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
+export const cloneCurrentStepsToSuggestedSteps = (steps) => {
+    let  flatSteps = steps.map(step => step.step)
+    console.log(flatSteps)
+  return {
+    type: CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS,
+    flatSteps
+  }
 }
