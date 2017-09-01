@@ -66,4 +66,6 @@ You must try not to make it bloated.
 19. At this point, implementing Suggest Edit, Suggest Move, and Suggest In-Sequence becomes more difficult.
 Previously, I was just listing suggested items to add/remove.  Now, obviiously we are talking about adding and removing those items to the owner's master list, and providing functions to re-order it, and change arbitrary items.
 
-The question becomes wether to begin migrating to a dual-list model where we diff the two lists (own and suggested), or we have been trending that way from the begining.   
+The question becomes wether to begin migrating to a dual-list model where we diff the two lists (own and suggested), or we have been trending that way from the begining.
+
+20. Using targeted $set vs. splice, eg. SUGGEST_REMOVE_STEP vs SUGGEST_EDIT_STEP

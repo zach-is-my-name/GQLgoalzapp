@@ -20,21 +20,22 @@ export const setGoalDocID = goalDocID => ({
 
 export const SET_STEP = 'SET_STEP';
 export const setStep = (step,index) => {
-let stepArr = [step]
 // console.log('STEP ARR', stepArr)
 return ( {
   type: SET_STEP,
   step,
   index: [index] + 1
-})};
+})
+
+};
 
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
 export const setSuggestedStep = (suggestedStep,index) => {
   return ( {
-    type: SET_SUGGESTED_STEP,
-    suggestedStep: [suggestedStep],
-    index: [index]
-  })
+  type: SET_SUGGESTED_STEP,
+  suggestedStep,
+  index: [index] + 1
+})
 }
 
 export const SET_GOALDOC = 'SET_GOALDOC'
@@ -104,6 +105,14 @@ export const editStep = (index, editedStep) => {
     editedStep
   }}
 
+export const SUGGEST_EDIT_STEP = 'SUGGEST_EDIT_STEP'
+export const suggestEditStep = (index, editedStep) => {
+  return  {
+    type: SUGGEST_EDIT_STEP,
+    index,
+    editedStep
+  }}
+
 export const MOVE_STEP = 'MOVE_STEP'
 export const moveStep = (newStepOrder) => {
   return {
@@ -115,17 +124,9 @@ export const moveStep = (newStepOrder) => {
 export const MOVE_STEP_ON_CLONE = 'MOVE_STEP_ON_CLONE'
 export const moveStepOnClone = (newStepOrder) => {
   return {
-    type: MOVE_STEP_ON_CLONE,
+    type: MOVE_STEP,
     newStepOrder
   }
-}
-
-export const SUGGEST_EDIT_STEP = 'SUGGEST_EDIT_STEP'
-export const suggestEditStep = (suggestedEdit) => {
-    return {
-      type: SUGGEST_EDIT_STEP,
-      suggestedEdit
-    }
 }
 
 export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'

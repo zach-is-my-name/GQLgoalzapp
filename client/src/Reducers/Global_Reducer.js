@@ -54,8 +54,11 @@ if (action.type === 'SET_STEP') {
 })}
 
 if (action.type === 'SET_SUGGESTED_STEP'){
+  console.log(action.suggestedStep)
+  console.log(action.index)
   return update(state, {
-    currentSuggestedSteps: {$push:action.suggestedStep},
+    currentGoalStepsClone: {$splice:[[action.index , 0, action.suggestedStep]]
+  }
   })
 }
 
@@ -86,20 +89,27 @@ if (action.type === 'SET_CURRENT_USERNAME'){
 if (action.type === 'REMOVE_STEP'){
   return update( state, {
   currentGoalSteps: {$splice: [[action.index, action.index + 1]]}
-})}
+  })
+}
 
 if (action.type === 'SUGGEST_REMOVE_STEP') {
     // console.log(action.index)
   return update( state, {
-  currentSuggestedRemoveSteps: {$push: action.indexArr}
+  currentGoalStepsClone:
+{$splice: [[action.index, 1]]}
   })
 }
 
 if(action.type === 'EDIT_STEP') {
   return update( state, {
   currentGoalSteps: {[action.index]: {$set:action.editedStep }}
-  }
-  )
+  })
+}
+
+if(action.type === 'SUGGEST_EDIT_STEP') {
+  return update( state, {
+  currentGoalStepsClone: {[action.index]: {$set:action.editedStep }}
+  })
 }
 
 if (action.type === 'MOVE_STEP' ){

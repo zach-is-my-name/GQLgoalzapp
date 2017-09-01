@@ -27,25 +27,30 @@ class ForeignSortableStepWithButtons extends Component {
       editStepOn: false,
       editedStep: '',
     }
-}
-clickHandlerEdit(eventIndex, event) {
-  this.setState(prevState => ({
-    editStepOn: !prevState.editStepOn
-  }))
-  this.setState({activeIndexEditStep: eventIndex, eventIndex: this.props.eventIndex})
+    this.clickHandlerNo = this.clickHandlerNo.bind(this)
+    this.clickHandlerYes = this.clickHandlerYes.bind(this)
+    this.handleChangeEditForm = this.handleChangeEditForm.bind(this)
+    this.submitEditedStep = this.submitEditedStep.bind(this)
 }
 
-handleChangeEditForm(event) {
-  this.setState({editedStep: event.target.value})
-}
+  clickHandlerEdit(eventIndex, event) {
+    this.setState(prevState => ({
+      editStepOn: !prevState.editStepOn
+    }))
+    this.setState({activeIndexEditStep: eventIndex, eventIndex: this.props.eventIndex})
+  }
 
-submitEditedStep(event, eventIndex, editedStep) {
-  event.preventDefault()
-  console.log(eventIndex)
-  console.log(editedStep)
-  this.props.dispatch(actions.editStep(eventIndex, editedStep))
-  this.setState({editedStep: ""})
-}
+  handleChangeEditForm(event) {
+    this.setState({editedStep: event.target.value})
+  }
+
+  submitEditedStep(event, eventIndex, editedStep) {
+    event.preventDefault()
+    console.log(eventIndex)
+    console.log(editedStep)
+    this.props.dispatch(actions.suggestEditStep(eventIndex, editedStep))
+    this.setState({editedStep: ""})
+  }
 
   clickHandlerYes(event) {
     console.log('yes clicked')
