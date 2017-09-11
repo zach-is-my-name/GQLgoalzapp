@@ -45,7 +45,8 @@ class CurrentGoal extends Component {
       this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
 
       if (this.props.loggedInUser !== this.props.targetUser) {
-        console.log('THISSSSSSSSSSSSSSS', nextProps.data.GoalDoc.steps)
+        // console.log('THISSSSSSSSSSSSSSS', nextProps.data.GoalDoc.steps)
+        console.log('clone steps called from CurrentGoal.js')
       this.props.dispatch(actions.cloneCurrentStepsToSuggestedSteps(nextProps.data.GoalDoc.steps))
     }
   }

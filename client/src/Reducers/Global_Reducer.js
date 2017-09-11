@@ -125,11 +125,17 @@ if (action.type === 'MOVE_STEP_ON_CLONE' ){
 }
 
 if (action.type === 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS') {
+  console.log(action.flatSteps)
   return update (state, {
     currentGoalStepsClone: {$set: action.flatSteps}
   })
 }
 
+// if (action.type === 'MERGE_STEPS_CLONE') {
+//   return update( state, {
+//
+//   })
+// }
 
 return state;
 }

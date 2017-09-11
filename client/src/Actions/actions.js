@@ -29,11 +29,13 @@ return ( {
 
 };
 
+//where is the index being passed in SuggestStep.js?
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
 export const setSuggestedStep = (suggestedStep,index) => {
+  const stepObj = {step: suggestedStep, suggestedStep: true}
   return ( {
   type: SET_SUGGESTED_STEP,
-  suggestedStep,
+  suggestedStep: stepObj,
   index: [index] + 1
 })
 }
@@ -124,17 +126,26 @@ export const moveStep = (newStepOrder) => {
 export const MOVE_STEP_ON_CLONE = 'MOVE_STEP_ON_CLONE'
 export const moveStepOnClone = (newStepOrder) => {
   return {
-    type: MOVE_STEP,
+    type: MOVE_STEP_ON_CLONE,
     newStepOrder
   }
 }
 
 export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
 export const cloneCurrentStepsToSuggestedSteps = (steps) => {
-    let  flatSteps = steps.map(step => step.step)
-    console.log(flatSteps)
+    console.log(steps)
+    let flatSteps = steps.map(step => ({step:step.step, suggestedStep: false }))
+    console.log('actions/flatSteps', flatSteps)
+    let flatStepsObj = {step: flatSteps, suggestedStep:false}
   return {
     type: CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS,
-    flatSteps
+    flatSteps: flatSteps
   }
 }
+
+// export const MERGE_STEPS_CLONE = 'MERGE_STEPS_CLONE'
+// export const mergeStepsClone = () => {
+//   return {
+//     type: MERGE_STEPS_CLONE
+//   }
+// }

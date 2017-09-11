@@ -12,7 +12,7 @@ import '../../style/ForeignCurrentSteps.css'
 import SuggestStep from './SuggestStep.js'
 import SuggestEditStep from './SuggestEditStep.js'
 import YesNoPrompt from './YesNoPrompt.js'
-
+import ZappButton from './ZappButton.js'
 
 class ForeignSortableStepWithButtons extends Component {
   constructor(props) {
@@ -27,6 +27,7 @@ class ForeignSortableStepWithButtons extends Component {
       editStepOn: false,
       editedStep: '',
     }
+
     this.clickHandlerNo = this.clickHandlerNo.bind(this)
     this.clickHandlerYes = this.clickHandlerYes.bind(this)
     this.handleChangeEditForm = this.handleChangeEditForm.bind(this)
@@ -109,9 +110,6 @@ class ForeignSortableStepWithButtons extends Component {
           <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerSuggestAdd(eventIndex)} alt="" src={plus}/></li>
         </div>
         <div className="row-2">
-          {this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex)
-            ? <SuggestStep index={eventIndex}/>
-          : null}
 
           {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove === this.state.eventIndex))
             ? <div className="prompt">
@@ -123,6 +121,10 @@ class ForeignSortableStepWithButtons extends Component {
             ? <SuggestEditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>
           : null}
 
+          {this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex)
+            ? <SuggestStep index={eventIndex}/>
+          : null}
+
         </div>
       </div>
           )
@@ -131,42 +133,45 @@ class ForeignSortableStepWithButtons extends Component {
           const SuggestSortableStepWithButtons = connect()(SortableElement(ForeignSortableStepWithButtons))
 
           const SuggestSortableList = SortableContainer((props) => {
-            console.log(props)
+            console.log('SortableContainer props',props)
             const {newIndex} = props
             const {oldIndex} = props
             const {items} = props
             const {indexInMotion} = props
+            console.log('props.items aka currentStepsClone:', items)
 
             return (
               <ul className="sortable-container">
-                {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
+                {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value.step} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
               </ul>
             );
           });
 
 
 
-          class ForeignCurrentSteps extends Component {
-            constructor(props) {
-              super(props)
-              this.state = {
+class ForeignCurrentSteps extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
 
-                  newIndex: null,
-                  oldIndex: null,
-                  indexInMotion: null
-              }
-                // this.clickHandlerYes = this.clickHandlerYes.bind(this)
-                // this.clickHandlerNo = this.clickHandlerNo.bind(this)
-            }
-
-            render() {
-                let currentGoalStepsClone = this.props.currentGoalStepsClone
-              return (
-                <div className="steps-container">
-                  <SuggestSortableList items={currentGoalStepsClone} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
-                </div>
-)
+        newIndex: null,
+        oldIndex: null,
+        indexInMotion: null,
+        toggleOnZappButton: true,
+    }
+      // this.clickHandlerYes = this.clickHandlerYes.bind(this)
+      // this.clickHandlerNo = this.clickHandlerNo.bind(this)
   }
+
+  render() {
+      let currentGoalStepsClone = this.props.currentGoalStepsClone
+    return (
+      <div className="steps-container">
+        <SuggestSortableList items={currentGoalStepsClone} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
+        {this.state.toggleOnZappButton ? <ZappButton /> : null}
+      </div>
+)
+}
   onSortEnd({oldIndex, newIndex}) {
     this.setState({newIndex: newIndex, oldIndex: oldIndex})
     const newOrderedList = arrayMove(this.props.currentGoalStepsClone, oldIndex, newIndex)

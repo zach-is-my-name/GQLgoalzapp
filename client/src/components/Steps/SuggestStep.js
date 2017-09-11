@@ -21,6 +21,7 @@ class SuggestStep extends Component {
     const {suggestedStep} = this.state
     const goalDocId = this.props.currentGoalID
     const suggesterId = this.props.loggedInUserID
+    const index = this.props.index
     this.props.submitSuggestedStep({
       variables: {
         suggestedStep,
@@ -30,7 +31,7 @@ class SuggestStep extends Component {
     }).then(({data}) => {
       console.log('DATA SUBMITTED', data);
       this.setState({suggestedStep: ""})
-      this.props.dispatch(actions.setSuggestedStep(suggestedStep))
+      this.props.dispatch(actions.setSuggestedStep(suggestedStep, index))
     })
   }
 

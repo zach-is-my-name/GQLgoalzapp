@@ -168,6 +168,9 @@ class OwnCurrentSteps extends Component {
 
   render() {
 
+//suggestedStep manipulation goes here
+
+
   let currentGoalSteps = this.props.currentGoalSteps
 
     return (
