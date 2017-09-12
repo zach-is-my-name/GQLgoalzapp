@@ -8,14 +8,14 @@ const initialState = {
   currentGoal: '',
   currentGoalID:'',
   currentGoalSteps:[],
-  currentSuggestedSteps:[],
   currentGoalStepsClone: [],
-  currentSuggestedRemoveSteps: [],
   loggedInUserID:'',
   loggedInUserName:'',
   loggedIn: false,
   targetUserID: '',
   targetUserName: '' ,
+  // currentSuggestedSteps:[],
+  // currentSuggestedRemoveSteps: [],
 }
 
 export const goalReducer = (state = initialState, action) => {

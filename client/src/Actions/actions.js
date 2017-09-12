@@ -109,10 +109,13 @@ export const editStep = (index, editedStep) => {
 
 export const SUGGEST_EDIT_STEP = 'SUGGEST_EDIT_STEP'
 export const suggestEditStep = (index, editedStep) => {
+  let stepKey =  [index]["step"]
+  let stepObj = {step: editedStep, suggestedStep: true}
   return  {
     type: SUGGEST_EDIT_STEP,
     index,
-    editedStep
+    editedStep: stepObj,
+    stepKey
   }}
 
 export const MOVE_STEP = 'MOVE_STEP'
