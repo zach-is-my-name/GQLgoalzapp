@@ -88,12 +88,12 @@ if (action.type === 'SET_CURRENT_USERNAME'){
 
 if (action.type === 'REMOVE_STEP'){
   return update( state, {
-  currentGoalSteps: {$splice: [[action.index, action.index + 1]]}
+  currentGoalSteps: {$splice: [[action.index, 1]]}
   })
 }
 
 if (action.type === 'SUGGEST_REMOVE_STEP') {
-    // console.log(action.index)
+    console.log(action.index)
   return update( state, {
   currentGoalStepsClone:
 {$splice: [[action.index, 1]]}

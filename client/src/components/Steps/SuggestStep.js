@@ -12,31 +12,34 @@ class SuggestStep extends Component {
     this.handleChange = this.handleChange.bind(this)
     this._submitSuggestedStep = this._submitSuggestedStep.bind(this)
     this.state = {
-      suggestedStep: " "
+      step: " "
     }
   }
 
   _submitSuggestedStep(event) {
     event.preventDefault()
-    const {suggestedStep} = this.state
+    const {step} = this.state
     const goalDocId = this.props.currentGoalID
     const suggesterId = this.props.loggedInUserID
     const index = this.props.index
+    // this.props.dispatch(actions.setSuggestedStep(step, index))
     this.props.submitSuggestedStep({
       variables: {
-        suggestedStep,
+        suggestedStep: true,
+        step,
+        index,
         goalDocId,
-        suggesterId
+        suggesterId,
       }
     }).then(({data}) => {
       console.log('DATA SUBMITTED', data);
-      this.setState({suggestedStep: ""})
-      this.props.dispatch(actions.setSuggestedStep(suggestedStep, index))
+      this.props.dispatch(actions.setSuggestedStep(step, index, data.createClonedStep.id))
+      this.setState({step: ""})
     })
   }
 
   handleChange(e) {
-    this.setState({suggestedStep: e.target.value});
+    this.setState({step: e.target.value});
   }
 
   render() {
@@ -54,7 +57,7 @@ class SuggestStep extends Component {
         return (
           <div className="suggest-step-input">
             <form onSubmit={this._submitSuggestedStep}>
-              <input type="text" onChange={this.handleChange} placeholder="" value={this.state.suggestedStep}/>
+              <input type="text" onChange={this.handleChange} placeholder="" value={this.state.step}/>
               <input className="suggest-step-button" type="submit" value="Suggest Step"/>
             </form>
           </div>
@@ -65,7 +68,6 @@ class SuggestStep extends Component {
       }
     }
   }
-// }
 
 const userQuery = gql `
   query userQuery {
@@ -74,9 +76,12 @@ const userQuery = gql `
     }
   }
 `
-const suggestStepMutation = gql `mutation($suggestedStep:String!, $goalDocId: ID, $suggesterId:ID) {
-  createSuggestedStep(suggestedStep: $suggestedStep, goalDocId:$goalDocId, suggesterId:$suggesterId)
-  {id}
+const suggestStepMutation = gql `mutation ($index: Int!, $step: String!, $suggestedStep: Boolean!, $goalDocId: ID, $suggesterId: ID) {
+  createClonedStep(positionIndex: $index, step: $step, suggestedStep: $suggestedStep, goalDocId: $goalDocId, suggesterId: $suggesterId) {
+    step,
+    positionIndex,
+    id
+  }
 }`
 
 const SuggestStepWithMutation = graphql(userQuery, {

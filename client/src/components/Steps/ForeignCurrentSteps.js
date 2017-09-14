@@ -12,7 +12,7 @@ import '../../style/ForeignCurrentSteps.css'
 import SuggestStep from './SuggestStep.js'
 import SuggestEditStep from './SuggestEditStep.js'
 import YesNoPrompt from './YesNoPrompt.js'
-import ZappButton from './ZappButton.js'
+import SuggestRemoveStep from './SuggestRemoveStep.js'
 
 class ForeignSortableStepWithButtons extends Component {
   constructor(props) {
@@ -26,6 +26,7 @@ class ForeignSortableStepWithButtons extends Component {
       activeIndexEditStep: null,
       editStepOn: false,
       editedStep: '',
+      renderRemoveMutation:false,
     }
 
     this.clickHandlerNo = this.clickHandlerNo.bind(this)
@@ -57,7 +58,8 @@ class ForeignSortableStepWithButtons extends Component {
     console.log('yes clicked')
     this.props.dispatch(actions.suggestRemoveStep(this.state.indexToRemove))
     this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
+      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
+      renderRemoveMutation: !prevState.renderRemoveMutation
     }))
   }
 
@@ -116,6 +118,7 @@ class ForeignSortableStepWithButtons extends Component {
               <p>Remove Step?</p>
               <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
           : null}
+          {this.state.renderRemoveMutation ? <SuggestRemoveStep id={this.props.id} /> : null }
 
           {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
             ? <SuggestEditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>
@@ -130,6 +133,7 @@ class ForeignSortableStepWithButtons extends Component {
           )
           }
           }
+
           const SuggestSortableStepWithButtons = connect()(SortableElement(ForeignSortableStepWithButtons))
 
           const SuggestSortableList = SortableContainer((props) => {
@@ -142,7 +146,7 @@ class ForeignSortableStepWithButtons extends Component {
 
             return (
               <ul className="sortable-container">
-                {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value.step} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
+                {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value.step} id={value.id} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
               </ul>
             );
           });
@@ -168,7 +172,7 @@ class ForeignCurrentSteps extends Component {
     return (
       <div className="steps-container">
         <SuggestSortableList items={currentGoalStepsClone} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
-        {this.state.toggleOnZappButton ? <ZappButton /> : null}
+        {/* {this.state.toggleOnZappButton ? <ZappButton /> : null} */}
       </div>
 )
 }
