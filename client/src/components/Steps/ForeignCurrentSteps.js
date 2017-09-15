@@ -56,11 +56,10 @@ class ForeignSortableStepWithButtons extends Component {
 
   clickHandlerYes(event) {
     console.log('yes clicked')
-    this.props.dispatch(actions.suggestRemoveStep(this.state.indexToRemove))
     this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
       renderRemoveMutation: !prevState.renderRemoveMutation
-    }))
+    // toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
+  }))
   }
 
   clickHandlerNo(event) {
@@ -100,6 +99,7 @@ class ForeignSortableStepWithButtons extends Component {
   }
 
   render() {
+    console.log(this.state.renderRemoveMutation)
     const {value, eventIndex, newIndex, oldIndex, indexInMotion} = this.props
 
     return (
@@ -118,7 +118,7 @@ class ForeignSortableStepWithButtons extends Component {
               <p>Remove Step?</p>
               <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
           : null}
-          {this.state.renderRemoveMutation ? <SuggestRemoveStep id={this.props.id} /> : null }
+          {this.state.renderRemoveMutation ? <SuggestRemoveStep indexToRemove={this.state.indexToRemove} id={this.props.id} /> : null }
 
           {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
             ? <SuggestEditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>

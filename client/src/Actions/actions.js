@@ -87,10 +87,10 @@ export const removeStep = index => ({
 
 export const SUGGEST_REMOVE_STEP = 'SUGGEST_REMOVE_STEP'
 export const suggestRemoveStep = index => {
-  const indexArr = [index]
+  // const indexArr = [index]
 return   {
   type: SUGGEST_REMOVE_STEP,
-  indexArr
+  index
 }}
 // export const TOGGLE_SUGGEST_STEP_INPUT = 'TOGGLE_SUGGEST_STEP_INPUT'
 // export const toggleSuggestStepInput = state => ({
