@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 
 import {connect} from 'react-redux';
@@ -31,8 +32,6 @@ class ForeignSortableStepWithButtons extends Component {
 
     this.clickHandlerNo = this.clickHandlerNo.bind(this)
     this.clickHandlerYes = this.clickHandlerYes.bind(this)
-    this.handleChangeEditForm = this.handleChangeEditForm.bind(this)
-    this.submitEditedStep = this.submitEditedStep.bind(this)
 }
 
   clickHandlerEdit(eventIndex, event) {
@@ -40,18 +39,6 @@ class ForeignSortableStepWithButtons extends Component {
       editStepOn: !prevState.editStepOn
     }))
     this.setState({activeIndexEditStep: eventIndex, eventIndex: this.props.eventIndex})
-  }
-
-  handleChangeEditForm(event) {
-    this.setState({editedStep: event.target.value})
-  }
-
-  submitEditedStep(event, eventIndex, editedStep) {
-    event.preventDefault()
-    console.log(eventIndex)
-    console.log(editedStep)
-    this.props.dispatch(actions.suggestEditStep(eventIndex, editedStep))
-    this.setState({editedStep: ""})
   }
 
   clickHandlerYes(event) {
@@ -71,7 +58,7 @@ class ForeignSortableStepWithButtons extends Component {
   }
 
   clickHandlerSuggestAdd(eventIndex){
-    console.log(eventIndex)
+    // console.log(eventIndex)
     // this.setState({})
     this.setState(prevState => ({
       activeIndexAddStep: eventIndex,
@@ -99,7 +86,6 @@ class ForeignSortableStepWithButtons extends Component {
   }
 
   render() {
-    console.log(this.state.renderRemoveMutation)
     const {value, eventIndex, newIndex, oldIndex, indexInMotion} = this.props
 
     return (
@@ -121,7 +107,7 @@ class ForeignSortableStepWithButtons extends Component {
           {this.state.renderRemoveMutation ? <SuggestRemoveStep indexToRemove={this.state.indexToRemove} id={this.props.id} /> : null }
 
           {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
-            ? <SuggestEditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>
+            ? <SuggestEditStep id={this.props.id} index={eventIndex}/>
           : null}
 
           {this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex)
@@ -137,7 +123,6 @@ class ForeignSortableStepWithButtons extends Component {
           const SuggestSortableStepWithButtons = connect()(SortableElement(ForeignSortableStepWithButtons))
 
           const SuggestSortableList = SortableContainer((props) => {
-            console.log('SortableContainer props',props)
             const {newIndex} = props
             const {oldIndex} = props
             const {items} = props

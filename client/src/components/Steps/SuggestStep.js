@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {graphql} from 'react-apollo';
@@ -53,7 +54,6 @@ class SuggestStep extends Component {
     //   }}/>)
 
       if (this.props.loggedInUserID !== this.props.targetUserID) {
-        console.log('returning something')
         return (
           <div className="suggest-step-input">
             <form onSubmit={this._submitSuggestedStep}>

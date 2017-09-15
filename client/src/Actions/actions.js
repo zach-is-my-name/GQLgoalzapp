@@ -1,3 +1,4 @@
+/* eslint-disable */
 import 'isomorphic-fetch';
 
 export const SET_USERID ='SET_USERID'
@@ -108,9 +109,9 @@ export const editStep = (index, editedStep) => {
   }}
 
 export const SUGGEST_EDIT_STEP = 'SUGGEST_EDIT_STEP'
-export const suggestEditStep = (index, editedStep) => {
+export const suggestEditStep = (index, editedStep, id) => {
   let stepKey =  [index]["step"]
-  let stepObj = {step: editedStep, suggestedStep: true}
+  let stepObj = {step: editedStep, suggestedStep: true, id}
   return  {
     type: SUGGEST_EDIT_STEP,
     index,
@@ -136,9 +137,9 @@ export const moveStepOnClone = (newStepOrder) => {
 
 export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
 export const cloneCurrentStepsToSuggestedSteps = (steps) => {
-    console.log(steps)
+    // console.log(steps)
     let flatSteps = steps.map(step => ({step:step.step, suggestedStep: false }))
-    console.log('actions/flatSteps', flatSteps)
+    // console.log('actions/flatSteps', flatSteps)
     let flatStepsObj = {step: flatSteps, suggestedStep:false}
   return {
     type: CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS,
