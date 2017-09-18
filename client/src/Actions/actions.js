@@ -33,11 +33,12 @@ return ( {
 //where is the index being passed in SuggestStep.js?
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
 export const setSuggestedStep = (suggestedStep,index,id) => {
-  const stepObj = {step: suggestedStep, suggestedStep: true, id}
+  console.log('index of add step button', index)
+  const stepObj = {step: suggestedStep, suggestedStep: true, id, index}
   return ( {
   type: SET_SUGGESTED_STEP,
   suggestedStep: stepObj,
-  index: [index] + 1
+  index: index
 })
 }
 
