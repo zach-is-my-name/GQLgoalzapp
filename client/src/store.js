@@ -3,7 +3,7 @@ import {ApolloClient} from 'react-apollo';
 import { createLogger } from 'redux-logger'
 import { reducer as formReducer } from 'redux-form'
 // import { client } from './index'
-
+import thunk from 'redux-thunk'
 import * as Goal_Reducer from './Reducers/Global_Reducer';
 
 const logger = createLogger({
@@ -21,7 +21,7 @@ export const store = createStore(
     form: formReducer
   }), {}, //initial state
 composeEnhancers (
-  applyMiddleware(client.middleware(),logger),
+  applyMiddleware(client.middleware(),thunk, logger),
 
   )
 );

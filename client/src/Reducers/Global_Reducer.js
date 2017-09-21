@@ -54,8 +54,8 @@ if (action.type === 'SET_STEP') {
 })}
 
 if (action.type === 'SET_SUGGESTED_STEP'){
-  console.log(action.suggestedStep)
-  console.log(action.index)
+  // console.log('action.suggestedStep',action.suggestedStep)
+  // console.log('action.index suggestedStep',action.index)
   return update(state, {
     currentGoalStepsClone: {$splice:[[action.index , 0, action.suggestedStep]]
   }
@@ -131,6 +131,11 @@ if (action.type === 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS') {
   })
 }
 
+if (action.type === 'SET_POSITION_INDEX') {
+  return update (state, {
+    currentGoalStepsClone: {$set: action.stepsArr}
+  })
+}
 // if (action.type === 'MERGE_STEPS_CLONE') {
 //   return update( state, {
 //

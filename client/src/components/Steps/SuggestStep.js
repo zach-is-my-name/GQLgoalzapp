@@ -35,7 +35,9 @@ class SuggestStep extends Component {
     }).then(({data}) => {
       console.log('DATA SUBMITTED', data);
       this.props.dispatch(actions.setSuggestedStep(step, index, data.createClonedStep.id))
-      this.setState({step: ""})
+      this.props.dispatch(actions.setPositionIndex())
+      //dispatch setPositionIndex
+      // this.setState({step: ""})
     })
   }
 
@@ -103,7 +105,7 @@ const SuggestStepWithMutation = graphql(userQuery, {
 })(withRouter(SuggestStep)))
 
 const mapStateToProps = (state, props) => {
-  return {loggedInUserID: state.goals.loggedInUserID, targetUserID: state.goals.targetUserID, currentGoalID: state.goals.currentGoalID}
+  return {loggedInUserID: state.goals.loggedInUserID, targetUserID: state.goals.targetUserID, currentGoalID: state.goals.currentGoalID, currentGoalStepsClone: state.goals.currentGoalStepsClone}
 }
 
 export default connect(mapStateToProps)(SuggestStepWithMutation);
