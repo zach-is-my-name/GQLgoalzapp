@@ -1,4 +1,4 @@
-import {store} from '../store.js'
+
 /* eslint-disable */
 import 'isomorphic-fetch';
 
@@ -170,10 +170,10 @@ export const moveStepOnClone = (newStepOrder) => {
 
 export const SET_POSITION_INDEX ='SET_POSITION_INDEX'
 export const setPositionIndex = () => {
-// return  (dispatch,getState) => {
+return  (dispatch,getState) => {
     // console.log('getState', getState().goals.currentGoalStepsClone)
-  const stepsArr = store.getState().goals.currentGoalStepsClone
-  console.log('stepsArr',stepsArr)
+  const stepsArr = getState().goals.currentGoalStepsClone
+  // console.log('stepsArr',stepsArr)
  const positionArr = stepsArr.map((stepObj, index) => {
     if (stepObj.suggestedStep === true) {
     return  ({positionIndex: index})
@@ -183,14 +183,14 @@ export const setPositionIndex = () => {
     }
   )
 // console.log('positionArr', positionArr)
-  positionArr.map((positionObj,index) => {
+  const newSteps = positionArr.map((positionObj,index) => {
     // console.log(index)
     // console.log('Object.keys', Object.keys(stepsArr[0]))
     // console.log('stepsArr[index]', stepsArr[index])
     // console.log('stepsArr positionIndex @ i', stepObjPos)
     if (positionObj.positionIndex !== -1) {
-      stepsArr[index].positionIndex = positionObj.positionIndex
-        console.log('stepsArr',stepsArr)
+return    stepsArr[index].positionIndex = positionObj.positionIndex
+      // console.log('stepsArr',stepsArr)
     }
   }
 )
@@ -198,10 +198,10 @@ export const setPositionIndex = () => {
 
 return {
     type: SET_POSITION_INDEX,
-    stepsArr
+    stepsArr: newSteps
   }
 }
-// }
+}
 
 export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
 export const cloneCurrentStepsToSuggestedSteps = (steps) => {
