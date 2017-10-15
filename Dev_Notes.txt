@@ -69,3 +69,5 @@ Previously, I was just listing suggested items to add/remove.  Now, obviiously w
 The question becomes wether to begin migrating to a dual-list model where we diff the two lists (own and suggested), or we have been trending that way from the begining.
 
 20. Using targeted $set vs. splice, eg. SUGGEST_REMOVE_STEP vs SUGGEST_EDIT_STEP
+
+21. SuggestStep.js is verbose but linear.  Not complex.  

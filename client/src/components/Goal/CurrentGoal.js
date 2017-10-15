@@ -41,12 +41,12 @@ class CurrentGoal extends Component {
     if (nextProps.data && nextProps.data.loading == false && nextProps.data.GoalDoc) {
     if (this.props.data.GoalDoc !=nextProps.data.GoalDoc){
       /* ACTION DISPATCH */
-      console.log(nextProps.data.GoalDoc)
+      // console.log(nextProps.data.GoalDoc)
       this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
 
       if (this.props.loggedInUser !== this.props.targetUser) {
-        console.log('THISSSSSSSSSSSSSSS', nextProps.data.GoalDoc.steps)
-        console.log('clone steps called from CurrentGoal.js')
+        // console.log('THISSSSSSSSSSSSSSS', nextProps.data.GoalDoc.steps)
+        // console.log('clone steps called from CurrentGoal.js')
       this.props.dispatch(actions.cloneCurrentStepsToSuggestedSteps(nextProps.data.GoalDoc.steps))
     }
   }

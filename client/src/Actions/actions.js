@@ -25,14 +25,51 @@ export const setStep = (step, index) => {
 //where is the index being passed in SuggestStep.js?
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
 export const setSuggestedStep = (suggestedStep, index, id) => {
-  console.log('index of add step button', index)
+  // console.log('index of add step button', index)
   const stepObj = {
     step: suggestedStep,
     suggestedStep: true,
-    id,
-    positionIndex: index
+    id: null,
+    positionIndex: null
   }
   return ({type: SET_SUGGESTED_STEP, suggestedStep: stepObj, index: index})
+}
+
+// export const SET_SUGGESTED_STEP_ID_FROM_SERVER = 'SET_SUGGESTED_STEP_ID_FROM_SERVER'
+// export const setSuggestedStepIdFromServer (index,id) => {
+//   const stepsArr = store.getState().goals.currentGoalStepsClone
+//   stepsArr[index].id = id
+//
+//
+//   return {type: SET_SUGGESTED_STEP_ID_FROM_SERVER, x }
+// }
+
+export const SET_SUGGESTED_STEP_ID_FROM_SERVER = 'SET_SUGGESTED_STEP_ID_FROM_SERVER'
+export const setSuggestedStepIdFromServer = (index,id) => {
+  // const stepsArr = store.getState().goals.currentGoalStepsClone
+  // stepsArr[index].id = id
+
+
+  return {type: SET_SUGGESTED_STEP_ID_FROM_SERVER, index, id }
+}
+export const SET_POSITION_INDEX = 'SET_POSITION_INDEX'
+export const setPositionIndex = () => {
+  const stepsArr = store.getState().goals.currentGoalStepsClone
+  const positionArr = stepsArr.map((stepObj, index) => {
+    if (stepObj.suggestedStep === true) {
+      return ({positionIndex: index})
+    } else {
+      return ({positionIndex: -1})
+    }
+  })
+  positionArr.map((positionObj, index) => {
+    if (positionObj.positionIndex !== -1) {
+      stepsArr[index].positionIndex = positionObj.positionIndex
+      // console.log('stepsArr', stepsArr)
+    }
+  })
+
+  return {type: SET_POSITION_INDEX, stepsArr}
 }
 
 // export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
@@ -134,30 +171,11 @@ export const moveStepOnClone = (newStepOrder) => {
 //   }
 // }
 
-export const SET_POSITION_INDEX = 'SET_POSITION_INDEX'
-export const setPositionIndex = () => {
-  const stepsArr = store.getState().goals.currentGoalStepsClone
-  const positionArr = stepsArr.map((stepObj, index) => {
-    if (stepObj.suggestedStep === true) {
-      return ({positionIndex: index})
-    } else {
-      return ({positionIndex: -1})
-    }
-  })
-  positionArr.map((positionObj, index) => {
-    if (positionObj.positionIndex !== -1) {
-      stepsArr[index].positionIndex = positionObj.positionIndex
-      console.log('stepsArr', stepsArr)
-    }
-  })
-
-  return {type: SET_POSITION_INDEX, stepsArr}
-}
 
 export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
 export const cloneCurrentStepsToSuggestedSteps = (steps) => {
-  console.log('cloneCurrentSteps', steps)
-  let flatSteps = steps.map(step => ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex}))
+  // console.log('cloneCurrentSteps', steps)
+  let flatSteps = steps.map(step => ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex, id:step.id}))
   // console.log('actions/flatSteps', flatSteps)
   // let flatStepsObj = {step: flatSteps, suggestedStep:false}
   return {type: CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS, flatSteps: flatSteps}

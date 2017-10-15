@@ -40,7 +40,7 @@ if (action.type === 'SET_GOALDOC_ID') {
 // keep an eye on this state change
 if (action.type === 'SET_GOALDOC') {
   return update (state, {
-    currentGoal: {$set:action.flatGoalDoc.goal},
+  currentGoal: {$set:action.flatGoalDoc.goal},
   currentGoalID: {$set:action.flatGoalDoc.id},
   currentGoalSteps: {$set:action.flatGoalDoc.flatSteps},
   // currentSuggestedSteps: {$set:action.flatGoalDoc.flatSuggestedSteps},
@@ -61,6 +61,19 @@ if (action.type === 'SET_SUGGESTED_STEP'){
   }
   })
 }
+
+if (action.type === 'SET_POSITION_INDEX') {
+  return update (state, {
+    currentGoalStepsClone: {$set: action.stepsArr}
+  })
+}
+
+if (action.type === 'SET_SUGGESTED_STEP_ID_FROM_SERVER'){
+  return update(state, {
+    currentGoalStepsClone: {[action.index]: {id: { $set: action.id}}}
+  })
+}
+
 
 if (action.type === 'SET_LOGIN_STATUS'){
   return update( state, {
@@ -131,11 +144,7 @@ if (action.type === 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS') {
   })
 }
 
-if (action.type === 'SET_POSITION_INDEX') {
-  return update (state, {
-    currentGoalStepsClone: {$set: action.stepsArr}
-  })
-}
+
 // if (action.type === 'MERGE_STEPS_CLONE') {
 //   return update( state, {
 //

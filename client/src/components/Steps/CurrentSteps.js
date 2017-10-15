@@ -15,7 +15,7 @@ class CurrentSteps extends Component {
 
   componentWillMount() {
     if (this.props.loggedInUser !== this.props.targetUser) {
-      console.log('cloneCurrentStepsToSuggestedSteps called from CurrentSteps.js ')
+      // console.log('cloneCurrentStepsToSuggestedSteps called from CurrentSteps.js ')
       this.props.dispatch(actions.cloneCurrentStepsToSuggestedSteps(this.props.currentGoalSteps))
     }
   }
@@ -25,7 +25,7 @@ class CurrentSteps extends Component {
     let currentSteps
 
     if (this.props.loggedInUser !== this.props.targetUser) {
-      console.log('Foreign Steps')
+      // console.log('Foreign Steps')
       currentSteps = <ForeignCurrentSteps />
     } else {
       console.log('this.props.loggedInUser', this.props.loggedInUser)

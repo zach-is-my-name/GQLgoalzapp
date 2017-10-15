@@ -75,15 +75,19 @@ class ForeignSortableStepWithButtons extends Component {
     this.setState({indexToRemove: eventIndex, eventIndex: this.props.eventIndex})
   }
 
-  changeEventIndex(newIndex) {
-      this.setState({eventIndex: newIndex})
-    }
+  // changeEventIndex(newIndex) {
+  //     this.setState({eventIndex: newIndex})
+  //   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props !== nextProps) {
-      this.setState({eventIndex: nextProps.newIndex})
-    }
-  }
+
+  //USED TO MAINTAIN POSITION ON DRAG BUT
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.eventIndex !== nextProps.newIndex) {
+  //     console.log("componentWillReceiveProps called from ForeignCurrentSteps")
+  //     this.setState({eventIndex: nextProps.newIndex})
+  //     this.props.dispatch(actions.setPositionIndex())
+  //   }
+  // }
 
   render() {
     const {value, eventIndex, newIndex, oldIndex, indexInMotion} = this.props
@@ -127,7 +131,7 @@ class ForeignSortableStepWithButtons extends Component {
             const {oldIndex} = props
             const {items} = props
             const {indexInMotion} = props
-            console.log('props.items aka currentStepsClone:', items)
+            // console.log('props.items aka currentStepsClone:', items)
 
             return (
               <ul className="sortable-container">
