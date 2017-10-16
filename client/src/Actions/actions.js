@@ -29,7 +29,7 @@ export const setSuggestedStep = (suggestedStep, index, id) => {
   const stepObj = {
     step: suggestedStep,
     suggestedStep: true,
-    id: null,
+    id,
     positionIndex: null
   }
   return ({type: SET_SUGGESTED_STEP, suggestedStep: stepObj, index: index})
@@ -86,14 +86,15 @@ export const setPositionIndex = () => {
 
 export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goalDoc => {
-  const {goal, id, steps, suggestedSteps} = goalDoc
+  const {goal, id, steps, suggestedSteps, clonedSteps} = goalDoc
   let flatSteps = steps.map(step => step.step)
-  let flatSuggestedSteps = suggestedSteps.map(suggestedStep => suggestedStep.suggestedStep)
+  // let flatSuggestedSteps = suggestedSteps.map(suggestedStep => suggestedStep.suggestedStep)
+
   const flatGoalDoc = {
     goal,
     id,
     flatSteps,
-    flatSuggestedSteps
+    // flatSuggestedSteps
   }
   return {type: SET_GOALDOC, flatGoalDoc}
 };
@@ -172,13 +173,19 @@ export const moveStepOnClone = (newStepOrder) => {
 // }
 
 
-export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
-export const cloneCurrentStepsToSuggestedSteps = (steps) => {
+export const CLONE_CURRENT_STEPS_FOR_SUGGESTIONS = 'CLONE_CURRENT_STEPS_FOR_SUGGESTIONS'
+export const cloneCurrentStepsForSuggestions = (steps) => {
   // console.log('cloneCurrentSteps', steps)
-  let flatSteps = steps.map(step => ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex, id:step.id}))
+  let flatSteps = steps.map(step => ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex}))
   // console.log('actions/flatSteps', flatSteps)
   // let flatStepsObj = {step: flatSteps, suggestedStep:false}
-  return {type: CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS, flatSteps: flatSteps}
+  return {type: CLONE_CURRENT_STEPS_FOR_SUGGESTIONS, flatSteps: flatSteps}
+}
+
+export const SET_CLONED_STEPS = 'SET_CLONED_STEPS'
+export const setClonedSteps = clonedSteps => {
+    let flatSteps = clonedSteps.map(step => ({step: step.step, suggestedStep: step.suggestedStep, positionIndex: step.positionIndex, suggester: step.suggester.userName}))
+    return {type: SET_CLONED_STEPS, flatSteps}
 }
 
 // export const MERGE_STEPS_CLONE = 'MERGE_STEPS_CLONE'

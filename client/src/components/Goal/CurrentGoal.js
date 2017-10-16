@@ -43,11 +43,11 @@ class CurrentGoal extends Component {
       /* ACTION DISPATCH */
       // console.log(nextProps.data.GoalDoc)
       this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
-
+      this.props.dispatch(actions.setClonedSteps(nextProps.data.GoalDoc.clonedSteps))
       if (this.props.loggedInUser !== this.props.targetUser) {
         // console.log('THISSSSSSSSSSSSSSS', nextProps.data.GoalDoc.steps)
         // console.log('clone steps called from CurrentGoal.js')
-      this.props.dispatch(actions.cloneCurrentStepsToSuggestedSteps(nextProps.data.GoalDoc.steps))
+      this.props.dispatch(actions.cloneCurrentStepsForSuggestions(nextProps.data.GoalDoc.steps))
     }
   }
     }
@@ -57,7 +57,8 @@ class CurrentGoal extends Component {
 
 /* REDUX CONNECT */
 const mapStateToProps = (state, props) => {
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, currentGoalSteps: state.goals.currentGoalSteps,  loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID}
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, currentGoalSteps: state.goals.currentGoalSteps,  loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID,
+  currentGoalStepsClone: state.goals.currentGoalStepsClone}
 }
 
 const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoal);
@@ -72,8 +73,13 @@ query ($varID: ID) {
      step
      positionIndex
    }
-   suggestedSteps(orderBy:createdAt_ASC){
-     suggestedStep
+   clonedSteps(orderBy:createdAt_ASC) {
+     step
+     positionIndex
+     id
+     suggester {
+       userName
+     }
    }
   }
 }`;

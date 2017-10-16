@@ -137,13 +137,18 @@ if (action.type === 'MOVE_STEP_ON_CLONE' ){
   })
 }
 
-if (action.type === 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS') {
+if (action.type === 'CLONE_CURRENT_STEPS_FOR_SUGGESTIONS') {
   // console.log(action.flatSteps)
   return update (state, {
     currentGoalStepsClone: {$set: action.flatSteps}
   })
 }
 
+if (action.type === 'SET_CLONED_STEPS') {
+  return update(state, {
+    currentGoalStepsClone: {$set: action.flatSteps}
+  })
+}
 
 // if (action.type === 'MERGE_STEPS_CLONE') {
 //   return update( state, {

@@ -15,8 +15,8 @@ class CurrentSteps extends Component {
 
   componentWillMount() {
     if (this.props.loggedInUser !== this.props.targetUser) {
-      // console.log('cloneCurrentStepsToSuggestedSteps called from CurrentSteps.js ')
-      this.props.dispatch(actions.cloneCurrentStepsToSuggestedSteps(this.props.currentGoalSteps))
+      // console.log('cloneCurrentStepsForSuggestions called from CurrentSteps.js ')
+      this.props.dispatch(actions.cloneCurrentStepsForSuggestions(this.props.currentGoalSteps))
     }
   }
 
@@ -45,6 +45,6 @@ class CurrentSteps extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID}
+  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone}
 }
 export default connect(mapStateToProps)(CurrentSteps);
