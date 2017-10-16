@@ -31,7 +31,7 @@ class CurrentSteps extends Component {
       console.log('this.props.loggedInUser', this.props.loggedInUser)
       console.log('this.props.targetUser', this.props.targetUser)
       console.log('Own Steps')
-    currentSteps = <OwnCurrentSteps currentGoalSteps={this.props.currentGoalSteps} />
+    currentSteps = <OwnCurrentSteps currentGoalStepsClone={this.props.currentGoalStepsClone} />
 }
     return (
       <div className="steps-container">

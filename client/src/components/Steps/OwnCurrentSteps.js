@@ -114,7 +114,7 @@ class OwnSortabelStepWithButtons extends Component {
         <div className="row-1">
           <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={() => this.clickHandlerRemove(eventIndex)} alt="" src={minus}/></li>
 
-          <li className="current-step" onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value}</li>
+          <li className="current-step" onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value.step}</li>
 
           <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerAdd(eventIndex)} alt="" src={plus}/></li>
         </div>
@@ -148,6 +148,7 @@ const SortableList = SortableContainer((props) => {
   const {items} = props
   const {indexInMotion} = props
 
+console.log(items)
   return (
     <ul className="sortable-container">
       {items.map((value, index) => (<SortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
@@ -162,18 +163,21 @@ class OwnCurrentSteps extends Component {
 
       newIndex: null,
       oldIndex: null,
-      indexInMotion: null
+      indexInMotion: null,
+      toggleSuggestedSteps: true,
     }
   }
 
   render() {
 
 //suggestedStep manipulation goes here
-
-
-  let currentGoalSteps = this.props.currentGoalSteps
-
-    return (
+let currentGoalSteps
+  if (this.state.toggleSuggestedSteps === true) {
+   currentGoalSteps = this.props.currentGoalStepsClone
+} else {
+  currentGoalSteps = this.props.currentGoalSteps
+}
+   return  (
         <div>
           <SortableList items={currentGoalSteps} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
         </div>
