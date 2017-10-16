@@ -109,12 +109,17 @@ class OwnSortabelStepWithButtons extends Component {
     // if (indexInMotion !== null &&  indexInMotion === oldIndex){
     //   this.changeEventIndex(newIndex)
     // }
+    let stepClass = `current-step`
+    if (value.suggestedStep) {
+       stepClass = `current-step-suggested`
+    }
+
     return (
       <div className="sortable-item-wrapper">
         <div className="row-1">
           <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={() => this.clickHandlerRemove(eventIndex)} alt="" src={minus}/></li>
 
-          <li className="current-step" onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value.step}</li>
+          <li className={`${stepClass}`} onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value.step}</li>
 
           <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerAdd(eventIndex)} alt="" src={plus}/></li>
         </div>

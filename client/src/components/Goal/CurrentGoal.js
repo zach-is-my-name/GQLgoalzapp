@@ -77,6 +77,7 @@ query ($varID: ID) {
      step
      positionIndex
      id
+     suggestedStep
      suggester {
        userName
      }

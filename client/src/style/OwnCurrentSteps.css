@@ -60,6 +60,12 @@ li.current-step {
     user-select: none;
 }
 
+li.current-step-suggested {
+    height: 30px;
+    cursor: default;
+    user-select: none;
+    color:#ef3779;
+}
 .plus-image {
     margin-left: 29px;
     position: relative;
