@@ -184,7 +184,7 @@ export const cloneCurrentStepsForSuggestions = (steps) => {
 
 export const SET_CLONED_STEPS = 'SET_CLONED_STEPS'
 export const setClonedSteps = clonedSteps => {
-    let flatSteps = clonedSteps.map(step => ({step: step.step, suggestedStep: step.suggestedStep, positionIndex: step.positionIndex, suggester: step.suggester.userName}))
+    let flatSteps = clonedSteps.map(step => ({step: step.step, suggestedStep: step.suggestedStep, positionIndex: step.positionIndex, suggester: step.suggester.userName, id:step.id}))
     return {type: SET_CLONED_STEPS, flatSteps}
 }
 

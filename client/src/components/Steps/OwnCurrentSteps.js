@@ -147,13 +147,11 @@ class OwnSortabelStepWithButtons extends Component {
 const SortableStepWithButtons = connect()(SortableElement(OwnSortabelStepWithButtons))
 
 const SortableList = SortableContainer((props) => {
-  console.log(props)
   const {newIndex} = props
   const {oldIndex} = props
   const {items} = props
   const {indexInMotion} = props
 
-console.log(items)
   return (
     <ul className="sortable-container">
       {items.map((value, index) => (<SortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
