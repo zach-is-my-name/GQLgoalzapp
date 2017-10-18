@@ -11,7 +11,7 @@ let notification
   notification =  this.props.currentGoalStepsClone.map((_stepObj) => {
           if (_stepObj.suggestedStep === true) {
           console.log(_stepObj)
-          return <Notification user={_stepObj.suggester} step={_stepObj.step} key={_stepObj.id} id={_stepObj.id} />
+          return <Notification randomColorUserName={this.props.randomColorUserName} randomColorStep={this.props.randomColorStep} user={_stepObj.suggester} step={_stepObj.step} key={_stepObj.id} id={_stepObj.id} />
         }
           notification = null
         })

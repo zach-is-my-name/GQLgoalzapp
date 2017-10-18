@@ -109,17 +109,22 @@ class OwnSortabelStepWithButtons extends Component {
     // if (indexInMotion !== null &&  indexInMotion === oldIndex){
     //   this.changeEventIndex(newIndex)
     // }
-    let stepClass = `current-step`
+    let randomColorStep
     if (value.suggestedStep) {
-       stepClass = `current-step-suggested`
+      randomColorStep = this.props.randomColorStep
+    } else {
+      randomColorStep = {
+        color: '#000000'
+      }
     }
 
+console.log('randomColorStep', this.props.randomColorStep)
     return (
       <div className="sortable-item-wrapper">
         <div className="row-1">
           <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={() => this.clickHandlerRemove(eventIndex)} alt="" src={minus}/></li>
 
-          <li className={`${stepClass}`} onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value.step}</li>
+          <span style={randomColorStep}> <li  onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value.step}</li></span>
 
           <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerAdd(eventIndex)} alt="" src={plus}/></li>
         </div>
@@ -127,62 +132,62 @@ class OwnSortabelStepWithButtons extends Component {
 
           {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove === this.state.eventIndex))
             ? <div className="prompt">
-              <p>Remove Step?</p>
-              <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEv entNo={this.clickHandlerNo}/></div>
-          : null}
+                  <p>Remove Step?</p>
+                  <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEv entNo={this.clickHandlerNo}/></div>
+              : null}
 
-          {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
-            ? <EditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>
-          : null}
+              {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
+                ? <EditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>
+              : null}
 
-          {(this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex))
-            ? <InputStep index={eventIndex}/>
-          : null}
+              {(this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex))
+                ? <InputStep index={eventIndex}/>
+              : null}
 
-        </div>
-      </div>
-    )
-  }
-}
-const SortableStepWithButtons = connect()(SortableElement(OwnSortabelStepWithButtons))
+            </div>
+          </div>
+          )
+          }
+          }
+          const SortableStepWithButtons = connect()(SortableElement(OwnSortabelStepWithButtons))
 
-const SortableList = SortableContainer((props) => {
-  const {newIndex} = props
-  const {oldIndex} = props
-  const {items} = props
-  const {indexInMotion} = props
+          const SortableList = SortableContainer((props) => {
+            const {newIndex} = props
+            const {oldIndex} = props
+            const {items} = props
+            const {indexInMotion} = props
 
-  return (
-    <ul className="sortable-container">
-      {items.map((value, index) => (<SortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
-    </ul>
-  );
-});
+            return (
+              <ul className="sortable-container">
+                {items.map((value, index) => (<SortableStepWithButtons randomColorStep={props.randomColorStep} key={`item-${index}`} index={index} eventIndex={index} value={value} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
+              </ul>
+            );
+          });
 
-class OwnCurrentSteps extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
+          class OwnCurrentSteps extends Component {
+            constructor(props) {
+              super(props)
+              this.state = {
 
-      newIndex: null,
-      oldIndex: null,
-      indexInMotion: null,
-      toggleSuggestedSteps: true,
-    }
-  }
+                newIndex: null,
+                oldIndex: null,
+                indexInMotion: null,
+                toggleSuggestedSteps: true,
+              }
+            }
 
-  render() {
+            render() {
 
-//suggestedStep manipulation goes here
-let currentGoalSteps
-  if (this.state.toggleSuggestedSteps === true) {
-   currentGoalSteps = this.props.currentGoalStepsClone
-} else {
-  currentGoalSteps = this.props.currentGoalSteps
-}
-   return  (
-        <div>
-          <SortableList items={currentGoalSteps} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
+              //suggestedStep manipulation goes here
+              let currentGoalSteps
+              if (this.state.toggleSuggestedSteps === true) {
+                currentGoalSteps = this.props.currentGoalStepsClone
+              } else {
+                currentGoalSteps = this.props.currentGoalSteps
+              }
+              return  (
+                <div>
+                  <SortableList randomColorStep={this.props.randomColorStep} items={currentGoalSteps} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}/>
         </div>
     )
   }
