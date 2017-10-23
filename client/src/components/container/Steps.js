@@ -43,8 +43,6 @@ let spanStyle2= {
   color: '#ef3779'
 }
 
-console.log('Step randomColorUserName', randomColor1)
-console.log('Step randomColorStep', randomColor2)
 
   return (
     <div>

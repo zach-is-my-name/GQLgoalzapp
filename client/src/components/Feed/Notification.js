@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import '../../style/Notification.css'
 
  const Notification = (props) => {
-   console.log('Notification randomColorUserName', props.randomColorUserName)
-   console.log('Notication props.randomColorStep', props.randomColorStep)
    let zappColor = {
      color: '#52b8f2'
    }
