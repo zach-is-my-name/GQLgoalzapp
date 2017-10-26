@@ -10,30 +10,32 @@ import '../../style/TargetUser.css'
 class TargetUser extends React.Component {
   constructor(props) {
     super(props)
-    this.dispatchTargetUserName = this.dispatchTargetUserName.bind(this)
+    // this.dispatchTargetUserName = this.dispatchTargetUserName.bind(this)
   }
 
+// dispatchTargetUserName(targetUserNeme) {
+//     this.props.dispatch(actions.setTargetUserName(targetUserNeme))
+// }
 
-dispatchTargetUserName(targetUserNeme) {
-    this.props.dispatch(actions.setTargetUserName(targetUserNeme))
+componentWillReceiveProps(nextProps) {
+if (this.props !== nextProps && this.props.data.User) {
+  this.props.dispatch(actions.setTargetUserName(nextProps.data.User.userName))
+  }
 }
 
+
   render() {
-    if(this.props.data){
-    const {data: {loading, error, User}} = this.props
-    if (!loading){
-    if (User) {
-    this.dispatchTargetUserName(User.userName)
-    }
+    if (!this.props.data.loading){
+
     return (
       <div className="target-user-wrapper">
-        <p className="target-user-p">Target User: {User ? User.userName : null} </p>
+        <p className="target-user-p">Target User: {this.props.data.User.userName} </p>
       </div>
         )
+      }
+      return null
     }
-  }
-  return null;
-}}
+}
   const mapStateToProps = (state, props) =>  {
     return ({
       targetUser: state.goals.targetUserID,

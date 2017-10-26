@@ -36,7 +36,7 @@ class SuggestStep extends Component {
 
   //use this to get the step you added from dispatch in mapStateToProps
   componentWillReceiveProps(nextProps) {
-    console.log('componentwillreceiveprops called')
+    // console.log('componentwillreceiveprops called')
     // const {step} = this.state
     const goalDocId = nextProps.currentGoalID
     const suggesterId = nextProps.loggedInUserID

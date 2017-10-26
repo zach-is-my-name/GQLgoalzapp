@@ -1,4 +1,4 @@
-// /* eslint-disable */
+/* eslint-disable */
 // //index is passed down as eventIndex because it is restricted in react-sortable
 //
 

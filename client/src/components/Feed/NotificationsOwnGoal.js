@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import '../../style/NotificationsOwnGoal.css'
 import {connect} from  'react-redux';
@@ -9,6 +10,7 @@ render() {
 let notification
       if (this.props.currentGoalStepsClone.some((stepObj) => stepObj.suggestedStep )) {
           notification =  this.props.currentGoalStepsClone.map((_stepObj) => {
+            console.log('currentGoalStepsClone for notification', _stepObj)
           if (_stepObj.suggestedStep === true) {
           return <Notification randomColorUserName={this.props.randomColorUserName} randomColorStep={this.props.randomColorStep} user={_stepObj.suggester} step={_stepObj.step} key={_stepObj.id} id={_stepObj.id} />
         }

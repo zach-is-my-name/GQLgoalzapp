@@ -40,6 +40,30 @@ export class App extends Component {
   dispatchLoginStatusCallback() {
       this.props.dispatch(actions.setLoginStatus())
 }
+
+componentWillReceiveProps(nextProps) {
+  if (this.props !== nextProps)
+      if (nextProps.userQuery.error) {
+      return console.error(this.props.userQuery.error)
+    }
+    if (nextProps.userQuery.loading) {
+      return  <div>Loading</div>
+    }
+      /*Check User Query */
+    if (window.localStorage.getItem('auth0IdToken') && this._isLoggedIn()) {
+      /*use callback to avoid warning*/
+      this.dispatchLoginStatusCallback()
+      this.dispatchUserIdCallback()
+
+      // this.props.dispatch(actions.setUserId(this.props.userQuery.user.id))
+      return this.renderLoggedIn()
+    }
+      return (
+          this.renderLoggedOut()
+          )
+          console.log('componentWillMount App', nextProps.userQuery.user)
+}
+
   render() {
     if (this.props.userQuery.error) {
       return console.error(this.props.userQuery.error)
