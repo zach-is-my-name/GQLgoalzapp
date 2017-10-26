@@ -7,8 +7,7 @@ import plus from '../../style/images/plus_websize.png'
 import minus from '../../style/images/minus.jpg'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 
-
-import '../../style/ForeignCurrentSteps.css'
+import '../../style/ForeignGoalCurrentSteps.css'
 
 import SuggestStep from './SuggestStep.js'
 import SuggestEditStep from './SuggestEditStep.js'
@@ -22,7 +21,7 @@ class ForeignSortableStepWithButtons extends Component {
       toggleOnYesNoPrompt: false,
       indexToRemove: null,
       activeIndexAddStep: null,
-      toggleActiveStep: false,
+      activeStep: false,
       eventIndex: null,
       activeIndexEditStep: null,
       editStepOn: false,
@@ -62,7 +61,7 @@ class ForeignSortableStepWithButtons extends Component {
     // this.setState({})
     this.setState(prevState => ({
       activeIndexAddStep: eventIndex,
-      toggleActiveStep: !prevState.toggleActiveStep,
+      activeStep: !prevState.activeStep,
       eventIndex: this.props.eventIndex
     }))
   }
@@ -83,9 +82,9 @@ class ForeignSortableStepWithButtons extends Component {
   //USED TO MAINTAIN POSITION ON DRAG BUT
   // componentWillReceiveProps(nextProps) {
   //   if (this.props.eventIndex !== nextProps.newIndex) {
-  //     console.log("componentWillReceiveProps called from ForeignCurrentSteps")
+  //     console.log("componentWillReceiveProps called from ForeignGoalCurrentSteps")
   //     this.setState({eventIndex: nextProps.newIndex})
-  //     this.props.dispatch(actions.setPositionIndex())
+  //     this.props.dispatch(actions.setSuggestedStepPositionIndex())
   //   }
   // }
 
@@ -108,13 +107,14 @@ class ForeignSortableStepWithButtons extends Component {
               <p>Remove Step?</p>
               <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
           : null}
+
           {this.state.renderRemoveMutation ? <SuggestRemoveStep indexToRemove={this.state.indexToRemove} id={this.props.id} /> : null }
 
           {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
             ? <SuggestEditStep id={this.props.id} index={eventIndex}/>
           : null}
 
-          {this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex)
+          {this.state.activeStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex)
             ? <SuggestStep index={eventIndex}/>
           : null}
 
@@ -142,7 +142,7 @@ class ForeignSortableStepWithButtons extends Component {
 
 
 
-class ForeignCurrentSteps extends Component {
+class ForeignGoalCurrentSteps extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -180,4 +180,4 @@ const mapStateToProps = (state, props) => {
   return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone}
 }
 
-export default connect(mapStateToProps)(ForeignCurrentSteps);
+export default connect(mapStateToProps)(ForeignGoalCurrentSteps);

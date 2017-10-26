@@ -27,7 +27,7 @@ class SuggestStep extends Component {
     const suggesterId = this.props.loggedInUserID
     const index = this.props.index
     this.props.dispatch(actions.setSuggestedStep(step, index))
-    this.props.dispatch(actions.setPositionIndex())
+    this.props.dispatch(actions.setSuggestedStepPositionIndex())
   }
 
   handleChange(e) {

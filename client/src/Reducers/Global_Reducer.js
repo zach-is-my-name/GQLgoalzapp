@@ -62,7 +62,7 @@ if (action.type === 'SET_SUGGESTED_STEP'){
   })
 }
 
-if (action.type === 'SET_POSITION_INDEX') {
+if (action.type === 'SET_SUGGESTED_STEP_POSITION_INDEX') {
   return update (state, {
     currentGoalStepsClone: {$set: action.stepsArr}
   })

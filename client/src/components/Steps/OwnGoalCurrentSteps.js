@@ -3,33 +3,33 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import '../../style/OwnCurrentSteps.css'
+import '../../style/OwnGoalCurrentSteps.css'
 import * as actions from '../../Actions/actions.js'
 import plus from '../../style/images/plus_websize.png'
 import minus from '../../style/images/minus.jpg'
 import YesNoPrompt from './YesNoPrompt.js'
-import ForeignCurrentSteps from './ForeignCurrentSteps.js'
+import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-
+import StepWithButtons from './StepWithButtons.js'
 import InputStep from './InputSteps.js'
 import EditStep from './EditStep.js'
 
-class OwnSortabelStepWithButtons extends Component {
+class StepWithButtonsContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       toggleOnYesNoPrompt: false,
       indexToRemove: null,
-      activeIndexAddStep: null,
-      toggleActiveStep: false,
+      activeIndexPlus: null,
+      activeStep: false,
       eventIndex: null,
       activeIndexEditStep: null,
       editStepOn: false,
       editedStep: ''
     }
     // this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
-    this.clickHandlerYes = this.clickHandlerYes.bind(this)
-    this.clickHandlerNo = this.clickHandlerNo.bind(this)
+    this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
+    this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
     this.clickHandlerAdd = this.clickHandlerAdd.bind(this)
     this.changeEventIndex = this.changeEventIndex.bind(this)
     this.handleChangeEditForm = this.handleChangeEditForm.bind(this);
@@ -71,13 +71,13 @@ class OwnSortabelStepWithButtons extends Component {
     console.log(eventIndex)
     // this.setState({})
     this.setState(prevState => ({
-      activeIndexAddStep: eventIndex,
-      toggleActiveStep: !prevState.toggleActiveStep,
+      activeIndexPlus: eventIndex,
+      activeStep: !prevState.activeStep,
       eventIndex: this.props.eventIndex
     }))
   }
 
-  clickHandlerYes() {
+  clickHandlerConfirmRemove() {
     console.log('yes clicked')
     this.props.dispatch(actions.removeStep(this.state.indexToRemove))
     this.setState(prevState => ({
@@ -85,7 +85,7 @@ class OwnSortabelStepWithButtons extends Component {
     }))
   }
 
-  clickHandlerNo() {
+  clickHandlerCancel() {
     console.log('no clicked')
     this.setState(prevState => ({
       toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
@@ -103,54 +103,65 @@ class OwnSortabelStepWithButtons extends Component {
     }
   }
 
+  placeholder() {
+    console.log('placeholder')
+  }
+
   render() {
     const {value, eventIndex, newIndex, oldIndex, indexInMotion} = this.props
 
     // if (indexInMotion !== null &&  indexInMotion === oldIndex){
     //   this.changeEventIndex(newIndex)
     // }
-    let randomColorStep
+    let suggestedStep
+
     if (value.suggestedStep) {
-      randomColorStep = this.props.randomColorStep
+      return (
+        <StepWithButtons
+          eventIndex={this.props.eventIndex}
+          minusEvent={this.rejectStep}
+          minusImg={minus}
+          stepColor={this.props.randomColorStep}
+          clickHandlerEdit={this.clickHandlerEdit}
+          value={this.props.value}
+          clickHandlerPlus={this.acceptStep}
+          plusImg={plus}
+          clickHandlerMinus={this.clickHandlerRejectStep}
+          clickHandlerCancel={this.clickHandlerCancel}
+          editedStep={this.state.editedStep}
+          submitEditedStep={this.placeholder}
+          activeStep={this.state.activeStep}
+          activeIndexPlus={this.state.activeIndexPlus}
+        />
+
+      )
     } else {
-      randomColorStep = {
+    let  noStepColor = {
         color: '#000000'
       }
-    }
-
-    return (
-      <div className="sortable-item-wrapper">
-        <div className="row-1">
-          <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={() => this.clickHandlerRemove(eventIndex)} alt="" src={minus}/></li>
-
-          <span style={randomColorStep}>
-            <li onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value.step}</li>
-          </span>
-
-          <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerAdd(eventIndex)} alt="" src={plus}/></li>
-        </div>
-        <div className="row-2">
-
-          {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove === this.state.eventIndex))
-            ? <div className="prompt">
-                <p>Remove Step?</p>
-                <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEv entNo={this.clickHandlerNo}/></div>
-            : null}
-
-          {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
-            ? <EditStep handleChange={this.handleChangeEditForm} editedStep={this.state.editedStep} submitEditedStep={this.submitEditedStep} step={value} index={eventIndex}/>
-            : null}
-
-          {(this.state.toggleActiveStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex))
-            ? <InputStep index={eventIndex}/>
-            : null}
-
-        </div>
-      </div>
+      return (
+      <StepWithButtons
+        eventIndex={this.props.eventIndex}
+        minusEvent={this.clickHandlerRemove}
+        minusImg={minus}
+        stepColor={noStepColor}
+        clickHandlerEdit={this.clickHandlerEdit}
+        value={this.props.value}
+        clickHandlerPlus={this.clickHandlerAdd}
+        plusImg={plus}
+        clickHandlerMinus={this.clickHandlerRemove}
+        clickHandlerCancel={this.clickHandlerCancel}
+        editedStep={this.state.editedStep}
+        submitEditedStep={this.submitEditedStep}
+        activeStep={this.state.activeStep}
+        activeIndexPlus={this.state.activeIndexPlus}
+      />
     )
+    }
   }
 }
-const SortableStepWithButtons = connect()(SortableElement(OwnSortabelStepWithButtons))
+
+const OwnSortableStepWithButtons = connect()(SortableElement(StepWithButtonsContainer))
 
 const SortableList = SortableContainer((props) => {
   const {newIndex} = props
@@ -160,16 +171,15 @@ const SortableList = SortableContainer((props) => {
 
   return (
     <ul className="sortable-container">
-      {items.map((value, index) => (<SortableStepWithButtons randomColorStep={props.randomColorStep} key={`item-${index}`} index={index} eventIndex={index} value={value} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
+      {items.map((value, index) => (<OwnSortableStepWithButtons randomColorStep={props.randomColorStep} key={`item-${index}`} index={index} eventIndex={index} value={value} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
     </ul>
   );
 });
 
-class OwnCurrentSteps extends Component {
+class OwnGoalCurrentSteps extends Component {
   constructor(props) {
     super(props)
     this.state = {
-
       newIndex: null,
       oldIndex: null,
       indexInMotion: null,
@@ -217,4 +227,4 @@ const mapStateToProps = (state, props) => {
   return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID}
 }
 
-export default connect(mapStateToProps)(OwnCurrentSteps);
+export default connect(mapStateToProps)(OwnGoalCurrentSteps);

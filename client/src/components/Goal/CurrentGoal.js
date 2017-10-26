@@ -12,6 +12,7 @@ import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 import '../../style/CurrentGoal.css'
 /* CLASS DECLARATION */
+
 class CurrentGoal extends Component {
   constructor(props) {
     super(props)
@@ -39,15 +40,14 @@ class CurrentGoal extends Component {
   /*Check if Query was sent and Data Received */
   componentWillReceiveProps(nextProps) {
     if (nextProps.data && nextProps.data.loading == false && nextProps.data.GoalDoc) {
-    if (this.props.data.GoalDoc !=nextProps.data.GoalDoc){
+    if (this.props.data.GoalDoc != nextProps.data.GoalDoc){
       /* ACTION DISPATCH */
       // console.log(nextProps.data.GoalDoc)
       this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
       this.props.dispatch(actions.setClonedSteps(nextProps.data.GoalDoc.clonedSteps))
       if (this.props.loggedInUser !== this.props.targetUser) {
-        // console.log('THISSSSSSSSSSSSSSS', nextProps.data.GoalDoc.steps)
-        // console.log('clone steps called from CurrentGoal.js')
-      this.props.dispatch(actions.cloneCurrentStepsForSuggestions(nextProps.data.GoalDoc.steps))
+        this.props.dispatch(actions.cloneCurrentStepsForSuggestions(nextProps.data.GoalDoc.steps))
+        console.log('cloneCurrentStepsForSuggestions called from CurrentGoal.js')
     }
   }
     }

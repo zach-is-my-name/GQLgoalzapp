@@ -5,7 +5,6 @@ import TargetUser from '../User/TargetUser'
 import SelectGoal from '../Goal/SelectGoal'
 import InputGoal  from '../Goal/InputGoal'
 
-// , SelectGoalData, CurrentGoal
 export default function Goal(props) {
 
   return (

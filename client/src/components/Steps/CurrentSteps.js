@@ -8,30 +8,28 @@ import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions.js'
 
 import '../../style/CurrentSteps.css'
-import OwnCurrentSteps from  './OwnCurrentSteps.js'
-import ForeignCurrentSteps from './ForeignCurrentSteps.js'
+import OwnGoalCurrentSteps from  './OwnGoalCurrentSteps.js'
+import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
 
 class CurrentSteps extends Component {
 
-  componentWillMount() {
-    if (this.props.loggedInUser !== this.props.targetUser) {
-      // console.log('cloneCurrentStepsForSuggestions called from CurrentSteps.js ')
-      this.props.dispatch(actions.cloneCurrentStepsForSuggestions(this.props.currentGoalSteps))
-    }
-  }
+  // componentWillMount() {
+  //   if (this.props.loggedInUser !== this.props.targetUser) {
+  //     this.props.dispatch(actions.cloneCurrentStepsForSuggestions(this.props.currentGoalSteps))
+  //     console.log('this.props.currentGoalSteps',this.props.currentGoalSteps)
+  //     console.log('cloneCurrentStepsForSuggestions called from CurrentSteps.js ')
+  //   }
+  //   }
+
 
   render() {
 
     let currentSteps
 
     if (this.props.loggedInUser !== this.props.targetUser) {
-      // console.log('Foreign Steps')
-      currentSteps = <ForeignCurrentSteps />
+      currentSteps = <ForeignGoalCurrentSteps />
     } else {
-      console.log('this.props.loggedInUser', this.props.loggedInUser)
-      console.log('this.props.targetUser', this.props.targetUser)
-      console.log('Own Steps')
-    currentSteps = <OwnCurrentSteps randomColorStep={this.props.randomColorStep} currentGoalStepsClone={this.props.currentGoalStepsClone} />
+    currentSteps = <OwnGoalCurrentSteps randomColorStep={this.props.randomColorStep} currentGoalStepsClone={this.props.currentGoalStepsClone} />
 }
     return (
       <div className="steps-container">

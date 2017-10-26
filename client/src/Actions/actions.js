@@ -19,7 +19,6 @@ export const setStep = (step, index) => {
     step,
     index: [index] + 1
   })
-
 };
 
 //where is the index being passed in SuggestStep.js?
@@ -35,15 +34,6 @@ export const setSuggestedStep = (suggestedStep, index, id) => {
   return ({type: SET_SUGGESTED_STEP, suggestedStep: stepObj, index: index})
 }
 
-// export const SET_SUGGESTED_STEP_ID_FROM_SERVER = 'SET_SUGGESTED_STEP_ID_FROM_SERVER'
-// export const setSuggestedStepIdFromServer (index,id) => {
-//   const stepsArr = store.getState().goals.currentGoalStepsClone
-//   stepsArr[index].id = id
-//
-//
-//   return {type: SET_SUGGESTED_STEP_ID_FROM_SERVER, x }
-// }
-
 export const SET_SUGGESTED_STEP_ID_FROM_SERVER = 'SET_SUGGESTED_STEP_ID_FROM_SERVER'
 export const setSuggestedStepIdFromServer = (index,id) => {
   // const stepsArr = store.getState().goals.currentGoalStepsClone
@@ -52,8 +42,9 @@ export const setSuggestedStepIdFromServer = (index,id) => {
 
   return {type: SET_SUGGESTED_STEP_ID_FROM_SERVER, index, id }
 }
-export const SET_POSITION_INDEX = 'SET_POSITION_INDEX'
-export const setPositionIndex = () => {
+
+export const SET_SUGGESTED_STEP_POSITION_INDEX = 'SET_SUGGESTED_STEP_POSITION_INDEX'
+export const setSuggestedStepPositionIndex = () => {
   const stepsArr = store.getState().goals.currentGoalStepsClone
   const positionArr = stepsArr.map((stepObj, index) => {
     if (stepObj.suggestedStep === true) {
@@ -69,20 +60,8 @@ export const setPositionIndex = () => {
     }
   })
 
-  return {type: SET_POSITION_INDEX, stepsArr}
+  return {type: SET_SUGGESTED_STEP_POSITION_INDEX, stepsArr}
 }
-
-// export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
-// export const setSuggestedStep = (suggestedStep,index,id) => {
-//   return (dispatch) => {
-//   console.log('index of add step button', index)
-//   const stepObj = {step: suggestedStep, suggestedStep: true, id, positionIndex:index}
-//   return ( {
-//   type: SET_SUGGESTED_STEP,
-//   suggestedStep: stepObj,
-//   index: index
-// })
-// }}
 
 export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goalDoc => {
@@ -153,25 +132,6 @@ export const MOVE_STEP_ON_CLONE = 'MOVE_STEP_ON_CLONE'
 export const moveStepOnClone = (newStepOrder) => {
   return {type: MOVE_STEP_ON_CLONE, newStepOrder}
 }
-
-// export const SET_POSITION_INDEX ='SET_POSITION_INDEX'
-// export const setPositionIndex = (stepsArr) => {
-//   console.log('stepsArr', stepsArr)
-//   const positionArr = stepsArr.map((stepObj, index) => {
-//     if (stepObj.suggestedStep === true) {
-//       return ({positionIndex: index})
-//     } else {
-//       return -1
-//     }
-//     }
-//   )
-// console.log('positionArr', positionArr)
-//   return {
-//     type: SET_POSITION_INDEX,
-//     positionArr
-//   }
-// }
-
 
 export const CLONE_CURRENT_STEPS_FOR_SUGGESTIONS = 'CLONE_CURRENT_STEPS_FOR_SUGGESTIONS'
 export const cloneCurrentStepsForSuggestions = (steps) => {
