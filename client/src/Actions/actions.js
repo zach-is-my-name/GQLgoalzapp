@@ -42,27 +42,74 @@ export const setSuggestedStepIdFromServer = (index,id) => {
 
   return {type: SET_SUGGESTED_STEP_ID_FROM_SERVER, index, id }
 }
+//
+// export const SET_SUGGESTED_STEP_POSITION_INDEX = 'SET_SUGGESTED_STEP_POSITION_INDEX'
+// export const setSuggestedStepPositionIndex = () => {
+//   const stepsArr = store.getState().goals.currentGoalStepsClone
+//   const positionArr = stepsArr.map((stepObj, index) => {
+//     if (stepObj.suggestedStep === true) {
+//       return ({positionIndex: index})
+//     } else {
+//       return ({positionIndex: -1})
+//     }
+//   })
+//   positionArr.map((positionObj, index) => {
+//     if (positionObj.positionIndex !== -1) {
+//       stepsArr[index].positionIndex = positionObj.positionIndex
+//       // console.log('stepsArr', stepsArr)
+//     }
+//   })
+//
+//   return {type: SET_SUGGESTED_STEP_POSITION_INDEX, stepsArr}
+// }
 
-export const SET_SUGGESTED_STEP_POSITION_INDEX = 'SET_SUGGESTED_STEP_POSITION_INDEX'
+export const SET_SUGGESTED_STEP_POSITION_INDEX ='SET_SUGGESTED_STEP_POSITION_INDEX'
 export const setSuggestedStepPositionIndex = () => {
-  const stepsArr = store.getState().goals.currentGoalStepsClone
-  const positionArr = stepsArr.map((stepObj, index) => {
-    if (stepObj.suggestedStep === true) {
-      return ({positionIndex: index})
-    } else {
-      return ({positionIndex: -1})
-    }
-  })
-  positionArr.map((positionObj, index) => {
-    if (positionObj.positionIndex !== -1) {
-      stepsArr[index].positionIndex = positionObj.positionIndex
-      // console.log('stepsArr', stepsArr)
-    }
-  })
+return  (dispatch,getState) => {
+    // console.log('getState', getState().goals.currentGoalStepsClone)
+  const stepsArr = getState().goals.currentGoalStepsClone
+  // console.log('stepsArr',stepsArr)
+ const positionArr = stepsArr.map((stepObj, index) => {
+    // if (stepObj.suggestedStep === true) {
+    return  ({positionIndex: index,
+    step: stepObj.step})
+    // }
+    // else {
+    // return  ({positionIndex: -1})
+    // }
+  }
+  )
+// console.log('positionArr', positionArr)
+  const newSteps = positionArr.map((positionObj,index) => {
+    // console.log(index)
+    // console.log('Object.keys', Object.keys(stepsArr[0]))
+    // console.log('stepsArr[index]', stepsArr[index])
+    // console.log('stepsArr positionIndex @ i', stepObjPos)
+    // if (positionObj.positionIndex !== -1) {
+return    stepsArr[index].positionIndex = positionObj.positionIndex
+      // console.log('stepsArr',stepsArr)
+    // }
+  }
+)
 
-  return {type: SET_SUGGESTED_STEP_POSITION_INDEX, stepsArr}
+return {
+    type: SET_SUGGESTED_STEP_POSITION_INDEX,
+    stepsArr: newSteps
+  }
+}
 }
 
+export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
+export const cloneCurrentStepsToSuggestedSteps = (steps) => {
+    // console.log('cloneCurrentSteps',steps)
+    let flatSteps = steps.map(step => ({step:step.step, suggestedStep: false, positionIndex:step.positionIndex }))
+    // console.log('actions/flatSteps', flatSteps)
+    // let flatStepsObj = {step: flatSteps, suggestedStep:false}
+  return {
+    type: CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS,
+    flatSteps: flatSteps
+  }
+}
 export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goalDoc => {
   const {goal, id, steps, suggestedSteps, clonedSteps} = goalDoc
@@ -133,13 +180,13 @@ export const moveStepOnClone = (newStepOrder) => {
   return {type: MOVE_STEP_ON_CLONE, newStepOrder}
 }
 
-export const CLONE_CURRENT_STEPS_FOR_SUGGESTIONS = 'CLONE_CURRENT_STEPS_FOR_SUGGESTIONS'
-export const cloneCurrentStepsForSuggestions = (steps) => {
+export const CLONE_CURRENT_STEPS = 'CLONE_CURRENT_STEPS'
+export const cloneCurrentSteps = (steps) => {
   // console.log('cloneCurrentSteps', steps)
   let flatSteps = steps.map(step => ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex}))
   // console.log('actions/flatSteps', flatSteps)
   // let flatStepsObj = {step: flatSteps, suggestedStep:false}
-  return {type: CLONE_CURRENT_STEPS_FOR_SUGGESTIONS, flatSteps: flatSteps}
+  return {type: CLONE_CURRENT_STEPS, flatSteps: flatSteps}
 }
 
 export const SET_CLONED_STEPS = 'SET_CLONED_STEPS'

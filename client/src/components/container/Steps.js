@@ -4,7 +4,7 @@ import React, {Component} from 'react'
 import InputSteps from '../Steps/InputSteps'
 import CurrentSteps from '../Steps/CurrentSteps'
 import SuggestStep from '../Steps/SuggestStep'
-import NotificationsOwnGoal from '../Feed/NotificationsOwnGoal'
+import Notifications from '../Feed/Notifications'
 // import CurrentSuggestedSteps from '../Steps/CurrentSuggestedSteps'
 
 export default function Steps() {
@@ -47,7 +47,7 @@ let spanStyle2= {
   return (
     <div>
       {/* <InputSteps /> */}
-      <NotificationsOwnGoal randomColorUserName={spanStyle1} randomColorStep={spanStyle2} />
+      <Notifications randomColorUserName={spanStyle1} randomColorStep={spanStyle2} />
       <CurrentSteps randomColorStep={spanStyle2} />
       {/* <SuggestStep /> */}
       {/* <CurrentSuggestedSteps /> */}

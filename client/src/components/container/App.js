@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import {graphql} from 'react-apollo';
+import {graphql,compose} from 'react-apollo';
 import gql from 'graphql-tag';
 import '../../style/App.css';
 import '../../style/fonts/bentonsans_regular-webfont.woff'
@@ -28,83 +28,34 @@ export class App extends Component {
     location.reload()
   }
 
-  _isLoggedIn = () => {
-    // console.log('this.props.userQuery', this.props.userQuery)
-    return this.props.userQuery.user
-  }
-
-  dispatchUserIdCallback() {
-      this.props.dispatch(actions.setUserId(this.props.userQuery.user.id))
-  }
-
-  dispatchLoginStatusCallback() {
-      this.props.dispatch(actions.setLoginStatus())
-}
-
 componentWillReceiveProps(nextProps) {
-  if (this.props !== nextProps)
-      if (nextProps.userQuery.error) {
-      return console.error(this.props.userQuery.error)
+  if (this.props !== nextProps && nextProps.data.user && window.localStorage.getItem('auth0IdToken')){
+      this.props.dispatch(actions.setUserId(nextProps.data.user.id))
+      this.props.dispatch(actions.setLoginStatus())
     }
-    if (nextProps.userQuery.loading) {
-      return  <div>Loading</div>
-    }
-      /*Check User Query */
-    if (window.localStorage.getItem('auth0IdToken') && this._isLoggedIn()) {
-      /*use callback to avoid warning*/
-      this.dispatchLoginStatusCallback()
-      this.dispatchUserIdCallback()
-
-      // this.props.dispatch(actions.setUserId(this.props.userQuery.user.id))
-      return this.renderLoggedIn()
-    }
-      return (
-          this.renderLoggedOut()
-          )
-          console.log('componentWillMount App', nextProps.userQuery.user)
 }
 
   render() {
-    if (this.props.userQuery.error) {
-      return console.error(this.props.userQuery.error)
-    }
-    if (this.props.userQuery.loading) {
-      return  <div>Loading</div>
-    }
-      /*Check User Query */
-    if (window.localStorage.getItem('auth0IdToken') && this._isLoggedIn()) {
-      /*use callback to avoid warning*/
-      this.dispatchLoginStatusCallback()
-      this.dispatchUserIdCallback()
-
-      // this.props.dispatch(actions.setUserId(this.props.userQuery.user.id))
-      return this.renderLoggedIn()
-    }
-      return (
-          this.renderLoggedOut()
-          )
-  }
-
-  renderLoggedIn() {
     const {match} = this.props;
-    console.log('renderLoggedIn()')
-    // console.log(match)
-    return (
-      <div className="App">
+    if(this.props.data.loading){
+      return <div>Loading...</div>
+    }
+    if (this.props.data && !this.props.data.loading && this.props.data.user) {
+      if(this.props.data.user) {
+      return (<div className="App">
+        {console.log('renderLoggedIn()')}
         <h1 className="logo">GoalZapp</h1>
         <div className="current-user">
-          <CurrentUser  user={this.props.userQuery.user.userName} />
+          <CurrentUser  user={this.props.data.user.userName} />
         </div>
         <MenuButton logout={this._logout} currentUser={this.props.currentUser}  />
         <Switch>
           <Route path="/userfeed/:userid" component={UserFeedPage} />
           <Route exact path="/" component={GlobalFeedPage}  />
         </Switch>
-      </div>
-          )
-          }
-
-  renderLoggedOut() {
+      </div>)
+  }
+}
     console.log('renderLoggedOut()')
     return (
       <div className="App">
@@ -116,8 +67,9 @@ componentWillReceiveProps(nextProps) {
         {/* <UserFeed/> */}
       </div>
     )
-  }
+   }
 }
+
 
 const userQuery = gql `
           query userQuery {
@@ -128,20 +80,27 @@ const userQuery = gql `
           }
         `
 
-const CurrentUserName = gql `
-query($userId: ID) {
-  User (id: $userId)
-  {userName
+// const currentUserName = gql `
+// query($userId: ID) {
+//   User (id: $userId){
+//     userName
+//   }
+// }
+// `;
+
+const WithQueries = compose(graphql(userQuery, {
+  // name: 'userQuery',
+  options: {
+    fetchPolicy: 'network-only'
   }
 }
-`;
 
-const WithQueries = (graphql(userQuery, {
-name: 'userQuery',
-  options: {
-    fetchPolicy: 'network-only',
-  }
-}))(withRouter(App))
+),
+// graphql(currentUserName, {
+//   name:'currentUserName'
+// })
+)
+(withRouter(App))
 
 
 const mapStateToProps = (state,props) => {

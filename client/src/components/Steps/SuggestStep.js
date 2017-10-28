@@ -36,7 +36,7 @@ class SuggestStep extends Component {
 
   //use this to get the step you added from dispatch in mapStateToProps
   componentWillReceiveProps(nextProps) {
-    // console.log('componentwillreceiveprops called')
+    console.log('componentwillreceiveprops called')
     // const {step} = this.state
     const goalDocId = nextProps.currentGoalID
     const suggesterId = nextProps.loggedInUserID
@@ -49,6 +49,7 @@ class SuggestStep extends Component {
     if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
       console.log('nextprops > this.props')
     this.props.data.refetch()
+
     if (!this.props.data.loading) {
     console.log('%cQUERY CALLED NEW STEP / RE-FETCH', "font-weight: bold", allClonedSteps)
     stepIdsFromServer = this.props.data.allClonedSteps.map((item) =>

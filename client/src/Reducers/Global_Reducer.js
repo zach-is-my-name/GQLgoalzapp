@@ -63,6 +63,7 @@ if (action.type === 'SET_SUGGESTED_STEP'){
 }
 
 if (action.type === 'SET_SUGGESTED_STEP_POSITION_INDEX') {
+  console.log(action.stepsArr)
   return update (state, {
     currentGoalStepsClone: {$set: action.stepsArr}
   })
@@ -137,7 +138,7 @@ if (action.type === 'MOVE_STEP_ON_CLONE' ){
   })
 }
 
-if (action.type === 'CLONE_CURRENT_STEPS_FOR_SUGGESTIONS') {
+if (action.type === 'CLONE_CURRENT_STEPS') {
   // console.log(action.flatSteps)
   return update (state, {
     currentGoalStepsClone: {$set: action.flatSteps}

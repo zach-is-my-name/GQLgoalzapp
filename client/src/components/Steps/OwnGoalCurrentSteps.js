@@ -18,9 +18,9 @@ class StepWithButtonsContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      toggleOnYesNoPrompt: false,
+      toggleConfirmPrompt: false,
       indexToRemove: null,
-      activeIndexPlus: null,
+      indexClicked: null,
       activeStep: false,
       eventIndex: null,
       activeIndexEditStep: null,
@@ -62,7 +62,7 @@ class StepWithButtonsContainer extends Component {
     console.log('clickHandlerRemove triggered')
     console.log('index to remove', eventIndex)
     this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt
     }))
     this.setState({indexToRemove: eventIndex, eventIndex: this.props.eventIndex})
   }
@@ -71,7 +71,7 @@ class StepWithButtonsContainer extends Component {
     console.log(eventIndex)
     // this.setState({})
     this.setState(prevState => ({
-      activeIndexPlus: eventIndex,
+      indexClicked: eventIndex,
       activeStep: !prevState.activeStep,
       eventIndex: this.props.eventIndex
     }))
@@ -81,14 +81,14 @@ class StepWithButtonsContainer extends Component {
     console.log('yes clicked')
     this.props.dispatch(actions.removeStep(this.state.indexToRemove))
     this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt
     }))
   }
 
   clickHandlerCancel() {
     console.log('no clicked')
     this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       indexToRemove: null
     }))
   }
@@ -131,11 +131,12 @@ class StepWithButtonsContainer extends Component {
           editedStep={this.state.editedStep}
           submitEditedStep={this.placeholder}
           activeStep={this.state.activeStep}
-          activeIndexPlus={this.state.activeIndexPlus}
+          indexClicked={this.state.indexClicked}
+          stepColor={this.props.randomColorStep}
         />
 
       )
-    } else {
+    } else if (!value.suggestedStep) {
     let  noStepColor = {
         color: '#000000'
       }
@@ -143,6 +144,8 @@ class StepWithButtonsContainer extends Component {
       <StepWithButtons
         eventIndex={this.props.eventIndex}
         minusEvent={this.clickHandlerRemove}
+        toggleConfirmPrompt={this.state.toggleConfirmPrompt}
+        indexToRemove={this.state.indexToRemove}
         minusImg={minus}
         stepColor={noStepColor}
         clickHandlerEdit={this.clickHandlerEdit}
@@ -154,7 +157,8 @@ class StepWithButtonsContainer extends Component {
         editedStep={this.state.editedStep}
         submitEditedStep={this.submitEditedStep}
         activeStep={this.state.activeStep}
-        activeIndexPlus={this.state.activeIndexPlus}
+        indexClicked={this.state.indexClicked}
+        stepColor={noStepColor}
       />
     )
     }
