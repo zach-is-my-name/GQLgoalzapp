@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, {Component} from 'react'
 
-import InputSteps from '../Steps/InputSteps'
+import AddStep from '../Steps/AddStep'
 import CurrentSteps from '../Steps/CurrentSteps'
 import SuggestStep from '../Steps/SuggestStep'
 import Notifications from '../Feed/Notifications'
@@ -46,7 +46,7 @@ let spanStyle2= {
 
   return (
     <div>
-      {/* <InputSteps /> */}
+      {/* <AddStep /> */}
       <Notifications randomColorUserName={spanStyle1} randomColorStep={spanStyle2} />
       <CurrentSteps randomColorStep={spanStyle2} />
       {/* <SuggestStep /> */}

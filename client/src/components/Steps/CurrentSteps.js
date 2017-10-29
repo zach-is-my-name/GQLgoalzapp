@@ -2,13 +2,12 @@
 // //index is passed down as eventIndex because it is restricted in react-sortable
 //
 
-
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions.js'
 
 import '../../style/CurrentSteps.css'
-import OwnGoalCurrentSteps from  './OwnGoalCurrentSteps.js'
+import OwnGoalCurrentSteps from './OwnGoalCurrentSteps.js'
 import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
 
 class CurrentSteps extends Component {
@@ -21,16 +20,15 @@ class CurrentSteps extends Component {
   //   }
   //   }
 
-
   render() {
 
     let currentSteps
 
     if (this.props.loggedInUser !== this.props.targetUser) {
-      currentSteps = <ForeignGoalCurrentSteps />
+      currentSteps = <ForeignGoalCurrentSteps/>
     } else {
-    currentSteps = <OwnGoalCurrentSteps randomColorStep={this.props.randomColorStep} currentGoalStepsClone={this.props.currentGoalStepsClone} />
-}
+      currentSteps = <OwnGoalCurrentSteps randomColorStep={this.props.randomColorStep} currentGoalStepsClone={this.props.currentGoalStepsClone} goalDocId={this.props.goalDocId}/>
+    }
     return (
       <div className="steps-container">
         <p className="currentsteps-label">
@@ -43,6 +41,6 @@ class CurrentSteps extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone}
+  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, goalDocId: state.goals.currentGoalID}
 }
 export default connect(mapStateToProps)(CurrentSteps);

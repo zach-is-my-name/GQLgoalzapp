@@ -5,11 +5,11 @@ import gql from 'graphql-tag';
 import {connect} from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom'
 import * as actions from '../../Actions/actions'
-import '../../style/InputSteps.css'
+import '../../style/AddStep.css'
 
 
 /* CLASS DEFINITION */
- class InputSteps extends React.Component {
+ class AddStep extends React.Component {
   constructor(props) {
     super(props)
     this.submitStep = this.submitStep.bind(this);
@@ -85,7 +85,7 @@ const StepsMutation = gql                                         `
 //   }
 // `
 
-const InputStepsWithMutation =
+const AddStepWithMutation =
 graphql(StepsMutation,{
     props:({mutate}) => ({
       createStep({variables}) {
@@ -97,7 +97,7 @@ graphql(StepsMutation,{
         })
       }
     })
-})(withRouter(InputSteps))
+})(withRouter(AddStep))
 
 /* REDUX */
 const mapStateToProps = (state, props) => {
@@ -106,4 +106,4 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-export default connect(mapStateToProps)(InputStepsWithMutation)
+export default connect(mapStateToProps)(AddStepWithMutation)

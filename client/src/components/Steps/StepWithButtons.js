@@ -1,7 +1,7 @@
 import React from 'react';
 import YesNoPrompt from './YesNoPrompt.js'
 import EditStep from './EditStep.js'
-import InputStep from './InputSteps.js'
+import AddStep from './AddStep.js'
 import AcceptStep from './AcceptStep.js'
 
   const StepWithButtons = (props) => {
@@ -47,12 +47,12 @@ import AcceptStep from './AcceptStep.js'
 
         {/*add step*/}
         {(props.activeStep && (props.eventIndex !== null) && (props.indexClicked === props.eventIndex) && props.value.suggestedStep === false)
-          ? <InputStep index={props.eventIndex}/>
+          ? <AddStep index={props.eventIndex}/>
         : null}
 
         {/*accept step*/}
-        {(props.activeStep && (props.eventIndex !== null) && (props.indexClicked === props.eventIndex) && props.value.suggestedStep === true)
-          ? <AcceptStep index={props.eventIndex} />
+        {(props.activeStep && (props.eventIndex !== null) && (props.indexClicked === props.eventIndex) && props.value.suggestedStep === true && props.acceptStep)
+          ? <AcceptStep step={props.value.step} goalDocId={props.goalDocId} stepId={props.value.id} />
         : null}
 
       </div>
