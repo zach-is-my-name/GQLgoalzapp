@@ -1,5 +1,5 @@
-import {store} from '../store.js'
 /* eslint-disable */
+import {store} from '../store.js'
 import 'isomorphic-fetch';
 
 export const SET_USERID = 'SET_USERID'
@@ -11,20 +11,50 @@ export const setGoal = goal => ({type: SET_GOAL, goal})
 export const SET_GOALDOC_ID = 'SET_GOALDOC_ID';
 export const setGoalDocID = goalDocID => ({type: SET_GOALDOC_ID, goalDocID});
 
+export const SET_GOALDOC = 'SET_GOALDOC'
+export const setGoalDoc = goalDoc => {
+  const {goal, id, steps, suggestedSteps, clonedSteps} = goalDoc
+  let flatSteps = steps.map((stepObj) => {
+  return  ({
+    step: stepObj.step,
+    positionIndex: stepObj.positionIndex,
+    suggestedStep: stepObj.suggestedStep,
+    // suggester: stepObj.suggester,
+    id: stepObj.id
+  })})
+
+  const flatGoalDoc = {
+    goal,
+    id,
+    flatSteps,
+  }
+  return {type: SET_GOALDOC, flatGoalDoc}
+};
+
 export const SET_STEP = 'SET_STEP';
-export const setStep = (step, index) => {
-  // console.log('STEP ARR', stepArr)
+export const setStep = (step, index,id) => {
+  const stepObj = {
+    step: step,
+    suggestedStep: false,
+    id,
+    positionIndex: null,
+  }
+
   return ({
     type: SET_STEP,
-    step,
-    index: [index] + 1
+    stepObj,
+    index: index
   })
 };
 
+export const SET_STEP_ID_FROM_SERVER = 'SET_STEP_ID_FROM_SERVER'
+export const setStepIdFromServer = (index, id) =>
+  ({type: SET_STEP_ID_FROM_SERVER, index, id})
+
+
 //where is the index being passed in SuggestStep.js?
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
-export const setSuggestedStep = (suggestedStep, index, id) => {
-  // console.log('index of add step button', index)
+export const setSuggestedStep = (suggestedStep, index,id) => {
   const stepObj = {
     step: suggestedStep,
     suggestedStep: true,
@@ -38,66 +68,52 @@ export const SET_SUGGESTED_STEP_ID_FROM_SERVER = 'SET_SUGGESTED_STEP_ID_FROM_SER
 export const setSuggestedStepIdFromServer = (index,id) => {
   // const stepsArr = store.getState().goals.currentGoalStepsClone
   // stepsArr[index].id = id
-
-
   return {type: SET_SUGGESTED_STEP_ID_FROM_SERVER, index, id }
 }
-//
-// export const SET_SUGGESTED_STEP_POSITION_INDEX = 'SET_SUGGESTED_STEP_POSITION_INDEX'
-// export const setSuggestedStepPositionIndex = () => {
-//   const stepsArr = store.getState().goals.currentGoalStepsClone
-//   const positionArr = stepsArr.map((stepObj, index) => {
-//     if (stepObj.suggestedStep === true) {
-//       return ({positionIndex: index})
-//     } else {
-//       return ({positionIndex: -1})
-//     }
-//   })
-//   positionArr.map((positionObj, index) => {
-//     if (positionObj.positionIndex !== -1) {
-//       stepsArr[index].positionIndex = positionObj.positionIndex
-//       // console.log('stepsArr', stepsArr)
-//     }
-//   })
-//
-//   return {type: SET_SUGGESTED_STEP_POSITION_INDEX, stepsArr}
-// }
 
-export const SET_SUGGESTED_STEP_POSITION_INDEX ='SET_SUGGESTED_STEP_POSITION_INDEX'
-export const setSuggestedStepPositionIndex = () => {
+export const SET_CLONED_STEP_POSITION_INDEX ='SET_CLONED_STEP_POSITION_INDEX'
+export const setClonedStepPositionIndex = () => {
 return  (dispatch,getState) => {
-    // console.log('getState', getState().goals.currentGoalStepsClone)
   const stepsArr = getState().goals.currentGoalStepsClone
   // console.log('stepsArr',stepsArr)
- const positionArr = stepsArr.map((stepObj, index) => {
-    // if (stepObj.suggestedStep === true) {
-    return  ({positionIndex: index,
-    step: stepObj.step})
-    // }
-    // else {
-    // return  ({positionIndex: -1})
-    // }
-  }
-  )
+ const positionArr = stepsArr.map((stepObj, index, stepsArr) => {
+    // console.log('stepsArr',stepsArr[index])
+    return  ({positionIndex: index})
+  })
+
 // console.log('positionArr', positionArr)
   const newSteps = positionArr.map((positionObj,index) => {
-    // console.log(index)
-    // console.log('Object.keys', Object.keys(stepsArr[0]))
-    // console.log('stepsArr[index]', stepsArr[index])
-    // console.log('stepsArr positionIndex @ i', stepObjPos)
-    // if (positionObj.positionIndex !== -1) {
-return    stepsArr[index].positionIndex = positionObj.positionIndex
-      // console.log('stepsArr',stepsArr)
+    return stepsArr[index].positionIndex = positionObj.positionIndex
     // }
-  }
-)
-
+  })
 return {
-    type: SET_SUGGESTED_STEP_POSITION_INDEX,
+    type: SET_CLONED_STEP_POSITION_INDEX,
     stepsArr: newSteps
   }
 }
 }
+
+export const SET_STEP_POSITION_INDEX = 'SET_STEP_POSITION_INDEX'
+export const setStepPositionIndex = () => {
+ return (dispatch, getState) => {
+   const stepsArr = getState().goals.currentGoalSteps
+  //  console.log('stepsArr', stepsArr)
+   const positionArr = stepsArr.map((stepObj, index) => {
+     return ({positionIndex: index})
+   })
+  //  console.log('positionArr', positionArr)
+   const newSteps = positionArr.map((positionObj, index, array) => {
+      // console.log('positionArr[index]', stepsArr[index])
+     return stepsArr[index].positionIndex = positionObj.positionIndex
+
+   })
+
+  return {
+  type: SET_STEP_POSITION_INDEX
+}
+ }
+}
+
 
 export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
 export const cloneCurrentStepsToSuggestedSteps = (steps) => {
@@ -110,20 +126,6 @@ export const cloneCurrentStepsToSuggestedSteps = (steps) => {
     flatSteps: flatSteps
   }
 }
-export const SET_GOALDOC = 'SET_GOALDOC'
-export const setGoalDoc = goalDoc => {
-  const {goal, id, steps, suggestedSteps, clonedSteps} = goalDoc
-  let flatSteps = steps.map(step => step.step)
-  // let flatSuggestedSteps = suggestedSteps.map(suggestedStep => suggestedStep.suggestedStep)
-
-  const flatGoalDoc = {
-    goal,
-    id,
-    flatSteps,
-    // flatSuggestedSteps
-  }
-  return {type: SET_GOALDOC, flatGoalDoc}
-};
 
 export const SET_USERDOC_ID = 'SET_USERDOC_ID';
 export const setUserDocID = userDocID => ({type: SET_USERDOC_ID, userDocID})
@@ -139,14 +141,20 @@ export const setTargetUserID = targetUserID => ({type: SET_TARGET_USER_ID, targe
 
 export const SET_TARGET_USER_NAME = 'SET_TARGET_USER_NAME'
 export const setTargetUserName = targetUserName => ({type: SET_TARGET_USER_NAME, targetUserName})
+
 export const REMOVE_STEP = 'REMOVE_STEP'
 export const removeStep = index => ({type: REMOVE_STEP, index})
 
-export const SUGGEST_REMOVE_STEP = 'SUGGEST_REMOVE_STEP'
-export const suggestRemoveStep = index => {
+export const REMOVE_CLONED_STEP = 'REMOVE_CLONED_STEP'
+export const removeClonedStep = index => {
   // const indexArr = [index]
-  return {type: SUGGEST_REMOVE_STEP, index}
+  return {type: REMOVE_CLONED_STEP, index}
 }
+
+export const suggestRemoveStep = () => {
+  return {type:SUGGEST_REMOVE_STEP}
+}
+
 // export const TOGGLE_SUGGEST_STEP_INPUT = 'TOGGLE_SUGGEST_STEP_INPUT'
 // export const toggleSuggestStepInput = state => ({
 //   type:TOGGLE_SUGGEST_STEP_INPUT,
@@ -183,7 +191,7 @@ export const moveStepOnClone = (newStepOrder) => {
 export const CLONE_CURRENT_STEPS = 'CLONE_CURRENT_STEPS'
 export const cloneCurrentSteps = (steps) => {
   // console.log('cloneCurrentSteps', steps)
-  let flatSteps = steps.map(step => ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex}))
+  let flatSteps = steps.map(step =>  ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex}))
   // console.log('actions/flatSteps', flatSteps)
   // let flatStepsObj = {step: flatSteps, suggestedStep:false}
   return {type: CLONE_CURRENT_STEPS, flatSteps: flatSteps}
@@ -191,8 +199,13 @@ export const cloneCurrentSteps = (steps) => {
 
 export const SET_CLONED_STEPS = 'SET_CLONED_STEPS'
 export const setClonedSteps = clonedSteps => {
-    let flatSteps = clonedSteps.map(step => ({step: step.step, suggestedStep: step.suggestedStep, positionIndex: step.positionIndex, suggester: step.suggester.userName, id:step.id}))
+    let flatSteps = clonedSteps.map(clonedStepObj => ({step: clonedStepObj.step, suggestedStep: clonedStepObj.suggestedStep, positionIndex: clonedStepObj.positionIndex, suggester: clonedStepObj.suggester.userName, id:clonedStepObj.id}))
     return {type: SET_CLONED_STEPS, flatSteps}
+}
+
+export const RESOLVE_ACCEPT_STEP ='RESOLVE_ACCEPT_STEP'
+export const resolveAcceptStep = () => {
+  return {type: RESOLVE_ACCEPT_STEP}
 }
 
 // export const MERGE_STEPS_CLONE = 'MERGE_STEPS_CLONE'

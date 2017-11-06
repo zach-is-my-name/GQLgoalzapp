@@ -52,7 +52,7 @@ import AcceptStep from './AcceptStep.js'
 
         {/*accept step*/}
         {(props.activeStep && (props.eventIndex !== null) && (props.indexClicked === props.eventIndex) && props.value.suggestedStep === true && props.acceptStep)
-          ? <AcceptStep step={props.value.step} goalDocId={props.goalDocId} stepId={props.value.id} />
+          ? <AcceptStep step={props.value.step} goalDocId={props.goalDocId} stepId={props.value.id} index={props.eventIndex} />
         : null}
 
       </div>

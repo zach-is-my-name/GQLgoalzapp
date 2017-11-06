@@ -14,8 +14,6 @@ class SuggestStep extends Component {
     this._submitSuggestedStep = this._submitSuggestedStep.bind(this)
     this.state = {
       step: " ",
-      readyToFireSuggestStepMutation: false,
-      positionIndexToSubmit: ""
     }
   }
 
@@ -23,11 +21,11 @@ class SuggestStep extends Component {
     event.preventDefault()
 
     const {step} = this.state
-    const goalDocId = this.props.currentGoalID
-    const suggesterId = this.props.loggedInUserID
+    // const goalDocId = this.props.currentGoalID
+    // const suggesterId = this.props.loggedInUserID
     const index = this.props.index
     this.props.dispatch(actions.setSuggestedStep(step, index))
-    this.props.dispatch(actions.setSuggestedStepPositionIndex())
+    this.props.dispatch(actions.setClonedStepPositionIndex())
   }
 
   handleChange(e) {
@@ -50,9 +48,9 @@ class SuggestStep extends Component {
       console.log('nextprops > this.props')
     this.props.data.refetch()
 
-    if (!this.props.data.loading) {
+    if (!nextProps.data.loading) {
     console.log('%cQUERY CALLED NEW STEP / RE-FETCH', "font-weight: bold", allClonedSteps)
-    stepIdsFromServer = this.props.data.allClonedSteps.map((item) =>
+      stepIdsFromServer = nextProps.data.allClonedSteps.map((item) =>
          item.id
         )
 
@@ -62,13 +60,13 @@ class SuggestStep extends Component {
     nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
 
       console.log('MAP CALLED, stepIdsFromServer =', stepIdsFromServer)
-      if (stepIdsFromServer !== undefined && stepIdsFromServer.length > 0 && stepObj.id) {
+      if (stepIdsFromServer !== undefined && stepIdsFromServer.length  && stepObj.id) {
         console.log('%c**UPDATE SITUATION**', "color:blue")
         idMatchingServerAndStore = stepIdsFromServer.filter((idFromServer) => {
           return idFromServer === stepObj.id
         })
 
-        if (idMatchingServerAndStore !== undefined && idMatchingServerAndStore.length > 0) {
+        if (idMatchingServerAndStore !== undefined && idMatchingServerAndStore.length) {
           console.log('%cID MATCHES', "color:purple", idMatchingServerAndStore)
           return this.props.submitPositionUpdate({
             variables: {
@@ -83,6 +81,7 @@ class SuggestStep extends Component {
 
       else if (stepObj.suggestedStep === true) {
         console.log('%cSUBMIT SITUATION *suggestedStep*', "color:orange")
+        console.log('this.props', )
         return this.props.submitSuggestedStep({
           variables: {
             suggestedStep: true,
@@ -170,7 +169,7 @@ query($id:ID){
  id
 }}`
 
-const suggestStepMutation = gql `mutation ($positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $goalDocId: ID, $suggesterId: ID) {
+const _suggestStepMutation = gql `mutation ($positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $goalDocId: ID, $suggesterId: ID) {
   createClonedStep(
     positionIndex: $positionIndex,
     step: $step,
@@ -185,28 +184,32 @@ const suggestStepMutation = gql `mutation ($positionIndex: Int!, $step: String!,
   }
 }`
 
-const submitPositionUpdate = gql `mutation($id: ID!, $positionIndex: Int)
+const positionUpdateMutation = gql `mutation($id: ID!, $positionIndex: Int)
  {updateClonedStep(id:$id, positionIndex: $positionIndex
 ) {
    id
  }} `
 
-const SuggestStepWithMutation = compose(graphql(userQuery, {
+const SuggestStepWithMutation = compose(
+
+graphql(userQuery, {
   options: {
     fetchPolicy: 'network-only'
   }
-}), graphql(clonedStepIdQuery, {
+}),
+graphql(clonedStepIdQuery, {
   options: ({goalDocID}) => ({
+    fetchPolicy: 'network-only',
     variables: {
       id: goalDocID
     }
   })
-}), graphql(suggestStepMutation, {
-  name: 'submitSuggestedStep'
-}, {
-  props: ({mutate}) => ({
+}),
+graphql(_suggestStepMutation, {
+  name: 'submitSuggestedStep',
+  props: ({submitSuggestedStep}) => ({
     submitSuggestedStep({variables}) {
-      return mutate({
+      return submitSuggestedStep({
         variables: {
           ...variables
         }
@@ -215,12 +218,12 @@ const SuggestStepWithMutation = compose(graphql(userQuery, {
       })
     }
   })
-}), graphql(submitPositionUpdate, {
-  name: 'submitPositionUpdate'
-}, {
-  props: ({mutate}) => ({
+}),
+graphql(positionUpdateMutation, {
+  name: 'submitPositionUpdate',
+  props: ({submitPositionUpdate}) => ({
     submitPositionUpdate({variables}) {
-      return mutate({
+      return submitPositionUpdate({
         variables: {
           ...variables
         }

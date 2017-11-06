@@ -14,6 +14,7 @@ const initialState = {
   loggedIn: false,
   targetUserID: '',
   targetUserName: '' ,
+  resolveAcceptStep: false,
   // currentSuggestedSteps:[],
   // currentSuggestedRemoveSteps: [],
 }
@@ -39,6 +40,7 @@ if (action.type === 'SET_GOALDOC_ID') {
 }
 // keep an eye on this state change
 if (action.type === 'SET_GOALDOC') {
+  // console.log('action.flatGoalDoc.flatSteps', action.flatGoalDoc.flatSteps)
   return update (state, {
   currentGoal: {$set:action.flatGoalDoc.goal},
   currentGoalID: {$set:action.flatGoalDoc.id},
@@ -49,7 +51,7 @@ if (action.type === 'SET_GOALDOC') {
 
 if (action.type === 'SET_STEP') {
   return update(state, {
-    currentGoalSteps: {$splice:[[action.index , 0, action.step]]
+    currentGoalSteps: {$splice:[[action.index , 0, action.stepObj]]
   }
 })}
 
@@ -62,10 +64,17 @@ if (action.type === 'SET_SUGGESTED_STEP'){
   })
 }
 
-if (action.type === 'SET_SUGGESTED_STEP_POSITION_INDEX') {
+if (action.type === 'SET_CLONED_STEP_POSITION_INDEX') {
   console.log(action.stepsArr)
   return update (state, {
     currentGoalStepsClone: {$set: action.stepsArr}
+  })
+}
+
+if(action.tye === 'SET_STEP_POSITION_INDEX') {
+  console.log(action.stepsArr)
+  return update(state, {
+    currentGoalSteps: {$set: action.stepsArr}
   })
 }
 
@@ -106,8 +115,8 @@ if (action.type === 'REMOVE_STEP'){
   })
 }
 
-if (action.type === 'SUGGEST_REMOVE_STEP') {
-    console.log(action.index)
+if (action.type === 'REMOVE_CLONED_STEP') {
+    // console.log(action.index)
   return update( state, {
   currentGoalStepsClone:
 {$splice: [[action.index, 1]]}
@@ -148,6 +157,12 @@ if (action.type === 'CLONE_CURRENT_STEPS') {
 if (action.type === 'SET_CLONED_STEPS') {
   return update(state, {
     currentGoalStepsClone: {$set: action.flatSteps}
+  })
+}
+
+if (action.type === 'RESOLVE_ACCEPT_STEP') {
+  return update(state, {
+    resolveAcceptStep: {$set:true}
   })
 }
 

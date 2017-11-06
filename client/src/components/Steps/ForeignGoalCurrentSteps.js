@@ -84,7 +84,7 @@ class ForeignSortableStepWithButtons extends Component {
   //   if (this.props.eventIndex !== nextProps.newIndex) {
   //     console.log("componentWillReceiveProps called from ForeignGoalCurrentSteps")
   //     this.setState({eventIndex: nextProps.newIndex})
-  //     this.props.dispatch(actions.setSuggestedStepPositionIndex())
+  //     this.props.dispatch(actions.setClonedStepPositionIndex())
   //   }
   // }
 

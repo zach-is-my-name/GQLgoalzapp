@@ -8,9 +8,9 @@ export declare type IntrospectionResultData = {
         types: [{
             kind: string;
             name: string;
-            possibleTypes: [{
+            possibleTypes: {
                 name: string;
-            }];
+            }[];
         }];
     };
 };

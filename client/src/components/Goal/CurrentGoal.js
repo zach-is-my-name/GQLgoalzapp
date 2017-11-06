@@ -37,22 +37,24 @@ class CurrentGoal extends Component {
     return null;
   }
 
+
   /*Check if Query was sent and Data Received */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data && nextProps.data.loading == false && nextProps.data.GoalDoc) {
+    if (nextProps.data && nextProps.data.loading === false && nextProps.data.GoalDoc) {
     if (this.props.data.GoalDoc !== nextProps.data.GoalDoc){
-
-        console.log(nextProps.data.GoalDoc)
+        // console.log(nextProps.data.GoalDoc)
         this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
       if (nextProps.data.GoalDoc.clonedSteps.length === 0){
-        console.log(nextProps.data.GoalDoc.steps)
+        // console.log('nextProps.data.GoalDoc', nextProps.data.GoalDoc)
+        // console.log('nextProps.data.GoalDoc.steps', nextProps.data.GoalDoc.steps)
         this.props.dispatch(actions.cloneCurrentSteps(nextProps.data.GoalDoc.steps))
     } else if (nextProps.data.GoalDoc.clonedSteps.length >= 1) {
           this.props.dispatch(actions.setClonedSteps(nextProps.data.GoalDoc.clonedSteps))
       }
-        if (this.props.loggedInUser !== this.props.targetUser) {
+      if (this.props.loggedInUser !== this.props.targetUser) {
+
           this.props.dispatch(actions.cloneCurrentSteps(nextProps.data.GoalDoc.steps))
-          console.log('cloneCurrentSteps called from CurrentGoal.js')
+          // console.log('cloneCurrentSteps called from CurrentGoal.js')
     }
   }
     }
@@ -77,6 +79,8 @@ query ($varID: ID) {
    steps(orderBy:createdAt_ASC) {
      step
      positionIndex
+     suggestedStep
+     id
    }
    clonedSteps(orderBy:positionIndex_ASC) {
      step

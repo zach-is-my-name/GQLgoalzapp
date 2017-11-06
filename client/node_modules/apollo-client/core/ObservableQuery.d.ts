@@ -46,7 +46,7 @@ export declare class ObservableQuery<T> extends Observable<ApolloQueryResult<T>>
     fetchMore(fetchMoreOptions: FetchMoreQueryOptions & FetchMoreOptions): Promise<ApolloQueryResult<T>>;
     subscribeToMore(options: SubscribeToMoreOptions): () => void;
     setOptions(opts: ModifiableWatchQueryOptions): Promise<ApolloQueryResult<T>>;
-    setVariables(variables: any, tryFetch?: boolean): Promise<ApolloQueryResult<T>>;
+    setVariables(variables: any, tryFetch?: boolean, fetchResults?: boolean): Promise<ApolloQueryResult<T>>;
     updateQuery(mapFn: (previousQueryResult: any, options: UpdateQueryOptions) => any): void;
     stopPolling(): void;
     startPolling(pollInterval: number): void;

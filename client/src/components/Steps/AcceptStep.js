@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {graphql, compose} from 'react-apollo';
@@ -7,67 +8,363 @@ import * as actions from '../../Actions/actions'
 class AcceptStep extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      successMutation: false
+    }
+    this._submitAcceptedStep = this._submitAcceptedStep.bind(this)
+    this._setIds = this._setIds.bind(this)
+    this._updateStepPositionIndex = this._updateStepPositionIndex.bind(this)
   }
 
-// componentWillReceiveProps(nextProps) {
-// if (this.props !== nextProps) {
-// }
-// }
+  _setIds(ids) {
+    this.setState({ids})
+  }
 
-render() {
-  console.log('this.props.goalDocId', this.props.goalDocId)
-  this.props.createStep({variables: {step: this.props.step, goalDocId: this.props.goalDocId, positionIndex: this.props.positionIndex, suggestedStep: false}}).then(({data}) => {
-    console.log('mutation sent', data)
-  })
-  this.props.deleteClonedStep({variables: {id: this.props.stepId }}).then(({data}) => {
-    console.log('mutation sent', data)
-  })
-  return <div><p>Step Accepted!</p></div>
+  _submitAcceptedStep() {
+    const step = this.props.step
+    const index = this.props.index
+    this.props.dispatch(actions.setStep(this.props.step, this.props.index))
+    this.props.dispatch(actions.setStepPositionIndex())
+  }
+
+  _updateStepPositionIndex(allClonedSteps) {
+    let _stepIdsFromServer
+    console.log('allClonedSteps', allClonedSteps)
+    _stepIdsFromServer = allClonedSteps.map((item) => item.id)
+    let _idMatchingServerAndStore
+    this.props.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
+      console.log('MAP CALLED, _stepIdsFromServer =', _stepIdsFromServer)
+      if (_stepIdsFromServer !== undefined && _stepIdsFromServer.length && stepObj.id) {
+        console.log('%c**CLONED_STEP UPDATE SITUATION', 'color:blue')
+        _idMatchingServerAndStore = _stepIdsFromServer.filter((idFromServer) => {
+          return idFromServer === stepObj.id
+        })
+        if (_idMatchingServerAndStore !== undefined && _idMatchingServerAndStore.length) {
+          console.log('%cCLONED_STEP ID MATCHES', 'color:purple', _idMatchingServerAndStore)
+          return this.props.positionUpdateMutationClonedStep({
+            variables: {
+              id: _idMatchingServerAndStore[0],
+              positionIndex: stepObj.positionIndex
+            }
+          }).then(({data}) => {
+            console.log('%cCLONED_STEP POSITION UPDATED', 'color:green', data)
+          }).then(() => {
+            this.props.dispatch(actions.removeClonedStep(this.props.index))
+            this.props.dispatch(actions.setClonedStepPositionIndex())
+          })
+          this.setState((prevState) => ({
+            successMutation: !prevState.successMutation
+          }))
+        }
+      }
+      // console.log('this.props called / no change currentGoalStepsClone')
+    })
+  }
+
+  componentDidMount() {
+    // this._submitAcceptedStep()
+  }
+
+  // componentWillMount() {
+  //   console.log(this.props)
+  // this._submitAcceptedStep()
+  //   this.props.stepQuery.refetch()
+  //   console.log('will mount',this.props.stepQuery)
+  // }
+
+  componentWillReceiveProps(nextProps) {
+    // console.log('called')
+    let stepIdsFromServer
+    if (!nextProps.stepQuery.loading) {
+      stepIdsFromServer = nextProps.stepQuery.allSteps.map((item) => item.id)
+      if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
+        let idMatchingServerAndStore
+        nextProps.currentGoalSteps.map((stepObj, mapIndex, array) => {
+          if (stepIdsFromServer !== undefined && stepIdsFromServer.length && stepObj.id) {
+            // console.log('%c**STEP UPDATE SITUATION', 'color:blue')
+            idMatchingServerAndStore = stepIdsFromServer.filter((idFromServer) => {
+              return idFromServer === stepObj.id
+            })
+            // console.log('idMatchingServerAndStore', idMatchingServerAndStore)
+            if (idMatchingServerAndStore !== undefined && idMatchingServerAndStore.length) {
+              return this.props.positionUpdateMutationStep({
+                variables: {
+                  id: idMatchingServerAndStore[0],
+                  positionIndex: stepObj.positionIndex
+                }
+              }).then(({data}) => {
+                // console.log('%cCURRENT_STEP POSITION UPDATED', "color: green", data)
+              })
+            }
+          } else {
+            // console.log('%cSTEP SUBMIT SITUATION', 'color:orange')
+            return this.props.submitAcceptedStep({
+              variables: {
+                step: this.props.step,
+                goalDocId: this.props.goalDocId,
+                positionIndex: stepObj.positionIndex,
+                suggestedStep: false
+              }
+            }).catch((error) => {
+              console.log(error)
+            // }).then(({data}) => {
+              // console.log('%cSTEP SUBMITTED', 'color:green', data)
+              .then(({data}) => this.props.dispatch(actions.setStepIdFromServer(mapIndex, data.createStep.id)))
+
+            }).then(() => this.props.deleteClonedStep({
+              variables: {
+                id: this.props.stepId
+              }
+            }))
+            .then(({data}) => console.log('deletedClonedStep', data))
+            .then(() => this.props.dispatch(actions.resolveAcceptStep())
+            )
+          }
+          if (nextProps.clonedStepIdQuery.allClonedSteps.length > this.props.clonedStepIdQuery.allClonedSteps.length) {
+            console.log(nextProps.clonedStepIdQuery)
+          }
+
+          console.log('nextProps called / no change currentGoalSteps')
+        })
+
+        // .then(({data}) => console.log('mutation sent', data))
+
+        // let _stepIdsFromServer
+        // nextProps.clonedStepIdQuery.refetch()
+        // console.log('allClonedSteps refetch', nextProps.clonedStepIdQuery.allClonedSteps)
+        // if (!nextProps.clonedStepIdQuery.loading) {
+        //   console.log('nextProps.clonedStepIdQuery.allClonedSteps', nextProps.clonedStepIdQuery.allClonedSteps)
+        //   _stepIdsFromServer = nextProps.clonedStepIdQuery.allClonedSteps.map((item) => item.id)
+        //   let _idMatchingServerAndStore
+        //
+        //   nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
+        //     console.log('MAP CALLED, _stepIdsFromServer =', _stepIdsFromServer)
+        //     if (_stepIdsFromServer !== undefined && _stepIdsFromServer.length && stepObj.id) {
+        //       console.log('%c**CLONED_STEP UPDATE SITUATION', 'color:blue')
+        //       _idMatchingServerAndStore = _stepIdsFromServer.filter((idFromServer) => {
+        //         return idFromServer === stepObj.id
+        //       })
+        //       if (_idMatchingServerAndStore !== undefined && _idMatchingServerAndStore.length) {
+        //         console.log('%cCLONED_STEP ID MATCHES', 'color:purple', _idMatchingServerAndStore)
+        //         return this.props.positionUpdateMutationClonedStep({
+        //           variables: {
+        //             id: _idMatchingServerAndStore[0],
+        //             positionIndex: stepObj.positionIndex
+        //           }
+        //         }).then(({data}) => {
+        //           console.log('%cCLONED_STEP POSITION UPDATED', 'color:green', data)
+        //         }).then( () => {
+        //               this.props.dispatch(actions.removeClonedStep(this.props.index))
+        //               this.props.dispatch(actions.setClonedStepPositionIndex())
+        //             }
+        //             )
+        //           // .then(
+        //           //   () => this.setState((prevState) =>  ({successMutation: !prevState.successMutation}))
+        //           // )
+        //       }
+        //     }
+        //     console.log('nextProps called / no change currentGoalStepsClone')
+        //     })
+        // }
+
+      }
+    }
+  }
+
+  render() {
+
+    if (this.props.resolveAcceptStep) {
+    // this.props.clonedStepIdQuery.refetch().then(({data}) => console.log(data.allClonedSteps))
+
+      this.props.clonedStepIdQuery.refetch().then(({data}) =>
+        this._updateStepPositionIndex(this.props.clonedStepIdQuery.allClonedSteps))
+
+        // console.log('allClonedSteps', this.props.clonedStepIdQuery.allClonedSteps)
+
+      //  .then(({data}) => console.log(data.allClonedSteps))
+      // =>_stepIdsFromServer = data)
+      //  console.log(_stepIdsFromServer)
+      // after deleting cloned step above, need to get single cloned step value in _stepsIds from server
+      // if (!this.props.clonedStepIdQuery.loading) {
+      //   console.log('this.props.clonedStepIdQuery.allClonedSteps', this.props.clonedStepIdQuery.allClonedSteps)
+      //   _stepIdsFromServer = this.props.clonedStepIdQuery.allClonedSteps.map((item) => item.id)
+      //   let _idMatchingServerAndStore
+      //   this.props.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
+      //     console.log('MAP CALLED, _stepIdsFromServer =', _stepIdsFromServer)
+      //     if (_stepIdsFromServer !== undefined && _stepIdsFromServer.length && stepObj.id) {
+      //       console.log('%c**CLONED_STEP UPDATE SITUATION', 'color:blue')
+      //       _idMatchingServerAndStore = _stepIdsFromServer.filter((idFromServer) => {
+      //         return idFromServer === stepObj.id
+      //       })
+      //       if (_idMatchingServerAndStore !== undefined && _idMatchingServerAndStore.length) {
+      //         console.log('%cCLONED_STEP ID MATCHES', 'color:purple', _idMatchingServerAndStore)
+      //         return this.props.positionUpdateMutationClonedStep({
+      //           variables: {
+      //             id: _idMatchingServerAndStore[0],
+      //             positionIndex: stepObj.positionIndex
+      //           }
+      //         }).then(({data}) => {
+      //           console.log('%cCLONED_STEP POSITION UPDATED', 'color:green', data)
+      //         }).then(() => {
+      //           this.props.dispatch(actions.removeClonedStep(this.props.index))
+      //           this.props.dispatch(actions.setClonedStepPositionIndex())
+      //         })
+      //         this.setState((prevState) => ({
+      //           successMutation: !prevState.successMutation
+      //         }))
+      //       }
+      //     }
+      //     // console.log('this.props called / no change currentGoalStepsClone')
+    // })
+      // }
+    }
+    // console.log('this.props.stepQuery render', this.props)
+    return (
+      <div>
+        <button>cancel</button>
+        <button onClick={this._submitAcceptedStep}>confirm</button>
+        {this.state.successMutation
+          ? <div>
+            <p>
+              Success!
+            </p>
+          </div>
+        : null}
+      </div>
+    )
+  }
 }
+const mapStateToProps = (state, props) => {
+  return {currentGoalSteps: state.goals.currentGoalSteps, goalDocId: state.goals.currentGoalID, currentGoalStepsClone: state.goals.currentGoalStepsClone, resolveAcceptStep: state.goals.resolveAcceptStep}
 }
 
-const AcceptStepMutation = gql `
+const _stepQuery = gql `
+query ($goalDocId: ID) {
+  allSteps(
+    filter: {goalDoc: {id: $goalDocId}}, orderBy: positionIndex_ASC
+  ) {
+    id
+    step
+    positionIndex
+  }
+}`
+
+const acceptStepMutation = gql `
 mutation($step:String!, $positionIndex:Int, $suggestedStep: Boolean, $goalDocId: ID){
   createStep(step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, goalDocId: $goalDocId) {
     id
     step
   }}`
 
-const RemoveClonedStep = gql `
+const removeClonedStepMutation = gql `
 mutation($id: ID!){
   deleteClonedStep(id: $id) {
     id
   }}`
 
+const positionUpdateMutationStep = gql `mutation($id:ID!,
+$positionIndex: Int)
+  {updateStep(id:$id, positionIndex: $positionIndex
+  ) {
+    id
+  }}`
 
-const AcceptStepWithMutation =
-compose(
-  graphql(AcceptStepMutation,
-  {
-    props: ({mutate}) => ({
-      createStep({variables}) {
-        return mutate({
-          variables: {...variables}
-        })
-        .catch((error) => {
-          console.log('there was an error sending the mutation', error)
-        })
-      }
-    })
-}),
-graphql(RemoveClonedStep,
-{
-  props:({mutate}) => ({
-    deleteClonedStep({variables}) {
-      return mutate({
-        variables: {...variables}
-      })
-      .catch((error) => {
+const positionUpdateMutationClonedStep = gql `mutation($id: ID!, $positionIndex: Int)
+ {updateClonedStep(id:$id, positionIndex: $positionIndex
+) {
+   id
+ }}`
+
+const clonedStepIdQuery = gql `
+  query($goalDocId:ID){
+    allClonedSteps(
+      filter:{goalDoc:{id:$goalDocId}}
+    )
+   {
+   id
+  }}`
+
+// const userQuery = gql `
+//   query userQuery {
+//     user {
+//       id
+//     }
+//   }
+// `
+
+connect(mapStateToProps)(AcceptStep)
+
+const AcceptStepWithMutation = compose(
+// graphql(userQuery, {
+//   options: {
+//     fetchPolicy: 'network-only'
+//   }
+// }),
+graphql(_stepQuery, {
+  name: 'stepQuery',
+  options: ({goalDocId}) => ({fetchPolicy: 'network-only', notifyOnNetworkStatusChange: true, variables: {
+      goalDocId
+    }})
+}), graphql(clonedStepIdQuery, {
+  name: 'clonedStepIdQuery',
+  options: ({goalDocId}) => ({
+    // fetchPolicy: 'network-only',
+   variables: {
+      goalDocId
+    }})
+}), graphql(acceptStepMutation, {
+  name: 'submitAcceptedStep',
+  props: ({submitAcceptedStep}) => ({
+    submitAcceptedStep({variables}) {
+      return submitAcceptedStep({
+        variables: {
+          ...variables
+        }
+      }).catch((error) => {
         console.log('there was an error sending the mutation', error)
       })
     }
   })
-})
-)(AcceptStep)
+}), graphql(positionUpdateMutationStep, {
+  name: 'positionUpdateMutationStep',
+  props: ({positionUpdateMutationStep}) => ({
+    positionUpdateMutationStep({variables}) {
+      return positionUpdateMutationStep({
+        variables: {
+          ...variables
+        }
+      }).catch((error) => {
+        console.error(error)
+      })
+    }
+  })
+}), graphql(removeClonedStepMutation, {
+  name: 'deleteClonedStep',
+  props: ({deleteClonedStep}) => ({
+    deleteClonedStep({variables}) {
+      return deleteClonedStep({
+        variables: {
+          ...variables
+        }
+      }).catch((error) => {
+        console.log('there was an error sending the mutation', error)
+      })
 
-export default connect()(AcceptStepWithMutation)
+    }
+  })
+}), graphql(positionUpdateMutationClonedStep, {
+  name: 'positionUpdateMutationClonedStep',
+  props: ({positionUpdateMutationClonedStep}) => ({
+    positionUpdateMutationClonedStep({variables}) {
+      return positionUpdateMutationClonedStep({
+        variables: {
+          ...variables
+        }
+      }).catch((error) => {
+        console.error(error)
+      })
+    }
+  })
+}))(AcceptStep)
+
+export default connect(mapStateToProps)(AcceptStepWithMutation)

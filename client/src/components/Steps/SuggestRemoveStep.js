@@ -14,7 +14,7 @@ class SuggestRemoveStep extends Component {
       }
     }).then(({data}) => {
     this.props.dispatch(actions.suggestRemoveStep(this.props.indexToRemove))
-    this.props.dispatch(actions.setSuggestedStepPositionIndex())
+    this.props.dispatch(actions.setClonedStepPositionIndex())
   })
     return null
   }
