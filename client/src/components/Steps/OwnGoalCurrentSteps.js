@@ -222,13 +222,17 @@ class OwnGoalCurrentSteps extends Component {
     if (this.state.toggleSuggestedSteps === true) {
       currentGoalSteps = this.props.currentGoalStepsClone
     } else {
-      //monkey fix
-      currentGoalSteps =  this.props.currentGoalSteps.map((step) => ({step}))
+      currentGoalSteps =  this.props.currentGoalSteps
     }
+
+
+    const clonedSteps = <p> Cloned Steps </p>
+    const steps = <p> Steps </p>
     return (
       <div>
         <button onClick={this._toggleSuggestedSteps}>Show/Hide Sugguested Steps
         </button>
+        {this.state.toggleSuggestedSteps ? clonedSteps : steps}
         <SortableList randomColorStep={this.props.randomColorStep} items={currentGoalSteps} onSortEnd={this.onSortEnd.bind(this)} onSortStart={this.onSortStart.bind(this)} helperClass="sortable-helper" hideSortableGhost={true} pressDelay={100} newIndex={this.state.newIndex} oldIndex={this.state.oldIndex} indexInMotion={this.state.indexInMotion}
           goalDocId={this.props.goalDocId}
         />
