@@ -5,7 +5,7 @@ import AddStep from './AddStep.js'
 import AcceptStep from './AcceptStep.js'
 
   const StepWithButtons = (props) => {
-console.log(props.value.step)
+// console.log(props.value.step)
 
   return (
     <div className="sortable-item-wrapper">

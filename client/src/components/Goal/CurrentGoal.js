@@ -52,7 +52,6 @@ class CurrentGoal extends Component {
           this.props.dispatch(actions.setClonedSteps(nextProps.data.GoalDoc.clonedSteps))
       }
       if (this.props.loggedInUser !== this.props.targetUser) {
-
           this.props.dispatch(actions.cloneCurrentSteps(nextProps.data.GoalDoc.steps))
           // console.log('cloneCurrentSteps called from CurrentGoal.js')
     }
@@ -76,7 +75,7 @@ query ($varID: ID) {
   GoalDoc(id: $varID) {
    goal
    id
-   steps(orderBy:createdAt_ASC) {
+   steps(orderBy:positionIndex_ASC) {
      step
      positionIndex
      suggestedStep

@@ -114,19 +114,6 @@ export const setStepPositionIndex = () => {
  }
 }
 
-
-export const CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS = 'CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS'
-export const cloneCurrentStepsToSuggestedSteps = (steps) => {
-    // console.log('cloneCurrentSteps',steps)
-    let flatSteps = steps.map(step => ({step:step.step, suggestedStep: false, positionIndex:step.positionIndex }))
-    // console.log('actions/flatSteps', flatSteps)
-    // let flatStepsObj = {step: flatSteps, suggestedStep:false}
-  return {
-    type: CLONE_CURRENT_STEPS_TO_SUGGESTED_STEPS,
-    flatSteps: flatSteps
-  }
-}
-
 export const SET_USERDOC_ID = 'SET_USERDOC_ID';
 export const setUserDocID = userDocID => ({type: SET_USERDOC_ID, userDocID})
 
@@ -149,6 +136,19 @@ export const REMOVE_CLONED_STEP = 'REMOVE_CLONED_STEP'
 export const removeClonedStep = index => {
   // const indexArr = [index]
   return {type: REMOVE_CLONED_STEP, index}
+}
+
+export const SET_SUGGESTED_TO_FALSE = 'SET_SUGGESTED_TO_FALSE'
+export const setSuggestedToFalse = (stepObj, index) => {
+    const updatedStepObj = {
+      step: stepObj.step,
+      suggestedStep: false,
+      positionIndex: stepObj.positionIndex,
+      suggester: stepObj.suggester,
+      id: stepObj.id
+    }
+
+  return {type: SET_SUGGESTED_TO_FALSE, updatedStepObj, index}
 }
 
 export const suggestRemoveStep = () => {
