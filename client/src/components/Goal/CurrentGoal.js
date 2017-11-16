@@ -20,8 +20,8 @@ class CurrentGoal extends Component {
 
   /* RENDER METHOD */
   render() {
-    if (this.props.data) {
-      const {data: {loading,error,GoalDoc}} = this.props;
+    if (this.props.goalDocById) {
+      const {goalDocById: {loading,error,GoalDoc}} = this.props;
       if (!loading) {
         error ? console.log(error) : null
         return (
@@ -40,20 +40,27 @@ class CurrentGoal extends Component {
 
   /*Check if Query was sent and Data Received */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data && nextProps.data.loading === false && nextProps.data.GoalDoc) {
-    if (this.props.data.GoalDoc !== nextProps.data.GoalDoc){
-        // console.log(nextProps.data.GoalDoc)
-        this.props.dispatch(actions.setGoalDoc(nextProps.data.GoalDoc))
-      if (nextProps.data.GoalDoc.clonedSteps.length === 0){
-        // console.log('nextProps.data.GoalDoc', nextProps.data.GoalDoc)
-        // console.log('nextProps.data.GoalDoc.steps', nextProps.data.GoalDoc.steps)
-        this.props.dispatch(actions.cloneCurrentSteps(nextProps.data.GoalDoc.steps))
-    } else if (nextProps.data.GoalDoc.clonedSteps.length >= 1) {
-          this.props.dispatch(actions.setClonedSteps(nextProps.data.GoalDoc.clonedSteps))
+    if (nextProps.goalDocById && nextProps.goalDocById.loading === false && nextProps.goalDocById.GoalDoc) {
+    if (this.props.goalDocById.GoalDoc !== nextProps.goalDocById.GoalDoc){
+        // console.log(nextProps.goalDocById.GoalDoc)
+        this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
+        console.log('goalDoc', nextProps.goalDocById.GoalDoc)
+      if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0){
+        // console.log('nextProps.goalDocById.GoalDoc', nextProps.goalDocById.GoalDoc)
+        // console.log('nextProps.goalDocById.GoalDoc.steps', nextProps.goalDocById.GoalDoc.steps)
+        this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
+    } else if (nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
+          this.props.dispatch(actions.setClonedSteps(nextProps.goalDocById.GoalDoc.clonedSteps))
       }
       if (this.props.loggedInUser !== this.props.targetUser) {
-          this.props.dispatch(actions.cloneCurrentSteps(nextProps.data.GoalDoc.steps))
+          console.log('currentGoalSteps', nextProps.goalDocById.GoalDoc.steps)
+          if(nextProps.goalDocById.GoalDoc.steps.length > this.props.currentGoalSteps.length) {
+            this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
+          }
+          // else {
+          // this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
           // console.log('cloneCurrentSteps called from CurrentGoal.js')
+      // }
     }
   }
     }
@@ -94,8 +101,10 @@ query ($varID: ID) {
 }`;
 
 const CurrentGoalWithData = graphql(FetchGoalDocByID, {
+  name: 'goalDocById',
   skip: (props) => !props.id,
   options: ({id}) => ({
+    fetchPolicy: 'network-only',
     variables: {
       varID: id
     }

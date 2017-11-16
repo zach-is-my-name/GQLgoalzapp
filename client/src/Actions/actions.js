@@ -199,7 +199,9 @@ export const cloneCurrentSteps = (steps) => {
 
 export const SET_CLONED_STEPS = 'SET_CLONED_STEPS'
 export const setClonedSteps = clonedSteps => {
-    let flatSteps = clonedSteps.map(clonedStepObj => ({step: clonedStepObj.step, suggestedStep: clonedStepObj.suggestedStep, positionIndex: clonedStepObj.positionIndex, suggester: clonedStepObj.suggester.userName, id:clonedStepObj.id}))
+    let flatSteps = clonedSteps.map(clonedStepObj => ({step: clonedStepObj.step, suggestedStep: clonedStepObj.suggestedStep, positionIndex: clonedStepObj.positionIndex,
+      // suggester: clonedStepObj.suggester.userName, 
+      id:clonedStepObj.id}))
     return {type: SET_CLONED_STEPS, flatSteps}
 }
 

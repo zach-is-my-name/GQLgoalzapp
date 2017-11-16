@@ -12,6 +12,7 @@ class SuggestStep extends Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this._submitSuggestedStep = this._submitSuggestedStep.bind(this)
+    this.submitSubsequent = this.submitSubsequent.bind(this)
     this.state = {
       step: " ",
     }
@@ -32,9 +33,78 @@ class SuggestStep extends Component {
     this.setState({step: e.target.value});
   }
 
+
+ submitSubsequent(allClonedSteps) {
+    let stepIdsFromServer = allClonedSteps.map(item => item.id)
+    // console.log('stepIdsFromServer', stepIdsFromServer)
+
+    let idMatchingServerAndStore
+
+    this.props.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
+        idMatchingServerAndStore = stepIdsFromServer.filter((idFromServer) => {
+          return idFromServer === stepObj.id
+        })
+      // if (stepIdsFromServer !== undefined && stepIdsFromServer.length  && stepObj.id) {
+        // console.log('%c**UPDATE SITUATION**', "color:blue")
+
+        if (idMatchingServerAndStore !== undefined && idMatchingServerAndStore.length) {
+        console.log('%c**UPDATE SITUATION**', "color:blue")
+          // console.log('%cID MATCHES', "color:purple", idMatchingServerAndStore)
+          return this.props.submitPositionUpdate({
+            variables: {
+              id: idMatchingServerAndStore[0],
+              positionIndex: stepObj.positionIndex
+            }
+          }).then(({data}) => {
+            // console.log('%cSTEP POSITION UPDATED', "color:green", data)
+          })
+        }
+      // }
+
+      else if (!idMatchingServerAndStore.length && stepObj.suggestedStep === true) {
+        // console.log('%cSUBMIT SITUATION *Suggested Step*', "color:orange")
+        // console.log('this.props', )
+        return this.props.submitSuggestedStep({
+          variables: {
+            suggestedStep: true,
+            step: stepObj.step,
+            positionIndex: stepObj.positionIndex,
+            goalDocId: this.props.goalDocID,
+            suggesterId:this.props.loggedInUserID
+          }
+        }).then(({data}) => {
+          // console.log('%cNEW STEP SUBMITTED',"color:green", data);
+          this.props.dispatch(actions.setSuggestedStepIdFromServer(mapIndex, data.createClonedStep.id))
+        }).then(() => this.props.dispatch(actions.resolveAcceptStep()))
+      }
+
+      else if (!idMatchingServerAndStore && stepObj.suggestedStep === false) {
+        // console.log('%cSUBMIT SITUATION *Existing step*', "color:orange")
+        return this.props.submitSuggestedStep({
+          variables: {
+            suggestedStep: false,
+            step: stepObj.step,
+            positionIndex: stepObj.positionIndex,
+            goalDocId: this.props.goalDocID,
+            suggesterId: this.props.loggedInUserID
+          }
+        }).then(({data}) => {
+          // console.log('%cEXISTING STEP SUBMITTED', "color:green",data);
+          this.props.dispatch(actions.setSuggestedStepIdFromServer(mapIndex, data.createClonedStep.id))
+        }).then(() => this.props.dispatch(actions.resolveAcceptStep()))
+
+      }
+      // console.log('no change currentGoalStepsClone')
+      return
+    })
+
+ }
+
+
   //use this to get the step you added from dispatch in mapStateToProps
+
   componentWillReceiveProps(nextProps) {
-    console.log('componentwillreceiveprops called')
+    // console.log('componentwillreceiveprops called')
     // const {step} = this.state
     const goalDocId = nextProps.currentGoalID
     const suggesterId = nextProps.loggedInUserID
@@ -44,76 +114,68 @@ class SuggestStep extends Component {
 
     const {data: {loading, error, allClonedSteps}} = this.props
 
-    if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
-      console.log('nextprops > this.props')
-    this.props.data.refetch()
-
     if (!nextProps.data.loading) {
-    console.log('%cQUERY CALLED NEW STEP / RE-FETCH', "font-weight: bold", allClonedSteps)
-      stepIdsFromServer = nextProps.data.allClonedSteps.map((item) =>
-         item.id
-        )
+    if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
+
+    // console.log('%cQUERY CALLED / ALL CLONED STEPS', "font-weight: bold", nextProps.data.allClonedSteps)
+      stepIdsFromServer = nextProps.data.allClonedSteps.map(item => item.id)
 
 
     let idMatchingServerAndStore
 
     nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
-
-      console.log('MAP CALLED, stepIdsFromServer =', stepIdsFromServer)
-      if (stepIdsFromServer !== undefined && stepIdsFromServer.length  && stepObj.id) {
-        console.log('%c**UPDATE SITUATION**', "color:blue")
         idMatchingServerAndStore = stepIdsFromServer.filter((idFromServer) => {
           return idFromServer === stepObj.id
         })
-
+      console.log(idMatchingServerAndStore.length)
+      // if (stepIdsFromServer !== undefined && stepIdsFromServer.length > this.props.currentGoalStepsClone.length  && stepObj.id) {
         if (idMatchingServerAndStore !== undefined && idMatchingServerAndStore.length) {
-          console.log('%cID MATCHES', "color:purple", idMatchingServerAndStore)
+        // console.log('%c**UPDATE SITUATION**', "color:blue")
+          // console.log('%cID MATCHES', "color:purple", idMatchingServerAndStore)
           return this.props.submitPositionUpdate({
             variables: {
               id: idMatchingServerAndStore[0],
               positionIndex: stepObj.positionIndex
             }
           }).then(({data}) => {
-            console.log('%cSTEP POSITION UPDATED', "color:green", data)
+            // console.log('%cSTEP POSITION UPDATED', "color:green", data)
           })
         }
-      }
 
-      else if (stepObj.suggestedStep === true) {
-        console.log('%cSUBMIT SITUATION *suggestedStep*', "color:orange")
-        console.log('this.props', )
+
+      else if (!idMatchingServerAndStore.length && stepObj.suggestedStep === true) {
+        // console.log('%cSUBMIT SITUATION *Suggested Step*', "color:orange")
         return this.props.submitSuggestedStep({
           variables: {
             suggestedStep: true,
             step: stepObj.step,
             positionIndex: stepObj.positionIndex,
-            goalDocId,
-            suggesterId
+            goalDocId: this.props.goalDocID,
+            suggesterId: this.props.loggedInUserID
           }
         }).then(({data}) => {
-          console.log('%cNEW STEP SUBMITTED',"color:green", data);
+          // console.log('%cNEW STEP SUBMITTED',"color:green", data);
           this.props.dispatch(actions.setSuggestedStepIdFromServer(mapIndex, data.createClonedStep.id))
-        })
-      }
+        }).then(() => this.props.dispatch(actions.resolveAcceptStep())
+    )}
 
-      else if (stepObj.suggestedStep === false) {
-        console.log('%cSUBMIT SITUATION *Existing step*', "color:orange")
+      else if (!idMatchingServerAndStore.length && stepObj.suggestedStep === false) {
+        // console.log('%cSUBMIT SITUATION *Existing step*', "color:orange")
         return this.props.submitSuggestedStep({
           variables: {
             suggestedStep: false,
             step: stepObj.step,
             positionIndex: stepObj.positionIndex,
-            goalDocId,
+            goalDocId: this.props.goalDocID,
             suggesterId
           }
         }).then(({data}) => {
-          console.log('%cEXISTING STEP SUBMITTED', "color:green",data);
+          // console.log('%cEXISTING STEP SUBMITTED', "color:green",data);
           this.props.dispatch(actions.setSuggestedStepIdFromServer(mapIndex, data.createClonedStep.id))
-        })
-
+        }).then(() => this.props.dispatch(actions.resolveAcceptStep()))
       }
-      console.log('nextProps called / no change currentGoalStepsClone')
-      return
+    // }
+      // console.log('nextProps called / no change currentGoalStepsClone')
     })
     }
   }
@@ -128,9 +190,9 @@ class SuggestStep extends Component {
     //   return (<Redirect to ={{
     //     pathname: '/'
     //   }}/>)
-    // console.log('currentGoalStepsClone', this.props.currentGoalStepsClone)
-    // console.log(this.props)
-
+    if( this.props.resolveAcceptStep) {
+      this.props.data.refetch().then(({data}) => this.submitSubsequent(this.props.data.allClonedSteps))
+        }
 
     if (this.props.loggedInUserID !== this.props.targetUserID) {
       return (
@@ -149,8 +211,7 @@ class SuggestStep extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  // console.log('mapStateToProps called')
-  return {loggedInUserID: state.goals.loggedInUserID, targetUserID: state.goals.targetUserID, currentGoalID: state.goals.currentGoalID, currentGoalStepsClone: state.goals.currentGoalStepsClone, goalDocID: state.goals.currentGoalID}
+  return {loggedInUserID: state.goals.loggedInUserID, targetUserID: state.goals.targetUserID, currentGoalID: state.goals.currentGoalID, currentGoalStepsClone: state.goals.currentGoalStepsClone, goalDocID: state.goals.currentGoalID, resolveAcceptStep: state.goals.resolveAcceptStep}
 }
 
 const userQuery = gql `
@@ -199,7 +260,6 @@ graphql(userQuery, {
 }),
 graphql(clonedStepIdQuery, {
   options: ({goalDocID}) => ({
-    fetchPolicy: 'network-only',
     variables: {
       id: goalDocID
     }
