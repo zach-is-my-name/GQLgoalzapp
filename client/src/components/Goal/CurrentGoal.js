@@ -40,23 +40,23 @@ class CurrentGoal extends Component {
 
   /*Check if Query was sent and Data Received */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.goalDocById && nextProps.goalDocById.loading === false && nextProps.goalDocById.GoalDoc) {
-    if (this.props.goalDocById.GoalDoc !== nextProps.goalDocById.GoalDoc){
-        // console.log(nextProps.goalDocById.GoalDoc)
-        this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
-        console.log('goalDoc', nextProps.goalDocById.GoalDoc)
-      if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0){
+    if (nextProps.goalDocById && !nextProps.goalDocById.loading && nextProps.goalDocById.GoalDoc) {
+        // console.log('this.props.goalDocById.GoalDoc', this.props.goalDocById.GoalDoc)
         // console.log('nextProps.goalDocById.GoalDoc', nextProps.goalDocById.GoalDoc)
-        // console.log('nextProps.goalDocById.GoalDoc.steps', nextProps.goalDocById.GoalDoc.steps)
-        this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
-    } else if (nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
-          this.props.dispatch(actions.setClonedSteps(nextProps.goalDocById.GoalDoc.clonedSteps))
-      }
-      if (this.props.loggedInUser !== this.props.targetUser) {
-          console.log('currentGoalSteps', nextProps.goalDocById.GoalDoc.steps)
-          if(nextProps.goalDocById.GoalDoc.steps.length > this.props.currentGoalSteps.length) {
-            this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
-          }
+
+        if (this.props.goalDocById.GoalDoc !== nextProps.goalDocById.GoalDoc) {
+          this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
+
+              if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0){
+                this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
+              }
+               else if (this.props.loggedInUser === this.props.targetUser &&  nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
+                this.props.dispatch(actions.setClonedStepsFromServer(nextProps.goalDocById.GoalDoc.clonedSteps))
+            }
+              if (this.props.loggedInUser !== this.props.targetUser) {
+                if(nextProps.goalDocById.GoalDoc.steps.length > this.props.currentGoalSteps.length) {
+                  this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
+                }
           // else {
           // this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
           // console.log('cloneCurrentSteps called from CurrentGoal.js')
@@ -77,6 +77,7 @@ const mapStateToProps = (state, props) => {
 const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoal);
 
 /* GRAPHQL QUERY */
+
 const FetchGoalDocByID = gql `
 query ($varID: ID) {
   GoalDoc(id: $varID) {
@@ -87,12 +88,14 @@ query ($varID: ID) {
      positionIndex
      suggestedStep
      id
+     originalId
    }
    clonedSteps(orderBy:positionIndex_ASC) {
      step
      positionIndex
      id
      suggestedStep
+     originalId
      suggester {
        userName
      }

@@ -90,7 +90,7 @@ if(action.type === 'SET_STEP_ID_FROM_SERVER') {
   })
 }
 
-if (action.type === 'SET_SUGGESTED_STEP_ID_FROM_SERVER'){
+if (action.type === 'SET_CLONED_STEP_ID_FROM_SERVER'){
   return update(state, {
     currentGoalStepsClone: {[action.index]: {id: { $set: action.id}}}
   })
@@ -166,16 +166,17 @@ if (action.type === 'CLONE_CURRENT_STEPS') {
   })
 }
 
-if (action.type === 'SET_CLONED_STEPS') {
+if (action.type === 'SET_CLONED_STEPS_FROM_SERVER') {
   return update(state, {
     currentGoalStepsClone: {$set: action.flatSteps}
   })
 }
 
 if (action.type === 'RESOLVE_ACCEPT_STEP') {
-  return update(state, {
-    resolveAcceptStep: {$set:true}
-  })
+  return {
+    ...state,
+    resolveAcceptStep: !state.resolveAcceptStep
+  }
 }
 
 // if (action.type === 'MERGE_STEPS_CLONE') {

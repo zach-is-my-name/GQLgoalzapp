@@ -32,12 +32,13 @@ export const setGoalDoc = goalDoc => {
 };
 
 export const SET_STEP = 'SET_STEP';
-export const setStep = (step, index,id) => {
+export const setStep = (step, index, id) => {
   const stepObj = {
     step: step,
     suggestedStep: false,
     id,
     positionIndex: null,
+    originalId: id
   }
 
   return ({
@@ -54,7 +55,7 @@ export const setStepIdFromServer = (index, id) =>
 
 //where is the index being passed in SuggestStep.js?
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
-export const setSuggestedStep = (suggestedStep, index,id) => {
+export const setSuggestedStep = (suggestedStep, index, id) => {
   const stepObj = {
     step: suggestedStep,
     suggestedStep: true,
@@ -64,11 +65,11 @@ export const setSuggestedStep = (suggestedStep, index,id) => {
   return ({type: SET_SUGGESTED_STEP, suggestedStep: stepObj, index: index})
 }
 
-export const SET_SUGGESTED_STEP_ID_FROM_SERVER = 'SET_SUGGESTED_STEP_ID_FROM_SERVER'
-export const setSuggestedStepIdFromServer = (index,id) => {
+export const SET_CLONED_STEP_ID_FROM_SERVER = 'SET_CLONED_STEP_ID_FROM_SERVER'
+export const setClonedStepIdFromServer = (index,id) => {
   // const stepsArr = store.getState().goals.currentGoalStepsClone
   // stepsArr[index].id = id
-  return {type: SET_SUGGESTED_STEP_ID_FROM_SERVER, index, id }
+  return {type: SET_CLONED_STEP_ID_FROM_SERVER, index, id }
 }
 
 export const SET_CLONED_STEP_POSITION_INDEX ='SET_CLONED_STEP_POSITION_INDEX'
@@ -191,19 +192,20 @@ export const moveStepOnClone = (newStepOrder) => {
 export const CLONE_CURRENT_STEPS = 'CLONE_CURRENT_STEPS'
 export const cloneCurrentSteps = (steps) => {
   // console.log('cloneCurrentSteps', steps)
-  let flatSteps = steps.map(step =>  ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex}))
+  let flatSteps = steps.map(step =>  ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex, id: step.id, originalId: step.originalId}))
   // console.log('actions/flatSteps', flatSteps)
   // let flatStepsObj = {step: flatSteps, suggestedStep:false}
   return {type: CLONE_CURRENT_STEPS, flatSteps: flatSteps}
 }
 
-export const SET_CLONED_STEPS = 'SET_CLONED_STEPS'
-export const setClonedSteps = clonedSteps => {
-    let flatSteps = clonedSteps.map(clonedStepObj => ({step: clonedStepObj.step, suggestedStep: clonedStepObj.suggestedStep, positionIndex: clonedStepObj.positionIndex,
-      // suggester: clonedStepObj.suggester.userName, 
+export const SET_CLONED_STEPS_FROM_SERVER = 'SET_CLONED_STEPS_FROM_SERVER'
+export const setClonedStepsFromServer = clonedSteps => {
+    let flatSteps = clonedSteps.map(clonedStepObj => ({step: clonedStepObj.step, suggestedStep: clonedStepObj.suggestedStep, positionIndex: clonedStepObj.positionIndex, originalId: clonedStepObj.originalId,
+      // suggester: clonedStepObj.suggester.userName,
       id:clonedStepObj.id}))
-    return {type: SET_CLONED_STEPS, flatSteps}
+    return {type: SET_CLONED_STEPS_FROM_SERVER, flatSteps}
 }
+
 
 export const RESOLVE_ACCEPT_STEP ='RESOLVE_ACCEPT_STEP'
 export const resolveAcceptStep = () => {
