@@ -7,6 +7,46 @@ import {withRouter, Redirect} from 'react-router-dom'
 import * as actions from '../../Actions/actions'
 // import '../../style/SuggestStep.css'
 
+const userQuery = gql `
+  query userQuery {
+    user {
+      id
+    }
+  }
+`
+const clonedStepIdQuery = gql `
+query($id:ID){
+  allClonedSteps(
+    filter:{goalDoc:{id:$id}}
+  )
+ {
+ id
+ originalId
+}}`
+
+const _suggestStepMutation = gql `mutation ($positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $goalDocId: ID, $suggesterId: ID) {
+  createClonedStep(
+    positionIndex: $positionIndex,
+    step: $step,
+    suggestedStep: $suggestedStep,
+    goalDocId: $goalDocId,
+    suggesterId: $suggesterId)
+    {
+    step,
+    positionIndex,
+    id,
+    suggestedStep
+  }
+}`
+
+const positionUpdateMutation = gql `mutation($id: ID!, $positionIndex: Int)
+ {updateClonedStep(id:$id, positionIndex: $positionIndex
+) {
+   id
+   positionIndex
+   step
+ }}`
+
 class SuggestStep extends Component {
   constructor(props) {
     super(props)
@@ -37,25 +77,19 @@ class SuggestStep extends Component {
       let serverClonedStepIds = nextProps.data.allClonedSteps.map(item => item.id)
 
       if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
-
         console.log('%cALL CLONED STEPS', "font-weight: bold", nextProps.data.allClonedSteps)
-
         console.log('serverClonedStepIds', serverClonedStepIds)
-
         let serverAndStateIdsMatch
-
         console.log('currentGoalStepsClone', nextProps.currentGoalStepsClone)
 
         nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
-
           console.log('stepObj ==', stepObj)
-
             serverAndStateIdsMatch = serverClonedStepIds.filter(idFromServer =>
                idFromServer === stepObj.originalId)
 
           console.log('serverAndStateIdsMatch', serverAndStateIdsMatch)
 
-            if (serverAndStateIdsMatch  && serverAndStateIdsMatch.length) {
+            if (serverAndStateIdsMatch && serverAndStateIdsMatch.length) {
             console.log('%c**UPDATE SITUATION**', "color:blue")
             // console.log('%cID MATCHES', "color:purple", serverAndStateIdsMatch)
               return this.props.submitPositionUpdate({
@@ -119,7 +153,7 @@ class SuggestStep extends Component {
     //     pathname: '/'
     //   }}/>)
 
-    // if(this.props.resolveAcceptStep) {
+    // ifthis.props.resolveAcceptStep) {
     //   this.props.data.refetch().then(({data}) => this.submitSubsequent(this.props.data.allClonedSteps))
     //     }
 
@@ -206,45 +240,6 @@ const mapStateToProps = (state, props) => {
   return {loggedInUserID: state.goals.loggedInUserID, targetUserID: state.goals.targetUserID, currentGoalID: state.goals.currentGoalID, currentGoalStepsClone: state.goals.currentGoalStepsClone, goalDocID: state.goals.currentGoalID, resolveAcceptStep: state.goals.resolveAcceptStep}
 }
 
-const userQuery = gql `
-  query userQuery {
-    user {
-      id
-    }
-  }
-`
-const clonedStepIdQuery = gql `
-query($id:ID){
-  allClonedSteps(
-    filter:{goalDoc:{id:$id}}
-  )
- {
- id
- originalId
-}}`
-
-const _suggestStepMutation = gql `mutation ($positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $goalDocId: ID, $suggesterId: ID) {
-  createClonedStep(
-    positionIndex: $positionIndex,
-    step: $step,
-    suggestedStep: $suggestedStep,
-    goalDocId: $goalDocId,
-    suggesterId: $suggesterId)
-    {
-    step,
-    positionIndex,
-    id,
-    suggestedStep
-  }
-}`
-
-const positionUpdateMutation = gql `mutation($id: ID!, $positionIndex: Int)
- {updateClonedStep(id:$id, positionIndex: $positionIndex
-) {
-   id
-   positionIndex
-   step
- }}`
 
 const SuggestStepWithMutation = compose(
 

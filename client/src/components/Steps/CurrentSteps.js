@@ -1,5 +1,5 @@
 /* eslint-disable */
-// //index is passed down as eventIndex because it is restricted in react-sortable
+// //index is passed down as stepIndex because it is restricted in react-sortable
 //
 
 import React, {Component} from 'react';

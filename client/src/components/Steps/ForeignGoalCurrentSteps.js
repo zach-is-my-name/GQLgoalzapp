@@ -22,7 +22,7 @@ class ForeignSortableStepWithButtons extends Component {
       indexToRemove: null,
       activeIndexAddStep: null,
       activeStep: false,
-      eventIndex: null,
+      stepIndex: null,
       activeIndexEditStep: null,
       editStepOn: false,
       editedStep: '',
@@ -33,11 +33,11 @@ class ForeignSortableStepWithButtons extends Component {
     this.clickHandlerYes = this.clickHandlerYes.bind(this)
 }
 
-  clickHandlerEdit(eventIndex, event) {
+  clickHandlerEdit(stepIndex, event) {
     this.setState(prevState => ({
       editStepOn: !prevState.editStepOn
     }))
-    this.setState({activeIndexEditStep: eventIndex, eventIndex: this.props.eventIndex})
+    this.setState({activeIndexEditStep: stepIndex, stepIndex: this.props.stepIndex})
   }
 
   clickHandlerYes(event) {
@@ -56,53 +56,53 @@ class ForeignSortableStepWithButtons extends Component {
     }))
   }
 
-  clickHandlerSuggestAdd(eventIndex){
-    // console.log(eventIndex)
+  clickHandlerSuggestAdd(stepIndex){
+    // console.log(stepIndex)
     // this.setState({})
     this.setState(prevState => ({
-      activeIndexAddStep: eventIndex,
+      activeIndexAddStep: stepIndex,
       activeStep: !prevState.activeStep,
-      eventIndex: this.props.eventIndex
+      stepIndex: this.props.stepIndex
     }))
   }
 
-  clickHandlerSuggestRemove(eventIndex) {
-    console.log('index to remove', eventIndex)
+  clickHandlerSuggestRemove(stepIndex) {
+    console.log('index to remove', stepIndex)
     this.setState(prevState => ({
       toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
     }))
-    this.setState({indexToRemove: eventIndex, eventIndex: this.props.eventIndex})
+    this.setState({indexToRemove: stepIndex, stepIndex: this.props.stepIndex})
   }
 
-  // changeEventIndex(newIndex) {
-  //     this.setState({eventIndex: newIndex})
+  // changestepIndex(newIndex) {
+  //     this.setState({stepIndex: newIndex})
   //   }
 
 
   //USED TO MAINTAIN POSITION ON DRAG BUT
   // componentWillReceiveProps(nextProps) {
-  //   if (this.props.eventIndex !== nextProps.newIndex) {
+  //   if (this.props.stepIndex !== nextProps.newIndex) {
   //     console.log("componentWillReceiveProps called from ForeignGoalCurrentSteps")
-  //     this.setState({eventIndex: nextProps.newIndex})
+  //     this.setState({stepIndex: nextProps.newIndex})
   //     this.props.dispatch(actions.setClonedStepPositionIndex())
   //   }
   // }
 
   render() {
-    const {value, eventIndex, newIndex, oldIndex, indexInMotion} = this.props
+    const {value, stepIndex, newIndex, oldIndex, indexInMotion} = this.props
 
     return (
       <div className="sortable-item-wrapper">
         <div className="row-1">
-          <li className="minus-image"><img key={`imagekey-minus${eventIndex}`} onClick={() => this.clickHandlerSuggestRemove(eventIndex)} alt="" src={minus}/></li>
+          <li className="minus-image"><img key={`imagekey-minus${stepIndex}`} onClick={() => this.clickHandlerSuggestRemove(stepIndex)} alt="" src={minus}/></li>
 
-          <li className="current-step" onClick={(event) => this.clickHandlerEdit(eventIndex, event)} key={eventIndex}>{value}</li>
+          <li className="current-step" onClick={(event) => this.clickHandlerEdit(stepIndex, event)} key={stepIndex}>{value}</li>
 
-          <li className="plus-image"><img key={`imageKey-plus${eventIndex}`} onClick={() => this.clickHandlerSuggestAdd(eventIndex)} alt="" src={plus}/></li>
+          <li className="plus-image"><img key={`imageKey-plus${stepIndex}`} onClick={() => this.clickHandlerSuggestAdd(stepIndex)} alt="" src={plus}/></li>
         </div>
         <div className="row-2">
 
-          {(this.state.toggleOnYesNoPrompt && (this.state.eventIndex !== null) && (this.state.indexToRemove === this.state.eventIndex))
+          {(this.state.toggleOnYesNoPrompt && (this.state.stepIndex !== null) && (this.state.indexToRemove === this.state.stepIndex))
             ? <div className="prompt">
               <p>Remove Step?</p>
               <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
@@ -110,12 +110,12 @@ class ForeignSortableStepWithButtons extends Component {
 
           {this.state.renderRemoveMutation ? <SuggestRemoveStep indexToRemove={this.state.indexToRemove} id={this.props.id} /> : null }
 
-          {(this.state.editStepOn && (this.state.eventIndex !== null) && this.state.activeIndexEditStep === this.state.eventIndex)
-            ? <SuggestEditStep id={this.props.id} index={eventIndex}/>
+          {(this.state.editStepOn && (this.state.stepIndex !== null) && this.state.activeIndexEditStep === this.state.stepIndex)
+            ? <SuggestEditStep id={this.props.id} index={stepIndex}/>
           : null}
 
-          {this.state.activeStep && (this.state.eventIndex !== null) && (this.state.activeIndexAddStep === this.state.eventIndex)
-            ? <SuggestStep index={eventIndex}/>
+          {this.state.activeStep && (this.state.stepIndex !== null) && (this.state.activeIndexAddStep === this.state.stepIndex)
+            ? <SuggestStep index={stepIndex}/>
           : null}
 
         </div>
@@ -135,7 +135,7 @@ class ForeignSortableStepWithButtons extends Component {
 
             return (
               <ul className="sortable-container">
-                {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} eventIndex={index} value={value.step} id={value.id} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
+                {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} stepIndex={index} value={value.step} id={value.id} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
               </ul>
             );
           });

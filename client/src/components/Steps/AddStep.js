@@ -1,81 +1,40 @@
 /* eslint-disable */
 import React, {Component} from 'react'
-import {graphql} from 'react-apollo';
+import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
 import {connect} from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom'
+import {withRouter, Redirect} from 'react-router-dom'
 import * as actions from '../../Actions/actions'
 import '../../style/AddStep.css'
 
-
-/* CLASS DEFINITION */
- class AddStep extends React.Component {
-  constructor(props) {
-    super(props)
-    this.submitStep = this.submitStep.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.state = {
-      step: ''
-    }
-  }
-
-/* EVENT HANDLER */
-  submitStep (event) {
-    event.preventDefault()
-    const {step} = this.state;
-    this.setState({step:''})
-    const goalDocId  = this.props.currentGoalID
-    console.log('STEP INPUT',step)
-    console.log('ID INPUT', goalDocId)
-    console.log('TYPE OF ID', typeof goalDocId)
-    if(this.props.currentGoalID){
-    this.props.createStep({variables: {step, goalDocId}})
-        .then(( {data} ) => {
-          console.log('DATA SUBMITTED', data);
-        /* DISPATCH ACTION */
-        console.log('this is step', step)
-        this.props.dispatch(actions.setStep(step))
-        })
-      }
-      alert("Select a Goal to Enter a Step on")
-    }
-  handleChange (e) {
-    this.setState({step: e.target.value});
-  }
-
-/* RENDER METHOD */
-  render() {
-    // if ( !this.props.targetUserID) {
-    //   return( <div> Loading </div>)
-
-  //   if (!this.props.data.user) {
-  //     console.warn('only logged in users can create new posts')
-  //
-  // }}
-if (this.props.loggedInUserID === this.props.targetUserIDID){
-  return (
-<div className="stepinput-form">
-  <form onSubmit={this.submitStep}>
-    <input type="text" onChange={this.handleChange} placeholder=""
-      value={this.state.step}/>
-    <input type="submit" value="Submit Step"/>
-  </form>
-</div>
-)
-}
-  // console.log('target user is not logged in user')
-  return (null)
+const UpdateOrCreateStep = gql `
+mutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean) {
+  updateOrCreateStep(create: {goalDocId: $goalDocId,
+  step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, }, update: {goalDocId: $goalDocId,
+  positionIndex: $positionIndex, id: $id})
+  {
+   step
+   id
+   goalDoc {
+     id
+   }
   }
 }
+  `
 
-/* GRAPHQL QUERY */
-const StepsMutation = gql                                         `
-  mutation($step:String!, $goalDocId: ID) {
-  createStep(step:$step, goalDocId:$goalDocId) {
-    step
-    id
-  }
-}`
+
+// goalDoc: {steps: {step: $step}}
+
+// const StepIdQuery = gql `
+// query($id:ID){
+//   allSteps(
+//     filter:{goalDoc:{id:$id}}
+//   )
+//  {
+//  id
+//  originalId
+// }}`
+
 
 // const userQuery = gql`
 //   query userQuery {
@@ -85,25 +44,112 @@ const StepsMutation = gql                                         `
 //   }
 // `
 
-const AddStepWithMutation =
-graphql(StepsMutation,{
-    props:({mutate}) => ({
-      createStep({variables}) {
-        return mutate({
-          variables: {...variables }
-        })
-        .catch((error) => {
-          console.log('there was an error sending the query', error)
-        })
-      }
-    })
-})(withRouter(AddStep))
+class AddStep extends React.Component {
+  constructor(props) {
+    super(props)
+    this._submitStep = this._submitStep.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      step: ''
+    }
+  }
 
-/* REDUX */
-const mapStateToProps = (state, props) => {
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedInUserID: state.goals.loggedInUserID,
-    targetUserIDID: state.goals.targetUserID,
+  render() {
+    // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
+
+    if (this.props.loggedInUserID === this.props.targetUserID) {
+      return (<div className="stepinput-form">
+        <form onSubmit={this._submitStep}>
+          <input type="text" onChange={this.handleChange} placeholder="" value={this.state.step}/>
+          <input type="submit" value="Submit Step"/>
+        </form>
+      </div>)
+    }
+    return (null)
+  }
+
+
+  _submitStep(event) {
+    event.preventDefault()
+    // this.setState({step: ''})
+    this.props.dispatch(actions.setStep(this.state.step))
+    this.props.dispatch(actions.setStepPositionIndex())
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("nextProps > props", nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length)
+
+    // if (!nextProps.data.loading) {
+      // let serverStepIds = nextProps.data.allSteps
+    if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
+       nextProps.currentGoalSteps.map(stepObj => {
+        let id
+        if (!stepObj.id) {
+        id = "x"
+      } else {
+        id = stepObj.id
+      }
+         return this.props.updateOrCreateStep({
+           variables: {
+             goalDocId: this.props.goalDocID,
+             step: stepObj.step,
+             id: id,
+             positionIndex: stepObj.positionIndex,
+             suggestedStep: false
+           }
+         })
+      // this.props.createStep({
+      //   variables: {
+      //     step: this.state.step,
+      //     goalDocId,
+      //     positionIndex: this.props.index,
+      //     suggestedStep: false
+      //   }
+      // })
+      .then(({data}) => {
+        console.log('DATA SUBMITTED', data);
+      })
+    })
+    } else {
+      alert("Select a Goal to Enter a Step on")
+      }
+  // }
+  }
+
+  handleChange(e) {
+    this.setState({step: e.target.value});
   }
 }
 
-export default connect(mapStateToProps)(AddStepWithMutation)
+const AddStepWithApollo =
+compose(
+graphql(UpdateOrCreateStep, {
+  props: ({mutate}) => ({
+    updateOrCreateStep({variables}) {
+      return mutate({
+        variables: {
+          ...variables
+        }
+      }).catch((error) => {
+        console.log('there was an error sending the query', error)
+      })
+    }
+  })
+}),
+// graphql(StepIdQuery, {
+//   options: ({goalDocID}) => ({
+//     variables: {
+//       id: goalDocID
+//     }
+//   })
+// })
+)(withRouter(AddStep))
+
+
+
+
+const mapStateToProps = (state, props) => {
+  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedInUserID: state.goals.loggedInUserID, targetUserID: state.goals.targetUserID, currentGoalSteps: state.goals.currentGoalSteps, goalDocID: state.goals.currentGoalID}
+}
+
+export default connect(mapStateToProps)(AddStepWithApollo)
