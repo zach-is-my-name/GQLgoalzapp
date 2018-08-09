@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './Components/container/App';
+import App from './Components/Container/App';
 import CreateUser from './Components/User/CreateUser';
 import {store} from './store';
 import { BrowserRouter as Router, Route, Swtich } from 'react-router-dom'

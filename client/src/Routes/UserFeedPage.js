@@ -4,9 +4,9 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import * as actions from '../Actions/actions'
 
-import Goal from '../Components/container/Goal.js'
-import Steps from '../Components/container/Steps.js'
-import App from '../Components/container/App'
+import Goal from '../Components/Container/Goal.js'
+import Steps from '../Components/Container/Steps.js'
+import App from '../Components/Container/App'
 import CurrentUser from '../Components/User/CurrentUser'
 import GlobalFeedPage from './GlobalFeedPage'
 import '../style/UserFeedPage.css'
