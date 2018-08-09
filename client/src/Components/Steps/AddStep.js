@@ -20,7 +20,7 @@ mutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggest
    }
   }
 }
-  `
+`
 
 
 // goalDoc: {steps: {step: $step}}
@@ -52,28 +52,6 @@ class AddStep extends React.Component {
     this.state = {
       step: ''
     }
-  }
-
-  render() {
-    // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
-
-    if (this.props.loggedInUserID === this.props.targetUserID) {
-      return (<div className="stepinput-form">
-        <form onSubmit={this._submitStep}>
-          <input type="text" onChange={this.handleChange} placeholder="" value={this.state.step}/>
-          <input type="submit" value="Submit Step"/>
-        </form>
-      </div>)
-    }
-    return (null)
-  }
-
-
-  _submitStep(event) {
-    event.preventDefault()
-    // this.setState({step: ''})
-    this.props.dispatch(actions.setStep(this.state.step))
-    this.props.dispatch(actions.setStepPositionIndex())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,6 +93,29 @@ class AddStep extends React.Component {
       }
   // }
   }
+
+  render() {
+    // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
+
+    if (this.props.loggedInUserID === this.props.targetUserID) {
+      return (<div className="stepinput-form">
+        <form onSubmit={this._submitStep}>
+          <input type="text" onChange={this.handleChange} placeholder="" value={this.state.step}/>
+          <input type="submit" value="Submit Step"/>
+        </form>
+      </div>)
+    }
+    return (null)
+  }
+
+
+  _submitStep(event) {
+    event.preventDefault()
+    // this.setState({step: ''})
+    this.props.dispatch(actions.setStep(this.state.step))
+    this.props.dispatch(actions.setStepPositionIndex())
+  }
+
 
   handleChange(e) {
     this.setState({step: e.target.value});

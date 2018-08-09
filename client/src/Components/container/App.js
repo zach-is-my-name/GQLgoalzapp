@@ -28,12 +28,12 @@ export class App extends Component {
     location.reload()
   }
 
-componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
   if (this.props !== nextProps && nextProps.data.user && window.localStorage.getItem('auth0IdToken')){
       this.props.dispatch(actions.setUserId(nextProps.data.user.id))
       this.props.dispatch(actions.setLoginStatus())
     }
-}
+  }
 
   render() {
     const {match} = this.props;

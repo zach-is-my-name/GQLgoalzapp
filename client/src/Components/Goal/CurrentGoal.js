@@ -11,14 +11,12 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 import '../../style/CurrentGoal.css'
-/* CLASS DECLARATION */
 
 class CurrentGoal extends Component {
   constructor(props) {
     super(props)
   }
 
-  /* RENDER METHOD */
   render() {
     if (this.props.goalDocById) {
       const {goalDocById: {loading,error,GoalDoc}} = this.props;
@@ -29,7 +27,7 @@ class CurrentGoal extends Component {
             <p className="currentgoal-label">Current Goal: </p>
             <p className="currentgoal"> {!this.props.id
               ? null
-            : GoalDoc.goal}</p>
+              : GoalDoc.goal}</p>
           </div>
         )
       }
@@ -41,11 +39,8 @@ class CurrentGoal extends Component {
   /*Check if Query was sent and Data Received */
   componentWillReceiveProps(nextProps) {
     if (nextProps.goalDocById && !nextProps.goalDocById.loading && nextProps.goalDocById.GoalDoc) {
-        // console.log('this.props.goalDocById.GoalDoc', this.props.goalDocById.GoalDoc)
-        // console.log('nextProps.goalDocById.GoalDoc', nextProps.goalDocById.GoalDoc)
-
         if (this.props.goalDocById.GoalDoc !== nextProps.goalDocById.GoalDoc) {
-          this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
+            this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
 
               if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0){
                 this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))

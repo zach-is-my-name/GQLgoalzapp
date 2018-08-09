@@ -43,7 +43,6 @@ let spanStyle2= {
   color: '#ef3779'
 }
 
-
   return (
     <div>
       {/* <AddStep /> */}

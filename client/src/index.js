@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/container/App';
-import CreateUser from './components/User/CreateUser';
+import App from './Components/container/App';
+import CreateUser from './Components/User/CreateUser';
 import {store} from './store';
 import { BrowserRouter as Router, Route, Swtich } from 'react-router-dom'
 import {ApolloProvider, ApolloClient} from 'react-apollo';

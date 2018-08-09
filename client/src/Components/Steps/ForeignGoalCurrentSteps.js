@@ -106,17 +106,17 @@ class ForeignSortableStepWithButtons extends Component {
             ? <div className="prompt">
               <p>Remove Step?</p>
               <YesNoPrompt clickEventYes={this.clickHandlerYes} clickEventNo={this.clickHandlerNo}/></div>
-          : null}
+            : null}
 
           {this.state.renderRemoveMutation ? <SuggestRemoveStep indexToRemove={this.state.indexToRemove} id={this.props.id} /> : null }
 
           {(this.state.editStepOn && (this.state.stepIndex !== null) && this.state.activeIndexEditStep === this.state.stepIndex)
             ? <SuggestEditStep id={this.props.id} index={stepIndex}/>
-          : null}
+            : null}
 
           {this.state.activeStep && (this.state.stepIndex !== null) && (this.state.activeIndexAddStep === this.state.stepIndex)
             ? <SuggestStep index={stepIndex}/>
-          : null}
+            : null}
 
         </div>
       </div>
@@ -126,19 +126,19 @@ class ForeignSortableStepWithButtons extends Component {
 
           const SuggestSortableStepWithButtons = connect()(SortableElement(ForeignSortableStepWithButtons))
 
-          const SuggestSortableList = SortableContainer((props) => {
-            const {newIndex} = props
-            const {oldIndex} = props
-            const {items} = props
-            const {indexInMotion} = props
-            // console.log('props.items aka currentStepsClone:', items)
+const SuggestSortableList = SortableContainer((props) => {
+      const {newIndex} = props
+      const {oldIndex} = props
+      const {items} = props
+      const {indexInMotion} = props
+      // console.log('props.items aka currentStepsClone:', items)
 
-            return (
-              <ul className="sortable-container">
-                {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} stepIndex={index} value={value.step} id={value.id} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
-              </ul>
-            );
-          });
+      return (
+        <ul className="sortable-container">
+          {items.map((value, index) => (<SuggestSortableStepWithButtons key={`item-${index}`} index={index} stepIndex={index} value={value.step} id={value.id} newIndex={newIndex} oldIndex={oldIndex} indexInMotion={indexInMotion}/>))}
+        </ul>
+      );
+    });
 
 
 
