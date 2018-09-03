@@ -50,10 +50,17 @@ if (action.type === 'SET_GOALDOC') {
 }
 
 if (action.type === 'SET_STEP') {
+  // console.log("action.index", action.index)
   return update(state, {
     currentGoalSteps: {$splice:[[action.index , 0, action.stepObj]]
   }
 })}
+if (action.type === 'SET_STEP_POSITION_INDEX') {
+  console.log("value passed to set_step_position_index_reducer", action.stepsArr)
+  return update(state, {
+    currentGoalSteps: {$set: action.stepsArr}
+  })
+}
 
 if (action.type === 'SET_SUGGESTED_STEP'){
   // console.log('action.suggestedStep',action.suggestedStep)
@@ -77,12 +84,6 @@ if (action.type === 'SET_CLONED_STEP_POSITION_INDEX') {
   })
 }
 
-if(action.type === 'SET_STEP_POSITION_INDEX') {
-  console.log(action.stepsArr)
-  return update(state, {
-    currentGoalSteps: {$set: action.stepsArr}
-  })
-}
 
 if(action.type === 'SET_STEP_ID_FROM_SERVER') {
   return update(state, {

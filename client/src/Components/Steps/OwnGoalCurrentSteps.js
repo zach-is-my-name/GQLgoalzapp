@@ -13,6 +13,7 @@ import InputStep from './AddStep.js'
 import EditStep from './EditStep.js'
 
 class StepWithButtonsContainer extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
@@ -68,7 +69,7 @@ class StepWithButtonsContainer extends Component {
   }
 
   clickHandlerAdd(stepIndex) {
-    console.log(stepIndex)
+    // console.log(stepIndex)
     // this.setState({})
     this.setState(prevState => ({
       indexClicked: stepIndex,
@@ -230,7 +231,6 @@ class OwnGoalCurrentSteps extends Component {
     } else {
       currentGoalSteps =  this.props.currentGoalSteps
     }
-
 
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>

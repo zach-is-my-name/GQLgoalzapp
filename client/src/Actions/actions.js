@@ -31,8 +31,31 @@ export const setGoalDoc = goalDoc => {
   return {type: SET_GOALDOC, flatGoalDoc}
 };
 
+
+export const SET_STEP_ID_FROM_SERVER = 'SET_STEP_ID_FROM_SERVER'
+export const setStepIdFromServer = (index, id) =>
+  ({type: SET_STEP_ID_FROM_SERVER, index, id})
+
+export function setStepAndPositionIndex(step, index) {
+   // console.log("called1")
+   store.dispatch(setStep(step, index))
+   console.log(setStepPositionIndex())
+   store.dispatch(setStepPositionIndex())
+   // console.log(setStepPositionIndex())
+   // store.dispatch(setStepPositionIndex())
+  //   .then(
+  // () =>  console.log("after Step")
+  // )
+  // .then(
+  //   (val) => (console.log(val))
+  // //     () =>  dispatch(setStepPositionIndex())
+  //   )
+
+  }
+
 export const SET_STEP = 'SET_STEP';
 export const setStep = (step, index, id) => {
+  console.log("called")
   const stepObj = {
     step: step,
     suggestedStep: false,
@@ -40,18 +63,79 @@ export const setStep = (step, index, id) => {
     positionIndex: null,
     originalId: id
   }
+  console.log(stepObj)
 
-  return ({
+  const setStepObj = {
     type: SET_STEP,
     stepObj,
     index: index
-  })
+  }
+  console.log(setStepObj)
+  return setStepObj
 };
 
-export const SET_STEP_ID_FROM_SERVER = 'SET_STEP_ID_FROM_SERVER'
-export const setStepIdFromServer = (index, id) =>
-  ({type: SET_STEP_ID_FROM_SERVER, index, id})
+/*Action Creator with Promise */
+// export const SET_STEP = 'SET_STEP';
+// export const setStep = (step, index, id) => new Promise(() => {
+//   console.log("called")
+//   const stepObj = {
+//     step: step,
+//     suggestedStep: false,
+//     id,
+//     positionIndex: null,
+//     originalId: id
+//   }
+//   console.log(stepObj)
+//
+//   const setStepObj = {
+//     type: SET_STEP,
+//     stepObj,
+//     index: index
+//   }
+//   console.log(setStepObj)
+//   return setStepObj
+// });
 
+export const SET_STEP_POSITION_INDEX = 'SET_STEP_POSITION_INDEX'
+export const setStepPositionIndex = () =>  {
+ console.log("setStepPositionIndex called")
+return (dispatch, getState) => {
+  console.log(getState())
+   const newSteps = getState().goals.currentGoalSteps.map((stepObj, index) => { return ({...stepObj, positionIndex: index})
+ })
+   console.log('newSteps', newSteps)
+const actionObj = {
+  type: SET_STEP_POSITION_INDEX,
+  stepsArr: newSteps
+}
+  console.log(actionObj)
+  dispatch(actionObj)
+}
+}
+  // console.log("var newSteps", newSteps)
+
+
+// export const SET_STEP_POSITION_INDEX = 'SET_STEP_POSITION_INDEX'
+// export const setStepPositionIndex = () =>  {
+//  return (dispatch, getState) => {
+//    console.log("set_step_position_index called")
+//    const currentStepsArr = getState().goals.currentGoalSteps
+//   //  console.log('stepsArr', stepsArr)
+//    const positionArr = currentStepsArr.map((stepObj, index) => {
+//      return ({positionIndex: index})
+//    })
+//    // console.log('positionArr', positionArr)
+//    const newSteps = positionArr.map((positionObj, index, array) => {
+//       // console.log('positionArr[index]', stepsArr[index])
+//      return stepsArr[index].positionIndex = positionObj.positionIndex
+//    })
+//   // console.log("var newSteps", newSteps)
+//   return ({
+//   type: SET_STEP_POSITION_INDEX,
+//   stepsArr: newSteps
+// })
+//  }
+// }
 
 //where is the index being passed in SuggestStep.js?
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
@@ -74,14 +158,13 @@ export const setClonedStepIdFromServer = (index,id) => {
 
 export const SET_CLONED_STEP_POSITION_INDEX ='SET_CLONED_STEP_POSITION_INDEX'
 export const setClonedStepPositionIndex = () => {
-return  (dispatch,getState) => {
+return  (dispatch, getState) => {
   const stepsArr = getState().goals.currentGoalStepsClone
   // console.log('stepsArr',stepsArr)
- const positionArr = stepsArr.map((stepObj, index, stepsArr) => {
+  const positionArr = stepsArr.map((stepObj, index, stepsArr) => {
     // console.log('stepsArr',stepsArr[index])
     return  ({positionIndex: index})
   })
-
 // console.log('positionArr', positionArr)
   const newSteps = positionArr.map((positionObj,index) => {
     return stepsArr[index].positionIndex = positionObj.positionIndex
@@ -94,26 +177,7 @@ return {
 }
 }
 
-export const SET_STEP_POSITION_INDEX = 'SET_STEP_POSITION_INDEX'
-export const setStepPositionIndex = () => {
- return (dispatch, getState) => {
-   const stepsArr = getState().goals.currentGoalSteps
-  //  console.log('stepsArr', stepsArr)
-   const positionArr = stepsArr.map((stepObj, index) => {
-     return ({positionIndex: index})
-   })
-  //  console.log('positionArr', positionArr)
-   const newSteps = positionArr.map((positionObj, index, array) => {
-      // console.log('positionArr[index]', stepsArr[index])
-     return stepsArr[index].positionIndex = positionObj.positionIndex
 
-   })
-
-  return {
-  type: SET_STEP_POSITION_INDEX
-}
- }
-}
 
 export const SET_USERDOC_ID = 'SET_USERDOC_ID';
 export const setUserDocID = userDocID => ({type: SET_USERDOC_ID, userDocID})

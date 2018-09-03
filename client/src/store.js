@@ -14,6 +14,7 @@ const logger = createLogger({
 const client = new ApolloClient();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 export const store = createStore(
   combineReducers ({
     goals:Goal_Reducer.goalReducer,
@@ -21,7 +22,7 @@ export const store = createStore(
     form: formReducer
   }), {}, //initial state
 composeEnhancers (
-  applyMiddleware(client.middleware(),thunk, logger),
+  applyMiddleware(client.middleware(),thunk, logger)
 
   )
 );

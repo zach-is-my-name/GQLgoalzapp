@@ -45,6 +45,7 @@ mutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggest
 // `
 
 class AddStep extends React.Component {
+
   constructor(props) {
     super(props)
     this._submitStep = this._submitStep.bind(this);
@@ -54,45 +55,45 @@ class AddStep extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("nextProps > props", nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length)
-
-    // if (!nextProps.data.loading) {
-      // let serverStepIds = nextProps.data.allSteps
-    if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
-       nextProps.currentGoalSteps.map(stepObj => {
-        let id
-        if (!stepObj.id) {
-        id = "x"
-      } else {
-        id = stepObj.id
-      }
-         return this.props.updateOrCreateStep({
-           variables: {
-             goalDocId: this.props.goalDocID,
-             step: stepObj.step,
-             id: id,
-             positionIndex: stepObj.positionIndex,
-             suggestedStep: false
-           }
-         })
-      // this.props.createStep({
-      //   variables: {
-      //     step: this.state.step,
-      //     goalDocId,
-      //     positionIndex: this.props.index,
-      //     suggestedStep: false
-      //   }
-      // })
-      .then(({data}) => {
-        console.log('DATA SUBMITTED', data);
-      })
-    })
-    } else {
-      alert("Select a Goal to Enter a Step on")
-      }
+  // componentWillReceiveProps(nextProps) {
+  //   // console.log("nextProps > props", nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length)
+  //
+  //   // if (!nextProps.data.loading) {
+  //     // let serverStepIds = nextProps.data.allSteps
+  //   if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
+  //      nextProps.currentGoalSteps.map(stepObj => {
+  //       let id
+  //       if (!stepObj.id) {
+  //       id = "x"
+  //     } else {
+  //       id = stepObj.id
+  //     }
+  //        return this.props.updateOrCreateStep({
+  //          variables: {
+  //            goalDocId: this.props.goalDocID,
+  //            step: stepObj.step,
+  //            id: id,
+  //            positionIndex: stepObj.positionIndex,
+  //            suggestedStep: false
+  //          }
+  //        })
+  //     // this.props.createStep({
+  //     //   variables: {
+  //     //     step: this.state.step,
+  //     //     goalDocId,
+  //     //     positionIndex: this.props.index,
+  //     //     suggestedStep: false
+  //     //   }
+  //     // })
+  //     .then(({data}) => {
+  //       console.log('DATA SUBMITTED', data);
+  //     })
+  //   })
+  //   } else {
+  //     alert("Select a Goal to Enter a Step on")
+  //     }
+  // // }
   // }
-  }
 
   render() {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
@@ -112,8 +113,12 @@ class AddStep extends React.Component {
   _submitStep(event) {
     event.preventDefault()
     // this.setState({step: ''})
-    this.props.dispatch(actions.setStep(this.state.step))
-    this.props.dispatch(actions.setStepPositionIndex())
+  // actions.setStepAndPositionIndex()
+  actions.setStepAndPositionIndex(this.state.step, this.props.index)
+    // this.props.dispatch(actions.setStepAndPositionIndex(this.state.step, this.props.index))
+    // actions.setStep(this.state.step, this.props.index)
+    // this.props.dispatch(actions.setStep(this.state.step, this.props.index))
+    // this.props.dispatch(actions.setStepPositionIndex())
   }
 
 
