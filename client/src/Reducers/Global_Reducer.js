@@ -56,7 +56,6 @@ if (action.type === 'SET_STEP') {
   }
 })}
 if (action.type === 'SET_STEP_POSITION_INDEX') {
-  console.log("value passed to set_step_position_index_reducer", action.stepsArr)
   return update(state, {
     currentGoalSteps: {$set: action.stepsArr}
   })

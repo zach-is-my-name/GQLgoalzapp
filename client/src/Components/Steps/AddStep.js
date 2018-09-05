@@ -7,6 +7,16 @@ import {withRouter, Redirect} from 'react-router-dom'
 import * as actions from '../../Actions/actions'
 import '../../style/AddStep.css'
 
+const StepIdQuery = gql `
+query($id:ID){
+  allSteps(
+    filter:{goalDoc:{id:$id}}
+  )
+ {
+ id
+ originalId
+}}`
+
 const UpdateOrCreateStep = gql `
 mutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean) {
   updateOrCreateStep(create: {goalDocId: $goalDocId,
@@ -19,30 +29,7 @@ mutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggest
      id
    }
   }
-}
-`
-
-
-// goalDoc: {steps: {step: $step}}
-
-// const StepIdQuery = gql `
-// query($id:ID){
-//   allSteps(
-//     filter:{goalDoc:{id:$id}}
-//   )
-//  {
-//  id
-//  originalId
-// }}`
-
-
-// const userQuery = gql`
-//   query userQuery {
-//     user {
-//       id
-//     }
-//   }
-// `
+}`
 
 class AddStep extends React.Component {
 
@@ -55,45 +42,43 @@ class AddStep extends React.Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   // console.log("nextProps > props", nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length)
-  //
-  //   // if (!nextProps.data.loading) {
-  //     // let serverStepIds = nextProps.data.allSteps
-  //   if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
-  //      nextProps.currentGoalSteps.map(stepObj => {
-  //       let id
-  //       if (!stepObj.id) {
-  //       id = "x"
-  //     } else {
-  //       id = stepObj.id
-  //     }
-  //        return this.props.updateOrCreateStep({
-  //          variables: {
-  //            goalDocId: this.props.goalDocID,
-  //            step: stepObj.step,
-  //            id: id,
-  //            positionIndex: stepObj.positionIndex,
-  //            suggestedStep: false
-  //          }
-  //        })
-  //     // this.props.createStep({
-  //     //   variables: {
-  //     //     step: this.state.step,
-  //     //     goalDocId,
-  //     //     positionIndex: this.props.index,
-  //     //     suggestedStep: false
-  //     //   }
-  //     // })
-  //     .then(({data}) => {
-  //       console.log('DATA SUBMITTED', data);
-  //     })
-  //   })
-  //   } else {
-  //     alert("Select a Goal to Enter a Step on")
-  //     }
-  // // }
-  // }
+  _submitStep(event) {
+    event.preventDefault()
+    actions.setStepAndPositionIndex(this.state.step, this.props.index)
+  }
+
+  handleChange(e) {
+    this.setState({step: e.target.value});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if (!nextProps.data.loading) {
+    if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
+      nextProps.currentGoalSteps.map((stepObj, mapIndex) => {
+        let id
+        if (!stepObj.id) {
+          id = "x"
+        } else {
+          id = stepObj.id
+        }
+        console.log("sending:",
+        {step: stepObj.step, id, positionIndex: stepObj.positionIndex})
+        return this.props.updateOrCreateStep({
+          variables: {
+            goalDocId: this.props.goalDocID,
+            step: stepObj.step,
+            id: id,
+            positionIndex: stepObj.positionIndex,
+            suggestedStep: false
+          }
+        }).then(({data}) => {
+            if (!stepObj.id){ return this.props.dispatch(actions.setStepIdFromServer(mapIndex, data.updateOrCreateStep.id))
+            }}
+)
+      })
+    }
+    // }
+  }
 
   render() {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
@@ -108,28 +93,9 @@ class AddStep extends React.Component {
     }
     return (null)
   }
-
-
-  _submitStep(event) {
-    event.preventDefault()
-    // this.setState({step: ''})
-  // actions.setStepAndPositionIndex()
-  actions.setStepAndPositionIndex(this.state.step, this.props.index)
-    // this.props.dispatch(actions.setStepAndPositionIndex(this.state.step, this.props.index))
-    // actions.setStep(this.state.step, this.props.index)
-    // this.props.dispatch(actions.setStep(this.state.step, this.props.index))
-    // this.props.dispatch(actions.setStepPositionIndex())
-  }
-
-
-  handleChange(e) {
-    this.setState({step: e.target.value});
-  }
 }
 
-const AddStepWithApollo =
-compose(
-graphql(UpdateOrCreateStep, {
+const AddStepWithApollo = compose(graphql(UpdateOrCreateStep, {
   props: ({mutate}) => ({
     updateOrCreateStep({variables}) {
       return mutate({
@@ -142,20 +108,33 @@ graphql(UpdateOrCreateStep, {
     }
   })
 }),
-// graphql(StepIdQuery, {
-//   options: ({goalDocID}) => ({
-//     variables: {
-//       id: goalDocID
-//     }
-//   })
-// })
+graphql(StepIdQuery, {
+  options: ({goalDocID}) => ({
+    variables: {
+      id: goalDocID
+    }
+  })
+})
 )(withRouter(AddStep))
 
-
-
-
 const mapStateToProps = (state, props) => {
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, loggedInUserID: state.goals.loggedInUserID, targetUserID: state.goals.targetUserID, currentGoalSteps: state.goals.currentGoalSteps, goalDocID: state.goals.currentGoalID}
+  return {
+    currentGoal: state.goals.currentGoal,
+    currentGoalID: state.goals.currentGoalID,
+    loggedInUserID: state.goals.loggedInUserID,
+    targetUserID: state.goals.targetUserID,
+    currentGoalSteps: state.goals.currentGoalSteps,
+    goalDocID: state.goals.currentGoalID
+  }
 }
 
 export default connect(mapStateToProps)(AddStepWithApollo)
+
+
+// const userQuery = gql`
+//   query userQuery {
+//     user {
+//       id
+//     }
+//   }
+// `
