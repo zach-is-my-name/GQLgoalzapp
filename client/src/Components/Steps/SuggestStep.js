@@ -46,30 +46,29 @@ class SuggestStep extends Component {
   componentWillReceiveProps(nextProps) {
     const suggesterId = nextProps.loggedInUserID
 
-      if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
-
-        nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
-          let id
-          stepObj.originalId ? id = stepObj.originalId : id = "x"
-          this.props.updateOrCreateClonedStep({
-            variables: {
-              goalDocId: this.props.goalDocId,
-              id: id,
-              positionIndex: stepObj.positionIndex,
-              suggestedStep: stepObj.suggestedStep,
-              step: stepObj.step,
-              suggesterId: this.props.loggedInUserID
-            }
-          })
-            .then(({data}) => {
-              this.props.dispatch(actions.setClonedStepIdFromServer(mapIndex, data.updateOrCreateClonedStep.id))
-            })
-          })
-            }
+    if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
+      nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
+        let id
+				if (stepObj.originalId) {
+					id = stepObj.originalId
+				} else {
+					id = "x"
+				}
+        this.props.updateOrCreateClonedStep({
+          variables: {
+            goalDocId: this.props.goalDocId,
+            id: id,
+            positionIndex: stepObj.positionIndex,
+            suggestedStep: stepObj.suggestedStep,
+            step: stepObj.step,
+            suggesterId: this.props.loggedInUserID
           }
-
-
-
+        }).then(({data}) => {
+          this.props.dispatch(actions.setClonedStepIdFromServer(mapIndex, data.updateOrCreateClonedStep.id))
+        })
+      })
+    }
+  }
 
   render() {
 
@@ -100,8 +99,7 @@ const mapStateToProps = (state, props) => {
   }
 }
 
-const SuggestStepWithApollo = compose(
-graphql(updateOrCreateClonedStep, {
+const SuggestStepWithApollo = compose(graphql(updateOrCreateClonedStep, {
   name: 'updateOrCreateClonedStep',
   props: ({updateOrCreateClonedStep}) => ({
     updateOrCreateClonedStep({variables}) {
@@ -114,7 +112,6 @@ graphql(updateOrCreateClonedStep, {
       })
     }
   })
-})
-)(withRouter(SuggestStep))
+}))(withRouter(SuggestStep))
 
 export default connect(mapStateToProps)(SuggestStepWithApollo);

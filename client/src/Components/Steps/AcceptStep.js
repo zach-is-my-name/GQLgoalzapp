@@ -70,11 +70,13 @@ class AcceptStep extends Component {
     if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
       nextProps.currentGoalSteps.map((stepObj, mapIndex, array) => {
         let id
-        !stepObj.id
-          ? id = 'x'
-          : id = stepObj.id
+        if (!stepObj.id) {
+          id = "x"
+        } else {
+          id = stepObj.id
+        }
 
-        if (!stepObj.originalId && id !== "x") {
+        if (stepObj.originalId == false && id !== "x") {
           console.log("Update Step Position and Assign OriginalId", id)
           return this.props.updateOrCreateStep({
             variables: {
@@ -86,7 +88,7 @@ class AcceptStep extends Component {
           }).then(({data}) => {
             console.log('%cUpdated Position Index && Assigned OrginalId', "color: green", data)
           })
-        } else if (!stepObj.originalId && id === "x") {
+        } else if (stepObj.originalId == false && id === "x") {
           console.log("Create Step", id)
           return this.props.updateOrCreateStep({
             variables: {
