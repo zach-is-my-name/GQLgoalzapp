@@ -7,8 +7,7 @@ import {withRouter, Redirect} from 'react-router-dom'
 import * as actions from '../../Actions/actions'
 // import '../../style/SuggestStep.css'
 
-const updateOrCreateClonedStep = gql `mutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!,
-	$step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
+const updateOrCreateClonedStep = gql `mutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
     updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
     positionIndex: $positionIndex, suggestedStep: $suggestedStep,
     step: $step, suggesterId: $suggesterId }, update: {goalDocId: $goalDocId, positionIndex:
@@ -33,28 +32,29 @@ class SuggestStep extends Component {
 
   _submitSuggestedStep(event) {
     event.preventDefault()
-
-    this.props.dispatch(actions.setSuggestedStep(this.state.step, this.props.index))
-    this.props.dispatch(actions.setClonedStepPositionIndex())
+    actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
+    // this.props.dispatch(actions.setSuggestedStep(this.state.step, this.props.index))
+    // this.props.dispatch(actions.setClonedStepPositionIndex())
   }
 
   handleChange(e) {
     this.setState({step: e.target.value});
   }
 
-  //use this to get the step you added from dispatch in mapStateToProps
   componentWillReceiveProps(nextProps) {
     const suggesterId = nextProps.loggedInUserID
 
     if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
       nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
+
         let id
-				if (stepObj.originalId) {
-					id = stepObj.originalId
-				} else {
-					id = "x"
-				}
-        this.props.updateOrCreateClonedStep({
+        if (stepObj.id) {
+          id = stepObj.id
+        } else {
+          id = "x"
+        }
+        console.log({step: stepObj.step, id, mapIndex, positionIndex: stepObj.positionIndex})
+        return this.props.updateOrCreateClonedStep({
           variables: {
             goalDocId: this.props.goalDocId,
             id: id,
@@ -64,7 +64,9 @@ class SuggestStep extends Component {
             suggesterId: this.props.loggedInUserID
           }
         }).then(({data}) => {
-          this.props.dispatch(actions.setClonedStepIdFromServer(mapIndex, data.updateOrCreateClonedStep.id))
+          if (!stepObj.id) {
+            return this.props.dispatch(actions.setClonedStepIdFromServer(mapIndex, data.updateOrCreateClonedStep.id))
+          }
         })
       })
     }

@@ -72,6 +72,11 @@ const actionObj = {
 }
 }
 
+export function setClonedStepAndPositionIndex(step, index) {
+  store.dispatch(setSuggestedStep(step, index))
+  store.dispatch(setClonedStepPositionIndex())
+}
+
 //where is the index being passed in SuggestStep.js?
 export const SET_SUGGESTED_STEP = 'SET_SUGGESTED_STEP'
 export const setSuggestedStep = (suggestedStep, index, id) => {
@@ -81,36 +86,33 @@ export const setSuggestedStep = (suggestedStep, index, id) => {
     id,
     positionIndex: null
   }
-  return ({type: SET_SUGGESTED_STEP, suggestedStep: stepObj, index: index})
-}
-
-export const SET_CLONED_STEP_ID_FROM_SERVER = 'SET_CLONED_STEP_ID_FROM_SERVER'
-export const setClonedStepIdFromServer = (index,id) => {
-  // const stepsArr = store.getState().goals.currentGoalStepsClone
-  // stepsArr[index].id = id
-  return {type: SET_CLONED_STEP_ID_FROM_SERVER, index, id }
+  const setSuggestedStepObj = {
+    type: SET_SUGGESTED_STEP,
+    stepObj,
+    index
+  }
+  return setSuggestedStepObj
+  // return ({type: SET_SUGGESTED_STEP, suggestedStep: stepObj, index: index})
 }
 
 export const SET_CLONED_STEP_POSITION_INDEX ='SET_CLONED_STEP_POSITION_INDEX'
 export const setClonedStepPositionIndex = () => {
 return  (dispatch, getState) => {
-  const stepsArr = getState().goals.currentGoalStepsClone
-  // console.log('stepsArr',stepsArr)
-  const positionArr = stepsArr.map((stepObj, index, stepsArr) => {
-    // console.log('stepsArr',stepsArr[index])
-    return  ({positionIndex: index})
-  })
-// console.log('positionArr', positionArr)
-  const newSteps = positionArr.map((positionObj,index) => {
-    return stepsArr[index].positionIndex = positionObj.positionIndex
-    // }
-  })
-return {
+  const newSteps = getState().goals.currentGoalStepsClone.map((stepObj, index) => {return ({...stepObj, positionIndex: index})
+})
+  const actionObj = {
     type: SET_CLONED_STEP_POSITION_INDEX,
-    stepsArr: newSteps
+    stepsArr:newSteps
   }
+  return dispatch(actionObj)
 }
 }
+export const SET_CLONED_STEP_ID_FROM_SERVER = 'SET_CLONED_STEP_ID_FROM_SERVER'
+export const setClonedStepIdFromServer = (index,id) => {
+  return {type: SET_CLONED_STEP_ID_FROM_SERVER, index, id }
+}
+
+
 
 
 

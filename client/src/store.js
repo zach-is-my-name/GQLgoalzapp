@@ -13,14 +13,17 @@ const logger = createLogger({
 
 const client = new ApolloClient();
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
+const composeEnhancers = typeof window === 'object' &&  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__: compose;
+/* eslint-disable no-underscore-dangle */
 export const store = createStore(
   combineReducers ({
     goals:Goal_Reducer.goalReducer,
     apollo:client.reducer(),
     form: formReducer
-  }), {}, //initial state
+  })
+ /* eslint-enable */
+  , {}, //initial state
 composeEnhancers (
   applyMiddleware(client.middleware(),thunk, logger)
 

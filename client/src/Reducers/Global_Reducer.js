@@ -55,6 +55,7 @@ if (action.type === 'SET_STEP') {
     currentGoalSteps: {$splice:[[action.index , 0, action.stepObj]]
   }
 })}
+
 if (action.type === 'SET_STEP_POSITION_INDEX') {
   return update(state, {
     currentGoalSteps: {$set: action.stepsArr}
@@ -65,7 +66,7 @@ if (action.type === 'SET_SUGGESTED_STEP'){
   // console.log('action.suggestedStep',action.suggestedStep)
   // console.log('action.index suggestedStep',action.index)
   return update(state, {
-    currentGoalStepsClone: {$splice:[[action.index , 0, action.suggestedStep]]
+    currentGoalStepsClone: {$splice:[[action.index , 0, action.stepObj]]
   }
   })
 }
@@ -77,7 +78,6 @@ if (action.type === 'SET_SUGGESTED_TO_FALSE') {
 }
 
 if (action.type === 'SET_CLONED_STEP_POSITION_INDEX') {
-  console.log(action.stepsArr)
   return update (state, {
     currentGoalStepsClone: {$set: action.stepsArr}
   })
