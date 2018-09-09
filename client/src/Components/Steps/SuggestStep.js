@@ -11,7 +11,7 @@ const updateOrCreateClonedStep = gql `mutation ($goalDocId: ID, $id: ID!, $posit
     updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
     positionIndex: $positionIndex, suggestedStep: $suggestedStep,
     step: $step, suggesterId: $suggesterId }, update: {goalDocId: $goalDocId, positionIndex:
-    $positionIndex, id: $id}) {
+    $positionIndex, id: $id, suggesterId: $suggesterId}) {
       step
       id
       goalDoc {
@@ -53,7 +53,6 @@ class SuggestStep extends Component {
         } else {
           id = "x"
         }
-        console.log({step: stepObj.step, id, mapIndex, positionIndex: stepObj.positionIndex})
         return this.props.updateOrCreateClonedStep({
           variables: {
             goalDocId: this.props.goalDocId,

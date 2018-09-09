@@ -193,7 +193,7 @@ export const moveStepOnClone = (newStepOrder) => {
 export const CLONE_CURRENT_STEPS = 'CLONE_CURRENT_STEPS'
 export const cloneCurrentSteps = (steps) => {
   // console.log('cloneCurrentSteps', steps)
-  let flatSteps = steps.map(step =>  ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex, id: step.id, originalId: step.originalId}))
+  let flatSteps = steps.map(step =>  ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex, id: null, originalId: step.originalId}))
   // console.log('actions/flatSteps', flatSteps)
   // let flatStepsObj = {step: flatSteps, suggestedStep:false}
   return {type: CLONE_CURRENT_STEPS, flatSteps: flatSteps}
