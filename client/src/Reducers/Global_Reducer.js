@@ -45,7 +45,7 @@ if (action.type === 'SET_GOALDOC') {
   currentGoal: {$set:action.flatGoalDoc.goal},
   currentGoalID: {$set:action.flatGoalDoc.id},
   currentGoalSteps: {$set:action.flatGoalDoc.flatSteps},
-  // currentSuggestedSteps: {$set:action.flatGoalDoc.flatSuggestedSteps},
+  currentGoalStepsClone: {$set:action.flatGoalDoc.flatClonedSteps}
   })
 }
 

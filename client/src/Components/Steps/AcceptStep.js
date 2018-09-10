@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 
 const UpdateOrCreateStep = gql `
-mutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean, $originalId: String) {
+mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean, $originalId: String) {
   updateOrCreateStep(create: {goalDocId: $goalDocId,
   step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, originalId: $originalId }, update: {goalDocId: $goalDocId,
   positionIndex: $positionIndex, id: $id})
@@ -25,7 +25,7 @@ mutation($id: ID!){
     id
   }}`
 
-const updateClonedStepPosition = gql `mutation($id: ID!, $positionIndex: Int)
+const updateClonedStepPosition = gql `mutation updateClonedStepPositionMutation($id: ID!, $positionIndex: Int)
  {updateClonedStep(id:$id, positionIndex: $positionIndex, suggestedStep: false
 ) {
    id

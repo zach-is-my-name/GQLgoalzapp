@@ -55,7 +55,7 @@ const mapStateToProps = (state, props) => {
 const SelectGoalWithState = connect(mapStateToProps)(SelectGoal)
 
 /*GRAPHQL QUERY */
-const GoalDocQuery = gql `query ($userid: ID) {
+const GoalDocQuery = gql `query allGoalDocsQuery ($userid: ID) {
   allGoalDocs(filter:
     {owners :{id: $userid}})
   {

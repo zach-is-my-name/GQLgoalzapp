@@ -45,7 +45,7 @@ if (this.props !== nextProps && this.props.data.User) {
   const TargetUserWithState = connect(mapStateToProps)(TargetUser)
 
   const targetUserQuery = gql `
-  query($targetUser: ID) {
+  query targetUserQuery($targetUser: ID) {
   User(id:$targetUser) {
     userName
   }

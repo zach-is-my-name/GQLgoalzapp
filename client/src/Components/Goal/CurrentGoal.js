@@ -45,7 +45,7 @@ class CurrentGoal extends Component {
               if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0){
                 this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
               }
-               else if (this.props.loggedInUser === this.props.targetUser &&  nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
+               else if (this.props.loggedInUser === this.props.targetUser && nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
                 this.props.dispatch(actions.setClonedStepsFromServer(nextProps.goalDocById.GoalDoc.clonedSteps))
             }
               if (this.props.loggedInUser !== this.props.targetUser) {
@@ -74,7 +74,7 @@ const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoal);
 /* GRAPHQL QUERY */
 
 const FetchGoalDocByID = gql `
-query ($varID: ID) {
+query fetchGoalDocByIdQuery ($varID: ID) {
   GoalDoc(id: $varID) {
    goal
    id

@@ -18,7 +18,7 @@ query($id:ID){
 }}`
 
 const UpdateOrCreateStep = gql `
-mutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean) {
+mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean) {
   updateOrCreateStep(create: {goalDocId: $goalDocId,
   step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, }, update: {goalDocId: $goalDocId,
   positionIndex: $positionIndex, id: $id})

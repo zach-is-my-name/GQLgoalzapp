@@ -19,7 +19,7 @@ class SuggestRemoveStep extends Component {
     return null
   }
 }
-const suggestRemoveStep = gql `mutation($id: ID!) {
+const suggestRemoveStep = gql `mutation suggestRemoveStepMutation($id: ID!) {
   deleteClonedStep(id: $id) {
     step
   }

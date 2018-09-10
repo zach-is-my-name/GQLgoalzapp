@@ -7,7 +7,7 @@ import {withRouter, Redirect} from 'react-router-dom'
 import * as actions from '../../Actions/actions'
 // import '../../style/SuggestStep.css'
 
-const updateOrCreateClonedStep = gql `mutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
+const updateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
     updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
     positionIndex: $positionIndex, suggestedStep: $suggestedStep,
     step: $step, suggesterId: $suggesterId }, update: {goalDocId: $goalDocId, positionIndex:

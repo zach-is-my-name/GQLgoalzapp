@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import '../../style/OwnGoalCurrentSteps.css'
 import * as actions from '../../Actions/actions.js'
 import YesNoPrompt from './YesNoPrompt.js'
-import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 import StepWithButtons from './StepWithButtons.js'
 import InputStep from './AddStep.js'
@@ -28,6 +27,7 @@ class StepWithButtonsContainer extends Component {
       acceptStep: false,
     }
     // this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
+
     this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
     this.clickHandlerAdd = this.clickHandlerAdd.bind(this)
@@ -36,6 +36,7 @@ class StepWithButtonsContainer extends Component {
     this.submitEditedStep = this.submitEditedStep.bind(this)
     this.clickHandlerEdit = this.clickHandlerEdit.bind(this)
     this.acceptStep = this.acceptStep.bind(this)
+
   }
 
   clickHandlerEdit(stepIndex, event) {

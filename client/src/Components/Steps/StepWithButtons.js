@@ -7,8 +7,7 @@ import minus from '../../style/images/minus.jpg'
 import plus from '../../style/images/plus_websize.png'
 
   const StepWithButtons = (props) => {
-
-  return (
+    return (
     <div className="sortable-item-wrapper">
       <div className="row-1">
 

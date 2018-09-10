@@ -67,7 +67,7 @@ handleChange(e) {
 
 /* GraphQL */
 
-const goalInputMutation = gql `mutation($goal: String, $ownersId: ID) {
+const goalInputMutation = gql `mutation goalInputMutation($goal: String, $ownersId: ID) {
   createGoalDoc(goal:$goal, ownersId: $ownersId ) {
     goal
     id

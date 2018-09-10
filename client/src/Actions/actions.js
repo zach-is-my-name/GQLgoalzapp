@@ -19,14 +19,24 @@ export const setGoalDoc = goalDoc => {
     step: stepObj.step,
     positionIndex: stepObj.positionIndex,
     suggestedStep: stepObj.suggestedStep,
-    // suggester: stepObj.suggester,
     id: stepObj.id
   })})
+
+  let flatClonedSteps = clonedSteps.map(clonedStepObj => {
+    return ({
+      step: clonedStepObj.step,
+      suggestedStep: clonedStepObj.suggestedStep,
+      id: clonedStepObj.id,
+      positionIndex: clonedStepObj.positionIndex,
+      suggester: clonedStepObj.suggester
+    })
+  })
 
   const flatGoalDoc = {
     goal,
     id,
     flatSteps,
+    flatClonedSteps
   }
   return {type: SET_GOALDOC, flatGoalDoc}
 };

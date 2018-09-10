@@ -124,7 +124,7 @@ class ForeignSortableStepWithButtons extends Component {
           }
           }
 
-          const SuggestSortableStepWithButtons = connect()(SortableElement(ForeignSortableStepWithButtons))
+const SuggestSortableStepWithButtons = connect()(SortableElement(ForeignSortableStepWithButtons))
 
 const SuggestSortableList = SortableContainer((props) => {
       const {newIndex} = props

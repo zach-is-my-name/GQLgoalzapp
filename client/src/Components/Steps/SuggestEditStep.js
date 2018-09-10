@@ -53,7 +53,7 @@ render() {
 }
 }
 
-const suggestEditStep = gql `mutation ($stepChange: String, $id: ID!) {
+const suggestEditStep = gql `mutation suggestEditStepMutation($stepChange: String, $id: ID!) {
   updateClonedStep( id: $id, step: $stepChange) {
     step,
     id
