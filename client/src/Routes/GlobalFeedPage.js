@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import { graphql, gql } from 'react-apollo'
+import {graphql} from 'react-apollo'
+import gql from 'graphql-tag';
 
 import GlobalFeed from '../Components/Container/GlobalFeed'
 

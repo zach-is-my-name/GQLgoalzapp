@@ -1,4 +1,6 @@
-import { createNetworkInterface } from 'apollo-client'
+// import {createNetworkInterface} from 'apollo-client'
+import {createHttpLink} from 'apollo-link-http'
+import {setContext} from 'apollo-link-context'
 // import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
 
 // const wsClient = new SubscriptionClient('wss://subscriptions.graph.cool/v1/cj30pbaza1q9j0141cxyrqrw8', {
@@ -8,22 +10,29 @@ import { createNetworkInterface } from 'apollo-client'
   }, */
 // })
 
-export const networkInterface = createNetworkInterface({
-  uri: 'https://api.graph.cool/simple/v1/cj3bp9pcdnmfd01470ryt1pyd',
-  dataIdFromObject: record => record.id,
+export const httpLink  = createHttpLink({
+  uri: 'https://api.graph.cool/simple/v1/cj3bp9pcdnmfd01470ryt1pyd'
 })
 
-networkInterface.use([{
-  applyMiddleware (req, next) {
-    if (!req.options.headers) {
-      req.options.headers = {}
-    }
+const middlewareLink = setContext(() => ({
+  headers: {
+    authorization: `Bearer ${localStorage.getItem('auth0IdToken')}` || null
+  }
+}))
 
-    // get the authentication token from local storage if it exists
-    if (localStorage.getItem('auth0IdToken')) {
-      req.options.headers.authorization = `Bearer ${localStorage.getItem('auth0IdToken')}`
-      // console.log('Request Headers:', req.options.headers.authorization)
-    }
-    next()
-  },
-}])
+export const link = middlewareLink.concat(httpLink)
+
+// networkInterface.use([{
+//   applyMiddleware (req, next) {
+//     if (!req.options.headers) {
+//       req.options.headers = {}
+//     }
+//
+//     // get the authentication token from local storage if it exists
+//     if (localStorage.getItem('auth0IdToken')) {
+//       req.options.headers.authorization = `Bearer ${localStorage.getItem('auth0IdToken')}`
+//       // console.log('Request Headers:', req.options.headers.authorization)
+//     }
+//     next()
+//   },
+// }])

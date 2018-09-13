@@ -8,7 +8,7 @@ import * as actions from '../../Actions/actions'
 import '../../style/AddStep.css'
 
 const StepIdQuery = gql `
-query($id:ID){
+query stepIdQuery($id:ID){
   allSteps(
     filter:{goalDoc:{id:$id}}
   )

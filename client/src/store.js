@@ -1,5 +1,4 @@
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
-import {ApolloClient} from 'react-apollo';
 import { createLogger } from 'redux-logger'
 import { reducer as formReducer } from 'redux-form'
 // import { client } from './index'
@@ -11,7 +10,6 @@ const logger = createLogger({
  predicate:(getState, action) => !action.type.includes('@@redux-form')
 })
 
-const client = new ApolloClient();
 
 const composeEnhancers = typeof window === 'object' &&  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
 window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__: compose;
@@ -19,13 +17,12 @@ window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__: compose;
 export const store = createStore(
   combineReducers ({
     goals:Goal_Reducer.goalReducer,
-    apollo:client.reducer(),
     form: formReducer
   })
  /* eslint-enable */
   , {}, //initial state
 composeEnhancers (
-  applyMiddleware(client.middleware(),thunk, logger)
+  applyMiddleware(thunk, logger)
 
   )
 );

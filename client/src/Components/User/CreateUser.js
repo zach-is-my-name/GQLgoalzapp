@@ -1,6 +1,7 @@
 import React from 'react'
 import {withRouter, Redirect} from 'react-router-dom'
-import {graphql, gql} from 'react-apollo'
+import {graphql} from 'react-apollo'
+import gql from 'graphql-tag';
 
 class CreateUser extends React.Component {
   state = {
