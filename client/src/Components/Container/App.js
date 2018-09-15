@@ -18,17 +18,23 @@ import MenuButton from '../User/MenuButton'
 const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
 const domain = 'userzach.auth0.com'
 
+const userQuery = gql `
+          query userQuery {
+            user {
+              id
+              userName
+            }
+          }
+        `
 export class App extends Component {
 
-  _logout = () => {
-    console.log('CLICKED LOGOUT')
-    // remove token from local storage and reload page to reset apollo client
-    window.localStorage.removeItem('auth0IdToken')
-    console.log('Token Removed')
-    location.reload()
-  }
+/*Freecom method*/
+// async componentDidMount() {
+//   const authToken = localStorage.getItem('auth0IdToken')
+//
+// }
 
-  componentWillReceiveProps(nextProps) {
+componentWillReceiveProps(nextProps) {
   if (this.props !== nextProps && nextProps.data.user && window.localStorage.getItem('auth0IdToken')){
       this.props.dispatch(actions.setUserId(nextProps.data.user.id))
       this.props.dispatch(actions.setLoginStatus())
@@ -69,16 +75,15 @@ export class App extends Component {
     )
    }
 }
+_logout = () => {
+  console.log('CLICKED LOGOUT')
+  // remove token from local storage and reload page to reset apollo client
+  window.localStorage.removeItem('auth0IdToken')
+  console.log('Token Removed')
+  location.reload()
+}
 
 
-const userQuery = gql `
-          query userQuery {
-            user {
-              id
-              userName
-            }
-          }
-        `
 
 // const currentUserName = gql `
 // query($userId: ID) {
