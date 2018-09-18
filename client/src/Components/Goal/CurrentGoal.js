@@ -2,7 +2,7 @@
 /* Read from state the current goal ID, then query for the goal name
 with that ID, render the goal name with that query and set the current goal with an action */
 
-/*Expect problems reading the current goal, when the page first loads and there is no current
+/* Expect problems reading the current goal, when the page first loads and there is no current
 goal selected */
 
 /* CURRENT_GOAL */
@@ -46,70 +46,73 @@ class CurrentGoal extends Component {
 
   render() {
     if (this.props.goalDocById) {
-      const {goalDocById: {loading,error,GoalDoc}} = this.props;
+      const {
+        goalDocById: {
+          loading,
+          error,
+          GoalDoc
+        }
+      } = this.props;
       if (!loading) {
-        error ? console.log(error) : null
-        return (
-          <div className="currentgoal-container">
-            <p className="currentgoal-label">Current Goal: </p>
-            <p className="currentgoal"> {!this.props.id
-              ? null
-              : GoalDoc.goal}</p>
-          </div>
-        )
+        error
+          ? console.log(error)
+          : null
+        return (<div className="currentgoal-container">
+          <p className="currentgoal-label">Current Goal:
+          </p>
+          <p className="currentgoal">
+            {
+              !this.props.id
+                ? null
+                : GoalDoc.goal
+            }</p>
+        </div>)
       }
     }
     return null;
   }
 
-
-  /*Check if Query was sent and Data Received */
+  /* Check if Query was sent and Data Received */
   componentWillReceiveProps(nextProps) {
     if (nextProps.goalDocById && !nextProps.goalDocById.loading && nextProps.goalDocById.GoalDoc) {
-        if (this.props.goalDocById.GoalDoc !== nextProps.goalDocById.GoalDoc) {
-            this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
+      if (this.props.goalDocById.GoalDoc !== nextProps.goalDocById.GoalDoc) {
+        this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
 
-              if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0){
-                this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
-              }
-               else if (this.props.loggedInUser === this.props.targetUser && nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
-                this.props.dispatch(actions.setClonedStepsFromServer(nextProps.goalDocById.GoalDoc.clonedSteps))
-            }
-              if (this.props.loggedInUser !== this.props.targetUser) {
-                if(nextProps.goalDocById.GoalDoc.steps.length > this.props.currentGoalSteps.length) {
-                  this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
-                }
-          // else {
-          // this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
-          // console.log('cloneCurrentSteps called from CurrentGoal.js')
-      // }
-    }
-  }
+        if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0) {
+          this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
+        } else if (this.props.loggedInUser === this.props.targetUser && nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
+          this.props.dispatch(actions.setClonedStepsFromServer(nextProps.goalDocById.GoalDoc.clonedSteps))
+        }
+      }
     }
   }
 }
 
-
-/* REDUX CONNECT */
-const mapStateToProps = (state, props) => {
-  return {currentGoal: state.goals.currentGoal, currentGoalID: state.goals.currentGoalID, currentGoalSteps: state.goals.currentGoalSteps,  loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID,
-  currentGoalStepsClone: state.goals.currentGoalStepsClone}
-}
-
-const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoal);
-
-/* GRAPHQL QUERY */
-
-
-const CurrentGoalWithData = graphql(fetchGoalDocByID, {
-  name: 'goalDocById',
-  skip: (props) => !props.id,
-  options: ({id}) => ({
-    fetchPolicy: 'network-only',
-    variables: {
-      varID: id
+  /* REDUX CONNECT */
+  const mapStateToProps = (state, props) => {
+    return {
+      currentGoal: state.goals.currentGoal,
+      currentGoalID: state.goals.currentGoalID,
+      currentGoalSteps: state.goals.currentGoalSteps,
+      loggedInUser: state.goals.loggedInUserID,
+      targetUser: state.goals.targetUserID,
+      currentGoalStepsClone: state.goals.currentGoalStepsClone
     }
-  })
-})(CurrentGoalWithState);
+  }
 
-export default CurrentGoalWithData
+  const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoal);
+
+  /* GRAPHQL QUERY */
+
+  const CurrentGoalWithData = graphql(fetchGoalDocByID, {
+    name: 'goalDocById',
+    skip: (props) => !props.id,
+    options: ({id}) => ({
+      fetchPolicy: 'network-only',
+      variables: {
+        varID: id
+      }
+    })
+  })(CurrentGoalWithState);
+
+  export default CurrentGoalWithData

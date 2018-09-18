@@ -74,7 +74,7 @@ componentWillReceiveProps(nextProps) {
       </div>
     )
    }
-}
+
 _logout = () => {
   console.log('CLICKED LOGOUT')
   // remove token from local storage and reload page to reset apollo client
@@ -82,6 +82,9 @@ _logout = () => {
   console.log('Token Removed')
   location.reload()
 }
+
+}
+
 
 
 

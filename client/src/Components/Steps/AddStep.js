@@ -36,6 +36,7 @@ class AddStep extends React.Component {
   constructor(props) {
     super(props)
     this._submitStep = this._submitStep.bind(this);
+    this._submitMutations = this._submitMutations.bind(this)
     this.handleChange = this.handleChange.bind(this);
     this.state = {
       step: ''
@@ -54,32 +55,9 @@ class AddStep extends React.Component {
   componentWillReceiveProps(nextProps) {
     // if (!nextProps.data.loading) {
     if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
-      nextProps.currentGoalSteps.map((stepObj, mapIndex) => {
-        let id
-        if (!stepObj.id) {
-          id = "x"
-        } else {
-          id = stepObj.id
-        }
-        console.log("sending:",
-        {step: stepObj.step, id, positionIndex: stepObj.positionIndex})
-        return this.props.updateOrCreateStep({
-          variables: {
-            goalDocId: this.props.goalDocID,
-            step: stepObj.step,
-            id: id,
-            positionIndex: stepObj.positionIndex,
-            suggestedStep: false
-          }
-        }).then(({data}) => {
-            if (!stepObj.id){ return this.props.dispatch(actions.setStepIdFromServer(mapIndex, data.updateOrCreateStep.id))
-            }}
-)
-      })
+    this._submitMutations(nextProps)
     }
-    // }
   }
-
   render() {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
 
@@ -93,6 +71,31 @@ class AddStep extends React.Component {
     }
     return (null)
   }
+
+   _submitMutations = async (nextProps) =>  {
+    nextProps.currentGoalSteps.map(async (stepObj, mapIndex) => {
+        let id
+        if (!stepObj.id) {
+          id = "x"
+        } else {
+          id = stepObj.id
+        }
+        const result = await this.props.updateOrCreateStep({
+          variables: {
+            goalDocId: this.props.goalDocID,
+            step: stepObj.step,
+            id: id,
+            positionIndex: stepObj.positionIndex,
+            suggestedStep: false
+          }
+        })
+        if (!stepObj.id) {
+          return this.props.dispatch(actions.setStepIdFromServer(mapIndex, result.data.updateOrCreateStep.id))
+        }
+      console.log("reached")
+}
+)
+}
 }
 
 const AddStepWithApollo = compose(graphql(UpdateOrCreateStep, {

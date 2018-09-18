@@ -62,63 +62,63 @@ class AcceptStep extends Component {
   _submitAcceptedStep() {
     const step = this.props.step
     const index = this.props.index
-    // this.props.dispatch(actions.setStep(this.props.step, this.props.index, this.props.id))
-    this.props.dispatch(actions.setStepPositionIndex())
+    actions.setStepAndPositionIndex(this.props.step, this.props.index, this.props.step.id)
+    // this.props.dispatch(actions.setStepPositionIndex())
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
-      nextProps.currentGoalSteps.map((stepObj, mapIndex, array) => {
-        let id
-        if (!stepObj.id) {
-          id = "x"
-        } else {
-          id = stepObj.id
-        }
-
-        if (stepObj.originalId == false && id !== "x") {
-          console.log("Update Step Position and Assign OriginalId", id)
-          return this.props.updateOrCreateStep({
-            variables: {
-              id: id,
-              originalId: id,
-              positionIndex: stepObj.positionIndex,
-              step: "z"
-            }
-          }).then(({data}) => {
-            console.log('%cUpdated Position Index && Assigned OrginalId', "color: green", data)
-          })
-        } else if (stepObj.originalId == false && id === "x") {
-          console.log("Create Step", id)
-          return this.props.updateOrCreateStep({
-            variables: {
-              id: id,
-              positionIndex: stepObj.positionIndex,
-              suggestedStep: false,
-              goalDocId: this.props.goalDocId,
-              step: stepObj.step
-            }
-          }).then(({data}) => {
-            console.log('%cCreated Step', "color: green", data)
-            this.props.dispatch(actions.setStepIdFromServer(mapIndex, data.updateOrCreateStep.id))
-          })
-        } else if (stepObj.originalId) {
-          console.log("has OriginalId, just update positionIndex")
-          return this.props.updateOrCreateStep({
-            variables: {
-              id: id,
-              positionIndex: stepObj.positionIndex,
-              string: "y"
-            }
-          }).then(({data}) => {
-            console.log('%cUpdated Position Index Only', "color: green", data)
-          }).catch((error) => {
-            console.log(error)
-          })
-        }
-      })
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
+  //     nextProps.currentGoalSteps.map((stepObj, mapIndex, array) => {
+  //       let id
+  //       if (!stepObj.id) {
+  //         id = "x"
+  //       } else {
+  //         id = stepObj.id
+  //       }
+  //
+  //       if (stepObj.originalId == false && id !== "x") {
+  //         console.log("Update Step Position and Assign OriginalId", id)
+  //         return this.props.updateOrCreateStep({
+  //           variables: {
+  //             id: id,
+  //             originalId: id,
+  //             positionIndex: stepObj.positionIndex,
+  //             step: "z"
+  //           }
+  //         }).then(({data}) => {
+  //           console.log('%cUpdated Position Index && Assigned OrginalId', "color: green", data)
+  //         })
+  //       } else if (stepObj.originalId == false && id === "x") {
+  //         console.log("Create Step", id)
+  //         return this.props.updateOrCreateStep({
+  //           variables: {
+  //             id: id,
+  //             positionIndex: stepObj.positionIndex,
+  //             suggestedStep: false,
+  //             goalDocId: this.props.goalDocId,
+  //             step: stepObj.step
+  //           }
+  //         }).then(({data}) => {
+  //           console.log('%cCreated Step', "color: green", data)
+  //           this.props.dispatch(actions.setStepIdFromServer(mapIndex, data.updateOrCreateStep.id))
+  //         })
+  //       } else if (stepObj.originalId) {
+  //         console.log("has OriginalId, just update positionIndex")
+  //         return this.props.updateOrCreateStep({
+  //           variables: {
+  //             id: id,
+  //             positionIndex: stepObj.positionIndex,
+  //             string: "y"
+  //           }
+  //         }).then(({data}) => {
+  //           console.log('%cUpdated Position Index Only', "color: green", data)
+  //         }).catch((error) => {
+  //           console.log(error)
+  //         })
+  //       }
+  //     })
+  //   }
+  // }
   // updateClonedStepPositionIndex(allClonedSteps)
 
   render() {

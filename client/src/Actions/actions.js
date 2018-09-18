@@ -122,10 +122,6 @@ export const setClonedStepIdFromServer = (index,id) => {
   return {type: SET_CLONED_STEP_ID_FROM_SERVER, index, id }
 }
 
-
-
-
-
 export const SET_USERDOC_ID = 'SET_USERDOC_ID';
 export const setUserDocID = userDocID => ({type: SET_USERDOC_ID, userDocID})
 
@@ -159,8 +155,6 @@ export const setSuggestedToFalse = (stepObj, index) => {
       suggester: stepObj.suggester,
       id: stepObj.id
     }
-
-  return {type: SET_SUGGESTED_TO_FALSE, updatedStepObj, index}
 }
 
 export const suggestRemoveStep = () => {
