@@ -24,6 +24,7 @@ class SuggestStep extends Component {
     super(props)
     this.handleChange = this.handleChange.bind(this)
     this._submitSuggestedStep = this._submitSuggestedStep.bind(this)
+    this._submitClonedStepMutation = this._submitClonedStepMutation.bind(this)
     // this.submitSubsequent = this.submitSubsequent.bind(this)
     this.state = {
       step: " "
@@ -43,34 +44,11 @@ class SuggestStep extends Component {
 
   componentWillReceiveProps(nextProps) {
     const suggesterId = nextProps.loggedInUserID
-
     if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
-      nextProps.currentGoalStepsClone.map((stepObj, mapIndex, array) => {
-
-        let id
-        if (stepObj.id) {
-          id = stepObj.id
-        } else {
-          id = "x"
-        }
-        return this.props.updateOrCreateClonedStep({
-          variables: {
-            goalDocId: this.props.goalDocId,
-            id: id,
-            positionIndex: stepObj.positionIndex,
-            suggestedStep: stepObj.suggestedStep,
-            step: stepObj.step,
-            suggesterId: this.props.loggedInUserID
-          }
-        }).then(({data}) => {
-          if (!stepObj.id) {
-            return this.props.dispatch(actions.setClonedStepIdFromServer(mapIndex, data.updateOrCreateClonedStep.id))
-          }
-        })
-      })
+      console.log(nextProps.currentGoalStepsClone)
+      this._submitClonedStepMutation(nextProps)
     }
   }
-
   render() {
 
     if (this.props.loggedInUserID !== this.props.targetUserID) {
@@ -86,6 +64,29 @@ class SuggestStep extends Component {
     }
   }
 
+_submitClonedStepMutation = async (nextProps) => {
+      nextProps.currentGoalStepsClone.map(async (stepObj, mapIndex, array) => {
+        let id
+        if (stepObj.id) {
+          id = stepObj.id
+        } else {
+          id = "x"
+        }
+        const suggestStepResult = await this.props.updateOrCreateClonedStep({
+          variables: {
+            goalDocId: this.props.goalDocId,
+            id: id,
+            positionIndex: stepObj.positionIndex,
+            suggestedStep: stepObj.suggestedStep,
+            step: stepObj.step,
+            suggesterId: this.props.loggedInUserID
+          }
+        })
+          if (!stepObj.id) {
+            return this.props.dispatch(actions.setClonedStepIdFromServer(mapIndex, suggestStepResult.data.updateOrCreateClonedStep.id))
+          }
+      })
+}
 }
 
 const mapStateToProps = (state, props) => {

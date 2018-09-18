@@ -31,12 +31,25 @@ mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $p
   }
 }`
 
+const UpdateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
+    updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
+    positionIndex: $positionIndex, suggestedStep: $suggestedStep,
+    step: $step, suggesterId: $suggesterId }, update: {goalDocId: $goalDocId, positionIndex:
+    $positionIndex, id: $id, suggesterId: $suggesterId}) {
+      step
+      id
+      goalDoc {
+        id
+      }
+    }}`
+
 class AddStep extends React.Component {
 
   constructor(props) {
     super(props)
     this._submitStep = this._submitStep.bind(this);
-    this._submitMutations = this._submitMutations.bind(this)
+    this._submitAddStepMutation = this._submitAddStepMutation.bind(this)
+    this._submitClonedStepMutation = this._submitClonedStepMutation.bind(this)
     this.handleChange = this.handleChange.bind(this);
     this.state = {
       step: ''
@@ -46,6 +59,7 @@ class AddStep extends React.Component {
   _submitStep(event) {
     event.preventDefault()
     actions.setStepAndPositionIndex(this.state.step, this.props.index)
+    actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
   }
 
   handleChange(e) {
@@ -55,7 +69,11 @@ class AddStep extends React.Component {
   componentWillReceiveProps(nextProps) {
     // if (!nextProps.data.loading) {
     if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
-    this._submitMutations(nextProps)
+      this._submitAddStepMutation(nextProps)
+    if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
+      console.log(nextProps.currentGoalStepsClone)
+      this._submitClonedStepMutation(nextProps)
+    }
     }
   }
   render() {
@@ -72,7 +90,7 @@ class AddStep extends React.Component {
     return (null)
   }
 
-   _submitMutations = async (nextProps) =>  {
+   _submitAddStepMutation = async (nextProps) =>  {
     nextProps.currentGoalSteps.map(async (stepObj, mapIndex) => {
         let id
         if (!stepObj.id) {
@@ -80,7 +98,7 @@ class AddStep extends React.Component {
         } else {
           id = stepObj.id
         }
-        const result = await this.props.updateOrCreateStep({
+        const addStepResult = await this.props.updateOrCreateStep({
           variables: {
             goalDocId: this.props.goalDocID,
             step: stepObj.step,
@@ -90,11 +108,35 @@ class AddStep extends React.Component {
           }
         })
         if (!stepObj.id) {
-          return this.props.dispatch(actions.setStepIdFromServer(mapIndex, result.data.updateOrCreateStep.id))
+          return this.props.dispatch(actions.setStepIdFromServer(mapIndex, addStepResult.data.updateOrCreateStep.id))
         }
-      console.log("reached")
 }
 )
+console.log("reached")
+}
+
+_submitClonedStepMutation = (nextProps) => {
+  nextProps.currentGoalStepsClone.map(async (stepObj, mapIndex, array) => {
+    let id
+    if (stepObj.id) {
+      id = stepObj.id
+    } else {
+      id = "x"
+    }
+    const suggestStepResult = await this.props.updateOrCreateClonedStep({
+      variables: {
+        goalDocId: this.props.goalDocId,
+        id: id,
+        positionIndex: stepObj.positionIndex,
+        suggestedStep: stepObj.suggestedStep,
+        step: stepObj.step,
+        suggesterId: this.props.loggedInUserID
+      }
+    })
+      if (!stepObj.id) {
+        return this.props.dispatch(actions.setClonedStepIdFromServer(mapIndex, suggestStepResult.data.updateOrCreateClonedStep.id))
+      }
+  })
 }
 }
 
@@ -107,6 +149,20 @@ const AddStepWithApollo = compose(graphql(UpdateOrCreateStep, {
         }
       }).catch((error) => {
         console.log('there was an error sending the query', error)
+      })
+    }
+  })
+}),
+graphql(UpdateOrCreateClonedStep, {
+  name: 'updateOrCreateClonedStep',
+  props: ({updateOrCreateClonedStep}) => ({
+    updateOrCreateClonedStep({variables}) {
+      return updateOrCreateClonedStep({
+        variables: {
+          ...variables
+        }
+      }).catch((error) => {
+        console.error(error)
       })
     }
   })
@@ -127,6 +183,7 @@ const mapStateToProps = (state, props) => {
     loggedInUserID: state.goals.loggedInUserID,
     targetUserID: state.goals.targetUserID,
     currentGoalSteps: state.goals.currentGoalSteps,
+    currentGoalStepsClone: state.goals.currentGoalStepsClone,
     goalDocID: state.goals.currentGoalID
   }
 }
