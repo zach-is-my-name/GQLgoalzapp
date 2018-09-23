@@ -25,13 +25,9 @@ class OwnGoalCurrentSteps extends Component {
   }
 
   render() {
-    //suggestedStep manipulation goes here
-    let currentGoalSteps
-    if (this.state.toggleSuggestedSteps === true) {
-      currentGoalSteps = this.props.currentGoalStepsClone
-    } else {
-      currentGoalSteps =  this.props.currentGoalSteps
-    }
+      let currentGoalSteps = this.props.currentGoalSteps
+      let currentGoalStepsClone =  this.props.currentGoalStepsClone
+
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
     return (
@@ -41,7 +37,8 @@ class OwnGoalCurrentSteps extends Component {
         {this.state.toggleSuggestedSteps ? clonedSteps : steps}
         <SortableStepsContainer
           randomColorStep={this.props.randomColorStep}
-          items={currentGoalSteps}
+          currentGoalSteps={currentGoalSteps}
+          currentGoalStepsClone={currentGoalStepsClone}
           onSortEnd={this.onSortEnd.bind(this)}
           onSortStart={this.onSortStart.bind(this)}
           helperClass="sortable-helper"
@@ -69,7 +66,7 @@ class OwnGoalCurrentSteps extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID}
+  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, }
 }
 
 export default connect(mapStateToProps)(OwnGoalCurrentSteps);

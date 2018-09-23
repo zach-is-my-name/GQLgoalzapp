@@ -15,6 +15,7 @@ const initialState = {
   targetUserID: '',
   targetUserName: '' ,
   resolveAcceptStep: false,
+  idToRemove: '',
   // currentSuggestedSteps:[],
   // currentSuggestedRemoveSteps: [],
 }
@@ -118,6 +119,12 @@ if (action.type === 'SET_TARGET_USER_NAME') {
 if (action.type === 'SET_CURRENT_USERNAME'){
   return update( state, {
     loggedInUserName: {$set:action.userName}
+  })
+}
+
+if (action.type === 'SET_ID_TO_REMOVE') {
+  return update(state, {
+    idToRemove: {$set: action.idToRemove}
   })
 }
 

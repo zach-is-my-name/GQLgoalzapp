@@ -1,29 +1,44 @@
 import React from 'react';
-import {SortableContainer, arrayMove} from 'react-sortable-hoc';
-import {OwnSortableStepWithButtons} from '../Container/OwnSortableStepWithButtons.js'
+import {SortableContainer} from 'react-sortable-hoc';
+import OwnSortableStepWithButtons from '../Container/OwnSortableStepWithButtons.js'
 
-export const SortableStepsContainer = SortableContainer((props) => {
-  const toggleSuggestedSteps = props.toggleSuggestedSteps
-  const items = props.items
-  const newIndex = props.newIndex
-  const oldIndex = props.oldIndex
-  const indexInMotion = props.indexInMotion
-  // items, newIndex, oldIndex, indexInMotion = {props}
-  return (
+export const SortableStepsContainer = SortableContainer(({goalDocId, toggleSuggestedSteps, currentGoalSteps, currentGoalStepsClone, newIndex, oldIndex, indexInMotion, randomColorStep}) => {
+  if (toggleSuggestedSteps === true) {
+    return (
     <ul className="sortable-container">
-      {items.map((value, index) =>
+      {currentGoalStepsClone.map((stepObj, index, currentGoalStepsClone) =>
         <OwnSortableStepWithButtons
-          randomColorStep={props.randomColorStep}
+          randomColorStep={randomColorStep}
           key={`item-${index}`}
           index={index}
           stepIndex={index}
-          value={value}
+          stepObj={stepObj}
           newIndex={newIndex}
           oldIndex={oldIndex}
           indexInMotion={indexInMotion}
-          goalDocId={props.goalDocId}
-          toggleSuggestedSteps={props.toggleSuggestedSteps}
+          goalDocId={goalDocId}
+          toggleSuggestedSteps={toggleSuggestedSteps}
+          currentGoalStepsClone={currentGoalStepsClone}
+        />)}
+    </ul>
+    )
+  } else {
+  return (
+    <ul className="sortable-container">
+      {currentGoalSteps.map((stepObj, index, currentGoalSteps) =>
+        <OwnSortableStepWithButtons
+          randomColorStep={randomColorStep}
+          key={`item-${index}`}
+          index={index}
+          stepIndex={index}
+          stepObj={stepObj}
+          newIndex={newIndex}
+          oldIndex={oldIndex}
+          indexInMotion={indexInMotion}
+          goalDocId={goalDocId}
+          toggleSuggestedSteps={toggleSuggestedSteps}
+          currentGoalSteps={currentGoalSteps}
         />)}
     </ul>
   );
-});
+}});

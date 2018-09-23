@@ -50,7 +50,10 @@ export function setStepAndPositionIndex(step, index) {
    store.dispatch(setStep(step, index))
    store.dispatch(setStepPositionIndex())
   }
-
+export function unsetStepAndPositionIndex(index) {
+  store.dispatch(removeStep(index))
+  store.dispatch(setStepPositionIndex())
+}
 export const SET_STEP = 'SET_STEP';
 export const setStep = (step, index, id) => {
   const stepObj = {
@@ -136,6 +139,9 @@ export const setTargetUserID = targetUserID => ({type: SET_TARGET_USER_ID, targe
 
 export const SET_TARGET_USER_NAME = 'SET_TARGET_USER_NAME'
 export const setTargetUserName = targetUserName => ({type: SET_TARGET_USER_NAME, targetUserName})
+
+export const SET_ID_TO_REMOVE = 'SET_ID_TO_REMOVE'
+export const setIdToRemove = idToRemove => ({type: SET_ID_TO_REMOVE, idToRemove})
 
 export const REMOVE_STEP = 'REMOVE_STEP'
 export const removeStep = index => ({type: REMOVE_STEP, index})
