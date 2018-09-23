@@ -1,10 +1,10 @@
 /* eslint-disable */
 import React, {Component} from 'react'
 
-import AddStep from '../Steps/AddStep'
-import CurrentSteps from '../Steps/CurrentSteps'
-import SuggestStep from '../Steps/SuggestStep'
-import Notifications from '../Feed/Notifications'
+import AddStepSmart from '../Steps/AddStep-smart'
+import CurrentStepsSmart from '../Steps/CurrentSteps-smart'
+import SuggestStepSmart from '../Steps/SuggestStepSmart'
+import NotificationsSmart from '../Feed/Notifications-smart'
 // import CurrentSuggestedSteps from '../Steps/CurrentSuggestedSteps'
 
 export default function Steps() {
@@ -46,8 +46,8 @@ let spanStyle2= {
   return (
     <div>
       {/* <AddStep /> */}
-      <Notifications randomColorUserName={spanStyle1} randomColorStep={spanStyle2} />
-      <CurrentSteps randomColorStep={spanStyle2} />
+      <NotificationsSmart randomColorUserName={spanStyle1} randomColorStep={spanStyle2} />
+      <CurrentStepsSmart randomColorStep={spanStyle2} />
       {/* <SuggestStep /> */}
       {/* <CurrentSuggestedSteps /> */}
     </div>

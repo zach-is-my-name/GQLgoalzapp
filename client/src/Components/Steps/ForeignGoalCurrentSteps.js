@@ -9,7 +9,7 @@ import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 
 import '../../style/ForeignGoalCurrentSteps.css'
 
-import SuggestStep from './SuggestStep.js'
+import SuggestStepSmart from './SuggestStepSmart.js'
 import SuggestEditStep from './SuggestEditStep.js'
 import YesNoPrompt from './YesNoPrompt.js'
 import SuggestRemoveStep from './SuggestRemoveStep.js'
@@ -115,7 +115,7 @@ class ForeignSortableStepWithButtons extends Component {
             : null}
 
           {this.state.activeStep && (this.state.stepIndex !== null) && (this.state.activeIndexAddStep === this.state.stepIndex)
-            ? <SuggestStep index={stepIndex}/>
+            ? <SuggestStepSmart index={stepIndex}/>
             : null}
 
         </div>

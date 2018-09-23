@@ -4,13 +4,13 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import * as actions from '../Actions/actions'
 
-import Goal from '../Components/Container/Goal.js'
+import Goal from '../Components/Goal/Goal.js'
 import Steps from '../Components/Container/Steps.js'
 import App from '../Components/Container/App'
 import CurrentUser from '../Components/User/CurrentUser'
 import GlobalFeedPage from './GlobalFeedPage'
 import '../style/UserFeedPage.css'
-import CurrentGoal from '../Components/Goal/CurrentGoal'
+import CurrentGoal from '../Components/Goal/CurrentGoal-smart'
 
  class UserFeedPage extends Component {
    constructor(props){
@@ -36,7 +36,7 @@ componentWillMount(){
     <CurrentGoal id={this.props.currentGoalID}/>
 
     {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
-    
+
     <Link className="globalfeed" to="/">
       GlobalFeed
     </Link>

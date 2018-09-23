@@ -11,7 +11,7 @@ import {connect} from 'react-redux';
 import SelectGoalForm from './Form/SelectGoalForm'
 
 /*CLASS DECLARATION */
-class SelectGoal extends React.Component {
+class SelectGoalSmart extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
@@ -52,7 +52,7 @@ const mapStateToProps = (state, props) => {
   return {currentGoal: state.goals.currentGoal,  loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUserID: state.goals.targetUserID,}
 }
 
-const SelectGoalWithState = connect(mapStateToProps)(SelectGoal)
+const SelectGoalWithState = connect(mapStateToProps)(SelectGoalSmart)
 
 /*GRAPHQL QUERY */
 const GoalDocQuery = gql `query allGoalDocsQuery ($userid: ID) {

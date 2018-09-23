@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {graphql} from 'react-apollo'
 import gql from 'graphql-tag';
 
-import GlobalFeed from '../Components/Container/GlobalFeed'
+import GlobalFeed from '../Components/Feed/GlobalFeed'
 
 class GlobalFeedPage extends Component {
 

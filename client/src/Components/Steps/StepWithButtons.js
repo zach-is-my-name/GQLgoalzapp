@@ -1,7 +1,7 @@
 import React from 'react';
 import YesNoPrompt from './YesNoPrompt.js'
 import EditStep from './EditStep.js'
-import AddStep from './AddStep.js'
+import AddStepSmart from './AddStep-smart.js'
 import RemoveStep from './RemoveStep.js'
 import AcceptStep from './AcceptStep.js'
 import minus from '../../style/images/minus.jpg'
@@ -60,8 +60,8 @@ import plus from '../../style/images/plus_websize.png'
           </div>
           : null }
         {}
-        {renderRemoveStep /*&& (indexClicked === stepIndex) */ ? <RemoveStep stepIndex={stepIndex}  unrenderRemoveStep={unrenderRemoveStep} nextPropsCurrentGoalSteps={nextPropsCurrentGoalSteps} /> : null}
-
+        {/* {renderRemoveStep /*&& (indexClicked === stepIndex)  ? <RemoveStep stepIndex={stepIndex}  unrenderRemoveStep={unrenderRemoveStep} nextPropsCurrentGoalSteps={nextPropsCurrentGoalSteps} /> : null}
+        */}
 
         {/*reject step*/}
         {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex && stepObj.suggestedStep === true))
@@ -78,7 +78,7 @@ import plus from '../../style/images/plus_websize.png'
         {/*add step*/}
         {(activeStep && stepIndex !== null && (indexClicked === stepIndex) && !stepObj.suggestedStep && !toggleSuggestedSteps)
           ?
-            <AddStep index={stepIndex}/>
+            <AddStepSmart index={stepIndex}/>
           : null}
 
         {/*accept step */}

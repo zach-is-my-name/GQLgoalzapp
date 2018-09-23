@@ -2,8 +2,8 @@
 
 import React, {Component} from 'react'
 import TargetUser from '../User/TargetUser'
-import SelectGoal from '../Goal/SelectGoal'
-import InputGoal  from '../Goal/InputGoal'
+import SelectGoal from '../Goal/SelectGoal-smart'
+import InputGoalSmart  from '../Goal/InputGoal-smart'
 
 export default function Goal(props) {
 
