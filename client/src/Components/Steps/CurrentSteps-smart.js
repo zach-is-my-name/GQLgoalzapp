@@ -3,8 +3,8 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions.js'
-
 import '../../style/CurrentSteps.css'
 import OwnGoalCurrentSteps from './OwnGoalCurrentSteps.js'
 import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
@@ -18,6 +18,7 @@ class CurrentStepsSmart extends Component {
   //     console.log('cloneCurrentSteps called from CurrentSteps.js ')
   //   }
   //   }
+
 
   render() {
 
@@ -42,4 +43,6 @@ class CurrentStepsSmart extends Component {
 const mapStateToProps = (state, props) => {
   return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, goalDocId: state.goals.currentGoalID}
 }
+
+
 export default connect(mapStateToProps)(CurrentStepsSmart);

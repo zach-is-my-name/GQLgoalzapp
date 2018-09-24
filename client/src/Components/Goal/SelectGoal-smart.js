@@ -7,30 +7,26 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
-
 import SelectGoalForm from './Form/SelectGoalForm'
 
-/*CLASS DECLARATION */
+const GoalDocQuery = gql `query allGoalDocsQuery ($userid: ID) {
+  allGoalDocs(filter:
+    {owners :{id: $userid}})
+  {
+    goal
+    id
+  }
+}`;
+
 class SelectGoalSmart extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
-
   }
 
-  /* EVENT HANDLER */
-  selectGoal(values) {
-    event.preventDefault();
-    const goalDocID = values.goalSelector
-    /*ACTION DISPATCH */
-    if (values.goalSelector) {
-    this.props.dispatch(actions.setGoalDocID(goalDocID))
-    }
-  }
 
-  /*RENDER METHOD */
   render() {
-    const { data: {loading,error,allGoalDocs} } = this.props
+    const {loading, error, allGoalDocs} = this.props.goalDocQuery
     if (loading) {
       return <div>loading...</div>;
     } else if (error) {
@@ -44,9 +40,17 @@ class SelectGoalSmart extends React.Component {
       )
     }
   }
+
+  selectGoal(values) {
+    event.preventDefault();
+    const goalDocID = values.goalSelector
+
+    if (values.goalSelector) {
+      this.props.dispatch(actions.setGoalDocID(goalDocID))
+    }
+  }
 }
 
-/*REDUX */
 const mapStateToProps = (state, props) => {
   // console.log(state)
   return {currentGoal: state.goals.currentGoal,  loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUserID: state.goals.targetUserID,}
@@ -54,20 +58,9 @@ const mapStateToProps = (state, props) => {
 
 const SelectGoalWithState = connect(mapStateToProps)(SelectGoalSmart)
 
-/*GRAPHQL QUERY */
-const GoalDocQuery = gql `query allGoalDocsQuery ($userid: ID) {
-  allGoalDocs(filter:
-    {owners :{id: $userid}})
-  {
-    goal
-    id
-  }
-}`;
 
 const ComponentWithData = graphql(GoalDocQuery,
-{ options: ({targetUserID}) => ({ variables: {userid:targetUserID}}),
+{name: 'goalDocQuery'},{ options: ({userId}) => ({ variables: {userid: userId}}),
 })(SelectGoalWithState);
-
-
 
 export default connect(mapStateToProps)(ComponentWithData)

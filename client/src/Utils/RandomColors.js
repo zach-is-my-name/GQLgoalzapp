@@ -1,13 +1,8 @@
 /* eslint-disable */
-import React, {Component} from 'react'
 
-import AddStepSmart from '../Steps/AddStep-smart'
-import CurrentStepsSmart from '../Steps/CurrentSteps-smart'
-import SuggestStepSmart from '../Steps/SuggestStepSmart'
-import NotificationsSmart from '../Feed/Notifications-smart'
 // import CurrentSuggestedSteps from '../Steps/CurrentSuggestedSteps'
 
-export default function Steps() {
+export default function RandomColors() {
   //bad css
    function getRandomInt1(min, max) {
       min = Math.ceil(min);
@@ -42,14 +37,4 @@ let spanStyle1 = {
 let spanStyle2= {
   color: '#ef3779'
 }
-
-  return (
-    <div>
-      {/* <AddStep /> */}
-      <NotificationsSmart randomColorUserName={spanStyle1} randomColorStep={spanStyle2} />
-      <CurrentStepsSmart randomColorStep={spanStyle2} />
-      {/* <SuggestStep /> */}
-      {/* <CurrentSuggestedSteps /> */}
-    </div>
-  )
 }

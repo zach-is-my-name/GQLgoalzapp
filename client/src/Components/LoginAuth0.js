@@ -10,7 +10,7 @@ import {withRouter} from 'react-router-dom'
     }
 
   componentDidMount() {
-    // console.log('componentDidMount called in LoginAuth0.js')
+    console.log('componentDidMount called in LoginAuth0.js')
     this._lock.on('authenticated', (authResult) => {
       window.localStorage.setItem('auth0IdToken', authResult.idToken)
       console.log('token set')
@@ -19,7 +19,7 @@ import {withRouter} from 'react-router-dom'
     }
 
   _showLogin = () => {
-    // console.log('CLICKED LOGIN')
+    console.log('CLICKED LOGIN')
     this._lock.show()
   }
 

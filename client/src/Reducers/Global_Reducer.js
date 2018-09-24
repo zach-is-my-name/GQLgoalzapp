@@ -28,6 +28,12 @@ if (action.type === 'SET_USERID') {
   })
 }
 
+if (action.type === 'SET_LOGIN_STATUS'){
+  return update( state, {
+    loggedIn: {$set: true}
+  })
+}
+
 if (action.type === 'SET_GOAL') {
   return update(state, {
     currentGoal: {$set:action.goal},
@@ -94,13 +100,6 @@ if(action.type === 'SET_STEP_ID_FROM_SERVER') {
 if (action.type === 'SET_CLONED_STEP_ID_FROM_SERVER'){
   return update(state, {
     currentGoalStepsClone: {[action.index]: {id: { $set: action.id}}}
-  })
-}
-
-
-if (action.type === 'SET_LOGIN_STATUS'){
-  return update( state, {
-    loggedIn: {$set: true}
   })
 }
 

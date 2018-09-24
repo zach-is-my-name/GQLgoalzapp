@@ -5,13 +5,12 @@ with that ID, render the goal name with that query and set the current goal with
 /* Expect problems reading the current goal, when the page first loads and there is no current
 goal selected */
 
-/* CURRENT_GOAL */
-
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Query, graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
+import CurrentGoal from './CurrentGoal'
 import '../../style/CurrentGoal.css'
 
 const fetchGoalDocByID = gql `
@@ -53,20 +52,11 @@ class CurrentGoalSmart extends Component {
           GoalDoc
         }
       } = this.props;
+
       if (!loading) {
         error
           ? console.log(error)
-          : null
-        return (<div className="currentgoal-container">
-          <p className="currentgoal-label">Current Goal:
-          </p>
-          <p className="currentgoal">
-            {
-              !this.props.id
-                ? null
-                : GoalDoc.goal
-            }</p>
-        </div>)
+          :null
       }
     }
     return null;
