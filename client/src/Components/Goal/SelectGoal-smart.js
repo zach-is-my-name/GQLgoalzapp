@@ -9,10 +9,9 @@ import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
 import SelectGoalForm from './Form/SelectGoalForm'
 
-const GoalDocQuery = gql `query allGoalDocsQuery ($userid: ID) {
+const GoalDocQuery = gql `query allGoalDocsQuery ($userId: ID) {
   allGoalDocs(filter:
-    {owners :{id: $userid}})
-  {
+    {owners :{id: $userId}}){
     goal
     id
   }
@@ -22,6 +21,9 @@ class SelectGoalSmart extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
+    this.state = {
+      goalDocId: ''
+    }
   }
 
 
@@ -43,10 +45,11 @@ class SelectGoalSmart extends React.Component {
 
   selectGoal(values) {
     event.preventDefault();
-    const goalDocID = values.goalSelector
+    const goalDocId = values.goalSelector
 
     if (values.goalSelector) {
-      this.props.dispatch(actions.setGoalDocID(goalDocID))
+      this.setState({goalDocId})
+      // this.props.dispatch(actions.setGoalDocID(goalDocID))
     }
   }
 }
