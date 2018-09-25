@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions.js'
 import {SortableContainer, arrayMove} from 'react-sortable-hoc';
-import {SortableStepsContainer} from '../Container/SortableStepsContainer.js'
+import {SortableStepsContainer} from './Sortable/SortableStepsContainer.js'
 
 
 class OwnGoalCurrentSteps extends Component {

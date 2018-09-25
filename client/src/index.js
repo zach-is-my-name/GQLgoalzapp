@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './Components/Container/App';
+import App from './Components/App';
 import CreateUser from './Components/User/CreateUser';
 import {store} from './store';
 import {Provider} from 'react-redux'
@@ -16,7 +16,7 @@ import './index.css';
 // import {networkInterface} from './networkinterface'
 
 // import GlobalFeed from './Routes/GlobalFeed'
-import UserFeedPage from './Routes/UserFeedPage'
+import UserFeedPage from './Routes/UserFeedPage-smart'
 import NotFound from './Routes/NotFound'
 
 console.log(link)

@@ -2,7 +2,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Link, withRouter, Switch} from 'react-router-dom';
 import FeedEntry from '../Feed/FeedEntry'
-import UserFeedPage from '../../Routes/UserFeedPage'
+import UserFeedPage from '../../Routes/UserFeedPage-smart'
 
  const GlobalFeed = ({entries = []}  )  => {
   if (entries && entries.length) {

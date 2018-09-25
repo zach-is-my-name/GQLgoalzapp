@@ -2,18 +2,17 @@
 import React, {Component} from 'react';
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
-import '../../style/App.css';
-import '../../style/fonts/bentonsans_regular-webfont.woff'
+import '../style/App.css';
+import '../style/fonts/bentonsans_regular-webfont.woff'
 import {withRouter, Switch, Route, BrowserRouter as Router} from 'react-router-dom'
 import {connect} from 'react-redux';
-
-import UserFeedPage from '../../Routes/UserFeedPage'
-import GlobalFeedPage from '../../Routes/GlobalFeedPage'
-import LoginAuth0 from '../LoginAuth0'
-import CurrentUser from '../User/CurrentUser'
-import * as actions from '../../Actions/actions'
+import UserFeedPage from '../Routes/UserFeedPage-smart'
+import GlobalFeedPage from '../Routes/GlobalFeedPage'
+import LoginAuth0 from './LoginAuth0'
+import CurrentUser from './User/CurrentUser'
+import * as actions from '../Actions/actions'
 import {Link} from 'react-router-dom';
-import MenuButton from '../User/MenuButton'
+import MenuButton from './User/MenuButton'
 
 const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
 const domain = 'userzach.auth0.com'

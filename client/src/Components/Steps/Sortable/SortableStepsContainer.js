@@ -1,6 +1,6 @@
 import React from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
-import OwnSortableStepWithButtons from '../Container/OwnSortableStepWithButtons.js'
+import OwnSortableStepWithButtons from './OwnSortableStepWithButtons.js'
 
 export const SortableStepsContainer = SortableContainer(({goalDocId, toggleSuggestedSteps, currentGoalSteps, currentGoalStepsClone, newIndex, oldIndex, indexInMotion, randomColorStep}) => {
   if (toggleSuggestedSteps === true) {

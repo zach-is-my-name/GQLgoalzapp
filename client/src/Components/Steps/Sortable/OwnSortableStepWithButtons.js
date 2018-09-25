@@ -3,11 +3,11 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import '../../style/OwnGoalCurrentSteps.css'
-import * as actions from '../../Actions/actions.js'
+import '../../../style/OwnGoalCurrentSteps.css'
+import * as actions from '../../../Actions/actions.js'
 import {SortableElement} from 'react-sortable-hoc';
 import update from 'immutability-helper';
-import StepWithButtons from '../Steps/StepWithButtons.js'
+import StepWithButtons from './StepWithButtons.js'
 
 class StepWithButtonsContainer extends Component {
 
