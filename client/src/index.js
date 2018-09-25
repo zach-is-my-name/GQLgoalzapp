@@ -19,7 +19,6 @@ import './index.css';
 import UserFeedPage from './Routes/UserFeedPage-smart'
 import NotFound from './Routes/NotFound'
 
-console.log(link)
 
 const cache = new InMemoryCache()
 

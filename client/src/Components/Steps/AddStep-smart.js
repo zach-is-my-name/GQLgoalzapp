@@ -8,6 +8,9 @@ import * as actions from '../../Actions/actions'
 import AddStep from './AddStep'
 import '../../style/AddStep.css'
 
+
+
+
 const StepIdQuery = gql `
 query stepIdQuery($id:ID){
   allSteps(
@@ -15,7 +18,8 @@ query stepIdQuery($id:ID){
   )
  {
  id
- originalId
+ positionIndex
+ step
 }}`
 
 const UpdateOrCreateStep = gql `
@@ -57,38 +61,56 @@ class AddStepSmart extends React.Component {
     }
   }
 
-  _submitStep(event) {
-    event.preventDefault()
-    actions.setStepAndPositionIndex(this.state.step, this.props.index)
-    actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
-  }
-
-  handleChange(e) {
-    this.setState({step: e.target.value});
-  }
-
   componentWillReceiveProps(nextProps) {
     // if (!nextProps.data.loading) {
-    if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
-      this._submitAddStepMutation(nextProps)
-    if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
-      console.log(nextProps.currentGoalStepsClone)
-      this._submitClonedStepMutation(nextProps)
-    }
-    }
+    // if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
+    //   this._submitAddStepMutation(nextProps)
+    // if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
+    //   console.log(nextProps.currentGoalStepsClone)
+    //   this._submitClonedStepMutation(nextProps)
+    // }
+    // }
   }
+
   render() {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
+
+ //
+ // console.log(newStepsSortedByPositionIndex)
     if (this.props.loggedInUserID === this.props.targetUserID) {
       return(
         <AddStep _submitStep={this._submitStep} handleChange={this.handleChange} value={this.state.step} loggedInUserID={this.props.loggedInUserID} />
   )
     }
     return (null)
+}
+
+  _submitStep(event) {
+    event.preventDefault()
+    const {loading, error, allSteps} = this.props.stepIdQuery
+
+    if (!loading) {
+    // actions.setStepAndPositionIndex(this.state.step, this.props.index)
+    // actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
+    const newStep = {
+      step: this.state.step,
+      suggestedStep: false,
+      id: null,
+      positionIndex: null
+    }
+    const stepIndex = this.props.stepIndex
+    const  newSteps = allSteps.slice()
+    newSteps.splice(stepIndex,0,newStep)
+    const newStepsSortedByPositionIndex = newSteps.map((stepObj, index) =>({...stepObj, positionIndex: index}))
+    this._submitAddStepMutation(newStepsSortedByPositionIndex)
+  }
+}
+  handleChange(e) {
+    this.setState({step: e.target.value});
   }
 
-   _submitAddStepMutation = async (nextProps) =>  {
-    nextProps.currentGoalSteps.map(async (stepObj, mapIndex) => {
+  _submitAddStepMutation = async (newStepsSortedByPositionIndex) =>  {
+    newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
         let id
         if (!stepObj.id) {
           id = "x"
@@ -97,27 +119,26 @@ class AddStepSmart extends React.Component {
         }
         const addStepResult = await this.props.updateOrCreateStep({
           variables: {
-            goalDocId: this.props.goalDocID,
+            goalDocId: this.props.goalDocId,
             step: stepObj.step,
             id: id,
             positionIndex: stepObj.positionIndex,
             suggestedStep: false
           }
         })
-        if (!stepObj.id) {
-          return this.props.dispatch(actions.setStepIdFromServer(mapIndex, addStepResult.data.updateOrCreateStep.id))
-        }
+        // if (!stepObj.id) {
+        //   return this.props.dispatch(actions.setStepIdFromServer(mapIndex, addStepResult.data.updateOrCreateStep.id))
+        // }
 }
 )
-console.log("reached")
 }
 
-_submitClonedStepMutation = (nextProps) => {
-  nextProps.currentGoalStepsClone.map(async (stepObj, mapIndex, array) => {
-    let id
-    if (stepObj.id) {
-      id = stepObj.id
-    } else {
+  _submitClonedStepMutation = (nextProps) => {
+    nextProps.currentGoalStepsClone.map(async (stepObj, mapIndex, array) => {
+      let id
+      if (stepObj.id) {
+        id = stepObj.id
+        } else {
       id = "x"
     }
     const suggestStepResult = await this.props.updateOrCreateClonedStep({
@@ -135,9 +156,11 @@ _submitClonedStepMutation = (nextProps) => {
       }
   })
 }
+
 }
 
-const AddStepWithApollo = compose(graphql(UpdateOrCreateStep, {
+const AddStepWithApollo = compose(
+graphql(UpdateOrCreateStep, {
   props: ({mutate}) => ({
     updateOrCreateStep({variables}) {
       return mutate({
@@ -165,9 +188,10 @@ graphql(UpdateOrCreateClonedStep, {
   })
 }),
 graphql(StepIdQuery, {
-  options: ({goalDocID}) => ({
+  name: "stepIdQuery",
+  options: (ownProps) => ({
     variables: {
-      id: goalDocID
+      id: ownProps.goalDocId
     }
   })
 })

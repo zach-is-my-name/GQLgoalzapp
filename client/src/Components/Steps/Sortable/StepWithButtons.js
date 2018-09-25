@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import YesNoPrompt from '../YesNoPrompt.js'
 import EditStep from '../EditStep.js'
@@ -78,7 +79,7 @@ import plus from '../../../style/images/plus_websize.png'
         {/*add step*/}
         {(activeStep && stepIndex !== null && (indexClicked === stepIndex) && !stepObj.suggestedStep && !toggleSuggestedSteps)
           ?
-            <AddStepSmart index={stepIndex}/>
+            <AddStepSmart stepIndex={stepIndex} goalDocId={goalDocId}/>
           : null}
 
         {/*accept step */}
