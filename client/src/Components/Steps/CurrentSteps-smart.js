@@ -19,7 +19,6 @@ class CurrentStepsSmart extends Component {
   //   }
   //   }
 
-
   render() {
 
     let currentSteps

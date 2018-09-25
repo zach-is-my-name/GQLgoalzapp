@@ -37,6 +37,10 @@ import InputGoalSmart  from '../Components/Goal/InputGoal-smart'
    constructor(props){
     super(props)
     // this.dispatchtargetUserID = this.dispatchtargetUserID.bind(this)
+    this.state = {
+      goalDocId: ''
+    }
+    this._setGoalDocId = this._setGoalDocId.bind(this)
    }
 
 componentDidMount() {
@@ -55,7 +59,7 @@ if (loading) {
   <div className="userfeedpage-container">
     <h2> UserFeed </h2>
     <TargetUser targetUserName={User.userName || ''} />
-    <SelectGoal userId={this.props.userQuery.user.id} />
+    <SelectGoal userId={this.props.userQuery.user.id} setGoalDocId={this._setGoalDocId}  />
     {/* <InputGoal /> */}
     {/* <CurrentStepsSmart loggedInUser={this.props.data.user.} />
       <CurrentGoal id={this.props.currentGoalID}/>
@@ -68,6 +72,9 @@ if (loading) {
     </Link>
   </div>
 )
+  }
+  _setGoalDocId(id) {
+      this.setState({goalDocId:id})
   }
   }
 

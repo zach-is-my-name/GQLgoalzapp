@@ -15,17 +15,13 @@ const GoalDocQuery = gql `query allGoalDocsQuery ($userId: ID) {
     goal
     id
   }
-}`;
+}`
 
 class SelectGoalSmart extends React.Component {
   constructor(props) {
     super(props)
     this.selectGoal = this.selectGoal.bind(this);
-    this.state = {
-      goalDocId: ''
     }
-  }
-
 
   render() {
     const {loading, error, allGoalDocs} = this.props.goalDocQuery
@@ -48,22 +44,15 @@ class SelectGoalSmart extends React.Component {
     const goalDocId = values.goalSelector
 
     if (values.goalSelector) {
-      this.setState({goalDocId})
+      this.props.setGoalDocId(goalDocId)
       // this.props.dispatch(actions.setGoalDocID(goalDocID))
     }
   }
 }
 
-const mapStateToProps = (state, props) => {
-  // console.log(state)
-  return {currentGoal: state.goals.currentGoal,  loggedIn: state.goals.loggedIn, userid: state.goals.userid, targetUserID: state.goals.targetUserID,}
-}
-
-const SelectGoalWithState = connect(mapStateToProps)(SelectGoalSmart)
-
 
 const ComponentWithData = graphql(GoalDocQuery,
 {name: 'goalDocQuery'},{ options: ({userId}) => ({ variables: {userid: userId}}),
-})(SelectGoalWithState);
+})(SelectGoalSmart);
 
-export default connect(mapStateToProps)(ComponentWithData)
+export default ComponentWithData
