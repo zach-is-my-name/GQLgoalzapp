@@ -3,11 +3,38 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions.js'
 import '../../style/CurrentSteps.css'
 import OwnGoalCurrentSteps from './OwnGoalCurrentSteps.js'
 import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
+
+const goalDocByIdQuery = gql `
+query goalDocByIdQuery ($goalDocId: ID) {
+  GoalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     step
+     positionIndex
+     suggestedStep
+     id
+     originalId
+   }
+   clonedSteps(orderBy:positionIndex_ASC) {
+     step
+     positionIndex
+     id
+     suggestedStep
+     originalId
+     suggester {
+       userName
+     }
+   }
+  }
+}`;
+
 
 class CurrentStepsSmart extends Component {
 
@@ -21,13 +48,22 @@ class CurrentStepsSmart extends Component {
 
   render() {
 
-    let currentSteps
+const {loading, error, GoalDoc} = this.props.goalDocById
+let currentSteps
 
+if (loading) {
+    return <div>Loading...</div>
+  }
     if (this.props.loggedInUser !== this.props.targetUser) {
       currentSteps = <ForeignGoalCurrentSteps/>
     } else {
-      currentSteps = <OwnGoalCurrentSteps randomColorStep={this.props.randomColorStep} currentGoalStepsClone={this.props.currentGoalStepsClone} goalDocId={this.props.goalDocId}/>
+      currentSteps = <OwnGoalCurrentSteps
+        randomColorStep={this.props.randomColorStep}
+        clonedSteps={GoalDoc.clonedSteps}
+        steps={GoalDoc.steps}
+        goalDocId={this.props.goalDocId}/>
     }
+
     return (
       <div className="steps-container">
         <p className="currentsteps-label">
@@ -37,11 +73,19 @@ class CurrentStepsSmart extends Component {
       </div>
     )
   }
+
 }
 
-const mapStateToProps = (state, props) => {
-  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, goalDocId: state.goals.currentGoalID}
-}
+// const mapStateToProps = (state, props) => {
+//   return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, goalDocId: state.goals.currentGoalID}
+// }
 
+const WithData = compose(graphql(goalDocByIdQuery,
+  {name: 'goalDocById',
+  options: (ownProps) =>
+ ({  variables: {goalDocId: ownProps.goalDocId}
+})}
+))(CurrentStepsSmart)
 
-export default connect(mapStateToProps)(CurrentStepsSmart);
+export default WithData
+// export default connect(mapStateToProps)(CurrentStepsSmart);

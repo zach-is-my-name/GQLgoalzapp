@@ -48,7 +48,6 @@ export class App extends Component {
   //   }
 
   _isLoggedIn = () => {
-    console.log('this.props.data', this.props.data)
     return this.props.data.user
   }
 
@@ -63,7 +62,7 @@ export class App extends Component {
           <MenuButton logout={this._logout} currentUser={this.props.data.user.userName}/>
           <Switch>
             <Route path="/userfeed/:userid" component={UserFeedPage}/>
-            <Route exact="exact" path="/" component={GlobalFeedPage}/>
+            <Route exact path="/" component={GlobalFeedPage}/>
           </Switch>
         </div>
           )

@@ -25,8 +25,8 @@ class OwnGoalCurrentSteps extends Component {
   }
 
   render() {
-      let currentGoalSteps = this.props.currentGoalSteps
-      let currentGoalStepsClone =  this.props.currentGoalStepsClone
+      let currentGoalSteps = this.props.steps
+      let currentGoalStepsClone =  this.props.clonedSteps
 
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
