@@ -11,14 +11,13 @@ import '../../style/AddStep.css'
 
 const stepIdQuery = gql `
 query stepIdQuery($id:ID){
-  allSteps(
-    filter:{goalDoc:{id:$id}}
-  )
- {
- id
- positionIndex
- step
-}}`
+  allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
+     id
+     positionIndex
+     step
+   }
+ }`
+
 
 const UpdateOrCreateStep = gql `
 mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean) {
@@ -120,12 +119,15 @@ class AddStepSmart extends React.Component {
         positionIndex: null
       }
       const stepIndex = this.props.stepIndex
+      // console.log('allSteps', allSteps)
       const newSteps = allSteps.slice()
+      // console.log('newSteps', newSteps)
       newSteps.splice(stepIndex, 0, newStep)
       const newStepsSortedByPositionIndex = newSteps.map((stepObj, index) => ({
         ...stepObj,
         positionIndex: index
       }))
+      // console.log('newStepsSortedByPositionIndex', newStepsSortedByPositionIndex )
       this._submitAddStepMutation(newStepsSortedByPositionIndex)
     }
   }
