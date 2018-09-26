@@ -60,34 +60,35 @@ class UserFeedPage extends Component {
         UserFeed
       </h2>
       <TargetUser targetUserName={User.userName || ''}/>
-      <SelectGoal userId={this.props.userQuery.user.id} setGoalDocId={this._setGoalDocId}/>
-      {/* <InputGoal /> */}
-      {this.state.goalDocId ? <CurrentSteps loggedInUser={this.props.userQuery.user.id}  targetUser={User.id} goalDocId={this.state.goalDocId}  /> : null}
-        <CurrentGoal id={this.props.currentGoalID}/>
+      <SelectGoal userId={this.props.userQuery.user.id} setGoalDocId={this._setGoalDocId}/> {/* <InputGoal /> */}
+      {
+        this.state.goalDocId
+          ? <CurrentSteps loggedInUser={this.props.userQuery.user.id} targetUser={User.id} goalDocId={this.state.goalDocId}/>
+          : null
+      }
+      {/* <CurrentGoal id={this.props.currentGoalID}/> */}
 
       {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
 
-      <Notifications/>
-      {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
+      <Notifications/> {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
       <Link className="globalfeed" to="/">
         GlobalFeed
       </Link>
     </div>)
-      }
-      _setGoalDocId(id) {this.setState({goalDocId: id})}
-      } const mapStateToProps = (state, props) => {return {currentGoalID: state.goals.currentGoalID}}
+  }
 
-      const WithData = compose(
-        graphql(userQuery, {name: 'userQuery'}),
-          graphql(targetUserQuery, {
-            name: 'targetUserQuery',
-            options: (ownProps) => {
-              return ({
-                variables: {
-                  targetUser: ownProps.userQuery.user.id
-                }
-              })
-            }
-          }
-      ))(UserFeedPage)
-export default connect(mapStateToProps)(WithData)
+  _setGoalDocId(id) {
+    this.setState({goalDocId: id})
+  }
+}
+
+export default compose(graphql(userQuery, {name: 'userQuery'}), graphql(targetUserQuery, {
+  name: 'targetUserQuery',
+  options: (ownProps) => {
+    return ({
+      variables: {
+        targetUser: ownProps.userQuery.user.id
+      }
+    })
+  }
+}))(UserFeedPage)

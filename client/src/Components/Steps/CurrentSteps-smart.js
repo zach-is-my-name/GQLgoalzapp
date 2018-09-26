@@ -49,29 +49,27 @@ class CurrentStepsSmart extends Component {
   render() {
 
 const {loading, error, GoalDoc} = this.props.goalDocById
+const {loggedInUser, targetUser} = this.props
 let currentSteps
 
 if (loading) {
     return <div>Loading...</div>
   }
-    if (this.props.loggedInUser !== this.props.targetUser) {
-      currentSteps = <ForeignGoalCurrentSteps/>
-    } else {
-      currentSteps = <OwnGoalCurrentSteps
-        randomColorStep={this.props.randomColorStep}
-        clonedSteps={GoalDoc.clonedSteps}
-        steps={GoalDoc.steps}
-        goalDocId={this.props.goalDocId}/>
-    }
 
     return (
       <div className="steps-container">
         <p className="currentsteps-label">
           Steps:
         </p>
-        {currentSteps}
+        {loggedInUser !== targetUser ?
+          <ForeignGoalCurrentSteps />
+        : <OwnGoalCurrentSteps
+          randomColorStep={this.props.randomColorStep}
+          clonedSteps={GoalDoc.clonedSteps}
+          steps={GoalDoc.steps}
+          goalDocId={this.props.goalDocId}/> }
       </div>
-    )
+          )
   }
 
 }
