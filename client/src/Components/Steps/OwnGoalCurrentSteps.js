@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions.js'
 import {SortableContainer, arrayMove} from 'react-sortable-hoc';
-import {SortableStepsContainer} from './Sortable/SortableStepsContainer.js'
+import {OwnSteps} from './Sortable/OwnGoal/OwnSteps.js'
 
 
 class OwnGoalCurrentSteps extends Component {
@@ -35,7 +35,7 @@ class OwnGoalCurrentSteps extends Component {
         <button onClick={this._toggleSuggestedSteps}>Show/Hide Sugguested Steps
         </button>
         {this.state.toggleSuggestedSteps ? clonedSteps : steps}
-        <SortableStepsContainer
+        <OwnSteps
           randomColorStep={this.props.randomColorStep}
           currentGoalSteps={currentGoalSteps}
           currentGoalStepsClone={currentGoalStepsClone}
@@ -49,6 +49,8 @@ class OwnGoalCurrentSteps extends Component {
           indexInMotion={this.state.indexInMotion}
           toggleSuggestedSteps={this.state.toggleSuggestedSteps}
           goalDocId={this.props.goalDocId}
+          targetUser={this.props.targetUser}
+          loggedInUser={this.props.loggedInUser}
         />
       </div>
     )
@@ -65,8 +67,9 @@ class OwnGoalCurrentSteps extends Component {
   }
 }
 
-const mapStateToProps = (state, props) => {
-  return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, }
-}
+// const mapStateToProps = (state, props) => {
+//   return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, }
+// }
 
-export default connect(mapStateToProps)(OwnGoalCurrentSteps);
+// export default connect(mapStateToProps)(OwnGoalCurrentSteps);
+export default (OwnGoalCurrentSteps);

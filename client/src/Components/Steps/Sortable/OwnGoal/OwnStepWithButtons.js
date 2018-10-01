@@ -1,14 +1,14 @@
 /* eslint-disable */
 import React from 'react';
-import YesNoPrompt from '../YesNoPrompt.js'
-import EditStep from '../EditStep.js'
-import AddStepSmart from '../AddStep-smart.js'
-import RemoveStep from '../RemoveStep.js'
-import AcceptStep from '../AcceptStep.js'
-import minus from '../../../style/images/minus.jpg'
-import plus from '../../../style/images/plus_websize.png'
+import YesNoPrompt from '../../YesNoPrompt.js'
+import EditStep from '../../EditStep.js'
+import AddStepSmart from '../../AddStep-smart.js'
+import RemoveStep from '../../RemoveStep.js'
+import AcceptStep from '../../AcceptStep.js'
+import minus from '../../../../style/images/minus.jpg'
+import plus from '../../../../style/images/plus_websize.png'
 
-  const StepWithButtons = ({
+  const OwnStepWithButtons = ({
         stepIndex,
         minusEvent,
         toggleConfirmPrompt,
@@ -35,6 +35,8 @@ import plus from '../../../style/images/plus_websize.png'
         renderRemoveStep,
         unrenderRemoveStep,
         nextPropsCurrentGoalSteps=[],
+        targetUser,
+        loggedInUser,
   }) => {
     return (
     <div className="sortable-item-wrapper">
@@ -90,4 +92,4 @@ import plus from '../../../style/images/plus_websize.png'
     </div>
   )
   }
-  export default StepWithButtons
+  export default OwnStepWithButtons

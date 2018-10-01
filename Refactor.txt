@@ -1,0 +1,29 @@
+Move data fetching out of <CurrentGoal /> into <UserFeedPage />.
+
+Factor out components especially <ForeignGoalCurrentSteps /> and <OwnGoalGoalCurrentSteps />
+
+Factor <ul>'s' into components
+
+Factor <li>'s into components'
+
+Factor out long code blocks into functions
+
+Data Fetching ---
+
+-Use query.Refetch to get data in after a mutation
+
+-Use client.query() to get data in on command
+
+-Use async / await to eliminate data.loading (as per FreeCom)
+
+-Use componentDidMount to fetch data
+
+-Use presentation components
+
+-Use container components and pass down props
+
+-Use default props ( [] ) to eliminate check for data object
+
+Use cast to bool for values that need to be true
+
+User val && val function() to run conditionally run function

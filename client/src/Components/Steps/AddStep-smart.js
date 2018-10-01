@@ -94,23 +94,13 @@ class AddStepSmart extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // if (!nextProps.data.loading) {
-    // if (nextProps.currentGoalSteps.length > this.props.currentGoalSteps.length) {
-    //   this._submitAddStepMutation(nextProps)
-    // if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
-    //   console.log(nextProps.currentGoalStepsClone)
-    //   this._submitClonedStepMutation(nextProps)
-    // }
-    // }
-  }
 
   render() {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
 
     //
-    if (this.props.loggedInUserID === this.props.targetUserID) {
-      return (<AddStep _submitStep={this._submitStep} handleChange={this.handleChange} value={this.state.step} loggedInUserID={this.props.loggedInUserID}/>)
+    if (this.props.loggedInUser === this.props.targetUser) {
+      return (<AddStep _submitStep={this._submitStep} handleChange={this.handleChange} value={this.state.step} />)
     }
     return (null)
   }
@@ -119,10 +109,8 @@ class AddStepSmart extends React.Component {
     this.setState({step: e.target.value});
   }
 
-async  _submitStep(event) {
+  async  _submitStep(event) {
     event.preventDefault()
-    const {loading, error, allSteps} = this.props.stepIdQuery
-
     // console.log(this._reorderSteps(this.props.stepIdQuery))
     await  this._submitAddStepMutation(this._reorderSteps(this.props.stepIdQuery))
       this._submitClonedStepMutation(this._reorderSteps(this.props.clonedStepIdQuery))
@@ -156,26 +144,6 @@ async  _submitStep(event) {
     }
   }
 
-  // _reorderClonedSteps() {
-  //   const {loading, error, allSteps} = this.props.clonedStepIdQuery
-  //   if (!loading) {
-  //     // actions.setStepAndPositionIndex(this.state.step, this.props.index)
-  //     // actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
-  //     const newStep = {
-  //       step: this.state.step,
-  //       suggestedStep: false,
-  //       id: null,
-  //       positionIndex: null
-  //     }
-  //     const stepIndex = this.props.stepIndex
-  //     const newSteps = allSteps.slice()
-  //     newSteps.splice(stepIndex, 0, newStep)
-  //     const newStepsSortedByPositionIndex = newSteps.map((stepObj, index) => ({
-  //       ...stepObj,
-  //       positionIndex: index
-  //     }))
-  //   }
-  // }
   _submitAddStepMutation = async (newStepsSortedByPositionIndex) => {
     newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
       let id
@@ -265,19 +233,8 @@ graphql(UpdateOrCreateClonedStep, {
 })
 )(withRouter(AddStepSmart))
 
-const mapStateToProps = (state, props) => {
-  return {
-    currentGoal: state.goals.currentGoal,
-    currentGoalID: state.goals.currentGoalID,
-    loggedInUserID: state.goals.loggedInUserID,
-    targetUserID: state.goals.targetUserID,
-    currentGoalSteps: state.goals.currentGoalSteps,
-    currentGoalStepsClone: state.goals.currentGoalStepsClone,
-    goalDocID: state.goals.currentGoalID
-  }
-}
 
-export default connect(mapStateToProps)(AddStepWithApollo)
+export default (AddStepWithApollo)
 
 // const userQuery = gql`
 //   query userQuery {

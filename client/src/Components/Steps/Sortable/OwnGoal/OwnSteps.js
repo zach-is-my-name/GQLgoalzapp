@@ -1,13 +1,13 @@
 import React from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
-import OwnSortableStepWithButtons from './OwnSortableStepWithButtons.js'
+import OwnStep from './OwnStep.js'
 
-export const SortableStepsContainer = SortableContainer(({goalDocId, toggleSuggestedSteps, currentGoalSteps, currentGoalStepsClone, newIndex, oldIndex, indexInMotion, randomColorStep}) => {
+export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, currentGoalSteps, currentGoalStepsClone, newIndex, oldIndex, indexInMotion, randomColorStep, targetUser, loggedInUser}) => {
   if (toggleSuggestedSteps === true) {
     return (
     <ul className="sortable-container">
       {currentGoalStepsClone.map((stepObj, index, currentGoalStepsClone) =>
-        <OwnSortableStepWithButtons
+        <OwnStep
           randomColorStep={randomColorStep}
           key={`item-${index}`}
           index={index}
@@ -19,6 +19,8 @@ export const SortableStepsContainer = SortableContainer(({goalDocId, toggleSugge
           goalDocId={goalDocId}
           toggleSuggestedSteps={toggleSuggestedSteps}
           currentGoalStepsClone={currentGoalStepsClone}
+          targetUser={targetUser}
+          loggedInUser={loggedInUser}
         />)}
     </ul>
     )
@@ -26,7 +28,7 @@ export const SortableStepsContainer = SortableContainer(({goalDocId, toggleSugge
   return (
     <ul className="sortable-container">
       {currentGoalSteps.map((stepObj, index, currentGoalSteps) =>
-        <OwnSortableStepWithButtons
+        <OwnStep
           randomColorStep={randomColorStep}
           key={`item-${index}`}
           index={index}
@@ -38,6 +40,8 @@ export const SortableStepsContainer = SortableContainer(({goalDocId, toggleSugge
           goalDocId={goalDocId}
           toggleSuggestedSteps={toggleSuggestedSteps}
           currentGoalSteps={currentGoalSteps}
+          targetUser={targetUser}
+          loggedInUser={loggedInUser}
         />)}
     </ul>
   );

@@ -3,13 +3,13 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import '../../../style/OwnGoalCurrentSteps.css'
-import * as actions from '../../../Actions/actions.js'
+import '../../../../style/OwnGoalCurrentSteps.css'
+import * as actions from '../../../../Actions/actions.js'
 import {SortableElement} from 'react-sortable-hoc';
 import update from 'immutability-helper';
-import StepWithButtons from './StepWithButtons.js'
+import OwnStepWithButtons from './OwnStepWithButtons.js'
 
-class StepWithButtonsContainer extends Component {
+class OwnStep  extends Component {
 
   constructor(props) {
     super(props)
@@ -70,10 +70,10 @@ class StepWithButtonsContainer extends Component {
 
     if (stepObj.suggestedStep) {
       return (
-        <StepWithButtons
+        <OwnStepWithButtons
           stepIndex={this.props.stepIndex}
           minusEvent={this.rejectStep}
-          stepColor={this.props.randomColorStep}
+          stepColor={({color: '#ef3779'})}
           clickHandlerEdit={this.clickHandlerEdit}
           stepObj={this.props.stepObj}
           clickHandlerPlus={this.acceptStep}
@@ -87,6 +87,8 @@ class StepWithButtonsContainer extends Component {
           stepId={this.props.stepObj.id}
           acceptStep={this.state.acceptStep}
           toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+          targetUser={this.props.targetUser}
+          loggedInUser={this.props.loggedInUser}
         />
 
       )
@@ -95,7 +97,7 @@ class StepWithButtonsContainer extends Component {
         color: '#000000'
       }
       return (
-      <StepWithButtons
+      <OwnStepWithButtons
         stepIndex={this.props.stepIndex}
         minusEvent={this.clickHandlerRemove}
         toggleConfirmPrompt={this.state.toggleConfirmPrompt}
@@ -118,6 +120,8 @@ class StepWithButtonsContainer extends Component {
         renderRemoveStep={this.state.renderRemoveStep}
         unrenderRemoveStep={this.props.unrenderRemoveStep}
         idToRemove={this.state.idToRemove}
+        targetUser={this.props.targetUser}
+        loggedInUser={this.props.loggedInUser}
         // nextPropsCurrentGoalSteps={nextPropsCurrentGoalSteps}
       />
     )
@@ -209,5 +213,4 @@ class StepWithButtonsContainer extends Component {
   }
 }
 
-/* export default */ const OwnSortableStepWithButtons =  SortableElement(StepWithButtonsContainer)
-export default connect()(OwnSortableStepWithButtons)
+/* export default */  export default SortableElement(OwnStep)

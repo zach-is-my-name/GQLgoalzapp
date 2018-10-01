@@ -9,9 +9,9 @@ import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
 import SelectGoalForm from './Form/SelectGoalForm'
 
-const GoalDocQuery = gql `query allGoalDocsQuery ($userId: ID) {
+const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
   allGoalDocs(filter:
-    {owners :{id: $userId}}){
+    {owners :{id: $targetUserId}}){
     goal
     id
   }
@@ -52,7 +52,7 @@ class SelectGoalSmart extends React.Component {
 
 
 const ComponentWithData = graphql(GoalDocQuery,
-{name: 'goalDocQuery'},{ options: ({userId}) => ({ variables: {userid: userId}}),
+{name: 'goalDocQuery'},{ options: ({targetUserId}) => ({ variables: {targetUserId: targetUserId}}),
 })(SelectGoalSmart);
 
 export default ComponentWithData

@@ -62,12 +62,21 @@ if (loading) {
           Steps:
         </p>
         {loggedInUser !== targetUser ?
-          <ForeignGoalCurrentSteps />
+          <ForeignGoalCurrentSteps
+            goalDocId={this.props.goalDocId}
+            targetUser={targetUser}
+            loggedInUser={loggedInUser}
+            steps={GoalDoc.steps}
+            clonedSteps={GoalDoc.clonedSteps}
+          />
         : <OwnGoalCurrentSteps
           randomColorStep={this.props.randomColorStep}
           clonedSteps={GoalDoc.clonedSteps}
           steps={GoalDoc.steps}
-          goalDocId={this.props.goalDocId}/> }
+          goalDocId={this.props.goalDocId}
+          targetUser={targetUser}
+          loggedInUser={loggedInUser}/>
+        }
       </div>
           )
   }

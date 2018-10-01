@@ -60,7 +60,7 @@ class UserFeedPage extends Component {
         UserFeed
       </h2>
       <TargetUser targetUserName={User.userName || ''}/>
-      <SelectGoal userId={this.props.userQuery.user.id} setGoalDocId={this._setGoalDocId}/> {/* <InputGoal /> */}
+      <SelectGoal targetUserId={User.id} userId={this.props.userQuery.user.id} setGoalDocId={this._setGoalDocId}/> {/* <InputGoal /> */}
       {
         this.state.goalDocId
           ? <CurrentSteps loggedInUser={this.props.userQuery.user.id} targetUser={User.id} goalDocId={this.state.goalDocId}/>
@@ -70,7 +70,8 @@ class UserFeedPage extends Component {
 
       {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
 
-      <Notifications/> {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
+      {/* <Notifications/>  */}
+      {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
       <Link className="globalfeed" to="/">
         GlobalFeed
       </Link>
@@ -87,7 +88,7 @@ export default compose(graphql(userQuery, {name: 'userQuery'}), graphql(targetUs
   options: (ownProps) => {
     return ({
       variables: {
-        targetUser: ownProps.userQuery.user.id
+        targetUser: ownProps.match.params.userid
       }
     })
   }
