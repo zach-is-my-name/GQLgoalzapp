@@ -66,7 +66,7 @@ class RemoveStep extends Component {
     this._reorderSteps = this._reorderSteps.bind(this)
     }
 componentDidMount() {
-  this.props.unrenderRemoveStepFunct()
+  this.props.unrenderRemoveStepFunction()
 }
 
   render() {

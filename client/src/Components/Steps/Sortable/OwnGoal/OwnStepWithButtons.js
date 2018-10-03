@@ -38,7 +38,8 @@ import plus from '../../../../style/images/plus_websize.png'
         loggedInUser,
         idToRemove,
         renderRemoveStepState,
-        unrenderRemoveStepFunct
+        unrenderRemoveStepFunction
+
   }) => {
     return (
     <div className="sortable-item-wrapper">
@@ -64,7 +65,7 @@ import plus from '../../../../style/images/plus_websize.png'
             />
           </div>
           : null }
-        {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ? <RemoveStep stepIndex={stepIndex} idToRemove={idToRemove} goalDocId={goalDocId} unrenderRemoveStepFunct={unrenderRemoveStepFunct}   renderRemoveStepState={renderRemoveStepState}  /> : null}
+        {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ? <RemoveStep stepIndex={stepIndex} idToRemove={idToRemove} goalDocId={goalDocId} unrenderRemoveStepFunction={unrenderRemoveStepFunction}   renderRemoveStepState={renderRemoveStepState}  /> : null}
 
 
         {/*reject step*/}

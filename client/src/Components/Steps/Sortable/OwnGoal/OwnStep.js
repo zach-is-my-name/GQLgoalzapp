@@ -24,7 +24,7 @@ class OwnStep  extends Component {
       editStepOn: false,
       editedStep: '',
       acceptStep: false,
-      renderRemoveStep: false,
+      renderRemoveStepState: false,
       // unrenderRemoveStep: true,
       // nextPropsCurrentGoalSteps: [],
       counter: 0
@@ -39,7 +39,7 @@ class OwnStep  extends Component {
     this.acceptStep = this.acceptStep.bind(this)
     this.clickHandlerRejectStep = this.clickHandlerRejectStep.bind(this)
     this.clickHandlerConfirmRemove = this.clickHandlerConfirmRemove.bind(this)
-    // this.unrenderRemoveStep = this.unrenderRemoveStep.bind(this)
+    this.unrenderRemoveStep = this.unrenderRemoveStep.bind(this)
   }
 
 
@@ -103,9 +103,9 @@ class OwnStep  extends Component {
         idToRemove={this.state.idToRemove}
         targetUser={this.props.targetUser}
         loggedInUser={this.props.loggedInUser}
-        renderRemoveStepState={this.props.renderRemoveStepState}
+        renderRemoveStepState={this.state.renderRemoveStepState}
         // renderRemoveStepState={this.state.renderRemoveStep}
-        unrenderRemoveStepFunct={this.props.unrenderRemoveStepFunct}
+        unrenderRemoveStepFunction={this.unrenderRemoveStep}
         // nextPropsCurrentGoalSteps={nextPropsCurrentGoalSteps}
       />
     )
@@ -159,25 +159,26 @@ class OwnStep  extends Component {
 
   clickHandlerConfirmRemove(e) {
     e.preventDefault()
-    this.props.unrenderRemoveStepFunct()
+    // this.unrenderRemoveStep()
     this.setState(prevState => ({
+      renderRemoveStepState: !prevState.renderRemoveStepState,
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       // renderRemoveStep: !prevState.renderRemoveStep,
       // renderRemoveStep: prevState.renderRemoveStep + 1 ,
     }))
   }
 
-//   unrenderRemoveStep() {
-//   console.log('called unrender')
-//   this.setState(prevState => { return (
-//     {
-//       renderRemoveStep: !prevState.renderRemoveStep ,
-//       // toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-//       // renderRemoveStep: prevState.renderRemoveStep + 1 ,
-//     // toggleConfirmPrompt: !prevState.toggleConfirmPrompt
-//   }
-//   )}
-// )}
+  unrenderRemoveStep() {
+  console.log('called unrender')
+  this.setState(prevState => { return (
+    {
+      renderRemoveStepState: !prevState.renderRemoveStepState,
+      // toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+      // renderRemoveStep: prevState.renderRemoveStep + 1 ,
+    // toggleConfirmPrompt: !prevState.toggleConfirmPrompt
+  }
+  )}
+)}
 
   clickHandlerCancel() {
     this.setState(prevState => ({
