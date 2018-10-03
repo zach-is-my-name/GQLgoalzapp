@@ -17,8 +17,7 @@ class OwnGoalCurrentSteps extends Component {
       renderRemoveStepState: false,
     }
     this._toggleSuggestedSteps = this._toggleSuggestedSteps.bind(this)
-    this.unrenderRemoveStep = this.unrenderRemoveStep.bind(this)
-  }
+}
 
   _toggleSuggestedSteps() {
     this.setState(prevState => ({
@@ -53,24 +52,11 @@ class OwnGoalCurrentSteps extends Component {
           goalDocId={this.props.goalDocId}
           targetUser={this.props.targetUser}
           loggedInUser={this.props.loggedInUser}
-          renderRemoveStepState={this.state.renderRemoveStepState}
-          unrenderRemoveStepFunct={this.unrenderRemoveStep}
         />
       </div>
     )
   }
 
-unrenderRemoveStep() {
-  console.log('called unrender')
-  this.setState(prevState => { return (
-    {
-      renderRemoveStepState: !prevState.renderRemoveStepState,
-      // toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-      // renderRemoveStep: prevState.renderRemoveStep + 1 ,
-    // toggleConfirmPrompt: !prevState.toggleConfirmPrompt
-  }
-  )}
-)}
 
   onSortEnd({oldIndex, newIndex}) {
     this.setState({newIndex: newIndex, oldIndex: oldIndex})

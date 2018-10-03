@@ -25,9 +25,6 @@ class OwnStep  extends Component {
       editedStep: '',
       acceptStep: false,
       renderRemoveStepState: false,
-      // unrenderRemoveStep: true,
-      // nextPropsCurrentGoalSteps: [],
-      counter: 0
     }
     this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
@@ -104,9 +101,7 @@ class OwnStep  extends Component {
         targetUser={this.props.targetUser}
         loggedInUser={this.props.loggedInUser}
         renderRemoveStepState={this.state.renderRemoveStepState}
-        // renderRemoveStepState={this.state.renderRemoveStep}
         unrenderRemoveStepFunction={this.unrenderRemoveStep}
-        // nextPropsCurrentGoalSteps={nextPropsCurrentGoalSteps}
       />
     )
     }
@@ -135,8 +130,6 @@ class OwnStep  extends Component {
     this.setState({editedStep: ""})
   }
 
-
-
   clickHandlerAdd(stepIndex) {
     // console.log(stepIndex)
     // this.setState({})
@@ -154,7 +147,6 @@ class OwnStep  extends Component {
       indexClicked: stepIndex,
       idToRemove: this.props.stepObj.id
     }))
-    // this.props.dispatch(actions.setIdToRemove(this.props.stepObj.id))
   }
 
   clickHandlerConfirmRemove(e) {
@@ -163,8 +155,6 @@ class OwnStep  extends Component {
     this.setState(prevState => ({
       renderRemoveStepState: !prevState.renderRemoveStepState,
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-      // renderRemoveStep: !prevState.renderRemoveStep,
-      // renderRemoveStep: prevState.renderRemoveStep + 1 ,
     }))
   }
 
@@ -173,9 +163,6 @@ class OwnStep  extends Component {
   this.setState(prevState => { return (
     {
       renderRemoveStepState: !prevState.renderRemoveStepState,
-      // toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-      // renderRemoveStep: prevState.renderRemoveStep + 1 ,
-    // toggleConfirmPrompt: !prevState.toggleConfirmPrompt
   }
   )}
 )}

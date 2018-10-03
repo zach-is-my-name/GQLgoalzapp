@@ -22,8 +22,6 @@ export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, cur
           currentGoalStepsClone={currentGoalStepsClone}
           targetUser={targetUser}
           loggedInUser={loggedInUser}
-          renderRemoveStepState={renderRemoveStepState}
-          unrenderRemoveStepFunct={unrenderRemoveStepFunct}
         />)}
     </ul>
     )
@@ -45,8 +43,6 @@ export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, cur
           currentGoalSteps={currentGoalSteps}
           targetUser={targetUser}
           loggedInUser={loggedInUser}
-          renderRemoveStepState={renderRemoveStepState}
-          unrenderRemoveStepFunct={unrenderRemoveStepFunct}
         />)}
     </ul>
   );
