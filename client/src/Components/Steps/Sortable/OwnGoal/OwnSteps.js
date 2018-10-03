@@ -2,7 +2,8 @@ import React from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
 import OwnStep from './OwnStep.js'
 
-export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, currentGoalSteps, currentGoalStepsClone, newIndex, oldIndex, indexInMotion, randomColorStep, targetUser, loggedInUser}) => {
+export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, currentGoalSteps, currentGoalStepsClone, newIndex, oldIndex, indexInMotion, randomColorStep, targetUser, loggedInUser, renderRemoveStepState, unrenderRemoveStepFunct}) => {
+
   if (toggleSuggestedSteps === true) {
     return (
     <ul className="sortable-container">
@@ -21,6 +22,8 @@ export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, cur
           currentGoalStepsClone={currentGoalStepsClone}
           targetUser={targetUser}
           loggedInUser={loggedInUser}
+          renderRemoveStepState={renderRemoveStepState}
+          unrenderRemoveStepFunct={unrenderRemoveStepFunct}
         />)}
     </ul>
     )
@@ -42,6 +45,8 @@ export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, cur
           currentGoalSteps={currentGoalSteps}
           targetUser={targetUser}
           loggedInUser={loggedInUser}
+          renderRemoveStepState={renderRemoveStepState}
+          unrenderRemoveStepFunct={unrenderRemoveStepFunct}
         />)}
     </ul>
   );

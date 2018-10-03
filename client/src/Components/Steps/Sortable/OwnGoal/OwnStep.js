@@ -25,7 +25,9 @@ class OwnStep  extends Component {
       editedStep: '',
       acceptStep: false,
       renderRemoveStep: false,
-      nextPropsCurrentGoalSteps: []
+      // unrenderRemoveStep: true,
+      // nextPropsCurrentGoalSteps: [],
+      counter: 0
     }
     this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
@@ -37,37 +39,18 @@ class OwnStep  extends Component {
     this.acceptStep = this.acceptStep.bind(this)
     this.clickHandlerRejectStep = this.clickHandlerRejectStep.bind(this)
     this.clickHandlerConfirmRemove = this.clickHandlerConfirmRemove.bind(this)
-    this.unrenderRemoveStep = this.unrenderRemoveStep.bind(this)
+    // this.unrenderRemoveStep = this.unrenderRemoveStep.bind(this)
   }
 
 
 
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.currentGoalStepsClone === undefined && this.props.currentGoalSteps > )
-    this.props.currentGoalSteps && (nextProps.currentGoalSteps < this.props.currentGoalSteps) &&
-    update(this.state, {
-      nextPropsCurrentGoalSteps: {$set: nextProps.currentGoalSteps}
-    })
-    this.setState(prevState => ({
-      renderRemoveStep: !prevState.renderRemoveStep,
-    }))
-    // console.log("currentGoalSteps", this.props.currentGoalSteps)
-    // if (this.props.currentGoalSteps.length < nextProps.currentGoalSteps.length) {
-    //   console.log('less goal steps')
-    // }
-    // if (this.props.stepIndex !== nextProps.stepIndex) {
-    //   this.setState({stepIndex: nextProps.newIndex})
-    // }
-  }
 
   render() {
     const {stepObj, stepIndex, newIndex, oldIndex, indexInMotion} = this.props
-
     // if (indexInMotion !== null &&  indexInMotion === oldIndex){
     //   this.changestepIndex(newIndex)
     // }
     let suggestedStep
-
     if (stepObj.suggestedStep) {
       return (
         <OwnStepWithButtons
@@ -117,11 +100,12 @@ class OwnStep  extends Component {
         toggleSuggestedSteps={this.props.toggleSuggestedSteps}
         clickHandlerRemove={this.clickHandlerRemove}
         clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
-        renderRemoveStep={this.state.renderRemoveStep}
-        unrenderRemoveStep={this.props.unrenderRemoveStep}
         idToRemove={this.state.idToRemove}
         targetUser={this.props.targetUser}
         loggedInUser={this.props.loggedInUser}
+        renderRemoveStepState={this.props.renderRemoveStepState}
+        // renderRemoveStepState={this.state.renderRemoveStep}
+        unrenderRemoveStepFunct={this.props.unrenderRemoveStepFunct}
         // nextPropsCurrentGoalSteps={nextPropsCurrentGoalSteps}
       />
     )
@@ -147,19 +131,11 @@ class OwnStep  extends Component {
 
   submitEditedStep(event, stepIndex, editedStep) {
     event.preventDefault()
-    console.log(stepIndex)
-    console.log(editedStep)
     this.props.dispatch(actions.editStep(stepIndex, editedStep))
     this.setState({editedStep: ""})
   }
 
-  clickHandlerRemove(stepIndex, id) {
-    this.setState(prevState => ({
-      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-      indexToRemove: stepIndex
-    }))
-    this.props.dispatch(actions.setIdToRemove(this.props.stepObj.id))
-  }
+
 
   clickHandlerAdd(stepIndex) {
     // console.log(stepIndex)
@@ -171,23 +147,39 @@ class OwnStep  extends Component {
     }))
   }
 
+  clickHandlerRemove(stepIndex, id) {
+    this.setState(prevState => ({
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+      indexToRemove: stepIndex,
+      indexClicked: stepIndex,
+      idToRemove: this.props.stepObj.id
+    }))
+    // this.props.dispatch(actions.setIdToRemove(this.props.stepObj.id))
+  }
+
   clickHandlerConfirmRemove(e) {
     e.preventDefault()
-    actions.unsetStepAndPositionIndex(this.state.indexToRemove)
+    this.props.unrenderRemoveStepFunct()
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       // renderRemoveStep: !prevState.renderRemoveStep,
+      // renderRemoveStep: prevState.renderRemoveStep + 1 ,
     }))
   }
 
-  unrenderRemoveStep() {
-  this.setState(prevState => (
-    {renderRemoveStep: !prevState.renderRemoveStep}
-  ))
-  }
+//   unrenderRemoveStep() {
+//   console.log('called unrender')
+//   this.setState(prevState => { return (
+//     {
+//       renderRemoveStep: !prevState.renderRemoveStep ,
+//       // toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+//       // renderRemoveStep: prevState.renderRemoveStep + 1 ,
+//     // toggleConfirmPrompt: !prevState.toggleConfirmPrompt
+//   }
+//   )}
+// )}
 
   clickHandlerCancel() {
-    console.log('no clicked')
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       indexToRemove: null

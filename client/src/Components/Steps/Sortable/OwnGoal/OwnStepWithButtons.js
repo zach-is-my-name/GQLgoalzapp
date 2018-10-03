@@ -3,7 +3,7 @@ import React from 'react';
 import YesNoPrompt from '../../YesNoPrompt.js'
 import EditStep from '../../EditStep.js'
 import AddStepSmart from '../../AddStep-smart.js'
-import RemoveStep from '../../RemoveStep.js'
+import RemoveStep from '../../RemoveStep-smart.js'
 import AcceptStep from '../../AcceptStep.js'
 import minus from '../../../../style/images/minus.jpg'
 import plus from '../../../../style/images/plus_websize.png'
@@ -33,10 +33,12 @@ import plus from '../../../../style/images/plus_websize.png'
         stepObj,
         clickHandlerConfirmRemove,
         renderRemoveStep,
-        unrenderRemoveStep,
         nextPropsCurrentGoalSteps=[],
         targetUser,
         loggedInUser,
+        idToRemove,
+        renderRemoveStepState,
+        unrenderRemoveStepFunct
   }) => {
     return (
     <div className="sortable-item-wrapper">
@@ -62,9 +64,8 @@ import plus from '../../../../style/images/plus_websize.png'
             />
           </div>
           : null }
-        {}
-        {/* {renderRemoveStep /*&& (indexClicked === stepIndex)  ? <RemoveStep stepIndex={stepIndex}  unrenderRemoveStep={unrenderRemoveStep} nextPropsCurrentGoalSteps={nextPropsCurrentGoalSteps} /> : null}
-        */}
+        {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ? <RemoveStep stepIndex={stepIndex} idToRemove={idToRemove} goalDocId={goalDocId} unrenderRemoveStepFunct={unrenderRemoveStepFunct}   renderRemoveStepState={renderRemoveStepState}  /> : null}
+
 
         {/*reject step*/}
         {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex && stepObj.suggestedStep === true))

@@ -27,7 +27,7 @@ const ForeignStepWithButtons = ({toggleOnYesNoPrompt, indexToRemove, value, step
               <YesNoPrompt clickEventYes={clickHandlerYes} clickEventNo={clickHandlerNo}/></div>
             : null}
 
-          {renderRemoveMutation ? <SuggestRemoveStep indexToRemove={indexToRemove} id={id} /> : null }
+          {renderRemoveMutation ? <SuggestRemoveStep indexToRemove={indexToRemove} goalDocId={goalDocId} id={id} /> : null }
 
           {(editStepOn && (stepIndex !== null) && activeIndexEditStep === stepIndex)
             ? <SuggestEditStep id={id} index={stepIndex}/>
@@ -35,9 +35,9 @@ const ForeignStepWithButtons = ({toggleOnYesNoPrompt, indexToRemove, value, step
 
           {activeStep && (stepIndex !== null) && (indexClicked === stepIndex)
             ? <SuggestStepSmart stepIndex={stepIndex} goalDocId={goalDocId} targetUser={targetUser} loggedInUser={loggedInUser}/>
-                  : null}
+            : null}
 
-          </div>
+        </div>
       </div>
   )}
   export default ForeignStepWithButtons
