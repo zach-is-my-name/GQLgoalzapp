@@ -1,4 +1,4 @@
-/* eslint-disable */
+// /* eslint-disable */
 import React, {Component} from 'react'
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
@@ -43,11 +43,11 @@ mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $p
   }
 }`
 
-const UpdateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID) {
+const UpdateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID, $stepsId: String) {
     updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
     positionIndex: $positionIndex,
-    step: $step, suggestedStep:$suggestedStep  }, update: {goalDocId: $goalDocId, positionIndex:
-    $positionIndex, id: $id, suggesterId: $suggesterId, suggestedStep:$suggestedStep}) {
+    step: $step, suggestedStep:$suggestedStep, stepsId: $stepsId  }, update: {goalDocId: $goalDocId, positionIndex:
+    $positionIndex, id: $id, suggesterId: $suggesterId, suggestedStep:$suggestedStep, stepsId: $stepsId}) {
       step
       id
       goalDoc {
@@ -65,14 +65,13 @@ const goalDocByIdQuery = gql `
          positionIndex
          suggestedStep
          id
-         originalId
        }
        clonedSteps(orderBy:positionIndex_ASC) {
          step
          positionIndex
          id
          suggestedStep
-         originalId
+         stepsId
          suggester {
            userName
          }
@@ -90,7 +89,8 @@ class AddStepSmart extends React.Component {
     this._submitClonedStepMutation = this._submitClonedStepMutation.bind(this)
     this.handleChange = this.handleChange.bind(this);
     this.state = {
-      step: ''
+      step: '',
+
     }
   }
 
@@ -110,27 +110,17 @@ class AddStepSmart extends React.Component {
 
   async _submitStep(event) {
     event.preventDefault()
-    console.log(this._reorderSteps(this.props.stepIdQuery))
-    await this._submitAddStepMutation(this._reorderSteps(this.props.stepIdQuery))
-      this._submitClonedStepMutation(this._reorderSteps(this.props.clonedStepIdQuery))
+    const {stepIdQuery, clonedStepIdQuery} = this.props
+    const returnedIdArr =  await this._submitAddStepMutation(this._reorderSteps(stepIdQuery))
+    const returnedId = returnedIdArr[0]
+    this._submitClonedStepMutation(this._reorderClonedSteps(clonedStepIdQuery, returnedId))
   }
 
   _reorderSteps(queryResult) {
     const {loading, error} = queryResult
     const {stepIndex} = this.props.stepIndex
     if (!loading) {
-      const {stepIdQuery} = this.props
-      const {clonedStepIdQuery} = this.props
-      let allSteps
-
-      /* Re-use _reorderSteps function */
-      if (queryResult === stepIdQuery) {
-        allSteps = stepIdQuery.allSteps
-      } else if (queryResult === clonedStepIdQuery) {
-        allSteps = clonedStepIdQuery.allClonedSteps
-      }
-
-      const newSteps = allSteps.slice()
+      const newSteps = queryResult.allSteps.slice()
       const newStep = {
         step: this.state.step,
         suggestedStep: false,
@@ -145,8 +135,8 @@ class AddStepSmart extends React.Component {
     }
   }
 
-  _submitAddStepMutation = async (newStepsSortedByPositionIndex) => {
-    newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
+  async _submitAddStepMutation(newStepsSortedByPositionIndex) {
+      const mapFunct = newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
       let id
       if (!stepObj.id) {
         id = "x"
@@ -154,7 +144,7 @@ class AddStepSmart extends React.Component {
         id = stepObj.id
       }
 
-      const addStepResult = await this.props.updateOrCreateStep({
+        const result = await this.props.updateOrCreateStep({
         variables: {
           goalDocId: this.props.goalDocId,
           step: stepObj.step,
@@ -163,11 +153,41 @@ class AddStepSmart extends React.Component {
           suggestedStep: false
         }
       })
-    })
-  }
+       if (!stepObj.id) {
+        return  result.data.updateOrCreateStep.id
+         }
+       }
+     )
+        const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
+        return arr
+   }
 
-  _submitClonedStepMutation = (newClonedStepsSortedByPositionIndex) => {
-    newClonedStepsSortedByPositionIndex.map(async (stepObj, mapIndex, array) => {
+
+  _reorderClonedSteps(queryResult, returnedId) {
+    // console.log(returnedStepId)
+    const {loading, error } = queryResult
+    if (!loading) {
+    const {clonedStepIdQuery} = queryResult
+    const {stepIndex} = this.props.stepIndex
+    const newSteps = queryResult.allClonedSteps.slice()
+      const newStep = {
+        step: this.state.step,
+        suggestedStep: false,
+        id: null,
+        positionIndex: null,
+        stepsId: returnedId,
+      }
+    newSteps.splice(stepIndex, 0, newStep)
+    console.log()
+     const _newSteps = newSteps.map((stepObj, index) => ({
+      ...stepObj,
+      positionIndex: index,
+    }))
+    return _newSteps
+  }}
+
+  _submitClonedStepMutation (newClonedStepsSortedByPositionIndex) {
+    newClonedStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
       let id
       if (stepObj.id) {
         id = stepObj.id
@@ -175,13 +195,14 @@ class AddStepSmart extends React.Component {
         id = "x"
       }
 
-      const suggestStepResult = await this.props.updateOrCreateClonedStep({
+       await this.props.updateOrCreateClonedStep({
         variables: {
           goalDocId: this.props.goalDocId,
           id: id,
           positionIndex: stepObj.positionIndex,
           suggestedStep: stepObj.suggestedStep,
           step: stepObj.step,
+          stepsId: stepObj.stepsId
         }
       })
           })
@@ -189,9 +210,10 @@ class AddStepSmart extends React.Component {
 }
 
 const AddStepWithApollo = compose(graphql(UpdateOrCreateStep, {
-  props: ({mutate}) => ({
+  name:'updateOrCreateStep',
+  props: ({updateOrCreateStep}) => ({
     updateOrCreateStep({variables}) {
-      return mutate({
+      return updateOrCreateStep({
         variables: {
           ...variables
         },

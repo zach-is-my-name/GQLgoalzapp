@@ -6,9 +6,9 @@ import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
 
 const UpdateOrCreateStep = gql `
-mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean, $originalId: String) {
+mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean, $stepsId: String) {
   updateOrCreateStep(create: {goalDocId: $goalDocId,
-  step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, originalId: $originalId }, update: {goalDocId: $goalDocId,
+  step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, stepsId: $stepsId }, update: {goalDocId: $goalDocId,
   positionIndex: $positionIndex, id: $id})
   {
    step
@@ -76,19 +76,19 @@ class AcceptStep extends Component {
   //         id = stepObj.id
   //       }
   //
-  //       if (stepObj.originalId == false && id !== "x") {
-  //         console.log("Update Step Position and Assign OriginalId", id)
+  //       if (stepObj.stepsId == false && id !== "x") {
+  //         console.log("Update Step Position and Assign stepsId", id)
   //         return this.props.updateOrCreateStep({
   //           variables: {
   //             id: id,
-  //             originalId: id,
+  //             stepsId: id,
   //             positionIndex: stepObj.positionIndex,
   //             step: "z"
   //           }
   //         }).then(({data}) => {
   //           console.log('%cUpdated Position Index && Assigned OrginalId', "color: green", data)
   //         })
-  //       } else if (stepObj.originalId == false && id === "x") {
+  //       } else if (stepObj.stepsId == false && id === "x") {
   //         console.log("Create Step", id)
   //         return this.props.updateOrCreateStep({
   //           variables: {
@@ -102,8 +102,8 @@ class AcceptStep extends Component {
   //           console.log('%cCreated Step', "color: green", data)
   //           this.props.dispatch(actions.setStepIdFromServer(mapIndex, data.updateOrCreateStep.id))
   //         })
-  //       } else if (stepObj.originalId) {
-  //         console.log("has OriginalId, just update positionIndex")
+  //       } else if (stepObj.stepsId) {
+  //         console.log("has stepsId, just update positionIndex")
   //         return this.props.updateOrCreateStep({
   //           variables: {
   //             id: id,

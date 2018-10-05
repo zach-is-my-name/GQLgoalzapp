@@ -23,14 +23,13 @@ query GoalDocByIdQuery ($varID: ID) {
      positionIndex
      suggestedStep
      id
-     originalId
    }
    clonedSteps(orderBy:positionIndex_ASC) {
      step
      positionIndex
      id
      suggestedStep
-     originalId
+     stepsId
      suggester {
        userName
      }
