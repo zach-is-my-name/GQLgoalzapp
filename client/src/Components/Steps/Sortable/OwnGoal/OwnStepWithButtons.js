@@ -4,49 +4,12 @@ import YesNoPrompt from '../../YesNoPrompt.js'
 import EditStep from '../../EditStep.js'
 import AddStepSmart from '../../AddStep-smart.js'
 import RemoveStep from '../../RemoveStep-smart.js'
-<<<<<<< Updated upstream
-import AcceptStep from '../../AcceptStep.js'
-=======
 import AcceptStep from '../../AcceptStep-smart.js'
 import RejectStep from '../../RejectStep-smart.js'
->>>>>>> Stashed changes
 import minus from '../../../../style/images/minus.jpg'
 import plus from '../../../../style/images/plus_websize.png'
 
   const OwnStepWithButtons = ({
-<<<<<<< Updated upstream
-        stepIndex,
-        minusEvent,
-        toggleConfirmPrompt,
-        indexToRemove,
-        clickHandlerEdit,
-        clickHandlerPlus,
-        clickHandlerMinus,
-        clickHandlerCancel,
-        editedStep,
-        submitEditedStep,
-        activeStep,
-        indexClicked,
-        stepColor,
-        goalDocId,
-        stepId,
-        clickHandlerRejectStep,
-        toggleSuggestedSteps,
-        editStepOn,
-        activeIndexEditStep,
-        handleChangeEditForm,
-        acceptStep,
-        stepObj,
-        clickHandlerConfirmRemove,
-        renderRemoveStep,
-        nextPropsCurrentGoalSteps=[],
-        targetUser,
-        loggedInUser,
-        idToRemove,
-        renderRemoveStepState,
-        unrenderRemoveStepFunction
-
-=======
     acceptStep,
     activeIndexEditStep,
     clickHandlerCancel,
@@ -79,7 +42,6 @@ import plus from '../../../../style/images/plus_websize.png'
     unrenderRemoveStepFunction,
     renderAcceptStepState,
     unrenderAcceptStepFunction,
->>>>>>> Stashed changes
   }) => {
     return (
     <div className="sortable-item-wrapper">

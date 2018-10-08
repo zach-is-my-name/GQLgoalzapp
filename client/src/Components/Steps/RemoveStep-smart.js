@@ -123,13 +123,8 @@ componentDidMount() {
       }
   }
 
-<<<<<<< Updated upstream
-  async _submitRemoveStepMutation() {
-      // console.log('_submitRemoveStepMutation called')
-=======
   async _submitRemoveStepMutation(idToRemove) {
         // console.log('_submitRemoveStepMutation called')
->>>>>>> Stashed changes
       const removeStepResult = await this.props.removeStepMutation({
         variables: {
           id: this.props.idToRemove
@@ -154,10 +149,6 @@ componentDidMount() {
       }
 
 
-<<<<<<< Updated upstream
-async _submitRemoveClonedStepMutation(){
-    const removeClonedStepResult = await this.props.removeClonedStepMutation({
-=======
 async _submitRemoveClonedStepMutation(stepsIdToRemove){
     const clonedStepIdResult = await this.props.client.query({query: clonedStepIdByStepsIdQuery,
       variables: {
@@ -167,7 +158,6 @@ async _submitRemoveClonedStepMutation(stepsIdToRemove){
     const clonedStepIdToRemove = clonedStepIdResult.data.allClonedSteps[0].id
 
     await this.props.removeClonedStepMutation({
->>>>>>> Stashed changes
       variables: {
         id: this.props.clonedStepIdToRemove
       }
