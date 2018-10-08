@@ -9,7 +9,7 @@ class ForeignStep extends Component {
       toggleOnYesNoPrompt: false,
       indexToRemove: null,
       indexClicked: null,
-      activeStep: false,
+      stepActivated: false,
       activeIndexEditStep: null,
       editStepOn: false,
       editedStep: '',
@@ -26,7 +26,7 @@ class ForeignStep extends Component {
       <ForeignStepWithButtons
         indexToRemove={this.state.indexToRemove}
         indexClicked={this.state.indexClicked}
-        activeStep={this.state.activeStep}
+        stepActivated={this.state.stepActivated}
         editStepOn={this.state.editStepOn}
         editedStep={this.state.editedStep}
         renderRemoveMutation={this.state.renderRemoveMutation}
@@ -77,7 +77,7 @@ class ForeignStep extends Component {
     this.setState(prevState => { return  (
     {
       indexClicked: stepIndex,
-      activeStep: !prevState.activeStep,
+      stepActivated: !prevState.stepActivated,
       stepIndex: this.props.stepIndex
     }
   )}

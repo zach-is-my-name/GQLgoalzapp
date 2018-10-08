@@ -4,11 +4,17 @@ import YesNoPrompt from '../../YesNoPrompt.js'
 import EditStep from '../../EditStep.js'
 import AddStepSmart from '../../AddStep-smart.js'
 import RemoveStep from '../../RemoveStep-smart.js'
+<<<<<<< Updated upstream
 import AcceptStep from '../../AcceptStep.js'
+=======
+import AcceptStep from '../../AcceptStep-smart.js'
+import RejectStep from '../../RejectStep-smart.js'
+>>>>>>> Stashed changes
 import minus from '../../../../style/images/minus.jpg'
 import plus from '../../../../style/images/plus_websize.png'
 
   const OwnStepWithButtons = ({
+<<<<<<< Updated upstream
         stepIndex,
         minusEvent,
         toggleConfirmPrompt,
@@ -40,6 +46,40 @@ import plus from '../../../../style/images/plus_websize.png'
         renderRemoveStepState,
         unrenderRemoveStepFunction
 
+=======
+    acceptStep,
+    activeIndexEditStep,
+    clickHandlerCancel,
+    clickHandlerConfirmReject,
+    clickHandlerConfirmRemove,
+    clickHandlerEdit,
+    clickHandlerMinus,
+    clickHandlerPlus,
+    editStepOn,
+    editedStep,
+    goalDocId,
+    handleChangeEditForm,
+    idToRemove,
+    indexClicked,
+    indexToRemove,
+    loggedInUser,
+    renderRejectStepState,
+    renderRemoveStep,
+    renderRemoveStepState,
+    stepActivated,
+    stepColor,
+    stepId,
+    stepIndex,
+    stepObj,
+    submitEditedStep,
+    targetUser,
+    toggleConfirmPrompt,
+    toggleSuggestedSteps,
+    unrenderRejectStepFunction,
+    unrenderRemoveStepFunction,
+    renderAcceptStepState,
+    unrenderAcceptStepFunction,
+>>>>>>> Stashed changes
   }) => {
     return (
     <div className="sortable-item-wrapper">
@@ -81,14 +121,22 @@ import plus from '../../../../style/images/plus_websize.png'
           : null}
 
         {/*add step*/}
-        {(activeStep && stepIndex !== null && (indexClicked === stepIndex) && !stepObj.suggestedStep && !toggleSuggestedSteps)
+        {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) && !stepObj.suggestedStep && !toggleSuggestedSteps)
           ?
             <AddStepSmart stepIndex={stepIndex} goalDocId={goalDocId}/>
           : null}
 
         {/*accept step */}
-        {(activeStep && stepIndex !== null && (indexClicked === stepIndex) && stepObj.suggestedStep && acceptStep)
-          ? <AcceptStep step={stepObj.step} goalDocId={goalDocId} stepId={stepObj.id} index={stepIndex} />
+        {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) && stepObj.suggestedStep &&
+        renderAcceptStepState)
+          ? <AcceptStep
+            acceptedStep={stepObj.step}
+            goalDocId={goalDocId}
+            clonedStepId={stepObj.id}
+            clonedStepIndex={stepIndex}
+            renderAcceptStepState={renderAcceptStepState}
+            unrenderAcceptStepFunction={unrenderAcceptStepFunction}
+            />
           : null}
       </div>
     </div>

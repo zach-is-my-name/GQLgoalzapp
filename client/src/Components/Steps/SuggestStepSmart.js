@@ -107,9 +107,6 @@ async _submitSuggestedStep(event) {
         positionIndex: index
       }))
     }
-    // actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
-    // this.props.dispatch(actions.setSuggestedStep(this.state.step, this.props.index))
-    // this.props.dispatch(actions.setClonedStepPositionIndex())
   }
 
   _submitSuggestedStepMutation = async (newClonedStepsSortedByPositionIndex) => {

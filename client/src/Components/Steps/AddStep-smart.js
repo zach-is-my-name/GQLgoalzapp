@@ -86,7 +86,7 @@ class AddStepSmart extends React.Component {
     this._submitStep = this._submitStep.bind(this);
     this._reorderSteps = this._reorderSteps.bind(this)
     this._submitAddStepMutation = this._submitAddStepMutation.bind(this)
-    this._submitClonedStepMutation = this._submitClonedStepMutation.bind(this)
+    this._submitAddClonedStepMutation = this._submitAddClonedStepMutation.bind(this)
     this.handleChange = this.handleChange.bind(this);
     this.state = {
       step: '',
@@ -113,7 +113,7 @@ class AddStepSmart extends React.Component {
     const {stepIdQuery, clonedStepIdQuery} = this.props
     const returnedIdArr =  await this._submitAddStepMutation(this._reorderSteps(stepIdQuery))
     const returnedId = returnedIdArr[0]
-    this._submitClonedStepMutation(this._reorderClonedSteps(clonedStepIdQuery, returnedId))
+    this._submitAddClonedStepMutation(this._reorderClonedSteps(clonedStepIdQuery, returnedId))
   }
 
   _reorderSteps(queryResult) {
@@ -158,8 +158,8 @@ class AddStepSmart extends React.Component {
          }
        }
      )
-        const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
-        return arr
+        const arrayOfReturnedId = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
+        return arrayOfReturnedId
    }
 
 
@@ -186,7 +186,7 @@ class AddStepSmart extends React.Component {
     return _newSteps
   }}
 
-  _submitClonedStepMutation (newClonedStepsSortedByPositionIndex) {
+  _submitAddClonedStepMutation (newClonedStepsSortedByPositionIndex) {
     newClonedStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
       let id
       if (stepObj.id) {

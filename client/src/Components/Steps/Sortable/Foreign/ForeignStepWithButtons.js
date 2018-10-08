@@ -8,7 +8,7 @@ import plus from '../../../../style/images/plus_websize.png'
 import minus from '../../../../style/images/minus.jpg'
 
 const ForeignStepWithButtons = ({toggleOnYesNoPrompt, indexToRemove, value, stepIndex,
-  newIndex, clickHandlerEdit, clickHandlerSuggestAdd, clickHandlerYes,clickHandlerNo, renderRemoveMutation,id, editStepOn, activeIndexEditStep, indexClicked, activeStep,
+  newIndex, clickHandlerEdit, clickHandlerSuggestAdd, clickHandlerYes,clickHandlerNo, renderRemoveMutation,id, editStepOn, activeIndexEditStep, indexClicked, stepActivated,
   oldIndex, indexInMotion, goalDocId, targetUser, loggedInUser, clickHandlerSuggestRemove, stepObj}) =>{
     return (
       <div className="sortable-item-wrapper">
@@ -33,7 +33,7 @@ const ForeignStepWithButtons = ({toggleOnYesNoPrompt, indexToRemove, value, step
             ? <SuggestEditStep id={id} index={stepIndex}/>
             : null}
 
-          {activeStep && (stepIndex !== null) && (indexClicked === stepIndex)
+          {stepActivated && (stepIndex !== null) && (indexClicked === stepIndex)
             ? <SuggestStepSmart stepIndex={stepIndex} goalDocId={goalDocId} targetUser={targetUser} loggedInUser={loggedInUser}/>
             : null}
 

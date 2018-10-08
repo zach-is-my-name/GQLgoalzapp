@@ -18,13 +18,19 @@ class OwnStep  extends Component {
       indexToRemove: null,
       idToRemove: null,
       indexClicked: null,
-      activeStep: false,
+      stepActivated: false,
       stepIndex: null,
       activeIndexEditStep: null,
       editStepOn: false,
       editedStep: '',
       acceptStep: false,
       renderRemoveStepState: false,
+<<<<<<< Updated upstream
+=======
+      renderRejectStepState: false,
+      renderAcceptStepState: false,
+
+>>>>>>> Stashed changes
     }
     this.clickHandlerRemove = this.clickHandlerRemove.bind(this)
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
@@ -37,6 +43,12 @@ class OwnStep  extends Component {
     this.clickHandlerRejectStep = this.clickHandlerRejectStep.bind(this)
     this.clickHandlerConfirmRemove = this.clickHandlerConfirmRemove.bind(this)
     this.unrenderRemoveStep = this.unrenderRemoveStep.bind(this)
+<<<<<<< Updated upstream
+=======
+    this.unrenderRejectStep = this.unrenderRejectStep.bind(this)
+    this.unrenderAcceptStep = this.unrenderAcceptStep.bind(this)
+    this.clickHandlerConfirmReject = this.clickHandlerConfirmReject.bind(this)
+>>>>>>> Stashed changes
   }
 
 
@@ -48,9 +60,10 @@ class OwnStep  extends Component {
     //   this.changestepIndex(newIndex)
     // }
     let suggestedStep
-    if (stepObj.suggestedStep) {
+    if (stepObj.suggestedStep === true) {
       return (
         <OwnStepWithButtons
+<<<<<<< Updated upstream
           stepIndex={this.props.stepIndex}
           minusEvent={this.rejectStep}
           stepColor={({color: '#ef3779'})}
@@ -64,15 +77,41 @@ class OwnStep  extends Component {
           activeStep={this.state.activeStep}
           indexClicked={this.state.indexClicked}
           goalDocId={this.props.goalDocId}
-          stepId={this.props.stepObj.id}
+=======
           acceptStep={this.state.acceptStep}
-          toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-          targetUser={this.props.targetUser}
+          clickHandlerCancel={this.clickHandlerCancel}
+          clickHandlerConfirmReject={this.clickHandlerConfirmReject}
+          clickHandlerEdit={this.clickHandlerEdit}
+          clickHandlerMinus={this.clickHandlerRejectStep}
+          clickHandlerPlus={this.clickHandlerAcceptStep}
+          editedStep={this.state.editedStep}
+          goalDocId={this.props.goalDocId}
+          idToRemove={this.state.idToRemove}
+          indexClicked={this.state.indexClicked}
+          indexToRemove={this.state.indexToRemove}
           loggedInUser={this.props.loggedInUser}
+          renderRejectStepState={this.state.renderRejectStepState}
+          stepActivated={this.state.stepActivated}
+          stepColor={({color: '#ef3779'})}
+>>>>>>> Stashed changes
+          stepId={this.props.stepObj.id}
+          stepIndex={this.props.stepIndex}
+          stepObj={this.props.stepObj}
+          submitEditedStep={this.placeholder}
+          targetUser={this.props.targetUser}
+<<<<<<< Updated upstream
+          loggedInUser={this.props.loggedInUser}
+=======
+          toggleConfirmPrompt={this.state.toggleConfirmPrompt}
+          toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+          unrenderRejectStepFunction={this.unrenderRejectStep}
+          renderAcceptStepState={this.state.renderAcceptStepState}
+          unrenderAcceptStepFunction={this.unrenderAcceptStep}
+>>>>>>> Stashed changes
         />
 
       )
-    } else if (!stepObj.suggestedStep) {
+    } else if (stepObj.suggestedStep === false) {
     let  noStepColor = {
         color: '#000000'
       }
@@ -89,7 +128,7 @@ class OwnStep  extends Component {
         clickHandlerCancel={this.clickHandlerCancel}
         editedStep={this.state.editedStep}
         submitEditedStep={this.submitEditedStep}
-        activeStep={this.state.activeStep}
+        stepActivated={this.state.stepActivated}
         indexClicked={this.state.indexClicked}
         stepColor={noStepColor}
         goalDocId={this.props.goalDocId}
@@ -135,7 +174,7 @@ class OwnStep  extends Component {
     // this.setState({})
     this.setState(prevState => ({
       indexClicked: stepIndex,
-      activeStep: !prevState.activeStep,
+      stepActivated: !prevState.stepActivated,
       stepIndex: this.props.stepIndex
     }))
   }
@@ -178,12 +217,27 @@ class OwnStep  extends Component {
     this.setState({stepIndex: newIndex})
   }
 
+<<<<<<< Updated upstream
+=======
+  clickHandlerAcceptStep(indexClicked) {
+    this.setState(prevState => ({
+      renderAcceptStepState: !prevState.renderAcceptStepState,
+      stepActivated: !prevState.stepActivated,
+      indexClicked: indexClicked,
+    })
+  )}
+
+  unrenderAcceptStep() {
+    console.log('unrender accept step called')
+    this.setState(prevState => ({renderAcceptStepState: !prevState.renderAcceptStepState})
+)}
+>>>>>>> Stashed changes
 
   acceptStep(stepIndex) {
     this.setState(prevState => ({
       acceptStep: !prevState.acceptStep,
       indexClicked: stepIndex,
-      activeStep: !prevState.activeStep,
+      stepActivated: !prevState.stepActivated,
       stepIndex: this.props.stepIndex
     }))
   }
