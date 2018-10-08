@@ -47,7 +47,7 @@ import plus from '../../../../style/images/plus_websize.png'
     <div className="sortable-item-wrapper">
       <div className="row-1">
 
-        <li className="minus-image"> <img key={`imagekey-minus${stepIndex}`} onClick={() => minusEvent(stepIndex, stepObj.id)} alt="" src={minus}/></li>
+        <li className="minus-image"> <img key={`imagekey-minus${stepIndex}`} onClick={() => clickHandlerMinus(stepIndex, stepObj.id)} alt="" src={minus}/></li>
 
         <span style={stepColor}>
           <li onClick={(event) => clickHandlerEdit(stepIndex, event)} key={stepIndex}> {stepObj.step} </li>
