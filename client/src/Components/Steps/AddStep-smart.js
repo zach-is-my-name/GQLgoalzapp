@@ -1,4 +1,4 @@
-// /* eslint-disable */
+/* eslint-disable */
 import React, {Component} from 'react'
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';

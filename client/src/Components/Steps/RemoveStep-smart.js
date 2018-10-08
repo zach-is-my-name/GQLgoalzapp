@@ -81,11 +81,19 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
   }
 }`
 
+	const clonedStepIdByStepsIdQuery = gql `
+    query allClonedStepsByStepsIdQuery ($stepsId: String){
+      allClonedSteps(filter: { stepsId: $stepsId}){
+	      id
+	    }
+	  } `
+
 class RemoveStep extends Component {
   constructor(props) {
     super(props)
+    this._submitRemoveSteps = this._submitRemoveSteps.bind(this)
     this._submitRemoveStepMutation = this._submitRemoveStepMutation.bind(this)
-    this._submitRemoveClonedStepMutation = this._submitClonedStepMutation.bind(this)
+    this._submitRemoveClonedStepMutation = this._submitRemoveClonedStepMutation.bind(this)
     this._reorderSteps = this._reorderSteps.bind(this)
     this._reorderClonedSteps = this._reorderClonedSteps.bind(this)
     }
@@ -95,7 +103,8 @@ componentDidMount() {
 
   render() {
     if (this.props.renderRemoveStepState === true) {
-        this._submitRemoveStepMutation()
+        this._submitRemoveSteps(this.props.idToRemove)
+        // this._submitRemoveStepMutation()
     }
       return null
   }
@@ -123,11 +132,19 @@ componentDidMount() {
       }
   }
 
+    async _submitRemoveSteps(idToRemove) {
+  	        await this._submitRemoveStepMutation(idToRemove)
+  	        this._submitRemoveClonedStepMutation(idToRemove)
+  	 	  }
+
+
+
   async _submitRemoveStepMutation(idToRemove) {
+        console.log('idToRemove', idToRemove)
         // console.log('_submitRemoveStepMutation called')
       const removeStepResult = await this.props.removeStepMutation({
         variables: {
-          id: this.props.idToRemove
+          id: idToRemove
         }
       }).catch((error) => {console.log(error)})
 
