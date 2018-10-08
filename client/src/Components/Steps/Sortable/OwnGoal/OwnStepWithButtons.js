@@ -74,8 +74,16 @@ import plus from '../../../../style/images/plus_websize.png'
         {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex && stepObj.suggestedStep === true))
           ? <div className="prompt">
             <p>Reject Step?</p>
-            <YesNoPrompt clickEventYes={clickHandlerMinus} clickEventNo={clickHandlerCancel}/></div>
+            <YesNoPrompt clickEventYes={clickHandlerConfirmReject} clickEventNo={clickHandlerCancel}/></div>
           : null}
+
+        {renderRejectStepState === true && (indexToRemove === stepIndex) ?
+          <RejectStep
+            idToRemove={idToRemove}
+            renderRejectStepState={renderRejectStepState}
+            goalDocId={goalDocId}
+            unrenderRejectStepFunction={unrenderRejectStepFunction}
+          /> : null}
 
         {/*edit step */}
         {(editStepOn && stepIndex != null && activeIndexEditStep === stepIndex)

@@ -124,10 +124,15 @@ class OwnStep  extends Component {
           }
           }
 
-          clickHandlerRejectStep() {
-
-          }
-
+          clickHandlerRejectStep(stepIndex, id) {
+      console.log('rejectStep clicked')
+      this.setState(prevState => ({
+        toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+        indexClicked: stepIndex,
+        indexToRemove: stepIndex,
+        idToRemove: this.props.stepObj.id,
+      })
+  )}
           clickHandlerEdit(stepIndex, event) {
             this.setState(prevState => ({
               editStepOn: !prevState.editStepOn,
