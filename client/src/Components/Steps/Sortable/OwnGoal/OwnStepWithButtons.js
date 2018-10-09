@@ -58,7 +58,7 @@ import plus from '../../../../style/images/plus_websize.png'
 
       <div className="row-2">
         {/*remove step*/}
-        {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex && stepObj.suggestedStep === false))
+        {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex && stepObj.suggestedStep === false)) && !toggleSuggestedSteps
           ? <div className="prompt">
             <p>Remove Step?</p>
             <YesNoPrompt
@@ -68,7 +68,7 @@ import plus from '../../../../style/images/plus_websize.png'
           </div>
           : null }
         {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ?
-          <RemoveStep 
+          <RemoveStep
             stepObj={stepObj}
             stepIndex={stepIndex}
             idToRemove={idToRemove}
