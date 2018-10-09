@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import YesNoPrompt from '../../YesNoPrompt.js'
-import EditStep from '../../EditStep.js'
+import EditStepSmart from '../../EditStep-smart.js'
 import AddStepSmart from '../../AddStep-smart.js'
 import RemoveStep from '../../RemoveStep-smart.js'
 import AcceptStep from '../../AcceptStep-smart.js'
@@ -50,7 +50,12 @@ import plus from '../../../../style/images/plus_websize.png'
         <li className="minus-image"> <img key={`imagekey-minus${stepIndex}`} onClick={() => clickHandlerMinus(stepIndex, stepObj.id)} alt="" src={minus}/></li>
 
         <span style={stepColor}>
-          <li onClick={(event) => clickHandlerEdit(stepIndex, event)} key={stepIndex}> {stepObj.step} </li>
+          <li onClick={(event) => clickHandlerEdit(stepIndex, event)} key={stepIndex}>
+            {editStepOn ?
+              <EditStepSmart
+                stepObj={stepObj}
+              />
+            : stepObj.step} </li>
         </span>
 
         <li className="plus-image"> <img key={`imageKey-plus${stepIndex}`} onClick={() => clickHandlerPlus(stepIndex)} alt="" src={plus}/> </li>
@@ -95,9 +100,10 @@ import plus from '../../../../style/images/plus_websize.png'
           /> : null}
 
         {/*edit step */}
-        {(editStepOn && stepIndex != null && activeIndexEditStep === stepIndex)
+        {/* {(editStepOn && stepIndex != null && activeIndexEditStep === stepIndex)
           ? <EditStep handleChange={handleChangeEditForm} editedStep={editedStep} submitEditedStep={submitEditedStep} step={stepObj} index={stepIndex}/>
           : null}
+        */}
 
         {/*add step*/}
         {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) && !stepObj.suggestedStep && !toggleSuggestedSteps)

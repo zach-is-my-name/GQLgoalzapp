@@ -1,19 +1,15 @@
-/* eslint-disable */
-import React, {Component} from 'react';
-import YesNoPrompt from './YesNoPrompt.js'
+import React from 'react'
+import '../../style/EditStep.css'
 
-export default class EditStep extends Component {
-
-render() {
- return (
+const EditStep = (props) => {
+return  (
 <div className="editstep-form">
-  <form onSubmit={e => this.props.submitEditedStep(e,this.props.index,this.props.editedStep)}>
-    <input type="text" onChange={this.props.handleChange} placeholder={this.props.editedStep}
-      value={this.props.editedStep}  />
-    <input type="submit" value="Submit Edited Step" onSubmit={e => this.props.submitEditedStep(e,this.props.index, this.props.editedStep)} />
+  <form onSubmit={props._submitEditedStep}>
+    <input  type="text" onChange={props.handleChange} value={props.value} className="edit-step-input"  />
+    <input type="submit" value="Edit Step" />
   </form>
 </div>
 )
 }
 
-}
+export default EditStep

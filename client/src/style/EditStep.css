@@ -1,0 +1,7 @@
+.edit-step-input:focus {
+    outline-width: 0;
+}
+
+input[type="text"] {
+  font-family: bentonreg;
+}

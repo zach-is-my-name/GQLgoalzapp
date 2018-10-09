@@ -22,7 +22,6 @@ class OwnStep  extends Component {
       stepIndex: null,
       activeIndexEditStep: null,
       editStepOn: false,
-      editedStep: '',
       acceptStep: false,
       renderRemoveStepState: false,
       renderRejectStepState: false,
@@ -34,7 +33,6 @@ class OwnStep  extends Component {
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
     this.clickHandlerAdd = this.clickHandlerAdd.bind(this)
     this.changestepIndex = this.changestepIndex.bind(this)
-    this.handleChangeEditForm = this.handleChangeEditForm.bind(this);
     this.submitEditedStep = this.submitEditedStep.bind(this)
     this.clickHandlerEdit = this.clickHandlerEdit.bind(this)
     this.clickHandlerAcceptStep = this.clickHandlerAcceptStep.bind(this)
@@ -104,7 +102,7 @@ class OwnStep  extends Component {
                 clickHandlerPlus={this.clickHandlerAdd}
                 clickHandlerMinus={this.clickHandlerRemoveStep}
                 clickHandlerCancel={this.clickHandlerCancel}
-                editedStep={this.state.editedStep}
+                editStepOn={this.state.editStepOn}
                 submitEditedStep={this.submitEditedStep}
                 stepActivated={this.state.stepActivated}
                 indexClicked={this.state.indexClicked}
@@ -136,15 +134,11 @@ class OwnStep  extends Component {
           clickHandlerEdit(stepIndex, event) {
             this.setState(prevState => ({
               editStepOn: !prevState.editStepOn,
-              activeIndexEditStep: stepIndex,
               stepIndex: this.props.stepIndex
             }))
             // this.setState({activeIndexEditStep: stepIndex, stepIndex: this.props.stepIndex})
           }
 
-          handleChangeEditForm(event) {
-            this.setState({editedStep: event.target.stepObj})
-          }
 
           submitEditedStep(event, stepIndex, editedStep) {
             event.preventDefault()

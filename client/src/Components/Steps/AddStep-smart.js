@@ -99,7 +99,10 @@ class AddStepSmart extends React.Component {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
 
     if (this.props.loggedInUser === this.props.targetUser) {
-      return <AddStep _submitStep={this._submitStep} handleChange={this.handleChange} value={this.state.step} />
+      return <AddStep
+        _submitStep={this._submitStep}
+        handleChange={this.handleChange}
+        value={this.state.step} />
     }
     return null
   }
