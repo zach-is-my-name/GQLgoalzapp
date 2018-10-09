@@ -23,6 +23,7 @@ const stepsQuery = gql `
 const clonedStepsQuery = gql `
     query clonedStepsQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
+        id
        clonedSteps(orderBy:positionIndex_ASC) {
          step
          positionIndex
@@ -102,6 +103,7 @@ componentDidMount() {
 }
 
   render() {
+    console.log(this.props.stepObj)
     if (this.props.renderRemoveStepState === true) {
         this._submitRemoveSteps(this.props.idToRemove)
         // this._submitRemoveStepMutation()
@@ -109,35 +111,10 @@ componentDidMount() {
       return null
   }
 
-
-   _reorderSteps(queryResult) {
-    const {loading, error} = queryResult
-      if (!loading) {
-
-        const newSteps = queryResult.data.GoalDoc.steps.slice()
-        return newSteps.map((stepObj, index) => ({
-          ...stepObj,
-          positionIndex: index
-        }))
-      }}
-
-  _reorderClonedSteps(queryResult) {
-    const {loading, error} = queryResult
-      if (!loading) {
-        const newSteps = queryResult.data.GoalDoc.clonedSteps.slice()
-        return newSteps.map((stepObj, index) => ({
-          ...stepObj,
-          positionIndex: index
-        }))
-      }
-  }
-
     async _submitRemoveSteps(idToRemove) {
   	        await this._submitRemoveStepMutation(idToRemove)
   	        this._submitRemoveClonedStepMutation(idToRemove)
   	 	  }
-
-
 
   async _submitRemoveStepMutation(idToRemove) {
         console.log('idToRemove', idToRemove)
@@ -164,37 +141,78 @@ componentDidMount() {
           }).catch(error => console.log(error))
         })
       }
+   _reorderSteps(queryResult) {
+    const {loading, error} = queryResult
+      if (!loading) {
+
+        const newSteps = queryResult.data.GoalDoc.steps.slice()
+        return newSteps.map((stepObj, index) => ({
+          ...stepObj,
+          positionIndex: index
+        }))
+      }}
+
+  _reorderClonedSteps(queryResult) {
+    const {loading, error} = queryResult
+      if (!loading) {
+        const newSteps = queryResult.data.GoalDoc.clonedSteps.slice()
+        return newSteps.map((stepObj, index) => ({
+          ...stepObj,
+          positionIndex: index
+        }))
+      }
+  }
+
+
+
+
 
 
 async _submitRemoveClonedStepMutation(stepsIdToRemove){
-    const clonedStepIdResult = await this.props.client.query({query: clonedStepIdByStepsIdQuery,
-      variables: {
-        stepsId: stepsIdToRemove,
-      },
-      fetchPolicy: 'network-only'}).catch(error => console.log(error))
-    const clonedStepIdToRemove = clonedStepIdResult.data.allClonedSteps[0].id
+    let clonedStepIdResult, clonedStepIdToRemove, clonedStepsQueryResult, reorderedClonedSteps
+    try {
+      clonedStepIdResult = await this.props.client.query({query: clonedStepIdByStepsIdQuery,
+        variables: {
+          stepsId: stepsIdToRemove,
+        },
+        fetchPolicy: 'network-only'})
+      } catch (error) {
+        console.log(error)
+      }
 
+  try {
+    clonedStepIdToRemove = clonedStepIdResult.data.allClonedSteps[0].id
     await this.props.removeClonedStepMutation({
       variables: {
-        id: this.props.clonedStepIdToRemove
+        id: clonedStepIdToRemove
       }
-    }.catch(error => console.log(error)))
-
-    const clonedStepsQuery = await this.props.client.query({query: stepsQuery,
+    })
+} catch (error) {
+  console.log(error)
+}
+  try {
+    clonedStepsQueryResult = await this.props.client.query({query: clonedStepsQuery,
       variables: {
         goalDocId: this.props.goalDocId},
-        fetchPolicy: 'network-only'}).catch(error => console.log(error))
+        fetchPolicy: 'network-only'})
+      } catch(error) {
+            console.log(error)
+        }
 
-    const reorderedSteps = await this_reorderSteps(clonedStepsQueryResult)
+    try {
+    reorderedClonedSteps = await this._reorderClonedSteps(clonedStepsQueryResult)
         await reorderedClonedSteps.map(async(stepObj, mapIndex) => {
           await this.props.updateClonedStep({
             variables: {
               id: stepObj.id,
               positionIndex: stepObj.positionIndex
             }
-          }).catch(error => console.log(error))
+          })
         })
+      } catch(error) {
+            console.log(error)
         }
+}
 }
 
 const RemoveStepWithMutation =

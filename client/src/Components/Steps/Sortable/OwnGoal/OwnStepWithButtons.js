@@ -67,7 +67,16 @@ import plus from '../../../../style/images/plus_websize.png'
             />
           </div>
           : null }
-        {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ? <RemoveStep stepIndex={stepIndex} idToRemove={idToRemove} goalDocId={goalDocId} unrenderRemoveStepFunction={unrenderRemoveStepFunction}   renderRemoveStepState={renderRemoveStepState}  /> : null}
+        {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ?
+          <RemoveStep 
+            stepObj={stepObj}
+            stepIndex={stepIndex}
+            idToRemove={idToRemove}
+            goalDocId={goalDocId}
+            unrenderRemoveStepFunction={unrenderRemoveStepFunction}
+            renderRemoveStepState={renderRemoveStepState}
+          />
+        : null}
 
 
         {/*reject step*/}
