@@ -231,7 +231,8 @@ graphql(UpdateOrCreateClonedStep, {
       return updateOrCreateClonedStep({
         variables: {
           ...variables
-        }
+        },
+        refetchQueries: ['goalDocByIdQuery']
       }).catch((error) => {
         console.log(error)
       })
