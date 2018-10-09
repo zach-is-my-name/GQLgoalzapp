@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@attently/riek": "^2.0.1",
     "react-scripts": "0.9.5",
     "redux-logger": "^3.0.6"
   },

@@ -1,6 +1,8 @@
 /* eslint-disable */
 import React, {Component} from 'react';
 import EditStep from './EditStep.js'
+import {RIEInput} from '@attently/riek'
+import '../../style/EditStepSmart.css'
 
 export default class EditStepSmart extends Component {
 constructor(props) {
@@ -12,22 +14,32 @@ constructor(props) {
   }
 }
 
-  handleChange(e) {
-      this.setState({editedStep: e.target.stepObj})
+  handleChange(obj) {
+      console.log(obj)
+      // this.setState({editedStep: e.target.stepObj})
           }
 
  _submitEditedStep() {
-   
+
  }
 
 render() {
  return (
-   <EditStep
-     _submitEditedStep={this._submitEditedStep}
-     handleChange={this.handleChange}
-     value={this.state.editedStep}
-   />
-     )
+     <RIEInput
+       value={this.props.stepObj.step}
+       propName={"editedStep"}
+       change={this.handleChange}
+       selectAll={false}
+       classEditing="editing-input"
+     />
+       )
      }
 
      }
+
+
+   // <EditStep
+   //   _submitEditedStep={this._submitEditedStep}
+   //   handleChange={this.handleChange}
+   //   value={this.state.editedStep}
+   // />
