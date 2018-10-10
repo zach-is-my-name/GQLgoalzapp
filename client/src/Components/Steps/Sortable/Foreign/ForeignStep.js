@@ -15,13 +15,16 @@ class ForeignStep extends Component {
       editedStep: '',
       renderRemoveMutation:false,
       renderSuggestRemoveState: false,
+      renderSuggestEditState: false,
     }
 
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
     this.clickHandlerSuggestAdd = this.clickHandlerSuggestAdd.bind(this)
     this.clickHandlerSuggestRemove = this.clickHandlerSuggestRemove.bind(this)
+    this.clickHandlerSuggestEdit = this.clickHandlerSuggestEdit.bind(this)
     this.clickHandlerConfirmSuggestRemove = this.clickHandlerConfirmSuggestRemove.bind(this)
     this.unrenderSuggestRemoveStep = this.unrenderSuggestRemoveStep.bind(this)
+    this.unrenderSuggestEditStep = this.unrenderSuggestEditStep.bind(this)
 }
 
   render() {
@@ -36,12 +39,12 @@ class ForeignStep extends Component {
         clickHandlerSuggestAdd={this.clickHandlerSuggestAdd}
         clickHandlerSuggestRemove={this.clickHandlerSuggestRemove}
         clickHandlerConfirmSuggestRemove={this.clickHandlerConfirmSuggestRemove}
+        clickHandlerSuggestEdit={this.clickHandlerSuggestEdit}
+        clickHandlerCancel={this.props.clickHandlerCancel}
         toggleOnYesNoPrompt={this.state.toggleOnYesNoPrompt}
         stepObj={this.props.stepObj}
         stepIndex={this.props.stepIndex}
         newIndex={this.props.newIndex}
-        clickHandlerEdit={this.props.clickHandlerEdit}
-        clickHandlerCancel={this.props.clickHandlerCancel}
         id={this.props.id}
         activeIndexEditStep={this.state.activeIndexEditStep }
         oldIndex={this.props.oldIndex}
@@ -50,15 +53,11 @@ class ForeignStep extends Component {
         targetUser={this.props.targetUser}
         loggedInUser={this.props.loggedInUser}
         renderSuggestRemoveState={this.state.renderSuggestRemoveState}
+        renderSuggestEditState={this.state.renderSuggestEditState}
         unrenderSuggestRemoveStepFunction={this.unrenderSuggestRemoveStep}
+        unrenderSuggestEditStepFunction={this.unrenderSuggestEditStep}
       />
     )
-  }
-  clickHandlerEdit(stepIndex, event) {
-    this.setState(prevState => ({
-      editStepOn: !prevState.editStepOn
-    }))
-    this.setState({activeIndexEditStep: stepIndex, stepIndex: this.props.stepIndex})
   }
 
   // clickHandlerYes(event) {
@@ -107,6 +106,19 @@ class ForeignStep extends Component {
   unrenderSuggestRemoveStep() {
     this.setState(prevState => ({
       renderSuggestRemoveState: !prevState.renderSuggestRemoveState,
+    }))
+  }
+
+  clickHandlerSuggestEdit(stepIndex, event) {
+    this.setState(prevState => ({
+      renderSuggestEditState: true,
+      stepIndex: this.props.stepIndex
+    }))
+  }
+
+  unrenderSuggestEditStep() {
+    this.setState(prevState => ({
+      renderSuggestEditState: false,
     }))
   }
 

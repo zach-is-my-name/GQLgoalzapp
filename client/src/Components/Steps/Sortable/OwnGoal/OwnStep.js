@@ -63,7 +63,6 @@ class OwnStep extends Component {
           indexClicked={this.state.indexClicked}
           clickHandlerCancel={this.clickHandlerCancel}
           clickHandlerConfirmReject={this.clickHandlerConfirmReject}
-          clickHandlerEdit={this.clickHandlerEdit}
           clickHandlerMinus={this.clickHandlerRejectStep}
           clickHandlerPlus={this.clickHandlerAcceptStep}
           goalDocId={this.props.goalDocId}

@@ -61,6 +61,16 @@ const goalDocByIdQuery = gql `
      }
 }
 
+render() {
+ return (
+   <EditStep
+     _submitEditedStep={this._submitEditedStep}
+     handleChange={this._handleChange}
+     value={this.state.editedStep}
+     unrenderEditFunction={this.props.unrenderEditFunction}
+   />
+     )}
+
   _handleChange(e) {
       this.setState({editedStep: e.target.value})
   }
@@ -81,20 +91,7 @@ async  _submitEditedStep(e) {
   }
    this.props.unrenderEditFunction()
  }
-
-render() {
-
- return (
-   <EditStep
-     _submitEditedStep={this._submitEditedStep}
-     handleChange={this._handleChange}
-     value={this.state.editedStep}
-     unrenderEditFunction={this.props.unrenderEditFunction}
-   />
-     )
-     }
-
-     }
+}
 
     export default compose(
       graphql(updateStepMutation, {
@@ -124,7 +121,7 @@ render() {
            variables: {
              ...variables
            },
-           refetchQueries: ['goalDocByIdQuery']
+           refetchQueries: ['goalDocByIdQuery'],
          })
        }
      })

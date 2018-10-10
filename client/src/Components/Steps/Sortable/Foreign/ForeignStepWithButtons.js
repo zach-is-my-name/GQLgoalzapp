@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import SuggestStepSmart from '../../SuggestStepSmart.js'
-import SuggestEditStep from '../../SuggestEditStep.js'
+import SuggestEditStep from '../../SuggestEditStep-smart.js'
 import YesNoPrompt from '../../YesNoPrompt.js'
 import SuggestRemoveStep from '../../SuggestRemoveStep-smart.js'
 import plus from '../../../../style/images/plus_websize.png'
@@ -13,7 +13,7 @@ const ForeignStepWithButtons = ({
   value,
   stepIndex,
   newIndex,
-  clickHandlerEdit,
+  clickHandlerSuggestEdit,
   clickHandlerSuggestAdd,
   clickHandlerCancel,
   renderRemoveMutation,
@@ -30,14 +30,22 @@ const ForeignStepWithButtons = ({
   clickHandlerSuggestRemove,
   clickHandlerConfirmSuggestRemove,
   renderSuggestRemoveState,
+  renderSuggestEditState,
   unrenderSuggestRemoveStepFunction,
+  unrenderSuggestEditStepFunction,
   stepObj,}) =>{
     return (
       <div className="sortable-item-wrapper">
         <div className="row-1">
           <li className="minus-image"><img key={`imagekey-minus${stepIndex}`} onClick={() => clickHandlerSuggestRemove(stepIndex)} alt="" src={minus}/></li>
 
-          <li className="current-step" onClick={(event) => clickHandlerEdit(stepIndex, event)} key={stepIndex}>{stepObj.step}</li>
+          <li className="current-step" onClick={(event) => clickHandlerSuggestEdit(stepIndex, event)} key={stepIndex}>
+            {renderSuggestEditState ?
+              <SuggestEditStep
+                stepObj={stepObj}
+                unrenderSuggestEditStepFunction={unrenderSuggestEditStepFunction}
+              />
+            :stepObj.step}</li>
 
           <li className="plus-image"><img key={`imageKey-plus${stepIndex}`} onClick={() => clickHandlerSuggestAdd(stepIndex)} alt="" src={plus}/></li>
         </div>

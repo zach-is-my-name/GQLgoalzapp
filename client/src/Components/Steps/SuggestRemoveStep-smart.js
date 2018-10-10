@@ -6,7 +6,7 @@ import * as actions  from '../../Actions/actions.js'
 
 
 const updateClonedStepMutation = gql `
-  mutation UpdateClonedStepMutation( $id: ID!) {
+  mutation SuggestRemoveClonedStepMutation( $id: ID!) {
     updateClonedStep(id: $id, suggestedStep: true, suggestRemove: true) {
       id
       step
