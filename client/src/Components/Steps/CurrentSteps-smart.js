@@ -26,6 +26,7 @@ query goalDocByIdQuery ($goalDocId: ID) {
      positionIndex
      id
      suggestedStep
+     suggestRemove
      stepsId
      suggester {
        userName
@@ -36,14 +37,6 @@ query goalDocByIdQuery ($goalDocId: ID) {
 
 
 class CurrentStepsSmart extends Component {
-
-  // componentWillMount() {
-  //   if (this.props.loggedInUser !== this.props.targetUser) {
-  //     this.props.dispatch(actions.cloneCurrentSteps(this.props.currentGoalSteps))
-  //     console.log('this.props.currentGoalSteps',this.props.currentGoalSteps)
-  //     console.log('cloneCurrentSteps called from CurrentSteps.js ')
-  //   }
-  //   }
 
   render() {
 

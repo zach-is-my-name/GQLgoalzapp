@@ -141,6 +141,7 @@ componentDidMount() {
           }).catch(error => console.log(error))
         })
       }
+
    _reorderSteps(queryResult) {
     const {loading, error} = queryResult
       if (!loading) {
@@ -162,11 +163,6 @@ componentDidMount() {
         }))
       }
   }
-
-
-
-
-
 
 async _submitRemoveClonedStepMutation(stepsIdToRemove){
     let clonedStepIdResult, clonedStepIdToRemove, clonedStepsQueryResult, reorderedClonedSteps

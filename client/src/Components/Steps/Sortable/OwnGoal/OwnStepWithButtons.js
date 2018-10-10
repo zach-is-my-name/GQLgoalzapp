@@ -27,7 +27,7 @@ import plus from '../../../../style/images/plus_websize.png'
     renderRemoveStep,
     renderRemoveStepState,
     stepActivated,
-    stepColor,
+    style,
     stepId,
     stepIndex,
     stepObj,
@@ -47,8 +47,8 @@ import plus from '../../../../style/images/plus_websize.png'
       <div className="row-1">
 
         <li className="minus-image"> <img key={`imagekey-minus${stepIndex}`} onClick={() => clickHandlerMinus(stepIndex, stepObj.id)} alt="" src={minus}/></li>
-
-        <span style={stepColor}>
+        {console.log(style)}
+        <span style={style}>
           <li onClick={(event) => clickHandlerEdit(stepIndex, event)} key={stepIndex}>
             {!toggleSuggestedSteps && renderEditStepState ?
               <EditStepSmart
@@ -56,10 +56,10 @@ import plus from '../../../../style/images/plus_websize.png'
                 unrenderEditFunction={unrenderEditFunction}
               />
             : stepObj.step} </li>
-        </span>
+          </span>
 
-        <li className="plus-image"> <img key={`imageKey-plus${stepIndex}`} onClick={() => clickHandlerPlus(stepIndex)} alt="" src={plus}/> </li>
-      </div>
+          <li className="plus-image"> <img key={`imageKey-plus${stepIndex}`} onClick={() => clickHandlerPlus(stepIndex)} alt="" src={plus}/> </li>
+        </div>
 
       <div className="row-2">
         {/*remove step*/}

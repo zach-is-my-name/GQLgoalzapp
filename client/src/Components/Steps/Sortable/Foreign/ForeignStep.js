@@ -14,11 +14,14 @@ class ForeignStep extends Component {
       editStepOn: false,
       editedStep: '',
       renderRemoveMutation:false,
+      renderSuggestRemoveState: false,
     }
 
-    this.clickHandlerNo = this.clickHandlerNo.bind(this)
-    this.clickHandlerYes = this.clickHandlerYes.bind(this)
+    this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
     this.clickHandlerSuggestAdd = this.clickHandlerSuggestAdd.bind(this)
+    this.clickHandlerSuggestRemove = this.clickHandlerSuggestRemove.bind(this)
+    this.clickHandlerConfirmSuggestRemove = this.clickHandlerConfirmSuggestRemove.bind(this)
+    this.unrenderSuggestRemoveStep = this.unrenderSuggestRemoveStep.bind(this)
 }
 
   render() {
@@ -32,13 +35,13 @@ class ForeignStep extends Component {
         renderRemoveMutation={this.state.renderRemoveMutation}
         clickHandlerSuggestAdd={this.clickHandlerSuggestAdd}
         clickHandlerSuggestRemove={this.clickHandlerSuggestRemove}
+        clickHandlerConfirmSuggestRemove={this.clickHandlerConfirmSuggestRemove}
         toggleOnYesNoPrompt={this.state.toggleOnYesNoPrompt}
         stepObj={this.props.stepObj}
         stepIndex={this.props.stepIndex}
         newIndex={this.props.newIndex}
         clickHandlerEdit={this.props.clickHandlerEdit}
-        clickHandlerYes={this.props.clickHandlerYes}
-        clickHandlerNo={this.props.clickHandlerNo}
+        clickHandlerCancel={this.props.clickHandlerCancel}
         id={this.props.id}
         activeIndexEditStep={this.state.activeIndexEditStep }
         oldIndex={this.props.oldIndex}
@@ -46,6 +49,8 @@ class ForeignStep extends Component {
         goalDocId={this.props.goalDocId}
         targetUser={this.props.targetUser}
         loggedInUser={this.props.loggedInUser}
+        renderSuggestRemoveState={this.state.renderSuggestRemoveState}
+        unrenderSuggestRemoveStepFunction={this.unrenderSuggestRemoveStep}
       />
     )
   }
@@ -56,15 +61,15 @@ class ForeignStep extends Component {
     this.setState({activeIndexEditStep: stepIndex, stepIndex: this.props.stepIndex})
   }
 
-  clickHandlerYes(event) {
-    console.log('yes clicked')
-    this.setState(prevState => ({
-      renderRemoveMutation: !prevState.renderRemoveMutation
-    // toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
-  }))
-  }
+  // clickHandlerYes(event) {
+  //   console.log('yes clicked')
+  //   this.setState(prevState => ({
+  //     renderRemoveMutation: !prevState.renderRemoveMutation
+  //   // toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
+  // }))
+  // }
 
-  clickHandlerNo(event) {
+  clickHandlerCancel(event) {
     console.log('no clicked')
     this.setState(prevState => ({
       toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
@@ -83,6 +88,7 @@ class ForeignStep extends Component {
   )}
 )}
 
+
   clickHandlerSuggestRemove(stepIndex) {
     console.log('index to remove', stepIndex)
     this.setState(prevState => ({
@@ -90,6 +96,20 @@ class ForeignStep extends Component {
     }))
     this.setState({indexToRemove: stepIndex, stepIndex: this.props.stepIndex})
   }
+
+  clickHandlerConfirmSuggestRemove() {
+    this.setState(prevState => ({
+      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
+      renderSuggestRemoveState: true,
+    }))
+  }
+
+  unrenderSuggestRemoveStep() {
+    this.setState(prevState => ({
+      renderSuggestRemoveState: !prevState.renderSuggestRemoveState,
+    }))
+  }
+
   // changestepIndex(newIndex) {
   //     this.setState({stepIndex: newIndex})
   //   }
@@ -104,5 +124,5 @@ class ForeignStep extends Component {
   //   }
   // }
 
-          }
+}
       export default SortableElement(ForeignStep)
