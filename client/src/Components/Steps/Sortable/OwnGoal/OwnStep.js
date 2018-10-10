@@ -9,11 +9,12 @@ import {SortableElement} from 'react-sortable-hoc';
 import update from 'immutability-helper';
 import OwnStepWithButtons from './OwnStepWithButtons.js'
 
-class OwnStep  extends Component {
+class OwnStep extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
+      renderEditStepState: false,
       toggleConfirmPrompt: false,
       indexToRemove: null,
       idToRemove: null,
@@ -21,31 +22,24 @@ class OwnStep  extends Component {
       stepActivated: false,
       stepIndex: null,
       activeIndexEditStep: null,
-      editStepOn: false,
-      acceptStep: false,
       renderRemoveStepState: false,
       renderRejectStepState: false,
-      renderAcceptStepState: false,
-
+      renderAcceptStepState: false
     }
 
     this.clickHandlerRemoveStep = this.clickHandlerRemoveStep.bind(this)
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
     this.clickHandlerAdd = this.clickHandlerAdd.bind(this)
     this.changestepIndex = this.changestepIndex.bind(this)
-    this.submitEditedStep = this.submitEditedStep.bind(this)
     this.clickHandlerEdit = this.clickHandlerEdit.bind(this)
     this.clickHandlerAcceptStep = this.clickHandlerAcceptStep.bind(this)
     this.clickHandlerRejectStep = this.clickHandlerRejectStep.bind(this)
-    this.clickHandlerConfirmRemove = this.clickHandlerConfirmRemove.bind(this)
     this.unrenderRemoveStep = this.unrenderRemoveStep.bind(this)
     this.unrenderRejectStep = this.unrenderRejectStep.bind(this)
     this.unrenderAcceptStep = this.unrenderAcceptStep.bind(this)
     this.clickHandlerConfirmReject = this.clickHandlerConfirmReject.bind(this)
+    this.unrenderEdit = this.unrenderEdit.bind(this)
   }
-
-
-
 
   render() {
     const {stepObj, stepIndex, newIndex, oldIndex, indexInMotion} = this.props
@@ -54,191 +48,127 @@ class OwnStep  extends Component {
     // }
     let suggestedStep
     if (stepObj.suggestedStep === true) {
-      return (
-        <OwnStepWithButtons
-          activeStep={this.state.activeStep}
-          indexClicked={this.state.indexClicked}
-          acceptStep={this.state.acceptStep}
-          clickHandlerCancel={this.clickHandlerCancel}
-          clickHandlerConfirmReject={this.clickHandlerConfirmReject}
-          clickHandlerEdit={this.clickHandlerEdit}
-          clickHandlerMinus={this.clickHandlerRejectStep}
-          clickHandlerPlus={this.clickHandlerAcceptStep}
-          editedStep={this.state.editedStep}
-          goalDocId={this.props.goalDocId}
-          idToRemove={this.state.idToRemove}
-          indexClicked={this.state.indexClicked}
-          indexToRemove={this.state.indexToRemove}
-          loggedInUser={this.props.loggedInUser}
-          renderRejectStepState={this.state.renderRejectStepState}
-          stepActivated={this.state.stepActivated}
-          stepColor={({color: '#ef3779'})}
-          stepId={this.props.stepObj.id}
-          stepIndex={this.props.stepIndex}
-          stepObj={this.props.stepObj}
-          submitEditedStep={this.placeholder}
-          targetUser={this.props.targetUser}
-          loggedInUser={this.props.loggedInUser}
-          toggleConfirmPrompt={this.state.toggleConfirmPrompt}
-          toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-          unrenderRejectStepFunction={this.unrenderRejectStep}
-          renderAcceptStepState={this.state.renderAcceptStepState}
-          unrenderAcceptStepFunction={this.unrenderAcceptStep}
-        />
-
-          )
-          } else if (stepObj.suggestedStep === false) {
-            let  noStepColor = {
-              color: '#000000'
-            }
-            return (
-              <OwnStepWithButtons
-                stepIndex={this.props.stepIndex}
-                minusEvent={this.clickHandlerRemoveStep}
-                toggleConfirmPrompt={this.state.toggleConfirmPrompt}
-                indexToRemove={this.state.indexToRemove}
-                clickHandlerEdit={this.clickHandlerEdit}
-                stepObj={this.props.stepObj}
-                clickHandlerPlus={this.clickHandlerAdd}
-                clickHandlerMinus={this.clickHandlerRemoveStep}
-                clickHandlerCancel={this.clickHandlerCancel}
-                editStepOn={this.state.editStepOn}
-                submitEditedStep={this.submitEditedStep}
-                stepActivated={this.state.stepActivated}
-                indexClicked={this.state.indexClicked}
-                stepColor={noStepColor}
-                goalDocId={this.props.goalDocId}
-                stepId={this.props.stepObj.id}
-                toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-                clickHandlerRemove={this.clickHandlerRemove}
-                clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
-                idToRemove={this.state.idToRemove}
-                targetUser={this.props.targetUser}
-                loggedInUser={this.props.loggedInUser}
-                renderRemoveStepState={this.state.renderRemoveStepState}
-                unrenderRemoveStepFunction={this.unrenderRemoveStep}
-              />
-            )
-          }
-          }
-
-          clickHandlerRejectStep(stepIndex, id) {
-      console.log('rejectStep clicked')
-      this.setState(prevState => ({
-        toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-        indexClicked: stepIndex,
-        indexToRemove: stepIndex,
-        idToRemove: this.props.stepObj.id,
-      })
-  )}
-          clickHandlerEdit(stepIndex, event) {
-            this.setState(prevState => ({
-              editStepOn: !prevState.editStepOn,
-              stepIndex: this.props.stepIndex
-            }))
-            // this.setState({activeIndexEditStep: stepIndex, stepIndex: this.props.stepIndex})
-          }
+      return (<OwnStepWithButtons activeStep={this.state.activeStep} indexClicked={this.state.indexClicked}  clickHandlerCancel={this.clickHandlerCancel} clickHandlerConfirmReject={this.clickHandlerConfirmReject} clickHandlerEdit={this.clickHandlerEdit} clickHandlerMinus={this.clickHandlerRejectStep} clickHandlerPlus={this.clickHandlerAcceptStep} goalDocId={this.props.goalDocId} idToRemove={this.state.idToRemove} indexToRemove={this.state.indexToRemove} loggedInUser={this.props.loggedInUser} renderRejectStepState={this.state.renderRejectStepState} stepActivated={this.state.stepActivated} stepColor={({color: '#ef3779'})} stepId={this.props.stepObj.id} stepIndex={this.props.stepIndex} stepObj={this.props.stepObj}  targetUser={this.props.targetUser} toggleConfirmPrompt={this.state.toggleConfirmPrompt} toggleSuggestedSteps={this.props.toggleSuggestedSteps} unrenderRejectStepFunction={this.unrenderRejectStep} renderAcceptStepState={this.state.renderAcceptStepState} unrenderAcceptStepFunction={this.unrenderAcceptStep}/>)
+    } else if (stepObj.suggestedStep === false) {
+      let noStepColor = {
+        color: '#000000'
+      }
+      return (<OwnStepWithButtons stepIndex={this.props.stepIndex} minusEvent={this.clickHandlerRemoveStep} toggleConfirmPrompt={this.state.toggleConfirmPrompt}  indexToRemove={this.state.indexToRemove} clickHandlerEdit={this.clickHandlerEdit} stepObj={this.props.stepObj} clickHandlerPlus={this.clickHandlerAdd} clickHandlerMinus={this.clickHandlerRemoveStep} clickHandlerCancel={this.clickHandlerCancel} renderEditStepState={this.state.renderEditStepState}  stepActivated={this.state.stepActivated} indexClicked={this.state.indexClicked} stepColor={noStepColor} goalDocId={this.props.goalDocId} stepId={this.props.stepObj.id} toggleSuggestedSteps={this.props.toggleSuggestedSteps}  clickHandlerConfirmRemove={this.clickHandlerConfirmRemove} idToRemove={this.state.idToRemove} targetUser={this.props.targetUser} loggedInUser={this.props.loggedInUser} renderRemoveStepState={this.state.renderRemoveStepState} unrenderRemoveStepFunction={this.unrenderRemoveStep}
+      unrenderEditFunction={this.unrenderEdit}
+      />
 
 
-          submitEditedStep(event, stepIndex, editedStep) {
-            event.preventDefault()
-            this.props.dispatch(actions.editStep(stepIndex, editedStep))
-            this.setState({editedStep: ""})
-          }
-
-          clickHandlerAdd(stepIndex) {
-            // console.log(stepIndex)
-            // this.setState({})
-            this.setState(prevState => ({
-              indexClicked: stepIndex,
-              stepActivated: !prevState.stepActivated,
-              stepIndex: this.props.stepIndex
-            }))
-          }
-
-          clickHandlerRemove(stepIndex, id) {
-            this.setState(prevState => ({
-              toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-              indexToRemove: stepIndex,
-              indexClicked: stepIndex,
-              idToRemove: this.props.stepObj.id
-            }))
-          }
-
-          clickHandlerConfirmRemove(e) {
-            e.preventDefault()
-            // this.unrenderRemoveStep()
-            this.setState(prevState => ({
-              renderRemoveStepState: !prevState.renderRemoveStepState,
-              toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-            }))
-          }
-
-          unrenderRemoveStep() {
-            console.log('called unrender')
-            this.setState(prevState => { return (
-              {
-                renderRemoveStepState: !prevState.renderRemoveStepState,
-              }
-            )}
-            )}
- clickHandlerConfirmReject(e){
-    e.preventDefault()
-    this.setState(prevState => ({
-        renderRejectStepState: !prevState.renderRejectStepState,
-        toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-    })
-  )}
- unrenderRejectStep(){
-    console.log('unrender reject step called')
-    this.setState(prevState => { return ({
-      renderRejectStepState: !prevState.renderRejectStepState }
-    )})
+      )
+    }
   }
-  clickHandlerRemoveStep(stepIndex, id) {
+
+  clickHandlerRejectStep(stepIndex, id) {
+    console.log('rejectStep clicked')
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-      indexToRemove: stepIndex,
       indexClicked: stepIndex,
-      idToRemove: this.props.stepObj.id,
+      indexToRemove: stepIndex,
+      idToRemove: this.props.stepObj.id
     }))
   }
-          clickHandlerCancel() {
-            this.setState(prevState => ({
-              toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-              indexToRemove: null
-            }))
-          }
 
-          changestepIndex(newIndex) {
-            this.setState({stepIndex: newIndex})
-          }
 
-                  clickHandlerAcceptStep(indexClicked) {
-            this.setState(prevState => ({
-              renderAcceptStepState: !prevState.renderAcceptStepState,
-              stepActivated: !prevState.stepActivated,
-              indexClicked: indexClicked,
-            })
-            )}
-
-          unrenderAcceptStep() {
-            console.log('unrender accept step called')
-            this.setState(prevState => ({renderAcceptStepState: !prevState.renderAcceptStepState})
-            )}
-
-          acceptStep(stepIndex) {
-            this.setState(prevState => ({
-              acceptStep: !prevState.acceptStep,
+  clickHandlerAdd(stepIndex) {
+    // console.log(stepIndex)
+    // this.setState({})
+    this.setState(prevState => ({
       indexClicked: stepIndex,
       stepActivated: !prevState.stepActivated,
       stepIndex: this.props.stepIndex
     }))
   }
 
+  clickHandlerEdit(stepIndex, event) {
+    this.setState(prevState => ({
+      renderEditStepState: true,
+      stepIndex: this.props.stepIndex
+    }))
+    // this.setState({activeIndexEditStep: stepIndex, stepIndex: this.props.stepIndex})
+  }
+
+  unrenderEdit() {
+  this.setState(prevState => ({
+  renderEditStepState: false
+  }))
+}
+
+  clickHandlerRemoveStep(stepIndex, id) {
+    this.setState(prevState => ({
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+      indexToRemove: stepIndex,
+      indexClicked: stepIndex,
+      idToRemove: this.props.stepObj.id
+    }))
+  }
+  clickHandlerConfirmRemove(e) {
+    e.preventDefault()
+    // this.unrenderRemoveStep()
+    this.setState(prevState => ({
+      renderRemoveStepState: !prevState.renderRemoveStepState,
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt
+    }))
+  }
+
+  unrenderRemoveStep() {
+    console.log('called unrender')
+    this.setState(prevState => {
+      return ({
+        renderRemoveStepState: !prevState.renderRemoveStepState
+      })
+    })
+  }
+  clickHandlerConfirmReject(e) {
+    e.preventDefault()
+    this.setState(prevState => ({
+      renderRejectStepState: !prevState.renderRejectStepState,
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt
+    }))
+  }
+  unrenderRejectStep() {
+    console.log('unrender reject step called')
+    this.setState(prevState => {
+      return ({
+        renderRejectStepState: !prevState.renderRejectStepState
+      })
+    })
+  }
+
+  clickHandlerCancel() {
+    this.setState(prevState => ({
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+      indexToRemove: null
+    }))
+  }
+
+  changestepIndex(newIndex) {
+    this.setState({stepIndex: newIndex})
+  }
+
+  clickHandlerAcceptStep(indexClicked) {
+    this.setState(prevState => ({
+      renderAcceptStepState: !prevState.renderAcceptStepState,
+      stepActivated: !prevState.stepActivated,
+      indexClicked: indexClicked
+    }))
+  }
+
+  unrenderAcceptStep() {
+    console.log('unrender accept step called')
+    this.setState(prevState => ({
+      renderAcceptStepState: !prevState.renderAcceptStepState
+    }))
+  }
+
+
   placeholder() {
     console.log('placeholder')
   }
 }
 
-/* export default */  export default SortableElement(OwnStep)
+/* export default */
+export default SortableElement(OwnStep)

@@ -10,7 +10,6 @@ import minus from '../../../../style/images/minus.jpg'
 import plus from '../../../../style/images/plus_websize.png'
 
   const OwnStepWithButtons = ({
-    acceptStep,
     activeIndexEditStep,
     clickHandlerCancel,
     clickHandlerConfirmReject,
@@ -18,8 +17,6 @@ import plus from '../../../../style/images/plus_websize.png'
     clickHandlerEdit,
     clickHandlerMinus,
     clickHandlerPlus,
-    editStepOn,
-    editedStep,
     goalDocId,
     handleChangeEditForm,
     idToRemove,
@@ -41,7 +38,9 @@ import plus from '../../../../style/images/plus_websize.png'
     unrenderRejectStepFunction,
     unrenderRemoveStepFunction,
     renderAcceptStepState,
+    renderEditStepState,
     unrenderAcceptStepFunction,
+    unrenderEditFunction,
   }) => {
     return (
     <div className="sortable-item-wrapper">
@@ -51,9 +50,10 @@ import plus from '../../../../style/images/plus_websize.png'
 
         <span style={stepColor}>
           <li onClick={(event) => clickHandlerEdit(stepIndex, event)} key={stepIndex}>
-            {editStepOn ?
+            {!toggleSuggestedSteps && renderEditStepState ?
               <EditStepSmart
                 stepObj={stepObj}
+                unrenderEditFunction={unrenderEditFunction}
               />
             : stepObj.step} </li>
         </span>
@@ -100,7 +100,7 @@ import plus from '../../../../style/images/plus_websize.png'
           /> : null}
 
         {/*edit step */}
-        {/* {(editStepOn && stepIndex != null && activeIndexEditStep === stepIndex)
+        {/* {(renderEditStepState && stepIndex != null && activeIndexEditStep === stepIndex)
           ? <EditStep handleChange={handleChangeEditForm} editedStep={editedStep} submitEditedStep={submitEditedStep} step={stepObj} index={stepIndex}/>
           : null}
         */}

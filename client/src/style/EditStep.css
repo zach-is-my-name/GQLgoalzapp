@@ -1,7 +1,21 @@
+.edit-step-input {
+  text-align: center;
+}
+
 .edit-step-input:focus {
     outline-width: 0;
 }
 
 input[type="text"] {
   font-family: bentonreg;
+}
+
+/* input[type="submit"] { */
+
+  .edit-step-submit {
+    display: flex;
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    /* justify-content: center; */
 }

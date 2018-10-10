@@ -1,45 +1,132 @@
 /* eslint-disable */
 import React, {Component} from 'react';
 import EditStep from './EditStep.js'
-import {RIEInput} from '@attently/riek'
-import '../../style/EditStepSmart.css'
+import {graphql, compose} from 'react-apollo';
+import gql from 'graphql-tag';
 
-export default class EditStepSmart extends Component {
-constructor(props) {
-  super(props)
-  this._submitEditedStep = this._submitEditedStep.bind(this)
-  this.handleChange = this.handleChange.bind(this)
-  this.state = {
-    editedStep: props.stepObj.step,
+
+
+const updateStepMutation = gql `mutation  UpdateStepMutation($id: ID!, $step: String) {
+  updateStep(id: $id, step: $step) {
+    id
+    step
   }
+}`
+
+const clonedStepIdQuery = gql ` query ClonedStepByIdQuery ($stepsId: String){
+    allClonedSteps(filter: { stepsId: $stepsId}){
+      id
+    }
+  }`
+
+const updateClonedStepMutation = gql `mutation  UpdateClonedStepMutation($id: ID!, $step: String) {
+  updateClonedStep(id: $id, step: $step) {
+    id
+    step
+  }
+}`
+// const updateClonedStepMutation = gql ``
+
+const goalDocByIdQuery = gql `
+    query goalDocByIdQuery ($goalDocId: ID) {
+      GoalDoc(id: $goalDocId) {
+       goal
+       id
+       steps(orderBy:positionIndex_ASC) {
+         step
+         positionIndex
+         suggestedStep
+         id
+       }
+       clonedSteps(orderBy:positionIndex_ASC) {
+         step
+         positionIndex
+         id
+         suggestedStep
+         stepsId
+         suggester {
+           userName
+         }
+       }
+      }
+    }`;
+
+ class EditStepSmart extends Component {
+   constructor(props) {
+     super(props)
+     this._submitEditedStep = this._submitEditedStep.bind(this)
+     this._handleChange = this._handleChange.bind(this)
+     this.state = {
+       editedStep: props.stepObj.step,
+     }
 }
 
-  handleChange(obj) {
-      console.log(obj)
-      // this.setState({editedStep: e.target.stepObj})
-          }
+  _handleChange(e) {
+      this.setState({editedStep: e.target.value})
+  }
 
- _submitEditedStep() {
-
+async  _submitEditedStep(e) {
+   console.log("_submitEditedStep Called")
+   e.preventDefault()
+   await  this.props.updateStep({variables : {
+     id: this.props.stepObj.id,
+     step: this.state.editedStep
+   }})
+   if (!this.props.clonedStepIdQuery.loading) {
+    const clonedStepId = this.props.clonedStepIdQuery.allClonedSteps[0].id
+    await this.props.updateClonedStep({variables : {
+      id: clonedStepId,
+      step: this.state.editedStep
+    }}).catch(error => console.log(error))
+  }
+   this.props.unrenderEditFunction()
  }
 
 render() {
+
  return (
-     <RIEInput
-       value={this.props.stepObj.step}
-       propName={"editedStep"}
-       change={this.handleChange}
-       selectAll={false}
-       classEditing="editing-input"
-     />
-       )
+   <EditStep
+     _submitEditedStep={this._submitEditedStep}
+     handleChange={this._handleChange}
+     value={this.state.editedStep}
+     unrenderEditFunction={this.props.unrenderEditFunction}
+   />
+     )
      }
 
      }
 
-
-   // <EditStep
-   //   _submitEditedStep={this._submitEditedStep}
-   //   handleChange={this.handleChange}
-   //   value={this.state.editedStep}
-   // />
+    export default compose(
+      graphql(updateStepMutation, {
+      props: ({mutate}) => ({
+        updateStep({variables}) {
+          return mutate({
+            variables: {
+              ...variables
+          },
+          refetchQueries: ['goalDocByIdQuery']
+        })
+        }
+      })
+    }),
+    graphql(clonedStepIdQuery, {
+      name: 'clonedStepIdQuery',
+     options: (ownProps) => ({
+       variables: {
+         stepsId: ownProps.stepObj.id
+       }
+     })
+   }),
+   graphql(updateClonedStepMutation, {
+     props: ({mutate}) => ({
+       updateClonedStep({variables}) {
+         return mutate({
+           variables: {
+             ...variables
+           },
+           refetchQueries: ['goalDocByIdQuery']
+         })
+       }
+     })
+   })
+  )(EditStepSmart)
