@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions.js'
 import {SortableContainer, arrayMove} from 'react-sortable-hoc';
 import {OwnSteps} from './Sortable/OwnGoal/OwnSteps.js'
-
+import update from 'immutability-helper';
+import '../../style/OwnGoalCurrentSteps.css'
 
 class OwnGoalCurrentSteps extends Component {
   constructor(props) {
@@ -14,21 +15,21 @@ class OwnGoalCurrentSteps extends Component {
       oldIndex: null,
       indexInMotion: null,
       toggleSuggestedSteps: true,
-      renderRemoveStepState: false,
+      items: []
     }
     this._toggleSuggestedSteps = this._toggleSuggestedSteps.bind(this)
+    this.getArr = this.getArr.bind(this)
 }
 
-  _toggleSuggestedSteps() {
-    this.setState(prevState => ({
-      toggleSuggestedSteps: !prevState.toggleSuggestedSteps
-    }))
-  }
+ // onSortEnd = ({oldIndex, newIndex}) => {
+ //   const arr = []
+ //   console.log(arrayMove(arr, oldIndex, newIndex))
+ // }
+
 
   render() {
       let currentGoalSteps = this.props.steps
       let currentGoalStepsClone =  this.props.clonedSteps
-
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
     return (
@@ -40,8 +41,7 @@ class OwnGoalCurrentSteps extends Component {
           randomColorStep={this.props.randomColorStep}
           currentGoalSteps={currentGoalSteps}
           currentGoalStepsClone={currentGoalStepsClone}
-          onSortEnd={this.onSortEnd.bind(this)}
-          onSortStart={this.onSortStart.bind(this)}
+          onSortEnd={this.onSortEnd}
           helperClass="sortable-helper"
           hideSortableGhost={true}
           pressDelay={100}
@@ -52,26 +52,46 @@ class OwnGoalCurrentSteps extends Component {
           goalDocId={this.props.goalDocId}
           targetUser={this.props.targetUser}
           loggedInUser={this.props.loggedInUser}
+          getArr={this.getArr}
         />
       </div>
     )
   }
 
-
-  onSortEnd({oldIndex, newIndex}) {
-    this.setState({newIndex: newIndex, oldIndex: oldIndex})
-    const newOrderedList = arrayMove(this.props.currentGoalSteps, oldIndex, newIndex)
-    this.props.dispatch(actions.moveStep(newOrderedList))
+  _toggleSuggestedSteps() {
+    this.setState(prevState => ({
+      toggleSuggestedSteps: !prevState.toggleSuggestedSteps
+    }))
   }
+  // if (action.type === 'SET_USERID') {
+  //   return update(state, {
+  //     loggedInUserID: {$set: action.id}
+  //   })
+  // }
 
-  onSortStart({index, collection}) {
-    this.setState({indexInMotion: index})
-  }
+ getArr(array) {
+ //   console.log('array', array)
 }
+  onSortEnd({oldIndex, newIndex}) {
+    this.setState({
+      items: arrayMove(array, oldIndex, newIndex)
+  })
+   }
+   // this.setState(prevState => ({
+   //   items: [...prevState, array]
+   // update(this.state, {
+   //   items: {$set: array}
+   // })
+ // }
+}
+//   onSortStart({index, collection}) {
+//     this.setState({indexInMotion: index})
+//   }
+// }
 
 // const mapStateToProps = (state, props) => {
 //   return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.currentGoalStepsClone, }
 // }
 
 // export default connect(mapStateToProps)(OwnGoalCurrentSteps);
-export default (OwnGoalCurrentSteps);
+export default SortableContainer(OwnGoalCurrentSteps);

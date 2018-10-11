@@ -2,12 +2,11 @@
 //index is passed down as stepIndex because it is restricted in react-sortable
 
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import '../../../../style/OwnGoalCurrentSteps.css'
-import * as actions from '../../../../Actions/actions.js'
-import {SortableElement} from 'react-sortable-hoc';
-import update from 'immutability-helper';
-import OwnStepWithButtons from './OwnStepWithButtons.js'
+import YesNoPrompt from '../../YesNoPrompt.js'
+import EditButton from './EditButton.js'
+import PlusButton from './PlusButton.js'
+import MinusButton from './MinusButton'
 
 class OwnStep extends Component {
 
@@ -58,75 +57,120 @@ class OwnStep extends Component {
 }
     if (stepObj.suggestedStep === true) {
       return (
-        <OwnStepWithButtons
-          activeStep={this.state.activeStep}
-          indexClicked={this.state.indexClicked}
-          clickHandlerCancel={this.clickHandlerCancel}
-          clickHandlerConfirmReject={this.clickHandlerConfirmReject}
-          clickHandlerMinus={this.clickHandlerRejectStep}
-          clickHandlerPlus={this.clickHandlerAcceptStep}
-          goalDocId={this.props.goalDocId}
-          idToRemove={this.state.idToRemove}
-          indexToRemove={this.state.indexToRemove}
-          loggedInUser={this.props.loggedInUser}
-          renderRejectStepState={this.state.renderRejectStepState}
-          stepActivated={this.state.stepActivated}
-          style={style}
-          stepId={this.props.stepObj.id}
-          stepIndex={this.props.stepIndex}
-          stepObj={this.props.stepObj}
-          targetUser={this.props.targetUser}
-          toggleConfirmPrompt={this.state.toggleConfirmPrompt}
-          toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-          unrenderRejectStepFunction={this.unrenderRejectStep}
-          renderAcceptStepState={this.state.renderAcceptStepState}
-          unrenderAcceptStepFunction={this.unrenderAcceptStep}
-        />)
-    } else if (stepObj.suggestedStep === false) {
-        return (
-          <OwnStepWithButtons
-            stepIndex={this.props.stepIndex}
-            minusEvent={this.clickHandlerRemoveStep}
-            toggleConfirmPrompt={this.state.toggleConfirmPrompt}
-            indexToRemove={this.state.indexToRemove}
-            clickHandlerEdit={this.clickHandlerEdit}
-            stepObj={this.props.stepObj}
-            clickHandlerPlus={this.clickHandlerAdd}
-            clickHandlerMinus={this.clickHandlerRemoveStep}
-            clickHandlerCancel={this.clickHandlerCancel}
-            renderEditStepState={this.state.renderEditStepState}
-            stepActivated={this.state.stepActivated}
-            indexClicked={this.state.indexClicked}
-            style={style}
-            goalDocId={this.props.goalDocId}
-            stepId={this.props.stepObj.id}
-            toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-            clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
-            idToRemove={this.state.idToRemove}
-            targetUser={this.props.targetUser}
-            loggedInUser={this.props.loggedInUser}
-            renderRemoveStepState={this.state.renderRemoveStepState}
-            unrenderRemoveStepFunction={this.unrenderRemoveStep}
-            unrenderEditFunction={this.unrenderEdit}
-          />
+    <div className="sortable-item-wrapper">
+      <MinusButton
+        clickHandlerCancel={this.clickHandlerCancel}
+        clickHandlerConfirmReject={this.clickHandlerConfirmReject}
+        clickHandlerMinus={this.clickHandlerRejectStep}
+        goalDocId={this.props.goalDocId}
+        idToRemove={this.state.idToRemove}
+        indexToRemove={this.state.indexToRemove}
+        loggedInUser={this.props.loggedInUser}
+        renderRejectStepState={this.state.renderRejectStepState}
+        stepIndex={this.props.stepIndex}
+        stepObj={this.props.stepObj}
+        targetUser={this.props.targetUser}
+        toggleConfirmPrompt={this.state.toggleConfirmPrompt}
+        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+        unrenderRejectStepFunction={this.unrenderRejectStep}
+        clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
+        renderRemoveStepState={this.state.renderRemoveStepState}
+        unrenderRemoveStepFunction={this.unrenderRemoveStep}
+      />
+
+      <EditButton
+        loggedInUser={this.props.loggedInUser}
+        style={style}
+        stepIndex={this.props.stepIndex}
+        stepObj={this.props.stepObj}
+        targetUser={this.props.targetUser}
+        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+        clickHandlerEdit={this.clickHandlerEdit}
+        renderEditStepState={this.state.renderEditStepState}
+        unrenderEditFunction={this.unrenderEdit}
+      />
+
+      <PlusButton
+        goalDocId={this.props.goalDocId}
+        indexClicked={this.state.indexClicked}
+        loggedInUser={this.props.loggedInUser}
+        stepActivated={this.state.stepActivated}
+        stepIndex={this.props.stepIndex}
+        stepObj={this.props.stepObj}
+        targetUser={this.props.targetUser}
+        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+        renderAcceptStepState={this.state.renderAcceptStepState}
+        unrenderAcceptStepFunction={this.unrenderAcceptStep}
+        clickHandlerPlus={this.clickHandlerAdd}
+      />
+    </div>
+  )
+      }
 
 
+        else if (stepObj.suggestedStep === false) {
+
+
+
+          return (
+    <div className="sortable-item-wrapper">
+      <MinusButton
+        clickHandlerCancel={this.clickHandlerCancel}
+        clickHandlerMinus={this.clickHandlerRejectStep}
+        goalDocId={this.props.goalDocId}
+        idToRemove={this.state.idToRemove}
+        indexToRemove={this.state.indexToRemove}
+        loggedInUser={this.props.loggedInUser}
+        stepIndex={this.props.stepIndex}
+        stepObj={this.props.stepObj}
+        targetUser={this.props.targetUser}
+        toggleConfirmPrompt={this.state.toggleConfirmPrompt}
+        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+        clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
+        renderRemoveStepState={this.state.renderRemoveStepState}
+        unrenderRemoveStepFunction={this.unrenderRemoveStep}
+
+      />
+      <EditButton
+        loggedInUser={this.props.loggedInUser}
+        style={style}
+        stepIndex={this.props.stepIndex}
+        stepObj={this.props.stepObj}
+        targetUser={this.props.targetUser}
+        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+        clickHandlerEdit={this.clickHandlerEdit}
+        renderEditStepState={this.state.renderEditStepState}
+        unrenderEditFunction={this.unrenderEdit}
+      />
+
+      <PlusButton
+        goalDocId={this.props.goalDocId}
+        indexClicked={this.state.indexClicked}
+        loggedInUser={this.props.loggedInUser}
+        stepActivated={this.state.stepActivated}
+        stepIndex={this.props.stepIndex}
+        stepObj={this.props.stepObj}
+        targetUser={this.props.targetUser}
+        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
+        clickHandlerPlus={this.clickHandlerAdd}
+      />
+    </div>
       )
-    }
-  }
+      }
+      }
 
-  clickHandlerRejectStep(stepIndex, id) {
-    console.log('rejectStep clicked')
-    this.setState(prevState => ({
-      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
-      indexClicked: stepIndex,
-      indexToRemove: stepIndex,
-      idToRemove: this.props.stepObj.id
-    }))
-  }
+      clickHandlerRejectStep(stepIndex, id) {
+        console.log('rejectStep clicked')
+        this.setState(prevState => ({
+          toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+          indexClicked: stepIndex,
+          indexToRemove: stepIndex,
+          idToRemove: this.props.stepObj.id
+        }))
+      }
 
 
-  clickHandlerAdd(stepIndex) {
+      clickHandlerAdd(stepIndex) {
     // console.log(stepIndex)
     // this.setState({})
     this.setState(prevState => ({
@@ -217,11 +261,10 @@ class OwnStep extends Component {
     }))
   }
 
-
-  placeholder() {
-    console.log('placeholder')
-  }
 }
 
 /* export default */
-export default SortableElement(OwnStep)
+// export default Ownstep
+// const sortableElement =  SortableElement(OwnStep)
+// export default sortableElement
+export default OwnStep

@@ -1,9 +1,22 @@
 import React from 'react';
-import {SortableContainer} from 'react-sortable-hoc';
+import '../../../../style/OwnGoalCurrentSteps.css'
+// import {SortableContainer} from 'react-sortable-hoc';
 import OwnStep from './OwnStep.js'
 
-export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, currentGoalSteps, currentGoalStepsClone, newIndex, oldIndex, indexInMotion, randomColorStep, targetUser, loggedInUser, renderRemoveStepState, unrenderRemoveStepFunct}) => {
-
+export const OwnSteps = ({goalDocId,
+  toggleSuggestedSteps,
+  currentGoalSteps,
+  currentGoalStepsClone,
+  newIndex,
+  oldIndex,
+  indexInMotion,
+  randomColorStep,
+  targetUser,
+  loggedInUser,
+  renderRemoveStepState,
+  unrenderRemoveStepFunct,
+  getArr,}) => {
+let componentArr
   if (toggleSuggestedSteps === true) {
     return (
     <ul className="sortable-container">
@@ -12,6 +25,7 @@ export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, cur
           randomColorStep={randomColorStep}
           key={`item-${index}`}
           index={index}
+          disabled={true}
           stepIndex={index}
           stepObj={stepObj}
           newIndex={newIndex}
@@ -26,9 +40,8 @@ export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, cur
     </ul>
     )
   } else {
-  return (
-    <ul className="sortable-container">
-      {currentGoalSteps.map((stepObj, index, currentGoalSteps) =>
+
+      componentArr = currentGoalSteps.map((stepObj, index, currentGoalSteps) =>
         <OwnStep
           randomColorStep={randomColorStep}
           key={`item-${index}`}
@@ -43,7 +56,15 @@ export const OwnSteps = SortableContainer(({goalDocId, toggleSuggestedSteps, cur
           currentGoalSteps={currentGoalSteps}
           targetUser={targetUser}
           loggedInUser={loggedInUser}
-        />)}
+        />
+      )
+      getArr(componentArr)
+return (
+
+    <ul className="sortable-container">
+      {componentArr}
     </ul>
-  );
-}});
+  )
+  }
+}
+export default OwnSteps
