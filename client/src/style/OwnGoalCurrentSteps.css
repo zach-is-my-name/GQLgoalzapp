@@ -19,39 +19,39 @@ ul.sortable-container {
 }
 
 .sortable-item-wrapper {
-    /*border: solid 1px red;*/
+    border: solid 1px red;
     list-style: none;
     /*padding: 15px;*/
     display: flex;
     /* flex-wrap: wrap; */
     width: 453px;
     /*height: 75px;*/
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     justify-content: center;
     /*align-items: center;*/
     padding: 0;
 }
 
-.row-1 {
-    display: flex;
-    width: 100%;
+/* .row-1 { */
+    /* display: flex; */
+    /* width: 100%; */
     /* align-self: center; */
-    justify-content: center;
-    user-select: none;
+    /* justify-content: center; */
+    /* user-select: none; */
     /*border: solid 1px orange;*/
     /*margin-bottom: 21px;*/
-}
+/* } */
 
 .row-2 {
 
 }
 
 li.minus-image {
-    position: relative;
+    /* position: relative; */
     /*top: -5px;*/
-    margin-right: 29px;
-    height: 30px;
-    width: 30px;
+    /* margin-right: 29px; */
+    /* height: 30px; */
+    /* width: 30px; */
 }
 
 li.current-step {
@@ -66,13 +66,11 @@ li.current-step-suggested {
     user-select: none;
     /*color:#ef3779;*/
 }
-.plus-image {
-    margin-left: 29px;
-    position: relative;
+/* .plus-image { */
+    /* margin-left: 29px; */
+    /* position: relative; */
     /*top: -4px;*/
-
-
-}
+/* } */
 
 
 .prompt {

@@ -2,7 +2,7 @@ import React from 'react';
 import plus from '../../../../style/images/plus_websize.png'
 import AddStepSmart from '../../AddStep-smart.js'
 import AcceptStep from '../../AcceptStep-smart.js'
-import '../../../../style/OwnGoalCurrentSteps.css'
+// import '../../../../style/OwnGoalCurrentSteps.css'
 import {SortableElement} from 'react-sortable-hoc';
 
 const PlusButton = ({
@@ -43,7 +43,7 @@ const PlusButton = ({
           : null}
       </div>
     </div>
-      )}
+  )}
 
 
       export default PlusButton

@@ -181,7 +181,6 @@ class AddStepSmart extends React.Component {
         stepsId: returnedId,
       }
     newSteps.splice(stepIndex, 0, newStep)
-    console.log()
      const _newSteps = newSteps.map((stepObj, index) => ({
       ...stepObj,
       positionIndex: index,
