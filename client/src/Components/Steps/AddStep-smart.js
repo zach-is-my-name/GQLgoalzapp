@@ -97,7 +97,6 @@ class AddStepSmart extends React.Component {
 
   render() {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
-
     if (this.props.loggedInUser === this.props.targetUser) {
       return <AddStep
         _submitStep={this._submitStep}
@@ -139,6 +138,7 @@ class AddStepSmart extends React.Component {
   }
 
   async _submitAddStepMutation(newStepsSortedByPositionIndex) {
+    try {
       const mapFunct = newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
       let id
       if (!stepObj.id) {
@@ -163,7 +163,12 @@ class AddStepSmart extends React.Component {
      )
         const arrayOfReturnedId = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
         return arrayOfReturnedId
+      }
+
+ catch (error) {
+     console.log(error)
    }
+}
 
 
   _reorderClonedSteps(queryResult, returnedId) {
@@ -189,6 +194,7 @@ class AddStepSmart extends React.Component {
   }}
 
   _submitAddClonedStepMutation (newClonedStepsSortedByPositionIndex) {
+    try {
     newClonedStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
       let id
       if (stepObj.id) {
@@ -208,8 +214,12 @@ class AddStepSmart extends React.Component {
         }
       })
           })
+  } catch (error) {
+    console.log(error)
   }
 }
+}
+
 
 const AddStepWithApollo = compose(graphql(UpdateOrCreateStep, {
   name:'updateOrCreateStep',
@@ -234,7 +244,7 @@ graphql(UpdateOrCreateClonedStep, {
         variables: {
           ...variables
         },
-        refetchQueries: ['goalDocByIdQuery']
+        refetchQueries: ['goalDocByIdQuery' ]
       }).catch((error) => {
         console.log(error)
       })

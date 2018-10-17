@@ -47,7 +47,6 @@ let currentSteps
 if (loading) {
     return <div>Loading...</div>
   }
-
     return (
       <div className="steps-container">
         <p className="currentsteps-label">
@@ -81,9 +80,9 @@ if (loading) {
 
 const WithData = compose(graphql(goalDocByIdQuery,
   {name: 'goalDocById',
-  options: (ownProps) =>
- ({  variables: {goalDocId: ownProps.goalDocId}
-})}
+  options: (ownProps) => {
+    return  ({  variables: {goalDocId: ownProps.goalDocId}
+})}}
 ))(CurrentStepsSmart)
 
 export default WithData

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react'
 import plus from '../../../../../style/images/plus_websize.png'
-import SuggestStepSmart from '../../../SuggestStepSmart.js'
+import SuggestStepSmart from '../../../SuggestStep-smart.js'
 
 const PlusButton = ({
     clickHandlerSuggestAdd,

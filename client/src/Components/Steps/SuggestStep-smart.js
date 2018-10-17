@@ -1,10 +1,8 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
 import {withRouter, Redirect} from 'react-router-dom'
-import * as actions from '../../Actions/actions'
 import SuggestStep from './SuggestStep.js'
 // import '../../style/SuggestStep.css'
 
@@ -35,7 +33,7 @@ const updateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation 
     }}`
 
 const goalDocByIdQuery = gql `
-    query goalDocByIdQuery ($goalDocId: ID) {
+    query RefetchGoalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        goal
        id
@@ -73,13 +71,6 @@ class SuggestStepSmart extends Component {
   handleChange(e) {
     this.setState({step: e.target.value});
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const suggesterId = nextProps.loggedInUserID
-  //   if (nextProps.currentGoalStepsClone.length > this.props.currentGoalStepsClone.length) {
-  //     console.log(nextProps.currentGoalStepsClone)
-  //   }
-  // }
 
 async _submitSuggestedStep(event) {
     event.preventDefault()

@@ -29,6 +29,15 @@ class ForeignGoalCurrentSteps extends Component {
     ))
   }
 
+  componentDidUpdate(prevProps) {
+    console.log('componentDidUpdate called')
+    if (this.props.steps !== prevProps.steps){
+      this.setState({
+        steps: [...this.props.clonedSteps, ...this.state.steps,]
+      })
+    }
+  }
+
   componentDidMount() {
     this.setState({steps:[...this.props.clonedSteps, ...this.state.steps,]})
   }

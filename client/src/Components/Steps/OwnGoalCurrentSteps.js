@@ -23,20 +23,17 @@ class OwnGoalCurrentSteps extends Component {
     this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
 }
 
- onSortEnd = ({oldIndex, newIndex}) => {
-   // console.log("this.state.goalDocs", this.state.goalDocs)
-   this.setState(() =>  { return {
-     steps: arrayMove(this.state.steps, oldIndex, newIndex),
-     newIndex: newIndex,
-     oldIndex: oldIndex,
-   }
-  }, ()  => this.setState({renderMoveStep: true}) )
- }
+  componentDidMount() {
+    this.setState({steps: [ ...this.props.steps, ...this.state.steps,]})
+  }
 
-componentDidMount() {
-  // console.log("componentDidMount called")
-  this.setState({steps: [ ...this.props.steps, ...this.state.steps,]})
-}
+  componentDidUpdate(prevProps) {
+    if (this.props.steps !== prevProps.steps){
+      this.setState({
+        steps: [...this.props.steps, ...this.state.steps,]
+      })
+    }
+  }
 
   render() {
     // console.log("this.state.steps", this.state.steps)
@@ -91,6 +88,16 @@ componentDidMount() {
       toggleSuggestedSteps: !prevState.toggleSuggestedSteps
     }))
   }
+
+ onSortEnd = ({oldIndex, newIndex}) => {
+   // console.log("this.state.goalDocs", this.state.goalDocs)
+   this.setState(() =>  { return {
+     steps: arrayMove(this.state.steps, oldIndex, newIndex),
+     newIndex: newIndex,
+     oldIndex: oldIndex,
+   }
+  }, ()  => this.setState({renderMoveStep: true}) )
+ }
 
 }
 
