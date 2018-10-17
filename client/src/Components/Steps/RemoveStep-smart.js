@@ -1,10 +1,7 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import _ from 'lodash'
 import {graphql, compose, withApollo} from 'react-apollo';
 import gql from 'graphql-tag';
-import * as actions from '../../Actions/actions.js'
 
 const stepsQuery = gql `
   query stepsQuery ($goalDocId: ID) {
@@ -99,7 +96,7 @@ class RemoveStep extends Component {
     this._reorderClonedSteps = this._reorderClonedSteps.bind(this)
     }
 componentDidMount() {
-  this.props.unrenderRemoveStepFunction()
+  this.props.unrenderRemoveSuggestedStepFunction()
 }
 
   render() {

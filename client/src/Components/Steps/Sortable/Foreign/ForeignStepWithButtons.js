@@ -1,15 +1,15 @@
 /* eslint-disable */
 import React, {Component} from 'react';
 import YesNoPrompt from '../../YesNoPrompt.js'
-import MinusButton from './MinusButton.js'
-import EditButton from './EditButton.js'
-import PlusButton from './PlusButton.js'
+import MinusButton from './Buttons/MinusButton.js'
+import EditButton from './Buttons/EditButton.js'
+import PlusButton from './Buttons/PlusButton.js'
 import '../../../../style/ForeignGoalCurrentSteps.css'
 
 class ForeignStepWithButtons extends Component {
   constructor(props) {
     super(props)
-    this.state= {
+    this.state={
       toggleConfirmPrompt: false,
       indexToRemove: null,
       indexClicked: null,
@@ -20,6 +20,7 @@ class ForeignStepWithButtons extends Component {
       renderRemoveMutation:false,
       renderSuggestRemoveState: false,
       renderSuggestEditState: false,
+      renderRemoveSuggestedStepState: false,
     }
 
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
@@ -28,22 +29,27 @@ class ForeignStepWithButtons extends Component {
     this.clickHandlerSuggestEdit = this.clickHandlerSuggestEdit.bind(this)
     this.clickHandlerConfirmSuggestRemove = this.clickHandlerConfirmSuggestRemove.bind(this)
     this.unrenderSuggestRemoveStep = this.unrenderSuggestRemoveStep.bind(this)
+    this.unrenderRemoveSuggesteStep = this.unrenderRemoveSuggesteStep.bind(this)
     this.unrenderSuggestEditStep = this.unrenderSuggestEditStep.bind(this)
-  }
+    this.clickHandlerConfirmRemoveSuggestedStep = this.clickHandlerConfirmRemoveSuggestedStep.bind(this)}
   render() {
     return (
       <div>
         <MinusButton
           clickHandlerSuggestRemove={this.clickHandlerSuggestRemove}
-          toggleConfirmPrompt={this.toggleConfirmPrompt}
+          clickHandlerRemoveSuggested={this.clickHandlerRemoveSuggested}
+          toggleConfirmPrompt={this.state.toggleConfirmPrompt}
           stepIndex={this.props.stepIndex}
           indexToRemove={this.state.indexToRemove}
           clickHandlerConfirmSuggestRemove={this.clickHandlerConfirmSuggestRemove}
+          clickHandlerConfirmRemoveSuggestedStep={this.clickHandlerConfirmRemoveSuggestedStep}
           clickHandlerCancel={this.clickHandlerCancel}
           renderSuggestRemoveState={this.state.renderSuggestRemoveState}
           goalDocId={this.props.goalDocId}
           id={this.props.id}
           unrenderSuggestRemoveStepFunction={this.unrenderSuggestRemoveStepFunction}
+          unrenderRemoveSuggestedStepFunction={this.unrenderRemoveSuggesteStep}
+          renderRemoveSuggestedStepState={this.state.renderRemoveSuggestedStepState}
           stepObj={this.props.stepObj}
         />
 
@@ -59,7 +65,7 @@ class ForeignStepWithButtons extends Component {
         />
         <PlusButton
           clickHandlerSuggestAdd={this.clickHandlerSuggestAdd}
-          stepIndex={this.state.stepIndex}
+          stepIndex={this.props.stepIndex}
           stepActivated={this.state.stepActivated}
           indexClicked={this.state.indexClicked}
           goalDocId={this.props.goalDocId}
@@ -73,40 +79,60 @@ class ForeignStepWithButtons extends Component {
   clickHandlerCancel(event) {
     console.log('no clicked')
     this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       indexToRemove: null
     }))
   }
 
   clickHandlerSuggestAdd(stepIndex){
-    console.log('called')
-    this.setState(prevState => { return  (
-    {
+    this.setState(prevState => ({
       indexClicked: stepIndex,
       stepActivated: !prevState.stepActivated,
       stepIndex: this.props.stepIndex
-    }
-  )}
-)}
-
-  clickHandlerSuggestRemove(stepIndex) {
-    console.log('index to remove', stepIndex)
-    this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt
     }))
-    this.setState({indexToRemove: stepIndex, stepIndex: this.props.stepIndex})
+}
+
+  clickHandlerSuggestRemove(indexToRemove) {
+    console.log('index to remove', indexToRemove)
+    this.setState(prevState => ({
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+      indexToRemove: indexToRemove,
+      // stepIndex: this.props.stepIndex
+    }))
   }
 
   clickHandlerConfirmSuggestRemove() {
+    console.log("clickHandler confirm ")
     this.setState(prevState => ({
-      toggleOnYesNoPrompt: !prevState.toggleOnYesNoPrompt,
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       renderSuggestRemoveState: true,
     }))
   }
 
   unrenderSuggestRemoveStep() {
     this.setState(prevState => ({
-      renderSuggestRemoveState: !prevState.renderSuggestRemoveState,
+      renderSuggestRemoveState: false,
+    }))}
+
+  clickHandlerRemoveSuggested() {
+    this.setState(prevState => ({
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+      indexToRemove: indexToRemove,
+      // stepIndex: this.props.stepIndex
+    }))
+  }
+
+  clickHandlerConfirmRemoveSuggestedStep() {
+    console.log("clickHandler confirm ")
+    this.setState(prevState => ({
+      toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
+      renderRemoveSuggestedStepState: true,
+    }))
+  }
+
+  unrenderRemoveSuggesteStep() {
+    this.setState(prevState => ({
+      renderRemoveSuggestedStepState: false,
     }))
   }
 
@@ -125,34 +151,3 @@ class ForeignStepWithButtons extends Component {
 }
 
 export default ForeignStepWithButtons
-
-// = ({
-//   toggleOnYesNoPrompt,
-//   indexToRemove,
-//   value,
-//   stepIndex,
-//   newIndex,
-//   clickHandlerSuggestEdit,
-//   clickHandlerSuggestAdd,
-//   clickHandlerCancel,
-//   renderRemoveMutation,
-//   id,
-//   editStepOn,
-//   activeIndexEditStep,
-//   indexClicked,
-//   stepActivated,
-//   oldIndex,
-//   indexInMotion,
-//   goalDocId,
-//   targetUser,
-//   loggedInUser,
-//   clickHandlerSuggestRemove,
-//   clickHandlerConfirmSuggestRemove,
-//   renderSuggestRemoveState,
-//   renderSuggestEditState,
-//   unrenderSuggestRemoveStepFunction,
-//   unrenderSuggestEditStepFunction,
-//   stepObj,}) =>{
-//     return (
-//   )}
-//   ForeignStepWithButtons

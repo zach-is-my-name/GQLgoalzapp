@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react';
-import SuggestEditStep from '../../SuggestEditStep-smart.js'
+import SuggestEditStep from '../../../SuggestEditStep-smart.js'
 
 const EditButton = ({
   clickHandlerSuggestEdit,

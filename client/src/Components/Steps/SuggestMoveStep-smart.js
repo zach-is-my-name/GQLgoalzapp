@@ -71,7 +71,7 @@ async _submitMoveClonedStepMutation(newClonedStepsSortedByPositionIndex) {
         id: stepObj.id,
         positionIndex: stepObj.positionIndex
       }
-    }).then((data)=> console.log(data))
+    })
   })
 }
 

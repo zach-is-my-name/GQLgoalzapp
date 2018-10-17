@@ -3,9 +3,9 @@
 
 import React, {Component} from 'react';
 import YesNoPrompt from '../../YesNoPrompt.js'
-import EditButton from './EditButton.js'
-import PlusButton from './PlusButton.js'
-import MinusButton from './MinusButton'
+import EditButton from './Buttons/EditButton.js'
+import PlusButton from './Buttons/PlusButton.js'
+import MinusButton from './Buttons/MinusButton.js'
 import '../../../../style/OwnGoalCurrentSteps.css'
 
 class OwnStepWithButtons extends Component {

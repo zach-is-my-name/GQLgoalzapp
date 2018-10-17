@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import * as actions from '../../Actions/actions.js'
 import { arrayMove} from 'react-sortable-hoc';
 import ForeignSteps from './Sortable/Foreign/ForeignSteps.js'
-import SuggestMoveStep from './SuggestMoveStep.js'
+import SuggestMoveStep from './SuggestMoveStep-smart.js'
 class ForeignGoalCurrentSteps extends Component {
   constructor(props) {
     super(props)

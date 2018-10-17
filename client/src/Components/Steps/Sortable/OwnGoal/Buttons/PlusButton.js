@@ -1,8 +1,8 @@
 /* eslint-disable */
 import React from 'react';
-import plus from '../../../../style/images/plus_websize.png'
-import AddStepSmart from '../../AddStep-smart.js'
-import AcceptStep from '../../AcceptStep-smart.js'
+import plus from '../../../../../style/images/plus_websize.png'
+import AddStepSmart from '../../../AddStep-smart.js'
+import AcceptStep from '../../../AcceptStep-smart.js'
 // import '../../../../style/OwnGoalCurrentSteps.css'
 import {SortableElement} from 'react-sortable-hoc';
 
