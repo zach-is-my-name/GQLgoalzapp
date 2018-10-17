@@ -30,9 +30,7 @@ class OwnGoalCurrentSteps extends Component {
      newIndex: newIndex,
      oldIndex: oldIndex,
    }
- }, ()  => this.setState({renderMoveStep: true}) )
-
-
+  }, ()  => this.setState({renderMoveStep: true}) )
  }
 
 componentDidMount() {

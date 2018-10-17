@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import plus from '../../../../style/images/plus_websize.png'
 import AddStepSmart from '../../AddStep-smart.js'

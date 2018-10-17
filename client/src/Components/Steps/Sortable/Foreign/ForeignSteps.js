@@ -4,7 +4,7 @@ import {SortableContainer} from 'react-sortable-hoc';
 import ForeignStep from './ForeignStep.js'
 
 
-export const ForeignSteps = SortableContainer(({
+const ForeignSteps = SortableContainer(({
         newIndex,
         oldIndex,
         clonedSteps,
@@ -15,9 +15,9 @@ export const ForeignSteps = SortableContainer(({
     }) => {
       return (
         <ul className="sortable-container">
-            {clonedSteps.map((stepObj, index) => (
-                <ForeignStep
-                    key={`item-${index}`}
+          {clonedSteps.map((stepObj, index) => (
+            <ForeignStep
+              key={`item-${index}`}
                     index={index}
                     stepIndex={index}
                     stepObj={stepObj}
@@ -34,3 +34,5 @@ export const ForeignSteps = SortableContainer(({
         </ul>
       );
     });
+
+    export default ForeignSteps

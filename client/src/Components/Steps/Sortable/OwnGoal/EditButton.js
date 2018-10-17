@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {Component} from 'react';
 import EditStepSmart from '../../EditStep-smart.js'
 // import '../../../../style/OwnGoalCurrentSteps.css'

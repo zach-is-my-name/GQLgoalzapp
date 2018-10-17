@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 // import '../../../../style/OwnGoalCurrentSteps.css'
 import {SortableContainer} from 'react-sortable-hoc';

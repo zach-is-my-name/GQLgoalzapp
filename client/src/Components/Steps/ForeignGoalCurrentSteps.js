@@ -2,53 +2,70 @@
 import React, {Component} from 'react';
 import * as actions from '../../Actions/actions.js'
 import { arrayMove} from 'react-sortable-hoc';
-import {ForeignSteps} from './Sortable/Foreign/ForeignSteps.js'
-
+import ForeignSteps from './Sortable/Foreign/ForeignSteps.js'
+import SuggestMoveStep from './SuggestMoveStep.js'
 class ForeignGoalCurrentSteps extends Component {
   constructor(props) {
     super(props)
     this.state = {
       newIndex: null,
       oldIndex: null,
-      indexInMotion: null,
+      steps: [],
+      renderMoveStep: false,
+      movedStepIndex: null,
       toggleOnZappButton: true
     }
-    // this.clickHandlerYes = this.clickHandlerYes.bind(this)
-    // this.clickHandlerNo = this.clickHandlerNo.bind(this)
+    this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
+  }
+
+
+  onSortEnd = ({oldIndex, newIndex}) => {
+      this.setState(() => { return {
+        steps: arrayMove(this.state.steps, oldIndex, newIndex),
+        newIndex: newIndex,
+        oldIndex: oldIndex,
+        }
+      }, () => this.setState({renderMoveStep: true}
+    ))
+  }
+
+  componentDidMount() {
+    this.setState({steps:[...this.props.clonedSteps, ...this.state.steps,]})
   }
 
   render() {
-    let {clonedSteps} = this.props
-    return (<div className="steps-container">
-      <ForeignSteps
-        clonedSteps={clonedSteps}
-        onSortEnd={this.onSortEnd.bind(this)}
-        onSortStart={this.onSortStart.bind(this)}
-        helperClass="sortable-helper"
-        hideSortableGhost={true}
-        pressDelay={100}
-        newIndex={this.state.newIndex}
-        oldIndex={this.state.oldIndex}
-        indexInMotion={this.state.indexInMotion}
-        goalDocId={this.props.goalDocId}
-        targetUser={this.props.targetUser}
-        loggedInUser={this.props.loggedInUser}/>
+  return (
+    <div>
+      {this.state.renderMoveStep ?
+        <SuggestMoveStep
+          _unrenderMoveStep={this._unrenderMoveStep}
+          clonedSteps={this.state.steps}
+          newIndex={this.state.newIndex}
+        /> : null}
+
+      <div className="steps-container">
+        <ForeignSteps
+          clonedSteps={this.state.steps}
+          onSortEnd={this.onSortEnd}
+          helperClass="sortable-helper"
+          hideSortableGhost={true}
+          pressDelay={100}
+          newIndex={this.state.newIndex}
+          oldIndex={this.state.oldIndex}
+          goalDocId={this.props.goalDocId}
+          targetUser={this.props.targetUser}
+          loggedInUser={this.props.loggedInUser}
+        />
+      </div>
     </div>
+      )
+      }
 
-    )
-  }
-  onSortEnd({oldIndex, newIndex}) {
-    this.setState({newIndex: newIndex, oldIndex: oldIndex})
-    const newOrderedList = arrayMove(this.props.clonedSteps, oldIndex, newIndex)
-    // this.props.dispatch(actions.moveStepOnClone(newOrderedList))
-  }
+ _unrenderMoveStep() {
+   this.setState({
+     renderMoveStep: false
+   })
+ }
 
-  onSortStart({index, collection}) {
-    this.setState({indexInMotion: index})
-  }
-} {/* const mapStateToProps = (state, props) => {
-              return {currentGoalSteps: state.goals.currentGoalSteps, loggedInUser: state.goals.loggedInUserID, targetUser: state.goals.targetUserID, currentGoalStepsClone: state.goals.clonedSteps}
-              }
-            */
 }
 export default(ForeignGoalCurrentSteps);
