@@ -9,5 +9,17 @@
 
 .target-user-p {
   margin-top: 5px;
+  margin-bottom: 7px;
   font-family: bentonreg;
+}
+
+.fas.faCaretRight {
+  margin-left: 5px;
+}
+.fas.faCaretLeft {
+  margin-right: 5px;
+}
+
+.target-user-arrows-container {
+  font-size: 12pt;
 }

@@ -6,7 +6,7 @@ import minus from '../../../../../style/images/minus.jpg'
 import YesNoPrompt from '../../../YesNoPrompt.js'
 import RemoveStep from '../../../RemoveStep-smart.js'
 import RejectStep from '../../../RejectStep-smart.js'
-// import '../../../../style/OwnGoalCurrentSteps.css'
+import '../../../../../style/MinusButton.css'
     const MinusButton = ({
         stepIndex,
         clickHandlerMinus,
@@ -26,21 +26,21 @@ import RejectStep from '../../../RejectStep-smart.js'
     }) => {
 
 return (
-        <div>
-          <div className="row-1">
-            <li className="minus-image">
-              <img key={`imagekey-minus${stepIndex}`}
-                onClick={() => clickHandlerMinus(stepIndex, stepObj.id)}
-                alt="" src={minus}/></li>
-          </div>
-          <div className="row-2">
-            {(toggleConfirmPrompt && (stepIndex !== null) &&
-              (indexToRemove === stepIndex && stepObj.suggestedStep === false)) && !toggleSuggestedSteps ?
-                <div className="prompt">
-                  <p>Remove Step?</p>
-                  <YesNoPrompt
-                    clickEventYes={clickHandlerConfirmRemove}
-                    clickEventNo={clickHandlerCancel}
+        <div className="minus-button-container">
+            <div className="row-1">
+                <li className="minus-image">
+                    <img key={`imagekey-minus${stepIndex}`}
+                        onClick={() => clickHandlerMinus(stepIndex, stepObj.id)}
+                        alt="" src={minus}/></li>
+            </div>
+            <div className="row-2">
+                {(toggleConfirmPrompt && (stepIndex !== null) &&
+                    (indexToRemove === stepIndex && stepObj.suggestedStep === false)) && !toggleSuggestedSteps ?
+                        <div className="prompt">
+                            <p>Remove Step?</p>
+                            <YesNoPrompt
+                                clickEventYes={clickHandlerConfirmRemove}
+                                clickEventNo={clickHandlerCancel}
                   />
                 </div>
               : null }

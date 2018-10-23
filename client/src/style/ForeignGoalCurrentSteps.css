@@ -3,21 +3,35 @@
     font-family: bentonreg;
 }
 
+.foreign-step-with-buttons-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  /* border: 1px solid black */
+}
+
+.foreign-step-suggest-step {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 .currentsteps-label {
     margin-left: 256px;
 }
 
 ul.sortable-container {
-    /*border: solid 1px black;*/
+    border: solid 1px black;
     display: flex;
     flex-direction: column;
     width: 50%;
     margin: 0 auto;
-    min-height: 500px;
+    min-height: 194px;
     /*justify-content: center;*/
     align-items: center;
     padding: 0;
 }
+
 
 .sortable-item-wrapper {
     /*border: solid 1px red;*/
@@ -50,7 +64,7 @@ ul.sortable-container {
 li.minus-image {
     position: relative;
     /*top: -5px;*/
-    margin-right: 29px;
+    margin-right: 19px;
     height: 30px;
     width: 30px;
 }
@@ -62,7 +76,7 @@ li.current-step {
 }
 
 .plus-image {
-    margin-left: 29px;
+    margin-left: 19px;
     position: relative;
     /*top: -4px;*/
 

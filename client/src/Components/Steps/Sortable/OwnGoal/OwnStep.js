@@ -6,7 +6,7 @@ import {SortableElement} from 'react-sortable-hoc'
 const OwnStep = SortableElement((props) => {
 
   return (
-    <div>  <OwnStepWithButtons {...props} /> </div>
+      <OwnStepWithButtons {...props} /> 
   )
 })
 export default OwnStep

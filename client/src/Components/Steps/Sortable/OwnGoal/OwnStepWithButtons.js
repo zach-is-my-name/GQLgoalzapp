@@ -57,7 +57,7 @@ class OwnStepWithButtons extends Component {
 }
     if (stepObj.suggestedStep === true) {
       return (
-    <div className="sortable-item-wrapper">
+    <div className="own-step-with-buttons-container">
       <MinusButton
         clickHandlerCancel={this.clickHandlerCancel}
         clickHandlerConfirmReject={this.clickHandlerConfirmReject}
@@ -113,7 +113,7 @@ class OwnStepWithButtons extends Component {
 
 
           return (
-    <div className="sortable-item-wrapper">
+    <div className="own-step-with-buttons-container">
       <MinusButton
         clickHandlerCancel={this.clickHandlerCancel}
         clickHandlerMinus={this.clickHandlerRejectStep}

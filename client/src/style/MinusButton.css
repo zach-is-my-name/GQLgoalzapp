@@ -1,0 +1,6 @@
+li.minus-image {
+  opacity: 0;
+}
+li.minus-image:hover {
+    opacity: 1;
+}

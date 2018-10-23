@@ -49,9 +49,6 @@ if (loading) {
   }
     return (
       <div className="steps-container">
-        <p className="currentsteps-label">
-          Steps:
-        </p>
         {loggedInUser !== targetUser ?
           <ForeignGoalCurrentSteps
             goalDocId={this.props.goalDocId}

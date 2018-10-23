@@ -1,4 +1,8 @@
 /* eslint-disable */
+// debug w/ Live Expression
+// JSON.stringify($r.props.clonedSteps.map(obj => obj.step))
+// JSON.stringify($r.state.clonedSteps.map(obj=> obj.step))
+
 import React, {Component} from 'react';
 import * as actions from '../../Actions/actions.js'
 import { arrayMove} from 'react-sortable-hoc';
@@ -10,7 +14,7 @@ class ForeignGoalCurrentSteps extends Component {
     this.state = {
       newIndex: null,
       oldIndex: null,
-      steps: [],
+      clonedSteps: [],
       renderMoveStep: false,
       movedStepIndex: null,
       toggleOnZappButton: true
@@ -18,28 +22,22 @@ class ForeignGoalCurrentSteps extends Component {
     this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
   }
 
-
-  onSortEnd = ({oldIndex, newIndex}) => {
-      this.setState(() => { return {
-        steps: arrayMove(this.state.steps, oldIndex, newIndex),
-        newIndex: newIndex,
-        oldIndex: oldIndex,
-        }
-      }, () => this.setState({renderMoveStep: true}
-    ))
-  }
-
   componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate called')
-    if (this.props.steps !== prevProps.steps){
+    // console.log("prevProps", JSON.stringify(prevProps.clonedSteps.map(obj => obj.step)))
+    // console.log('componentDidUpdate, prevProps.clonedSteps', prevProps.clonedSteps, 'this.props.clonedSteps', this.props.clonedSteps)
+    if (this.props.clonedSteps !== prevProps.clonedSteps){
+      console.log('this.props', this.props.clonedSteps.map(obj => obj.step))
+      console.log('prevProps', prevProps.clonedSteps.map(obj => obj.step))
       this.setState({
-        steps: [...this.props.clonedSteps, ...this.state.steps,]
+        // clonedSteps: [...this.props.clonedSteps, ...this.state.clonedSteps,]
+        clonedSteps: [...new Set([...this.props.clonedSteps, ...this.state.clonedSteps])]
       })
     }
   }
 
   componentDidMount() {
-    this.setState({steps:[...this.props.clonedSteps, ...this.state.steps,]})
+    // console.log('componentDidMount, this.state.clonedSteps', this.state.clonedSteps, 'this.props.clonedSteps', this.props.clonedSteps)
+    this.setState({clonedSteps:[...this.props.clonedSteps, ...this.state.clonedSteps,]})
   }
 
   render() {
@@ -48,13 +46,13 @@ class ForeignGoalCurrentSteps extends Component {
       {this.state.renderMoveStep ?
         <SuggestMoveStep
           _unrenderMoveStep={this._unrenderMoveStep}
-          clonedSteps={this.state.steps}
+          clonedSteps={this.state.clonedSteps}
           newIndex={this.state.newIndex}
         /> : null}
 
       <div className="steps-container">
         <ForeignSteps
-          clonedSteps={this.state.steps}
+          clonedSteps={this.state.clonedSteps}
           onSortEnd={this.onSortEnd}
           helperClass="sortable-helper"
           hideSortableGhost={true}
@@ -68,6 +66,16 @@ class ForeignGoalCurrentSteps extends Component {
       </div>
     </div>
       )
+      }
+
+      onSortEnd = ({oldIndex, newIndex}) => {
+          this.setState(() => { return {
+            clonedSteps: arrayMove(this.state.clonedSteps, oldIndex, newIndex),
+            newIndex: newIndex,
+            oldIndex: oldIndex,
+            }
+          }, () => this.setState({renderMoveStep: true}
+        ))
       }
 
  _unrenderMoveStep() {

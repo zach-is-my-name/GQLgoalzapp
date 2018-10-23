@@ -2,11 +2,14 @@
     font-family: bentonreg;
 }
 
+.own-step-with-buttons-container {
+  display: flex;
+}
 .currentsteps-label {
     margin-left: 256px;
 }
 
-ul.sortable-container {
+/* ul.sortable-container {
     border: solid 1px black;
     display: flex;
     flex-direction: column;
@@ -14,23 +17,23 @@ ul.sortable-container {
     margin: 0 auto;
     min-height: 194px;
     /*justify-content: center;*/
-    align-items: center;
-    padding: 0;
-}
+    /* align-items: center; */
+    /* padding: 0; */
+/* } */
 
-.sortable-item-wrapper {
+/* .sortable-item-wrapper {
     border: solid 1px red;
     list-style: none;
     /*padding: 15px;*/
-    display: flex;
+    /* display: flex; */
     /* flex-wrap: wrap; */
-    width: 453px;
+    /* width: 453px; */
     /*height: 75px;*/
     /* flex-wrap: wrap; */
-    justify-content: center;
+    /* justify-content: center; */
     /*align-items: center;*/
-    padding: 0;
-}
+    /* padding: 0; */
+/* } */ */
 
 /* .row-1 { */
     /* display: flex; */

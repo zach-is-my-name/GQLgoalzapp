@@ -5,6 +5,7 @@ import MinusButton from './Buttons/MinusButton.js'
 import EditButton from './Buttons/EditButton.js'
 import PlusButton from './Buttons/PlusButton.js'
 import '../../../../style/ForeignGoalCurrentSteps.css'
+import SuggestStepSmart from '../../SuggestStep-smart.js'
 
 class ForeignStepWithButtons extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class ForeignStepWithButtons extends Component {
     this.clickHandlerConfirmRemoveSuggestedStep = this.clickHandlerConfirmRemoveSuggestedStep.bind(this)}
   render() {
     return (
-      <div>
+      <div className="foreign-step-with-buttons-container">
         <MinusButton
           clickHandlerSuggestRemove={this.clickHandlerSuggestRemove}
           clickHandlerRemoveSuggested={this.clickHandlerRemoveSuggested}
@@ -72,6 +73,13 @@ class ForeignStepWithButtons extends Component {
           targetUser={this.props.targetUser}
           loggedInUser={this.props.loggedInUser}
         />
+
+        <div className="foreign-step-suggest-step">
+          {this.state.stepActivated && (this.props.stepIndex !== null) && (this.state.indexClicked === this.props.stepIndex)
+            ? <SuggestStepSmart stepIndex={this.props.stepIndex} goalDocId={this.props.goalDocId} targetUser={this.props.targetUser} loggedInUser={this.props.loggedInUser}/>
+            : null}
+        </div>
+
       </div>
     )
   }

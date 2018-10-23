@@ -4,7 +4,6 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
-import * as actions from '../Actions/actions'
 import CurrentUser from '../Components/User/CurrentUser'
 import GlobalFeedPage from './GlobalFeedPage'
 import '../style/UserFeedPage.css'
@@ -43,7 +42,6 @@ class UserFeedPage extends Component {
 
   componentDidMount() {
     const {match} = this.props;
-    // this.props.dispatch(actions.setTargetUserID(match.params.userid))
   }
 
   render() {
@@ -57,15 +55,15 @@ class UserFeedPage extends Component {
     }
     return (<div className="userfeedpage-container">
       <h2>
-        UserFeed
+        {/* UserFeed */}
       </h2>
       <TargetUser targetUserName={User.userName || ''}/>
       <SelectGoal targetUserId={User.id} userId={this.props.userQuery.user.id} setGoalDocId={this._setGoalDocId}/> {/* <InputGoal /> */}
       {
-        this.state.goalDocId
-          ? <CurrentSteps loggedInUser={this.props.userQuery.user.id} targetUser={User.id} goalDocId={this.state.goalDocId}/>
-          : null
-      }
+          this.state.goalDocId
+            ? <CurrentSteps loggedInUser={this.props.userQuery.user.id} targetUser={User.id} goalDocId={this.state.goalDocId}/>
+            : null
+        }
       {/* <CurrentGoal id={this.props.currentGoalID}/> */}
 
       {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}

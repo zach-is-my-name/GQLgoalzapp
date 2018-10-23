@@ -30,7 +30,8 @@ class OwnGoalCurrentSteps extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.steps !== prevProps.steps){
       this.setState({
-        steps: [...this.props.steps, ...this.state.steps,]
+        steps: [...new Set(...this.props.steps, ...this.state.steps)]
+        // steps: [...this.props.steps, ...this.state.steps,]
       })
     }
   }

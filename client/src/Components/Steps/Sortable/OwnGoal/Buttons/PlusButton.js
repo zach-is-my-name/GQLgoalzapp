@@ -3,7 +3,7 @@ import React from 'react';
 import plus from '../../../../../style/images/plus_websize.png'
 import AddStepSmart from '../../../AddStep-smart.js'
 import AcceptStep from '../../../AcceptStep-smart.js'
-// import '../../../../style/OwnGoalCurrentSteps.css'
+import '../../../../../style/PlusButton.css'
 import {SortableElement} from 'react-sortable-hoc';
 
 const PlusButton = ({
@@ -19,10 +19,8 @@ const PlusButton = ({
 }) => {
   return (
     <div>
-      <div className="row-1">
-        <li className="plus-image"> <img key={`imageKey-plus${stepIndex}`} onClick={() => clickHandlerPlus(stepIndex)} alt="" src={plus}/> </li>
-      </div>
-
+      <li className="plus-image"> <img key={`imageKey-plus${stepIndex}`} onClick={() => clickHandlerPlus(stepIndex)} alt="" src={plus}/> </li>
+      
       <div className="row-2">
 
         {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) &&

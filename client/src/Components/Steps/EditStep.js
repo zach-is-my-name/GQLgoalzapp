@@ -9,7 +9,9 @@ return  (
       type="text"
       onChange={props.handleChange} value={props.value}
       onBlur={props.unrenderEditFunction}
-      autoFocus className="edit-step-input"  
+      onFocus={console.log("Focus")}
+      // onFocus={props.unrenderEditFunction}
+      autoFocus className="edit-step-input"
     />
     {/* <input type="submit" className="edit-step-submit" value="Edit Step" /> */}
   </form>

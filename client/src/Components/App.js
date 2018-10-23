@@ -52,7 +52,7 @@ export class App extends Component {
   }
 
     renderLoggedIn() {
-      console.log('renderLoggedIn()')
+      // console.log('renderLoggedIn()')
       return (
         <div className="App">
           <h1 className="logo">GoalZapp</h1>

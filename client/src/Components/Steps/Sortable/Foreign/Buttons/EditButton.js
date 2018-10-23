@@ -13,7 +13,7 @@ const EditButton = ({
   id,
     }) => {
         return (
-        <div>
+        <div className="edit-button-container">
           <li className="current-step" onClick={(event) => clickHandlerSuggestEdit(stepIndex, event)} key={stepIndex}>
             {renderSuggestEditState ?
               <SuggestEditStep

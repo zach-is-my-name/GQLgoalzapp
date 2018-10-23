@@ -1,0 +1,11 @@
+li.plus-image {
+  opacity: 0;
+}
+
+li.plus-image:hover {
+  opacity: 1
+}
+
+/* .plus-button-container {
+  display: flex;
+} */
