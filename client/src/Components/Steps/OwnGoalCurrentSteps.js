@@ -16,7 +16,7 @@ class OwnGoalCurrentSteps extends Component {
       oldIndex: null,
       indexInMotion: null,
       toggleSuggestedSteps: true,
-      steps: [],
+      movedSteps: [],
       renderMoveStep: false,
     }
     this._toggleSuggestedSteps = this._toggleSuggestedSteps.bind(this)
@@ -24,13 +24,13 @@ class OwnGoalCurrentSteps extends Component {
 }
 
   componentDidMount() {
-    this.setState({steps: [ ...this.props.steps, ...this.state.steps,]})
+    this.setState({movedSteps: [ ...this.props.steps, ...this.state.movedSteps,]})
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.steps !== prevProps.steps){
+    if (this.props.steps !== prevProps.steps) {
       this.setState({
-        steps: [...new Set(...this.props.steps, ...this.state.steps)]
+        movedSteps: [...new Set(...this.props.steps, ...this.state.movedSteps)]
         // steps: [...this.props.steps, ...this.state.steps,]
       })
     }
@@ -47,7 +47,7 @@ class OwnGoalCurrentSteps extends Component {
           {this.state.renderMoveStep ?
             <MoveStep
               _unrenderMoveStep={this._unrenderMoveStep}
-              steps={this.state.steps}
+              steps={this.state.movedSteps}
               newIndex={this.state.newIndex}
               oldIndex={this.state.oldIndex}
               clonedSteps={this.props.clonedSteps}
@@ -60,7 +60,7 @@ class OwnGoalCurrentSteps extends Component {
           <OwnSteps
             onSortEnd={this.onSortEnd}
             randomColorStep={this.props.randomColorStep}
-            currentGoalSteps={this.state.steps}
+            currentGoalSteps={this.props.steps}
             currentGoalStepsClone={this.props.clonedSteps}
             onSortEnd={this.onSortEnd}
             helperClass="sortable-helper"
@@ -93,7 +93,7 @@ class OwnGoalCurrentSteps extends Component {
  onSortEnd = ({oldIndex, newIndex}) => {
    // console.log("this.state.goalDocs", this.state.goalDocs)
    this.setState(() =>  { return {
-     steps: arrayMove(this.state.steps, oldIndex, newIndex),
+     steps: arrayMove(this.state.movedSteps, oldIndex, newIndex),
      newIndex: newIndex,
      oldIndex: oldIndex,
    }
