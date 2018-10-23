@@ -14,7 +14,7 @@ class ForeignGoalCurrentSteps extends Component {
     this.state = {
       newIndex: null,
       oldIndex: null,
-      clonedSteps: [],
+      movedClonedSteps: [],
       renderMoveStep: false,
       movedStepIndex: null,
       toggleOnZappButton: true
@@ -30,14 +30,14 @@ class ForeignGoalCurrentSteps extends Component {
       console.log('prevProps', prevProps.clonedSteps.map(obj => obj.step))
       this.setState({
         // clonedSteps: [...this.props.clonedSteps, ...this.state.clonedSteps,]
-        clonedSteps: [...new Set([...this.props.clonedSteps, ...this.state.clonedSteps])]
+        movedClonedSteps: [...new Set([...this.props.clonedSteps, ...this.state.movedClonedSteps])]
       })
     }
   }
 
   componentDidMount() {
     // console.log('componentDidMount, this.state.clonedSteps', this.state.clonedSteps, 'this.props.clonedSteps', this.props.clonedSteps)
-    this.setState({clonedSteps:[...this.props.clonedSteps, ...this.state.clonedSteps,]})
+    this.setState({movedClonedSteps:[...this.props.clonedSteps, ...this.state.movedClonedSteps,]})
   }
 
   render() {
@@ -46,13 +46,13 @@ class ForeignGoalCurrentSteps extends Component {
       {this.state.renderMoveStep ?
         <SuggestMoveStep
           _unrenderMoveStep={this._unrenderMoveStep}
-          clonedSteps={this.state.clonedSteps}
+          clonedSteps={this.state.movedClonedSteps}
           newIndex={this.state.newIndex}
         /> : null}
 
       <div className="steps-container">
         <ForeignSteps
-          clonedSteps={this.state.clonedSteps}
+          clonedSteps={this.props.clonedSteps}
           onSortEnd={this.onSortEnd}
           helperClass="sortable-helper"
           hideSortableGhost={true}
@@ -70,7 +70,7 @@ class ForeignGoalCurrentSteps extends Component {
 
       onSortEnd = ({oldIndex, newIndex}) => {
           this.setState(() => { return {
-            clonedSteps: arrayMove(this.state.clonedSteps, oldIndex, newIndex),
+            movedClonedSteps: arrayMove(this.state.movedClonedSteps, oldIndex, newIndex),
             newIndex: newIndex,
             oldIndex: oldIndex,
             }
