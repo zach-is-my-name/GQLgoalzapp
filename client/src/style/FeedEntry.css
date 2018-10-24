@@ -1,0 +1,12 @@
+.feed-entry-owner {
+  color: #20859B;
+}
+
+.feed-entry-goal {
+  color: #83CE61;
+  text-decoration: underline;
+}
+
+.feed-entry-text-zapped-goal {
+  font-family: benton-italic;
+}

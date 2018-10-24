@@ -6,7 +6,6 @@ import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
 import CurrentUser from '../Components/User/CurrentUser'
 import GlobalFeedPage from './GlobalFeedPage'
-import '../style/UserFeedPage.css'
 import CurrentGoal from '../Components/Goal/CurrentGoal-smart'
 import CurrentSteps from '../Components/Steps/CurrentSteps-smart'
 import Notifications from '../Components/Feed/Notifications-smart'
@@ -15,6 +14,7 @@ import SelectGoal from '../Components/Goal/SelectGoal-smart'
 import InputGoalSmart from '../Components/Goal/InputGoal-smart'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons'
+import '../style/UserFeedPage.css'
 
 const userQuery = gql `
   query userQuery {

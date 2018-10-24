@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../style/FeedEntry.css'
 
 const FeedEntry = ({entry}) => {
   // console.log(entry)
@@ -7,9 +8,11 @@ const owner = entry.owners === null ? 'anonymous': entry.owners.userName
 // console.log(owner);
 // console.log( entry.owners.userName !== null ? `username is ${entry.owners.userName}` :`no username`)
 return (
-<div> {`
-  ${goal} ........ ${owner} zapped goal ${goal}
-`}</div>
+<div>
+  {`${goal} ........ `} <span className="feed-entry-owner">  {`${owner}`} </span>
+  <span className="feed-entry-text-zapped-goal"> {`zapped goal`} </span>
+  <span className="feed-entry-goal"> {`${goal}`} </span>
+</div>
     )
     }
 

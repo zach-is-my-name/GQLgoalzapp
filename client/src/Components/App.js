@@ -4,6 +4,9 @@ import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
 import '../style/App.css';
 import '../style/fonts/bentonsans_regular-webfont.woff'
+import '../style/fonts/bentonsans_light-webfont.woff'
+import '../style/fonts/benton-italic.woff'
+import '../style/fonts/nimbus_sans_becker_dcon_italic-webfont.woff'
 import {withRouter, Switch, Route, BrowserRouter as Router} from 'react-router-dom'
 import {connect} from 'react-redux';
 import UserFeedPage from '../Routes/UserFeedPage-smart'

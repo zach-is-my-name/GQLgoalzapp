@@ -12,6 +12,33 @@
 }
 
 @font-face {
+    font-family: 'nimbus-sans-italic';
+    src: url('./fonts/nimbus_sans_becker_dcon_italic-webfont.woff2') format('woff2'),
+         url('./fonts/nimbus_sans_becker_dcon_italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'benton-italic';
+    src: url('./fonts/benton-italic.woff') format('woff'),
+      url('./fonts/benton-italic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+@font-face {
+    font-family: 'bentonlight';
+    src: url('./fonts/bentonsans_light-webfont.woff2') format('woff2'),
+         url('./fonts/bentonsans_light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
     font-family: 'streamsterregular';
     src: url('./fonts/streamster-webfont.woff2') format('woff2'),
          url('./fonts/streamster-webfont.woff') format('woff');

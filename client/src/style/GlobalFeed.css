@@ -1,0 +1,13 @@
+.globalfeed-container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.globalfeed-user-icon {
+  margin-top: 15px;
+}
+
+.far.faUser.fa-lg {
+  color:grey;
+}
