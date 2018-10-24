@@ -264,7 +264,8 @@ graphql(UpdateOrCreateClonedStep, {
   options: (ownProps) => ({
     variables: {
       id: ownProps.goalDocId
-    }
+    },
+    fetchPolicy: 'network-only'
   })
 })
 )(withRouter(AddStepSmart))

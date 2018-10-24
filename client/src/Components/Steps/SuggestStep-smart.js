@@ -81,6 +81,7 @@ async _submitSuggestedStep(event) {
   _reorderSteps(queryResult) {
     const {loading, error, allClonedSteps} = queryResult
     if (!loading) {
+      console.log('query result', allClonedSteps)
       // console.log(allSteps)
       // actions.setStepAndPositionIndex(this.state.step, this.props.index)
       // actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
@@ -101,6 +102,7 @@ async _submitSuggestedStep(event) {
   }
 
   _submitSuggestedStepMutation = async (newClonedStepsSortedByPositionIndex) => {
+    console.log(newClonedStepsSortedByPositionIndex)
     newClonedStepsSortedByPositionIndex.map(async (stepObj, mapIndex, array) => {
       let id
       if (stepObj.id) {
@@ -138,7 +140,8 @@ export default compose(
     options: (ownProps) => ({
       variables: {
         id: ownProps.goalDocId
-      }
+      }, 
+      fetchPolicy: 'network-only'
     })
   }),
   graphql(updateOrCreateClonedStep, {
