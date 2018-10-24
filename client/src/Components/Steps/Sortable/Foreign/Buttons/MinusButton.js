@@ -1,9 +1,9 @@
 /* eslint-disable */
 import React from 'react';
-import SuggestRemoveStep from '../../../SuggestRemoveStep-smart.js'
+// import SuggestRemoveStep from '../../../SuggestRemoveStep-smart.js'
 import RemoveSuggestedStep from '../../../RemoveSuggestedStep-smart.js'
 import minus from '../../../../../style/images/minus.jpg'
-import YesNoPrompt from '../../../YesNoPrompt.js'
+// import YesNoPrompt from '../../../YesNoPrompt.js'
 
  const MinusButton = ( {
   clickHandlerSuggestRemove,
@@ -28,16 +28,16 @@ import YesNoPrompt from '../../../YesNoPrompt.js'
         stepObj.suggestedStep ? clickHandlerRemoveSuggested(stepIndex): clickHandlerSuggestRemove(stepIndex)} alt="" src={minus}/></li>
 
       {/*Suggest Remove Step*/}
-      {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex) && !stepObj.suggestedStep)
+      {/* {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex) && !stepObj.suggestedStep)
         ? <div className="prompt">
           <p>Remove Step?</p>
           <YesNoPrompt
-            clickEventYes={clickHandlerConfirmSuggestRemove}
-            clickEventNo={clickHandlerCancel}/>
+        clickEventYes={clickHandlerConfirmSuggestRemove}
+        clickEventNo={clickHandlerCancel}/>
         </div>
         : null}
 
-      {renderSuggestRemoveState ?
+        {renderSuggestRemoveState ?
         <SuggestRemoveStep
           indexToRemove={indexToRemove}
           goalDocId={goalDocId}
@@ -45,19 +45,19 @@ import YesNoPrompt from '../../../YesNoPrompt.js'
           unrenderSuggestRemoveStepFunction={unrenderSuggestRemoveStepFunction}
           stepObj={stepObj}
         />
-      : null }
-
+        : null }
+      */}
       {/*Remove Suggested Step*/}
-      {toggleConfirmPrompt &&(stepIndex !== null) && (indexToRemove === stepIndex) && stepObj.suggestedStep
+      {/* {toggleConfirmPrompt &&(stepIndex !== null) && (indexToRemove === stepIndex) && stepObj.suggestedStep
         ? <div className="prompt">
           <p>Remove Step?</p>
           <YesNoPrompt
-            clickEventYes={clickHandlerConfirmRemoveSuggestedStep}
-            clickEventNo={clickHandlerCancel}/>
+        clickEventYes={clickHandlerConfirmRemoveSuggestedStep}
+        clickEventNo={clickHandlerCancel}/>
         </div>
         : null}
 
-      {renderRemoveSuggestedStepState ?
+        {renderRemoveSuggestedStepState ?
         <RemoveSuggestedStep
           indexToRemove={indexToRemove}
           idToRemove={stepObj.id}
@@ -65,7 +65,7 @@ import YesNoPrompt from '../../../YesNoPrompt.js'
           unrenderRemoveSuggestedStepFunction={unrenderRemoveSuggestedStepFunction}
           stepObj={stepObj}
         /> : null}
-
+      */}
     </div>
           )
           }

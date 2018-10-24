@@ -10,11 +10,48 @@
   /* border: 1px solid black */
 }
 
+.foreign-step-suggest-remove {
+  display: flex;
+  flew-flow: row wrap;
+  justify-content: center;
+  width: 100%;
+
+}
+
+.prompt {
+
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.prompt p {
+    margin: 0;
+}
+
+.yes-no-prompt-buttons {
+  margin-left: 5px;
+}
+
+.button-yes {
+  margin-right: 5px;
+}
+
+
+.foreign-step-remove-suggested-step {
+  display: flex;
+  flew-flow: row wrap;
+  justify-content: center;
+  width: 100%;
+}
+
 .foreign-step-suggest-step {
   display: flex;
   width: 100%;
   justify-content: center;
 }
+
+
 
 .currentsteps-label {
     margin-left: 256px;
@@ -81,17 +118,4 @@ li.current-step {
     /*top: -4px;*/
 
 
-}
-
-
-.prompt {
-    width: 105px;
-    height: 45px;
-    /*border: solid 1px black;*/
-    /* order: 1; */
-    /*margin-left: 46px;*/
-}
-
-.prompt p {
-    margin: 0;
 }

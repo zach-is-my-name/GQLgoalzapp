@@ -13,6 +13,8 @@ import Notifications from '../Components/Feed/Notifications-smart'
 import TargetUser from '../Components/User/TargetUser'
 import SelectGoal from '../Components/Goal/SelectGoal-smart'
 import InputGoalSmart from '../Components/Goal/InputGoal-smart'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 
 const userQuery = gql `
   query userQuery {
@@ -63,7 +65,7 @@ class UserFeedPage extends Component {
           this.state.goalDocId
             ? <CurrentSteps loggedInUser={this.props.userQuery.user.id} targetUser={User.id} goalDocId={this.state.goalDocId}/>
             : null
-        }
+      }
       {/* <CurrentGoal id={this.props.currentGoalID}/> */}
 
       {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
@@ -71,7 +73,7 @@ class UserFeedPage extends Component {
       {/* <Notifications/>  */}
       {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
       <Link className="globalfeed" to="/">
-        GlobalFeed
+        <span className="fas faGlobe fa-lg"> <FontAwesomeIcon icon={ faGlobe } /> </span>
       </Link>
     </div>)
   }

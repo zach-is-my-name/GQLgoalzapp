@@ -2,6 +2,10 @@
   box-sizing: border-box;
 }
 
+.fas.faGlobe.fa-lg {
+  color: #52b8f2;
+}
+
 h2 {
   width: 132px;
   margin: 51px auto 5px auto;
