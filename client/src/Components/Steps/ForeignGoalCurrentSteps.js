@@ -22,22 +22,32 @@ class ForeignGoalCurrentSteps extends Component {
     this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
   }
 
+    // move step function needs a state entry to manipulate
+    // that manipulated state gets passed to the move step component and that submits its computed data
   componentDidUpdate(prevProps) {
     // console.log("prevProps", JSON.stringify(prevProps.clonedSteps.map(obj => obj.step)))
     // console.log('componentDidUpdate, prevProps.clonedSteps', prevProps.clonedSteps, 'this.props.clonedSteps', this.props.clonedSteps)
-    if (this.props.clonedSteps !== prevProps.clonedSteps){
-      console.log('this.props', this.props.clonedSteps.map(obj => obj.step))
-      console.log('prevProps', prevProps.clonedSteps.map(obj => obj.step))
+    if (this.props.clonedSteps !== prevProps.clonedSteps) {
+      console.log('this.props', this.props.clonedSteps)
+      console.log('prevProps', prevProps.clonedSteps)
+
+      // console.log('this.props', this.props.clonedSteps.map(obj => obj.step))
+      // console.log('prevProps', prevProps.clonedSteps.map(obj => obj.step))
+
       this.setState({
-        // clonedSteps: [...this.props.clonedSteps, ...this.state.clonedSteps,]
-        movedClonedSteps: [...new Set([...this.props.clonedSteps, ...this.state.movedClonedSteps])]
+        //merge
+        movedClonedSteps : this.props.clonedSteps
+        // movedClonedSteps : [ ...this.props.clonedSteps]
+        // movedClonedSteps: [...new Set([...this.props.clonedSteps, ...this.state.movedClonedSteps])]
       })
     }
   }
 
+  // set state for Move on initial render
   componentDidMount() {
     // console.log('componentDidMount, this.state.clonedSteps', this.state.clonedSteps, 'this.props.clonedSteps', this.props.clonedSteps)
-    this.setState({movedClonedSteps:[...this.props.clonedSteps, ...this.state.movedClonedSteps,]})
+    this.setState({movedClonedSteps: this.props.clonedSteps})
+    // this.setState({movedClonedSteps:[...this.props.clonedSteps, ...this.state.movedClonedSteps,]})
   }
 
   render() {
