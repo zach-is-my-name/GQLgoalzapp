@@ -20,34 +20,44 @@ const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
 class SelectGoalSmart extends React.Component {
   constructor(props) {
     super(props)
-    this.selectGoal = this.selectGoal.bind(this);
+    // this._selectGoal = this._selectGoal.bind(this);
+    // this._handleChange = this._handleChange.bind(this);
     }
 
   render() {
     const {loading, error, allGoalDocs} = this.props.goalDocQuery
     if (loading) {
-      return <div>loading...</div>;
+      return null
     } else if (error) {
       console.error(error)
       return <p>Error!</p>
     } else {
     return (
       <div>
-        <SelectGoalForm goalDocs={allGoalDocs} onChange={this.selectGoal}/>
+        <SelectGoalForm
+          // match={this.props.match}
+          goalDocs={allGoalDocs}
+          value={this.props.value}
+          handleChange={this.props.setGoalDocId}
+        />
       </div>
       )
     }
   }
 
-  selectGoal(values) {
-    event.preventDefault();
-    const goalDocId = values.goalSelector
+  // _handleChange (event) {
+  //  this.setState({goalDocId: })
+  // }
 
-    if (values.goalSelector) {
-      this.props.setGoalDocId(goalDocId)
-      // this.props.dispatch(actions.setGoalDocID(goalDocID))
-    }
-  }
+  // _selectGoal(values) {
+  //   event.preventDefault();
+  //   const goalDocId = values.goalSelector
+  //
+  //   if (values.goalSelector) {
+  //     this.props.setGoalDocId(goalDocId)
+  //     // this.props.dispatch(actions.setGoalDocID(goalDocID))
+  //   }
+  // }
 }
 
 

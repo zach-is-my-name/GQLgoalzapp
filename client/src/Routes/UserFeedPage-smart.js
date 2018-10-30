@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {Route, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
@@ -48,6 +48,7 @@ class UserFeedPage extends Component {
 
   render() {
     const {match} = this.props;
+    // console.log(match)
     const {loading, error, User} = this.props.targetUserQuery
     // this.dispatchtargetUserID(match.params.userid)
     if (loading) {
@@ -55,31 +56,44 @@ class UserFeedPage extends Component {
         Loading..
       </div>)
     }
-    return (<div className="userfeedpage-container">
-      <h2>
-        {/* UserFeed */}
-      </h2>
-      <TargetUser targetUserName={User.userName || ''}/>
-      <SelectGoal targetUserId={User.id} userId={this.props.userQuery.user.id} setGoalDocId={this._setGoalDocId}/> {/* <InputGoal /> */}
-      {
-          this.state.goalDocId
-            ? <CurrentSteps loggedInUser={this.props.userQuery.user.id} targetUser={User.id} goalDocId={this.state.goalDocId}/>
+    return (
+      <div className="userfeedpage-container">
+        <h2>
+          {/* UserFeed */}
+        </h2>
+        <TargetUser targetUserName={User.userName || ''}/>
+        <SelectGoal
+          targetUserId={User.id}
+          userId={this.props.userQuery.user.id}
+          setGoalDocId={this._setGoalDocId}
+          value={this.state.goalDocId}
+          match={match}
+        />
+        {/* <InputGoal /> */}
+        {
+          match.params.goaldocid || this.state.goalDocId
+            ? <CurrentSteps
+              loggedInUser={this.props.userQuery.user.id}
+              targetUser={User.id}
+              goalDocId={match.params.goaldocid || this.state.goalDocId}
+              />
             : null
-      }
-      {/* <CurrentGoal id={this.props.currentGoalID}/> */}
+        }
+        {/* <CurrentGoal id={this.props.currentGoalID}/> */}
 
-      {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
+        {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
 
-      {/* <Notifications/>  */}
-      {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
-      <Link className="globalfeed" to="/">
-        <span className="fas faGlobe fa-lg"> <FontAwesomeIcon icon={ faGlobe } /> </span>
-      </Link>
-    </div>)
+        {/* <Notifications/>  */}
+        {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
+        <Link className="globalfeed" to="/">
+          <span className="fas faGlobe fa-lg"> <FontAwesomeIcon icon={ faGlobe } /> </span>
+        </Link>
+      </div>
+    )
   }
 
-  _setGoalDocId(id) {
-    this.setState({goalDocId: id})
+  _setGoalDocId(event) {
+    this.setState({goalDocId: event.target.value})
   }
 }
 

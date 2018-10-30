@@ -1,0 +1,768 @@
+zmg@zmg-acer:~/GoalZapp/client$ git add .
+zmg@zmg-acer:~/GoalZapp/client$ git commit 
+[Refactor 88f3b69] <AddStep /> w/ stepsId field
+ 7 files changed, 193 insertions(+), 84 deletions(-)
+zmg@zmg-acer:~/GoalZapp/client$ git diff /Components/Steps/AddStep-smart.js
+fatal: ambiguous argument '/Components/Steps/AddStep-smart.js': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+zmg@zmg-acer:~/GoalZapp/client$ ls
+node_modules  package.json  package-lock.json  public  src
+zmg@zmg-acer:~/GoalZapp/client$ cd src
+Actions     index.css  networkinterface.js  Routes    style
+Components  index.js   Reducers             store.js  Utils
+zmg@zmg-acer:~/GoalZapp/client/src$ git diff /Components/Steps/AddStep-smart.js
+fatal: ambiguous argument '/Components/Steps/AddStep-smart.js': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+zmg@zmg-acer:~/GoalZapp/client/src$ git diff ./Components/Steps/AddStep-smart.js 
+diff --git a/client/src/Components/Steps/AddStep-smart.js b/client/src/Components/Steps/AddStep-smart.js
+index 6f03214..54924f0 100644
+--- a/client/src/Components/Steps/AddStep-smart.js
++++ b/client/src/Components/Steps/AddStep-smart.js
+@@ -136,6 +136,7 @@ class AddStepSmart extends React.Component {
+   }
+ 
+   async _submitAddStepMutation(newStepsSortedByPositionIndex) {
++      let sideEffect
+       const mapFunct = newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
+       let id
+       if (!stepObj.id) {
+@@ -154,12 +155,14 @@ class AddStepSmart extends React.Component {
+         }
+       })
+        if (!stepObj.id) {
+-        return  result.data.updateOrCreateStep.id
+-         }
++        sideEffect = result.data.updateOrCreateStep.id
++
++        return sideEffect }
+        }
+      )
+-        const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
+-        return arr
++       console.log(sideEffect)
++        // const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
++        // return arr
+    }
+ 
+ 
+zmg@zmg-acer:~/GoalZapp/client/src$ cd ..
+node_modules  package.json  package-lock.json  public  src
+zmg@zmg-acer:~/GoalZapp/client$ git checkout --
+M	client/src/Components/Steps/AddStep-smart.js
+zmg@zmg-acer:~/GoalZapp/client$ git log
+commit 88f3b697ff545b95ce6f8ea1bafa3aea5d20713e
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Thu Oct 4 21:56:50 2018 -0400
+
+    <AddStep /> w/ stepsId field
+
+commit 71ec3fe7e3e7fab23942f8b577852adabf2b3311
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 08:40:49 2018 -0400
+
+    Changed fetch-policy <AddStep />
+
+commit 336000082a641ec24cafc1ba23dac4432256f25f
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 07:20:50 2018 -0400
+
+    Moved <RemoveStep /> state into immediate parent
+
+commit f2f250a6921f863346c9768b580ac7c753baff11
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 06:58:13 2018 -0400
+
+    <RemoveStep />
+zmg@zmg-acer:~/GoalZapp/client$ git checkout 88f3b697ff545b95ce6f8ea1bafa3aea5d20713e
+M	client/src/Components/Steps/AddStep-smart.js
+Note: checking out '88f3b697ff545b95ce6f8ea1bafa3aea5d20713e'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 88f3b69... <AddStep /> w/ stepsId field
+zmg@zmg-acer:~/GoalZapp/client$ git checkout -
+M	client/src/Components/Steps/AddStep-smart.js
+Switched to branch 'Refactor'
+zmg@zmg-acer:~/GoalZapp/client$ cd src
+Actions     index.css  networkinterface.js  Routes    style
+Components  index.js   Reducers             store.js  Utils
+zmg@zmg-acer:~/GoalZapp/client/src$ git diff 
+diff --git a/client/src/Components/Steps/AddStep-smart.js b/client/src/Components/Steps/AddStep-smart.js
+index 6f03214..54924f0 100644
+--- a/client/src/Components/Steps/AddStep-smart.js
++++ b/client/src/Components/Steps/AddStep-smart.js
+@@ -136,6 +136,7 @@ class AddStepSmart extends React.Component {
+   }
+ 
+   async _submitAddStepMutation(newStepsSortedByPositionIndex) {
++      let sideEffect
+       const mapFunct = newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
+       let id
+       if (!stepObj.id) {
+@@ -154,12 +155,14 @@ class AddStepSmart extends React.Component {
+         }
+       })
+        if (!stepObj.id) {
+-        return  result.data.updateOrCreateStep.id
+-         }
++        sideEffect = result.data.updateOrCreateStep.id
++
++        return sideEffect }
+        }
+      )
+-        const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
+-        return arr
++       console.log(sideEffect)
++        // const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
++        // return arr
+    }
+ 
+ 
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout --
+M	client/src/Components/Steps/AddStep-smart.js
+zmg@zmg-acer:~/GoalZapp/client/src$ git diff Components/Steps/AddStep-smart.js
+diff --git a/client/src/Components/Steps/AddStep-smart.js b/client/src/Components/Steps/AddStep-smart.js
+index 6f03214..54924f0 100644
+--- a/client/src/Components/Steps/AddStep-smart.js
++++ b/client/src/Components/Steps/AddStep-smart.js
+@@ -136,6 +136,7 @@ class AddStepSmart extends React.Component {
+   }
+ 
+   async _submitAddStepMutation(newStepsSortedByPositionIndex) {
++      let sideEffect
+       const mapFunct = newStepsSortedByPositionIndex.map(async (stepObj, mapIndex) => {
+       let id
+       if (!stepObj.id) {
+@@ -154,12 +155,14 @@ class AddStepSmart extends React.Component {
+         }
+       })
+        if (!stepObj.id) {
+-        return  result.data.updateOrCreateStep.id
+-         }
++        sideEffect = result.data.updateOrCreateStep.id
++
++        return sideEffect }
+        }
+      )
+-        const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
+-        return arr
++       console.log(sideEffect)
++        // const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
++        // return arr
+    }
+ 
+ 
+zmg@zmg-acer:~/GoalZapp/client/src$ git log 
+commit 88f3b697ff545b95ce6f8ea1bafa3aea5d20713e
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Thu Oct 4 21:56:50 2018 -0400
+
+    <AddStep /> w/ stepsId field
+
+commit 71ec3fe7e3e7fab23942f8b577852adabf2b3311
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 08:40:49 2018 -0400
+
+    Changed fetch-policy <AddStep />
+
+commit 336000082a641ec24cafc1ba23dac4432256f25f
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 07:20:50 2018 -0400
+
+    Moved <RemoveStep /> state into immediate parent
+
+commit f2f250a6921f863346c9768b580ac7c753baff11
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 06:58:13 2018 -0400
+
+    <RemoveStep />
+zmg@zmg-acer:~/GoalZapp/client/src$ git status
+On branch Refactor
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   Components/Steps/AddStep-smart.js
+
+no changes added to commit (use "git add" and/or "git commit -a")
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout 88f3b697ff545b95ce6f8ea1bafa3aea5d20713e
+M	client/src/Components/Steps/AddStep-smart.js
+Note: checking out '88f3b697ff545b95ce6f8ea1bafa3aea5d20713e'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 88f3b69... <AddStep /> w/ stepsId field
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout --
+M	client/src/Components/Steps/AddStep-smart.js
+zmg@zmg-acer:~/GoalZapp/client/src$ git status
+HEAD detached at 88f3b69
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   Components/Steps/AddStep-smart.js
+
+no changes added to commit (use "git add" and/or "git commit -a")
+zmg@zmg-acer:~/GoalZapp/client/src$ git diff
+diff --git a/client/src/Components/Steps/AddStep-smart.js b/client/src/Components/Steps/AddStep-smart.js
+index 6f03214..e5041e4 100644
+--- a/client/src/Components/Steps/AddStep-smart.js
++++ b/client/src/Components/Steps/AddStep-smart.js
+@@ -112,7 +112,7 @@ class AddStepSmart extends React.Component {
+     event.preventDefault()
+     const {stepIdQuery, clonedStepIdQuery} = this.props
+     const returnedIdArr =  await this._submitAddStepMutation(this._reorderSteps(stepIdQuery))
+-    const returnedId = returnedIdArr[0]
++    // const returnedId = returnedIdArr[0]
+     this._submitClonedStepMutation(this._reorderClonedSteps(clonedStepIdQuery, returnedId))
+   }
+ 
+@@ -154,10 +154,12 @@ class AddStepSmart extends React.Component {
+         }
+       })
+        if (!stepObj.id) {
+-        return  result.data.updateOrCreateStep.id
+-         }
++        sideEffect = result.data.updateOrCreateStep.id
++
++        return sideEffect }
+        }
+      )
++       console.log(sideEffect)
+         const arr = Promise.all(mapFunct).then((ids)=>ids.filter((id)=> id !== undefined))
+         return arr
+    }
+zmg@zmg-acer:~/GoalZapp/client/src$ git log
+commit 88f3b697ff545b95ce6f8ea1bafa3aea5d20713e
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Thu Oct 4 21:56:50 2018 -0400
+
+    <AddStep /> w/ stepsId field
+
+commit 71ec3fe7e3e7fab23942f8b577852adabf2b3311
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 08:40:49 2018 -0400
+
+    Changed fetch-policy <AddStep />
+
+commit 336000082a641ec24cafc1ba23dac4432256f25f
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 07:20:50 2018 -0400
+
+    Moved <RemoveStep /> state into immediate parent
+
+commit f2f250a6921f863346c9768b580ac7c753baff11
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 06:58:13 2018 -0400
+
+    <RemoveStep />
+zmg@zmg-acer:~/GoalZapp/client/src$ git reset --hard HEAD
+HEAD is now at 88f3b69 <AddStep /> w/ stepsId field
+zmg@zmg-acer:~/GoalZapp/client/src$ git diff
+diff --git a/client/src/Components/Steps/RemoveStep-smart.js b/client/src/Components/Steps/RemoveStep-smart.js
+index 5c3aac8..51d4298 100644
+--- a/client/src/Components/Steps/RemoveStep-smart.js
++++ b/client/src/Components/Steps/RemoveStep-smart.js
+@@ -35,7 +35,13 @@ const clonedStepsQuery = gql `
+        }
+      }}`
+ 
+-// const stepIdQuery = gql `
++const clonedStepIdByStepsIdQuery = gql `
++  query allClonedStepsByStepsIdQuery ($stepsId: String){
++    allClonedSteps(filter: { stepsId: $stepsId}){
++      id
++    }
++  } `
++
+ // query stepIdQuery($id:ID) {
+ //   allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
+ //      id
+@@ -84,8 +90,9 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
+ class RemoveStep extends Component {
+:...skipping...
+diff --git a/client/src/Components/Steps/RemoveStep-smart.js b/client/src/Components/Steps/RemoveStep-smart.js
+index 5c3aac8..51d4298 100644
+--- a/client/src/Components/Steps/RemoveStep-smart.js
++++ b/client/src/Components/Steps/RemoveStep-smart.js
+@@ -35,7 +35,13 @@ const clonedStepsQuery = gql `
+        }
+      }}`
+ 
+-// const stepIdQuery = gql `
++const clonedStepIdByStepsIdQuery = gql `
++  query allClonedStepsByStepsIdQuery ($stepsId: String){
++    allClonedSteps(filter: { stepsId: $stepsId}){
++      id
++    }
++  } `
++
+ // query stepIdQuery($id:ID) {
+ //   allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
+ //      id
+@@ -84,8 +90,9 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
+ class RemoveStep extends Component {
+   constructor(props) {
+:...skipping...
+diff --git a/client/src/Components/Steps/RemoveStep-smart.js b/client/src/Components/Steps/RemoveStep-smart.js
+index 5c3aac8..51d4298 100644
+--- a/client/src/Components/Steps/RemoveStep-smart.js
++++ b/client/src/Components/Steps/RemoveStep-smart.js
+@@ -35,7 +35,13 @@ const clonedStepsQuery = gql `
+        }
+      }}`
+ 
+-// const stepIdQuery = gql `
++const clonedStepIdByStepsIdQuery = gql `
++  query allClonedStepsByStepsIdQuery ($stepsId: String){
++    allClonedSteps(filter: { stepsId: $stepsId}){
++      id
++    }
++  } `
++
+ // query stepIdQuery($id:ID) {
+ //   allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
+ //      id
+@@ -84,8 +90,9 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
+ class RemoveStep extends Component {
+   constructor(props) {
+     super(props)
++    this._submitRemoveSteps = this._submitRemoveSteps.bind(this)
+     this._submitRemoveStepMutation = this._submitRemoveStepMutation.bind(this)
+-    this._submitRemoveClonedStepMutation = this._submitClonedStepMutation.bind(this)
++    this._submitRemoveClonedStepMutation = this._submitRemoveClonedStepMutation.bind(this)
+     this._reorderSteps = this._reorderSteps.bind(this)
+     this._reorderClonedSteps = this._reorderClonedSteps.bind(this)
+     }
+@@ -95,39 +102,21 @@ componentDidMount() {
+ 
+   render() {
+     if (this.props.renderRemoveStepState === true) {
+-        this._submitRemoveStepMutation()
++      this._submitRemoveSteps(this.props.idToRemove)
+     }
+       return null
+   }
+ 
+-
+-   _reorderSteps(queryResult) {
+-    const {loading, error} = queryResult
+-      if (!loading) {
+-
+-        const newSteps = queryResult.data.GoalDoc.steps.slice()
+-        return newSteps.map((stepObj, index) => ({
+-          ...stepObj,
+-          positionIndex: index
+-        }))
+-      }}
+-
+-  _reorderClonedSteps(queryResult) {
+-    const {loading, error} = queryResult
+-      if (!loading) {
+-        const newSteps = queryResult.data.GoalDoc.clonedSteps.slice()
+-        return newSteps.map((stepObj, index) => ({
+-          ...stepObj,
+-          positionIndex: index
+zmg@zmg-acer:~/GoalZapp/client/src$ 
+zmg@zmg-acer:~/GoalZapp/client/src$ git diff
+diff --git a/client/src/Components/Steps/RemoveStep-smart.js b/client/src/Components/Steps/RemoveStep-smart.js
+index 5c3aac8..51d4298 100644
+--- a/client/src/Components/Steps/RemoveStep-smart.js
++++ b/client/src/Components/Steps/RemoveStep-smart.js
+@@ -35,7 +35,13 @@ const clonedStepsQuery = gql `
+        }
+      }}`
+ 
+-// const stepIdQuery = gql `
++const clonedStepIdByStepsIdQuery = gql `
++  query allClonedStepsByStepsIdQuery ($stepsId: String){
++    allClonedSteps(filter: { stepsId: $stepsId}){
++      id
++    }
++  } `
++
+ // query stepIdQuery($id:ID) {
+ //   allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
+ //      id
+@@ -84,8 +90,9 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
+ class RemoveStep extends Component {
+   constructor(props) {
+     super(props)
++    this._submitRemoveSteps = this._submitRemoveSteps.bind(this)
+     this._submitRemoveStepMutation = this._submitRemoveStepMutation.bind(this)
+-    this._submitRemoveClonedStepMutation = this._submitClonedStepMutation.bind(this)
++    this._submitRemoveClonedStepMutation = this._submitRemoveClonedStepMutation.bind(this)
+     this._reorderSteps = this._reorderSteps.bind(this)
+     this._reorderClonedSteps = this._reorderClonedSteps.bind(this)
+     }
+@@ -95,39 +102,21 @@ componentDidMount() {
+ 
+   render() {
+     if (this.props.renderRemoveStepState === true) {
+-        this._submitRemoveStepMutation()
++      this._submitRemoveSteps(this.props.idToRemove)
+     }
+       return null
+   }
+ 
+-
+-   _reorderSteps(queryResult) {
+-    const {loading, error} = queryResult
+-      if (!loading) {
+-
+-        const newSteps = queryResult.data.GoalDoc.steps.slice()
+-        return newSteps.map((stepObj, index) => ({
+-          ...stepObj,
+-          positionIndex: index
+-        }))
+-      }}
+-
+-  _reorderClonedSteps(queryResult) {
+-    const {loading, error} = queryResult
+-      if (!loading) {
+-        const newSteps = queryResult.data.GoalDoc.clonedSteps.slice()
+-        return newSteps.map((stepObj, index) => ({
+-          ...stepObj,
+-          positionIndex: index
+zmg@zmg-acer:~/GoalZapp/client/src$ git add .
+zmg@zmg-acer:~/GoalZapp/client/src$ git commit 
+[detached HEAD 7e725f3] <RemoveStep /> remove cloned step
+ 1 file changed, 54 insertions(+), 36 deletions(-)
+zmg@zmg-acer:~/GoalZapp/client/src$ git add .
+zmg@zmg-acer:~/GoalZapp/client/src$ git commit 
+[detached HEAD 6c397e7] AddStep re-fetch-queries clonedsteps
+ 1 file changed, 13 insertions(+), 12 deletions(-)
+zmg@zmg-acer:~/GoalZapp/client/src$ 
+zmg@zmg-acer:~/GoalZapp/client/src$ git add 
+Nothing specified, nothing added.
+Maybe you wanted to say 'git add .'?
+zmg@zmg-acer:~/GoalZapp/client/src$ git add .
+zmg@zmg-acer:~/GoalZapp/client/src$ git commit 
+[detached HEAD e6ff078] <Reject Step />
+ 7 files changed, 224 insertions(+), 40 deletions(-)
+ create mode 100644 client/src/Components/Steps/RejectStep-smart.js
+zmg@zmg-acer:~/GoalZapp/client/src$ git branch
+* (HEAD detached from 88f3b69)
+  Refactor
+  SecondPassListOps
+  SuggestInPlace
+  auth
+  auth_atempt2_routing
+  auth_attempt1
+  clean_up
+  css
+  fix_login
+  folder_restack
+  globalfeed
+  graphcool
+  improve_step/suggest_list
+  master
+  permissions
+  proxy
+  redux
+  rewrite
+  sortable
+  stateful
+  step_render
+  steps
+  suggest
+  temp-branch
+  user
+zmg@zmg-acer:~/GoalZapp/client/src$ git log -n 1
+commit e6ff078e10d35c2126dbc81b9ddef21c599da82e
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Sat Oct 6 01:16:58 2018 -0400
+
+    <Reject Step />
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout Refactor 
+error: Your local changes to the following files would be overwritten by checkout:
+	client/src/Components/Steps/AddStep-smart.js
+	client/src/Components/Steps/RejectStep-smart.js
+	client/src/Components/Steps/RemoveStep-smart.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStep.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+	client/src/Components/Steps/SuggestStepSmart.js
+Please, commit your changes or stash them before you can switch branches.
+Aborting
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash
+Saved working directory and index state WIP on (no branch): e6ff078 <Reject Step />
+HEAD is now at e6ff078 <Reject Step />
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout Refactor 
+Previous HEAD position was e6ff078... <Reject Step />
+Switched to branch 'Refactor'
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash apply
+Auto-merging client/src/Components/Steps/SuggestStepSmart.js
+Auto-merging client/src/Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+CONFLICT (content): Merge conflict in client/src/Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+Auto-merging client/src/Components/Steps/Sortable/OwnGoal/OwnStep.js
+CONFLICT (content): Merge conflict in client/src/Components/Steps/Sortable/OwnGoal/OwnStep.js
+Auto-merging client/src/Components/Steps/RemoveStep-smart.js
+CONFLICT (content): Merge conflict in client/src/Components/Steps/RemoveStep-smart.js
+CONFLICT (modify/delete): client/src/Components/Steps/RejectStep-smart.js deleted in Updated upstream and modified in Stashed changes. Version Stashed changes of client/src/Components/Steps/RejectStep-smart.js left in tree.
+Auto-merging client/src/Components/Steps/AddStep-smart.js
+Removing client/src/Components/Steps/AcceptStep.js
+zmg@zmg-acer:~/GoalZapp/client/src$ git status
+On branch Refactor
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	deleted:    Components/Steps/AcceptStep.js
+	modified:   Components/Steps/AddStep-smart.js
+	modified:   Components/Steps/Sortable/Foreign/ForeignStep.js
+	modified:   Components/Steps/Sortable/Foreign/ForeignStepWithButtons.js
+	modified:   Components/Steps/SuggestStepSmart.js
+
+Unmerged paths:
+  (use "git reset HEAD <file>..." to unstage)
+  (use "git add/rm <file>..." as appropriate to mark resolution)
+
+	deleted by us:   Components/Steps/RejectStep-smart.js
+	both modified:   Components/Steps/RemoveStep-smart.js
+	both modified:   Components/Steps/Sortable/OwnGoal/OwnStep.js
+	both modified:   Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	Components/Steps/AcceptStep-smart.js
+	../../server/Expored_GraphCool_Schema/
+
+zmg@zmg-acer:~/GoalZapp/client/src$ git add .
+zmg@zmg-acer:~/GoalZapp/client/src$ git log 
+commit 88f3b697ff545b95ce6f8ea1bafa3aea5d20713e
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Thu Oct 4 21:56:50 2018 -0400
+
+    <AddStep /> w/ stepsId field
+
+commit 71ec3fe7e3e7fab23942f8b577852adabf2b3311
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 08:40:49 2018 -0400
+
+    Changed fetch-policy <AddStep />
+
+commit 336000082a641ec24cafc1ba23dac4432256f25f
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 07:20:50 2018 -0400
+
+    Moved <RemoveStep /> state into immediate parent
+
+commit f2f250a6921f863346c9768b580ac7c753baff11
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 06:58:13 2018 -0400
+
+    <RemoveStep />
+zmg@zmg-acer:~/GoalZapp/client/src$ git commit 
+[Refactor 413e178] <AcceptStep />
+ 10 files changed, 517 insertions(+), 254 deletions(-)
+ create mode 100644 client/src/Components/Steps/AcceptStep-smart.js
+ delete mode 100644 client/src/Components/Steps/AcceptStep.js
+ create mode 100644 client/src/Components/Steps/RejectStep-smart.js
+zmg@zmg-acer:~/GoalZapp/client/src$ git log
+commit 413e178d1631a2c6c7ce3b9853979f63d8b9883a
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Mon Oct 8 16:42:45 2018 -0400
+
+    <AcceptStep />
+
+commit 88f3b697ff545b95ce6f8ea1bafa3aea5d20713e
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Thu Oct 4 21:56:50 2018 -0400
+
+    <AddStep /> w/ stepsId field
+
+commit 71ec3fe7e3e7fab23942f8b577852adabf2b3311
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 08:40:49 2018 -0400
+
+    Changed fetch-policy <AddStep />
+
+commit 336000082a641ec24cafc1ba23dac4432256f25f
+Author: zach-is-my-name <zach.greco@gmail.com>
+Date:   Wed Oct 3 07:20:50 2018 -0400
+
+    Moved <RemoveStep /> state into immediate parent
+zmg@zmg-acer:~/GoalZapp/client/src$ git status
+On branch Refactor
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	../../server/Expored_GraphCool_Schema/
+
+nothing added to commit but untracked files present (use "git add" to track)
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash list
+stash@{0}: WIP on (no branch): e6ff078 <Reject Step />
+stash@{1}: WIP on Refactor: bc3262c <AddStep /> add step to clonedSteps
+stash@{2}: WIP on Refactor: 0b4be30 <AddStep /> fixed add Step submit step order
+stash@{3}: WIP on Refactor: fe58a1c <UserFeed /> holds goalDocId state
+stash@{4}: WIP on Refactor: e103ca7 Scaffolded Smart Components
+stash@{5}: WIP on Refactor: e103ca7 Scaffolded Smart Components
+stash@{6}: WIP on SuggestInPlace: 567435f5 fixed bugs AcceptStep.js, SuggestStep.js
+stash@{7}: WIP on auth_attempt1: fa9ae44 this is really messed up, await a greater mind to untangle it
+stash@{8}: WIP on permission: 255e4ab Add user to User Model
+stash@{9}: WIP on step_render: 5fbfb22 re-org files/folders
+stash@{10}: WIP on redux: 69ca1ee Set_Step Action Creator pushes submitted step to currentGoalSteps: [ ], with immutability-helper.
+stash@{11}: WIP on (no branch): 5a6e0a9 Submit goal working, with GraphQL mutation
+stash@{12}: WIP on proxy: c5d6a49 proxy working without data
+stash@{13}: WIP on proxy: c5d6a49 proxy working without data
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash show stash@{0}
+ client/src/Components/Steps/AcceptStep.js                              | 230 -------------------------------------------------------------------------------------------------------------------------------------
+ client/src/Components/Steps/AddStep-smart.js                           |  10 +++---
+ client/src/Components/Steps/RejectStep-smart.js                        |  16 +++++-----
+ client/src/Components/Steps/RemoveStep-smart.js                        |   5 +--
+ client/src/Components/Steps/Sortable/Foreign/ForeignStep.js            |   6 ++--
+ client/src/Components/Steps/Sortable/Foreign/ForeignStepWithButtons.js |   4 +--
+ client/src/Components/Steps/Sortable/OwnGoal/OwnStep.js                |  57 ++++++++++++++++++++-------------
+ client/src/Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js     |  79 +++++++++++++++++++++++++---------------------
+ client/src/Components/Steps/SuggestStepSmart.js                        |   3 --
+ 9 files changed, 99 insertions(+), 311 deletions(-)
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash branch tmp stash@{0}
+error: Your local changes to the following files would be overwritten by checkout:
+	client/src/Components/Steps/RemoveStep-smart.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStep.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+Please, commit your changes or stash them before you can switch branches.
+Aborting
+zmg@zmg-acer:~/GoalZapp/client/src$ git add . 
+\zmg@zmg-acer:~/GoalZapp/client/src$ git commit 
+[Refactor 5dc33a9] merged changes
+ 3 files changed, 123 insertions(+), 197 deletions(-)
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash branch tmp stash@{0}
+Switched to a new branch 'tmp'
+Removing client/src/Components/Steps/AcceptStep.js
+On branch tmp
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	deleted:    Components/Steps/AcceptStep.js
+	modified:   Components/Steps/AddStep-smart.js
+	modified:   Components/Steps/RejectStep-smart.js
+	modified:   Components/Steps/RemoveStep-smart.js
+	modified:   Components/Steps/Sortable/Foreign/ForeignStep.js
+	modified:   Components/Steps/Sortable/Foreign/ForeignStepWithButtons.js
+	modified:   Components/Steps/Sortable/OwnGoal/OwnStep.js
+	modified:   Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+	modified:   Components/Steps/SuggestStepSmart.js
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	../../server/Expored_GraphCool_Schema/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped stash@{0} (436ef3132760540da649803ec0a3ee5cfa1a7baf)
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout Refactor 
+error: Your local changes to the following files would be overwritten by checkout:
+	client/src/Components/Steps/AddStep-smart.js
+	client/src/Components/Steps/RejectStep-smart.js
+	client/src/Components/Steps/RemoveStep-smart.js
+	client/src/Components/Steps/Sortable/Foreign/ForeignStep.js
+	client/src/Components/Steps/Sortable/Foreign/ForeignStepWithButtons.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStep.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+	client/src/Components/Steps/SuggestStepSmart.js
+Please, commit your changes or stash them before you can switch branches.
+Aborting
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash
+Saved working directory and index state WIP on tmp: e6ff078 <Reject Step />
+HEAD is now at e6ff078 <Reject Step />
+zmg@zmg-acer:~/GoalZapp/client/src$ git branch
+  Refactor
+  SecondPassListOps
+  SuggestInPlace
+  auth
+  auth_atempt2_routing
+  auth_attempt1
+  clean_up
+  css
+  fix_login
+  folder_restack
+  globalfeed
+  graphcool
+  improve_step/suggest_list
+  master
+  permissions
+  proxy
+  redux
+  rewrite
+  sortable
+  stateful
+  step_render
+  steps
+  suggest
+  temp-branch
+* tmp
+  user
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout Refactor 
+Switched to branch 'Refactor'
+zmg@zmg-acer:~/GoalZapp/client/src$ git add .
+zmg@zmg-acer:~/GoalZapp/client/src$ git commit
+[Refactor 90c3abe] merged changes
+ 2 files changed, 27 insertions(+), 6 deletions(-)
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash branch tmp stash@{0}
+fatal: A branch named 'tmp' already exists.
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash branch tmp1 stash@{0}
+Switched to a new branch 'tmp1'
+Removing client/src/Components/Steps/AcceptStep.js
+On branch tmp1
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	deleted:    Components/Steps/AcceptStep.js
+	modified:   Components/Steps/AddStep-smart.js
+	modified:   Components/Steps/RejectStep-smart.js
+	modified:   Components/Steps/RemoveStep-smart.js
+	modified:   Components/Steps/Sortable/Foreign/ForeignStep.js
+	modified:   Components/Steps/Sortable/Foreign/ForeignStepWithButtons.js
+	modified:   Components/Steps/Sortable/OwnGoal/OwnStep.js
+	modified:   Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+	modified:   Components/Steps/SuggestStepSmart.js
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	../../server/Expored_GraphCool_Schema/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped stash@{0} (941e162a6a0c759d0a808ac6c0cc8869625bebe9)
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout Refactor 
+error: Your local changes to the following files would be overwritten by checkout:
+	client/src/Components/Steps/AddStep-smart.js
+	client/src/Components/Steps/RejectStep-smart.js
+	client/src/Components/Steps/RemoveStep-smart.js
+	client/src/Components/Steps/Sortable/Foreign/ForeignStep.js
+	client/src/Components/Steps/Sortable/Foreign/ForeignStepWithButtons.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStep.js
+	client/src/Components/Steps/Sortable/OwnGoal/OwnStepWithButtons.js
+	client/src/Components/Steps/SuggestStepSmart.js
+Please, commit your changes or stash them before you can switch branches.
+Aborting
+zmg@zmg-acer:~/GoalZapp/client/src$ git stash
+Saved working directory and index state WIP on tmp1: e6ff078 <Reject Step />
+HEAD is now at e6ff078 <Reject Step />
+zmg@zmg-acer:~/GoalZapp/client/src$ git checkout Refactor 
+Switched to branch 'Refactor'
+zmg@zmg-acer:~/GoalZapp/client/src$ git add .
+zmg@zmg-acer:~/GoalZapp/client/src$ git commit 
+[Refactor 1d63477] Fixed <RejectStep /> from botched detached head recovery
+ 2 files changed, 18 insertions(+), 5 deletions(-)
+zmg@zmg-acer:~/GoalZapp/client/src$ 
+

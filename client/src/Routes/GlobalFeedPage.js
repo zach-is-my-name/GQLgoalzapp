@@ -5,6 +5,20 @@ import gql from 'graphql-tag';
 
 import GlobalFeed from '../Components/Feed/GlobalFeed'
 
+const AllGoalDocs = gql `
+  query {
+    allGoalDocs(orderBy: createdAt_DESC)
+    {
+      goal
+      id
+      owners {
+        userName
+        id
+      }
+    }
+  }
+  `
+
 class GlobalFeedPage extends Component {
 
   render() {
@@ -23,18 +37,6 @@ const {loading, error, allGoalDocs}  = this.props;
   }
 }
 
-const AllGoalDocs = gql `
-query {
-  allGoalDocs(orderBy: createdAt_DESC)
-  {
-  goal
-  id
-  owners {
-    userName
-  }
-  }
-}
-`
 
 const withData = graphql(AllGoalDocs, {
 props: ({data: {loading, error, allGoalDocs }}) => ({

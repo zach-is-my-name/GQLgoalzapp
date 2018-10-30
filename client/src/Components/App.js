@@ -64,12 +64,13 @@ export class App extends Component {
           </div>
           <MenuButton logout={this._logout} currentUser={this.props.data.user.userName}/>
           <Switch>
+            <Route path="/userfeed/:userid/:goaldocid" component={UserFeedPage} />
             <Route path="/userfeed/:userid" component={UserFeedPage}/>
             <Route exact path="/" component={GlobalFeedPage}/>
           </Switch>
         </div>
-          )
-          }
+              )
+              }
 
 
           renderLoggedOut() {
