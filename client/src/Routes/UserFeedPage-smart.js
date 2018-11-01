@@ -44,13 +44,13 @@ class UserFeedPage extends Component {
 
   componentDidMount() {
     const {match} = this.props;
+    match.params.goaldocid ? this.setState({goalDocId: match.params.goaldocid}) : null
   }
 
   render() {
     const {match} = this.props;
-    // console.log(match)
+    console.log(match)
     const {loading, error, User} = this.props.targetUserQuery
-    // this.dispatchtargetUserID(match.params.userid)
     if (loading) {
       return (<div>
         Loading..
@@ -64,7 +64,6 @@ class UserFeedPage extends Component {
         <TargetUser targetUserName={User.userName || ''}/>
         <SelectGoal
           targetUserId={User.id}
-          userId={this.props.userQuery.user.id}
           setGoalDocId={this._setGoalDocId}
           value={this.state.goalDocId}
           match={match}
@@ -73,7 +72,7 @@ class UserFeedPage extends Component {
         {
           match.params.goaldocid || this.state.goalDocId
             ? <CurrentSteps
-              loggedInUser={this.props.userQuery.user.id}
+              loggedInUser={this.props.userQuery.user ? this.props.userQuery.user.id : null}
               targetUser={User.id}
               goalDocId={match.params.goaldocid || this.state.goalDocId}
               />
@@ -94,6 +93,7 @@ class UserFeedPage extends Component {
 
   _setGoalDocId(event) {
     this.setState({goalDocId: event.target.value})
+    event.preventDefault()
   }
 }
 

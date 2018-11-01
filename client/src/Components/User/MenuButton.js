@@ -19,7 +19,7 @@ handleSelection(value, event) {
     return (
       <Wrapper className="MenuButton" onSelection={this.handleSelection}>
         <Button className="MenuButton-button">
-          {!this.props.currentUser ? 'blank' : this.props.currentUser}
+          {this.props.currentUser}
           {/* {this.props.currentUser} */}
         </Button>
         <Menu className="MenuButton-menu">

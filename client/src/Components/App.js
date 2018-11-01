@@ -50,78 +50,80 @@ export class App extends Component {
   //     }
   //   }
 
+  render() {
+    if (this.props.data.loading) {
+      return <div>Loading...</div>
+    }
+  if (this.props.data) {
+    return (
+       <div className="App">
+         <h1 className="logo">GoalZapp</h1>
+         <div className="current-user">
+           {/* <CurrentUser user={this.props.data.user ? this.props.data.user.username : 'anonymous'} /> */}
+         </div>
+         <MenuButton logout={this._logout} currentUser={this.props.data.user ? this.props.data.user.username : 'anonymous' }/>
+         <Switch>
+           <Route exact  path='/userfeed/:userid/:goaldocid' component={UserFeedPage} />
+           <Route exact  path='/userfeed/:userid' component={UserFeedPage} />
+           <Route path='/userfeed/:userid' component={UserFeedPage} />
+           <Route exact path='/userfeed' component={UserFeedPage} />
+           <Route exact path="/" component={GlobalFeedPage}/>
+           {/* <Route path='/signup' component={CreateUser} /> */}
+         </Switch>
+       </div>
+  )
+    // this.renderApp()
+  }
+    // if (this._isLoggedIn()) {
+    //   return this.renderLoggedIn()
+    // } else {
+    //   return this.renderLoggedOut()
+    // }
+  }
+
   _isLoggedIn = () => {
     return this.props.data.user
   }
 
-    renderLoggedIn() {
-      // console.log('renderLoggedIn()')
-      return (
-        <div className="App">
-          <h1 className="logo">GoalZapp</h1>
-          <div className="current-user">
-            {/* <CurrentUser user={this.props.data.user.userName}/> */}
-          </div>
-          <MenuButton logout={this._logout} currentUser={this.props.data.user.userName}/>
-          <Switch>
-            <Route path="/userfeed/:userid/:goaldocid" component={UserFeedPage} />
-            <Route path="/userfeed/:userid" component={UserFeedPage}/>
-            <Route exact path="/" component={GlobalFeedPage}/>
-          </Switch>
-        </div>
-              )
-              }
+  renderApp() {
+    // console.log('renderLoggedIn()')
+    // console.log(this.props.data)
+    // return (
+    // )
+  }
 
+  renderLoggedOut() {
+    console.log('renderLoggedOut()')
+    return (<div className="App">
+      <h1>GoalZapp</h1>
+      <br/>
 
-          renderLoggedOut() {
-            console.log('renderLoggedOut()')
-            return (
-              <div className = "App">
-                <h1>GoalZapp</h1>
-                <br/>
+      <LoginAuth0 clientId={clientId} domain={domain}/>
+      <br/>
+    </div>)
+  }
 
-                <LoginAuth0 clientId={clientId} domain={domain}/>
-                <br/>
-              </div>
-            )
-          }
+  _logout = () => {
+    console.log('CLICKED LOGOUT')
+    // remove token from local storage and reload page to reset apollo client
+    window.localStorage.removeItem('auth0IdToken')
+    console.log('Token Removed')
+    location.reload()
+  }
 
-          _logout = () => {
-            console.log('CLICKED LOGOUT')
-            // remove token from local storage and reload page to reset apollo client
-            window.localStorage.removeItem('auth0IdToken')
-            console.log('Token Removed')
-            location.reload()
-          }
+}
 
-          render() {
-            const {match} = this.props;
-            if (this.props.data.loading) {
-              return <div>Loading...</div>
-            }
-            if (this._isLoggedIn()) {
-              return this.renderLoggedIn()
-            } else {
-              return this.renderLoggedOut()
-            }
-          }
-        }
+const WithQueries = compose(graphql(userQuery, {
+  options: {
+    fetchPolicy: 'network-only'
+  }
+}))(withRouter(App))
+// graphql(currentUserName, {
+//   name:'currentUserName'
+// }))(withRouter(App))
 
-
-  const WithQueries = compose(graphql(userQuery, {
-            options: {
-              fetchPolicy: 'network-only'
-            }
-          }
-        ),
-        // graphql(currentUserName, {
-            //   name:'currentUserName'
-        // })
-      ) (withRouter(App))
-
-      const mapStateToProps = (state,props) => {
-        return {
-          currentUser: state.goals.loggedInUserName
-        }
-      }
-export default connect(mapStateToProps)(WithQueries)
+// const mapStateToProps = (state, props) => {
+//   return {currentUser: state.goals.loggedInUserName}
+// }
+// export default connect(mapStateToProps)(WithQueries)
+export default WithQueries

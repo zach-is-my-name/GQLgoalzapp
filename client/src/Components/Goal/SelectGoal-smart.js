@@ -35,7 +35,7 @@ class SelectGoalSmart extends React.Component {
     return (
       <div>
         <SelectGoalForm
-          // match={this.props.match}
+          match={this.props.match}
           goalDocs={allGoalDocs}
           value={this.props.value}
           handleChange={this.props.setGoalDocId}

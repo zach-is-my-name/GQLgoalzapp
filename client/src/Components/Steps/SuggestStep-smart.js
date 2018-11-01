@@ -68,14 +68,35 @@ class SuggestStepSmart extends Component {
     }
   }
 
+  render() {
+
+    if (this.props.loggedInUser && this.props.loggedInUser !== this.props.targetUser) {
+      return (
+        <SuggestStep _submitSuggestedStep={this._submitSuggestedStep}
+          handleChange={this.handleChange}
+          value={this.state.step} />
+      )
+    } else if (!this.props.loggedInUser) {
+      // TODO also check if the cloned steps are owned by the user.  This becomes more clear with 'suggestions by user'
+      return null
+    }
+    else {
+      console.log('Not a foreign user!')
+      return null
+    }
+  }
   handleChange(e) {
     this.setState({step: e.target.value});
   }
 
-async _submitSuggestedStep(event) {
+  async _submitSuggestedStep(event) {
     event.preventDefault()
     // console.log(this._reorderSteps(this.props.stepIdQuery))
-    await this._submitSuggestedStepMutation(this._reorderSteps(this.props.clonedStepIdQuery))
+    if (this.props.loggedInUser) {
+      await this._submitSuggestedStepMutation(this._reorderSteps(this.props.clonedStepIdQuery))
+  } else if (!this.props.loggedInUser && this.state.step) {
+    //render create user; save step state; when create user resolves send mutation
+  }
   }
 
   _reorderSteps(queryResult) {
@@ -123,15 +144,6 @@ async _submitSuggestedStep(event) {
     })
   }
 
-  render() {
-
-    if (this.props.loggedInUser !== this.props.targetUser) {
-      return (<SuggestStep _submitSuggestedStep={this._submitSuggestedStep} handleChange={this.handleChange} value={this.state.step}  />)
-    } else {
-      console.log('Not a foreign user!')
-      return null
-    }
-  }
 }
 
 export default compose(
@@ -140,7 +152,7 @@ export default compose(
     options: (ownProps) => ({
       variables: {
         id: ownProps.goalDocId
-      }, 
+      },
       fetchPolicy: 'network-only'
     })
   }),

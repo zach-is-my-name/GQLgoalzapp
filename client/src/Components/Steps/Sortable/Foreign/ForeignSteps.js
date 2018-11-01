@@ -18,17 +18,17 @@ const ForeignSteps = SortableContainer(({
           {clonedSteps.map((stepObj, index) => (
             <ForeignStep
               key={`item-${index}`}
-                    index={index}
-                    stepIndex={index}
-                    stepObj={stepObj}
-                    id={stepObj.id}
-                    newIndex={newIndex}
-                    oldIndex={oldIndex}
-                    indexInMotion={indexInMotion}
-                    goalDocId={goalDocId}
-                    targetUser={targetUser}
-                    loggedInUser={loggedInUser}
-                />
+              index={index}
+              stepIndex={index}
+              stepObj={stepObj}
+              id={stepObj.id}
+              newIndex={newIndex}
+              oldIndex={oldIndex}
+              indexInMotion={indexInMotion}
+              goalDocId={goalDocId}
+              targetUser={targetUser}
+              loggedInUser={loggedInUser}
+            />
             ))}
 
         </ul>

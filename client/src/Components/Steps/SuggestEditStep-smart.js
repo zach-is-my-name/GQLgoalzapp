@@ -64,11 +64,16 @@ class SuggestEditStep extends Component {
 
 async _submitEditedStep(e) {
     e.preventDefault()
-    await this.props.updateClonedStep({variables: {
-      id: this.props.stepObj.id,
-      step: this.state.editedStep
-    }})
-    this.props.unrenderSuggestEditStepFunction()
+    if (this.props.loggedInUser && this.props.loggedInUser !== this.props.targetUser) {
+      await this.props.updateClonedStep({variables: {
+        id: this.props.stepObj.id,
+        step: this.state.editedStep
+      }})
+      this.props.unrenderSuggestEditStepFunction()
+    } else if (!this.props.loggedInUser) {
+      // TODO prompt login or create user; if user owns clonedSteps, resolve action
+    }
+
 }
 }
 

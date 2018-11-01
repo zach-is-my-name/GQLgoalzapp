@@ -36,10 +36,6 @@ ReactDOM.render(
       <Router>
         <div>
           <Route  path='/' component={App} />
-          {/* <Route path='/userfeed/:userid' component={UserFeedPage} /> */}
-          <Route path='/signup' component={CreateUser} />
-          {/* <Route exact path='/userfeed' component={UserFeedPage} /> */}
-          {/* <Route  path='/userfeed/:userid' component={UserFeedPage} /> */}
           {/* <Route component={NotFound} /> */}
         </div>
       </Router>

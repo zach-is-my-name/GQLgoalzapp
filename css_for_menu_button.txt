@@ -1,0 +1,12 @@
+.app  {
+    display: flex;
+    flex-direction: column;
+}
+
+.MenuButton {
+    max-width: 150px;
+    align-self: flex-end;
+    margin-right: 41px;
+}
+
+// get MenuButton aligned horizonally with GoalZapp logo

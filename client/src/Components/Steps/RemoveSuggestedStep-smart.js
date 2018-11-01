@@ -47,7 +47,13 @@ componentDidMount() {
 }
 
  render() {
-   this._submitRemoveSuggestedStep(this.props.idToRemove)
+   if (this.props.loggedInUser) {
+     this._submitRemoveSuggestedStep(this.props.idToRemove)
+   }
+   else if (!this.props.loggedInUser) {
+     // message: 'cannot remove owner x' suggestion
+     return null
+   }
    return null
 }
 

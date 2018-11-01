@@ -51,16 +51,24 @@ class ForeignGoalCurrentSteps extends Component {
   }
 
   render() {
-  return (
-    <div>
-      {this.state.renderMoveStep ?
-        <SuggestMoveStep
-          _unrenderMoveStep={this._unrenderMoveStep}
-          clonedSteps={this.state.movedClonedSteps}
-          newIndex={this.state.newIndex}
-        /> : null}
+      let suggestMoveStep
+      if (this.state.renderMoveStep && this.props.loggedInUser) {
+       suggestMoveStep =  <SuggestMoveStep
+         _unrenderMoveStep={this._unrenderMoveStep}
+         clonedSteps={this.state.movedClonedSteps}
+         newIndex={this.state.newIndex} />
+
+      } else if (this.state.renderMoveStep && !this.props.loggedInUser ) {
+        suggestMoveStep = null
+        // create user; save state; resolve create user, render component / submit mutation
+      } else {
+        suggestMoveStep = null
+      }
+
+    return (
 
       <div className="steps-container">
+        {suggestMoveStep}
         <ForeignSteps
           clonedSteps={this.props.clonedSteps}
           onSortEnd={this.onSortEnd}
@@ -74,7 +82,6 @@ class ForeignGoalCurrentSteps extends Component {
           loggedInUser={this.props.loggedInUser}
         />
       </div>
-    </div>
       )
       }
 

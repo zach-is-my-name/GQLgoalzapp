@@ -33,7 +33,12 @@ componentDidMount() {
 
 
   render() {
-    this._suggestRemoveStep()
+    if (this.props.loggedInUser && this.props.loggedInUser !== this.props.targetUser) {
+      this._suggestRemoveStep()
+    } else if (!this.props.loggedInUser) {
+      // TODO check if user owns clonedSteps; prompt log-in or create user;  if true, resolve action; if false, onboard and give fresh clonedSteps
+      return null
+    }
     return null
   }
 
