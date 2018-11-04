@@ -76,10 +76,11 @@ const signinUser = gql`
     })
   }
 
-  _handleSubmitEmailLogin() {
-    const {email, password} = this.state
+  _handleSubmitEmailLogin(event) {
+    event.preventDefault()
+    const {emailValue, passwordValue} = this.state
 
-    this.props.signinUser({variables: {email, password}})
+    this.props.signinUser({variables: {email: emailValue, password: passwordValue}})
       .then((response) => {
         window.localStorage.setItem('graphcoolToken', response.data.signinUser.token)
         this.props.history.push('/')
