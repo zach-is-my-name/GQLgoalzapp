@@ -6,9 +6,9 @@ const FeedEntry = ({entry}) => {
   // console.log(entry)
 const {goal} = entry
 const owner = entry.owners === null ? 'anonymous': entry.owners.userName
-console.log('entry', entry)
-console.log('goal',goal)
-console.log('owner', owner)
+// console.log('entry', entry)
+// console.log('goal',goal)
+// console.log('owner', owner)
 // console.log(owner);
 // console.log( entry.owners.userName !== null ? `username is ${entry.owners.userName}` :`no username`)
 return (

@@ -3,9 +3,10 @@ import {withRouter, Redirect} from 'react-router-dom'
 import {graphql} from 'react-apollo'
 import gql from 'graphql-tag';
 
-class CreateUser extends React.Component {
+class CreateUserAuth0 extends React.Component {
   state = {
-    userName: ''
+    userName: '',
+
   }
 
   render() {
@@ -15,12 +16,21 @@ class CreateUser extends React.Component {
       )
     }
     // redirect if user is logged in or did not finish Auth0 Lock dialog
-    if (this.props.data.user || window.localStorage.getItem('auth0IdToken') === null) {
+    const auth0IdToken = window.localStorage.getItem('auth0IdToken')
+    const graphcoolToken = window.localStorage.getItem('graphcoolToken')
+    if (auth0IdToken || graphcoolToken ) {
       console.warn('not a new user or already logged in')
-      return (<Redirect to={{
-        pathname: '/'
-      }}/>)
-    }
+      return (
+        <Redirect to={{
+          pathname: '/'
+        }}/>)
+    } else if (auth0IdToken  === null  ) {
+      console.warn('To register using Google, first complete the sign-up tab of the Auth0 pop-up')
+        return (
+      <Redirect to={{
+          pathname: '/'
+      }}/>
+        )}
     return (
       <div>
         <input value={this.state.userName} placeholder='Name' onChange={(e) => this.setState({userName:e.target.value})}/>
@@ -70,4 +80,4 @@ export default graphql(createUser, {name: 'createUser'})(graphql(userQuery, {
   options: {
     fetchPolicy: 'network-only'
   }
-})(withRouter(CreateUser)))
+})(withRouter(CreateUserAuth0)))

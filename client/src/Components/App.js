@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import {graphql, compose} from 'react-apollo';
+import {graphql, compose, withApollo} from 'react-apollo';
 import gql from 'graphql-tag';
 import '../style/App.css';
 import '../style/fonts/bentonsans_regular-webfont.woff'
@@ -11,7 +11,7 @@ import {withRouter, Switch, Route, BrowserRouter as Router} from 'react-router-d
 import {connect} from 'react-redux';
 import UserFeedPage from '../Routes/UserFeedPage-smart'
 import GlobalFeedPage from '../Routes/GlobalFeedPage'
-import LoginAuth0 from './LoginAuth0'
+import Login from './Login'
 import CurrentUser from './User/CurrentUser'
 import * as actions from '../Actions/actions'
 import {Link} from 'react-router-dom';
@@ -28,12 +28,12 @@ export const userQuery = gql `
             }
           }
         `
-const currentUserName = gql `
-          query($userId: ID) {
-            User (id: $userId){
-              userName
-            }
-          }`
+// const currentUserName = gql `
+//           query($userId: ID) {
+//             User (id: $userId){
+//               userName
+//             }
+//           }`
 
 export class App extends Component {
 
@@ -50,18 +50,40 @@ export class App extends Component {
   //     }
   //   }
 
+
+
+
   render() {
+    const auth0IdToken = window.localStorage.getItem('auth0IdToken')
+    const graphcoolToken = window.localStorage.getItem('graphcoolToken')
+    // console.log('id token', window.localStorage.getItem('auth0IdToken'))
     if (this.props.data.loading) {
+      // console.log('returned loading')
       return <div>Loading...</div>
+
+    } else if (auth0IdToken || graphcoolToken) {
+        this.props.data.refetch()
+        return this._renderApp()
+      } else {
+        // console.log('returned log-out / no token')
+        return this.renderLoggedOut()
+      }
     }
-  if (this.props.data) {
-    return (
+
+  _isLoggedIn = () => {
+    return this.props.data.user
+  }
+
+
+_renderApp() {
+      // console.log('returned render')
+       return (
        <div className="App">
          <h1 className="logo">GoalZapp</h1>
          <div className="current-user">
            {/* <CurrentUser user={this.props.data.user ? this.props.data.user.username : 'anonymous'} /> */}
          </div>
-         <MenuButton logout={this._logout} currentUser={this.props.data.user ? this.props.data.user.username : 'anonymous' }/>
+         <MenuButton logout={this._logout} currentUser={this.props.data.user ? this.props.data.user.userName : 'anonymous' }/>
          <Switch>
            <Route exact  path='/userfeed/:userid/:goaldocid' component={UserFeedPage} />
            <Route exact  path='/userfeed/:userid' component={UserFeedPage} />
@@ -71,49 +93,38 @@ export class App extends Component {
            {/* <Route path='/signup' component={CreateUser} /> */}
          </Switch>
        </div>
-  )
-    // this.renderApp()
-  }
-    // if (this._isLoggedIn()) {
-    //   return this.renderLoggedIn()
-    // } else {
-    //   return this.renderLoggedOut()
-    // }
-  }
+     )
 
-  _isLoggedIn = () => {
-    return this.props.data.user
-  }
-
-  renderApp() {
-    // console.log('renderLoggedIn()')
-    // console.log(this.props.data)
-    // return (
-    // )
-  }
+}
 
   renderLoggedOut() {
-    console.log('renderLoggedOut()')
-    return (<div className="App">
-      <h1>GoalZapp</h1>
-      <br/>
+    // console.log('renderLoggedOut()')
+    return (
+      <div className="App">
+        <h1>GoalZapp</h1>
+        <br/>
 
-      <LoginAuth0 clientId={clientId} domain={domain}/>
-      <br/>
-    </div>)
+        <div className="app-login-options">
+          <Login clientId={clientId} domain={domain}/>
+          <br/>
+        </div>
+      </div>
+    )
   }
 
   _logout = () => {
     console.log('CLICKED LOGOUT')
     // remove token from local storage and reload page to reset apollo client
     window.localStorage.removeItem('auth0IdToken')
+    window.localStorage.removeItem('graphcoolToken')
     console.log('Token Removed')
     location.reload()
   }
 
 }
 
-const WithQueries = compose(graphql(userQuery, {
+const WithQueries =
+compose(graphql(userQuery, {
   options: {
     fetchPolicy: 'network-only'
   }

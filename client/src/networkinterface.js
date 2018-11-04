@@ -16,12 +16,15 @@ export const httpLink  = createHttpLink({
 
 const middlewareLink = setContext(() => ({
   headers: {
-    authorization: `Bearer ${localStorage.getItem('auth0IdToken')}` || null
+    // authorization: `Bearer ${localStorage.getItem('auth0IdToken')}` || `Bearer ${localStorage.getItem('graphcoolToken')}` || null
+    authorization: `Bearer ${localStorage.getItem('auth0IdToken') || localStorage.getItem('graphcoolToken')}` ||  null
   }
 }))
 
 export const link = middlewareLink.concat(httpLink)
-
+// const link = middlewareLink.concat(httpLink)
+// console.log(link)
+// export link
 // networkInterface.use([{
 //   applyMiddleware (req, next) {
 //     if (!req.options.headers) {

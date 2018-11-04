@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import GlobalFeed from '../Components/Feed/GlobalFeed'
 
 const AllGoalDocs = gql `
-  query {
+  query allGoalDocs {
     allGoalDocs(orderBy: createdAt_DESC)
     {
       goal

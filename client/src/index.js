@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './Components/App';
-import CreateUser from './Components/User/CreateUser';
+import CreateUserAuth0 from './Components/User/CreateUserAuth0';
 import {store} from './store';
 import {Provider} from 'react-redux'
 import { BrowserRouter as Router, Route, Swtich } from 'react-router-dom'
