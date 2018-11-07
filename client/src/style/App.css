@@ -79,10 +79,14 @@ h1 {
   width: 100%;
 }
 
+.menu-button {
+  margin-left: 722px;
+}
+
 .current-user {
   /*padding-left: 1em;*/
   display: inline-block;
-  margin-left: 78%;
+  /* margin-left: 78%; */
   font-family: bentonreg;
   font-size: 14pt;
 }

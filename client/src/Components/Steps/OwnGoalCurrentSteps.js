@@ -28,7 +28,10 @@ class OwnGoalCurrentSteps extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.steps !== prevProps.steps) {
+    if (JSON.stringify(this.props.steps) !== JSON.stringify(prevProps.steps)) {
+      console.log(Boolean(this.props.steps === prevProps.steps))
+      console.log('prevProps', prevProps.steps)
+      console.log('this.props', this.props.steps)
       this.setState({
         movedSteps: [...new Set(...this.props.steps, ...this.state.movedSteps)]
         // steps: [...this.props.steps, ...this.state.steps,]
@@ -54,14 +57,14 @@ class OwnGoalCurrentSteps extends Component {
             /> : null}
         </div>
         <div>
-          <button onClick={this._toggleSuggestedSteps}>Show/Hide Sugguested Steps
-          </button>
-          {this.state.toggleSuggestedSteps ? clonedSteps : steps}
+          {/* <button onClick={this._toggleSuggestedSteps}>Show/Hide Sugguested Steps */}
+          {/* </button> */}
+          {/* {this.state.toggleSuggestedSteps ? clonedSteps : steps} */}
           <OwnSteps
             onSortEnd={this.onSortEnd}
             randomColorStep={this.props.randomColorStep}
             currentGoalSteps={this.props.steps}
-            currentGoalStepsClone={this.props.clonedSteps}
+            currentGoalClonedSteps={this.props.clonedSteps}
             onSortEnd={this.onSortEnd}
             helperClass="sortable-helper"
             hideSortableGhost={true}
@@ -72,8 +75,11 @@ class OwnGoalCurrentSteps extends Component {
             toggleSuggestedSteps={this.state.toggleSuggestedSteps}
             goalDocId={this.props.goalDocId}
             targetUser={this.props.targetUser}
-            loggedInUser={this.props.loggedInUser}
+            loggedInUserId={this.props.loggedInUserId}
             getArr={this.getArr}
+            selfState={this.props.selfState}
+            suggestersIndex={this.props.suggestersIndex}
+            selectedSuggesterId={this.props.selectedSuggesterId}
           />
         </div>
       </div>

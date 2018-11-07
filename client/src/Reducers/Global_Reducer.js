@@ -8,7 +8,7 @@ const initialState = {
   currentGoal: '',
   currentGoalID:'',
   currentGoalSteps:[],
-  currentGoalStepsClone: [],
+  currentGoalClonedSteps: [],
   loggedInUserID:'',
   loggedInUserName:'',
   loggedIn: false,
@@ -52,7 +52,7 @@ if (action.type === 'SET_GOALDOC') {
   currentGoal: {$set:action.flatGoalDoc.goal},
   currentGoalID: {$set:action.flatGoalDoc.id},
   currentGoalSteps: {$set:action.flatGoalDoc.flatSteps},
-  currentGoalStepsClone: {$set:action.flatGoalDoc.flatClonedSteps}
+  currentGoalClonedSteps: {$set:action.flatGoalDoc.flatClonedSteps}
   })
 }
 
@@ -73,20 +73,20 @@ if (action.type === 'SET_SUGGESTED_STEP'){
   // console.log('action.suggestedStep',action.suggestedStep)
   // console.log('action.index suggestedStep',action.index)
   return update(state, {
-    currentGoalStepsClone: {$splice:[[action.index , 0, action.stepObj]]
+    currentGoalClonedSteps: {$splice:[[action.index , 0, action.stepObj]]
   }
   })
 }
 
 if (action.type === 'SET_SUGGESTED_TO_FALSE') {
   return update(state, {
-    currentGoalStepsClone: {$splice: [[action.index, 1, action.updatedStepObj]]}
+    currentGoalClonedSteps: {$splice: [[action.index, 1, action.updatedStepObj]]}
   } )
 }
 
 if (action.type === 'SET_CLONED_STEP_POSITION_INDEX') {
   return update (state, {
-    currentGoalStepsClone: {$set: action.stepsArr}
+    currentGoalClonedSteps: {$set: action.stepsArr}
   })
 }
 
@@ -99,7 +99,7 @@ if(action.type === 'SET_STEP_ID_FROM_SERVER') {
 
 if (action.type === 'SET_CLONED_STEP_ID_FROM_SERVER'){
   return update(state, {
-    currentGoalStepsClone: {[action.index]: {id: { $set: action.id}}}
+    currentGoalClonedSteps: {[action.index]: {id: { $set: action.id}}}
   })
 }
 
@@ -136,7 +136,7 @@ if (action.type === 'REMOVE_STEP'){
 if (action.type === 'REMOVE_CLONED_STEP') {
     // console.log(action.index)
   return update( state, {
-  currentGoalStepsClone:
+  currentGoalClonedSteps:
 {$splice: [[action.index, 1]]}
   })
 }
@@ -149,7 +149,7 @@ if(action.type === 'EDIT_STEP') {
 
 if(action.type === 'SUGGEST_EDIT_STEP') {
   return update( state, {
-  currentGoalStepsClone: {[action.index]: {$set:action.editedStep }}
+  currentGoalClonedSteps: {[action.index]: {$set:action.editedStep }}
   })
 }
 
@@ -161,20 +161,20 @@ if (action.type === 'MOVE_STEP' ){
 
 if (action.type === 'MOVE_STEP_ON_CLONE' ){
   return update( state, {
-    currentGoalStepsClone: {$set:action.newStepOrder}
+    currentGoalClonedSteps: {$set:action.newStepOrder}
   })
 }
 
 if (action.type === 'CLONE_CURRENT_STEPS') {
   // console.log(action.flatSteps)
   return update (state, {
-    currentGoalStepsClone: {$set: action.flatSteps}
+    currentGoalClonedSteps: {$set: action.flatSteps}
   })
 }
 
 if (action.type === 'SET_CLONED_STEPS_FROM_SERVER') {
   return update(state, {
-    currentGoalStepsClone: {$set: action.flatSteps}
+    currentGoalClonedSteps: {$set: action.flatSteps}
   })
 }
 

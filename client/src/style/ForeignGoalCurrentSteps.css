@@ -59,12 +59,13 @@
 
 ul.sortable-container {
     border: solid 1px black;
-    display: flex;
+     display: flex;
     flex-direction: column;
+    list-style: none;
     width: 50%;
     margin: 0 auto;
     min-height: 194px;
-    /*justify-content: center;*/
+    /* justify-content: center; */
     align-items: center;
     padding: 0;
 }
@@ -101,7 +102,7 @@ ul.sortable-container {
 li.minus-image {
     position: relative;
     /*top: -5px;*/
-    margin-right: 19px;
+    margin-right: 14px;
     height: 30px;
     width: 30px;
 }

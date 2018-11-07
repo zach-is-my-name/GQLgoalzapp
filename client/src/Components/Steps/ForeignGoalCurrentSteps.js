@@ -1,7 +1,4 @@
 /* eslint-disable */
-// debug w/ Live Expression
-// JSON.stringify($r.props.clonedSteps.map(obj => obj.step))
-// JSON.stringify($r.state.clonedSteps.map(obj=> obj.step))
 
 import React, {Component} from 'react';
 import * as actions from '../../Actions/actions.js'
@@ -25,29 +22,21 @@ class ForeignGoalCurrentSteps extends Component {
     // move step function needs a state entry to manipulate
     // that manipulated state gets passed to the move step component and that submits its computed data
   componentDidUpdate(prevProps) {
-    // console.log("prevProps", JSON.stringify(prevProps.clonedSteps.map(obj => obj.step)))
-    // console.log('componentDidUpdate, prevProps.clonedSteps', prevProps.clonedSteps, 'this.props.clonedSteps', this.props.clonedSteps)
     if (this.props.clonedSteps !== prevProps.clonedSteps) {
       console.log('this.props', this.props.clonedSteps)
       console.log('prevProps', prevProps.clonedSteps)
 
-      // console.log('this.props', this.props.clonedSteps.map(obj => obj.step))
-      // console.log('prevProps', prevProps.clonedSteps.map(obj => obj.step))
 
       this.setState({
         //merge
         movedClonedSteps : this.props.clonedSteps
-        // movedClonedSteps : [ ...this.props.clonedSteps]
-        // movedClonedSteps: [...new Set([...this.props.clonedSteps, ...this.state.movedClonedSteps])]
       })
     }
   }
 
   // set state for Move on initial render
   componentDidMount() {
-    // console.log('componentDidMount, this.state.clonedSteps', this.state.clonedSteps, 'this.props.clonedSteps', this.props.clonedSteps)
     this.setState({movedClonedSteps: this.props.clonedSteps})
-    // this.setState({movedClonedSteps:[...this.props.clonedSteps, ...this.state.movedClonedSteps,]})
   }
 
   render() {
@@ -60,7 +49,6 @@ class ForeignGoalCurrentSteps extends Component {
 
       } else if (this.state.renderMoveStep && !this.props.loggedInUser ) {
         suggestMoveStep = null
-        // create user; save state; resolve create user, render component / submit mutation
       } else {
         suggestMoveStep = null
       }

@@ -111,7 +111,7 @@ export const setSuggestedStep = (suggestedStep, index, id) => {
 export const SET_CLONED_STEP_POSITION_INDEX ='SET_CLONED_STEP_POSITION_INDEX'
 export const setClonedStepPositionIndex = () => {
 return  (dispatch, getState) => {
-  const newSteps = getState().goals.currentGoalStepsClone.map((stepObj, index) => {return ({...stepObj, positionIndex: index})
+  const newSteps = getState().goals.currentGoalClonedSteps.map((stepObj, index) => {return ({...stepObj, positionIndex: index})
 })
   const actionObj = {
     type: SET_CLONED_STEP_POSITION_INDEX,

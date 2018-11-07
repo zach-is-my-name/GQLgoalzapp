@@ -85,7 +85,7 @@ class CurrentGoalSmart extends Component {
       currentGoalSteps: state.goals.currentGoalSteps,
       loggedInUser: state.goals.loggedInUserID,
       targetUser: state.goals.targetUserID,
-      currentGoalStepsClone: state.goals.currentGoalStepsClone
+      currentGoalClonedSteps: state.goals.currentGoalClonedSteps
     }
   }
 

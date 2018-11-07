@@ -17,12 +17,12 @@ handleSelection(value, event) {
   render() {
     // console.log(this.props.currentUser)
     return (
-      <Wrapper className="MenuButton" onSelection={this.handleSelection}>
-        <Button className="MenuButton-button">
+      <Wrapper className="menu-button" onSelection={this.handleSelection}>
+        <Button className="menu-button-button">
           {this.props.currentUser}
           {/* {this.props.currentUser} */}
         </Button>
-        <Menu className="MenuButton-menu">
+        <Menu className="menu-button-menu">
           <ul>
             <MenuItem className="menuitem-userfeed">
               <Link  className="menuitem-userfeed"to={`/userfeed/${this.props.currentUserID}`}>{this.props.currentUser}</Link>

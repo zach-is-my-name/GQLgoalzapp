@@ -2,6 +2,20 @@
     font-family: bentonreg;
 }
 
+
 .currentsteps-label {
     margin-left: 256px;
 }
+
+/* .steps-container {
+    border: solid 1px black;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+    min-height: 194px;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+
+} */

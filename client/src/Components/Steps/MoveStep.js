@@ -43,6 +43,17 @@ const goalDocByIdQuery = gql `
        }
       }
     }`;
+
+const  allClonedStepsQuery = gql `
+ query allClonedStepsQuery($goalDocId:ID){
+   allClonedSteps(filter: {goalDoc: {id: $goalDocId}}, orderBy: positionIndex_ASC) {
+      id
+      positionIndex
+      step
+      suggestedStep
+
+    }
+  }`
 class MoveStep extends Component {
   constructor(props) {
     super(props)
@@ -102,10 +113,12 @@ _reorderClonedSteps() {
   const newIndex = this.props.newIndex
   const oldIndex = this.props.oldIndex
   let oldSteps = this.props.clonedSteps.slice()
-  if (clonedSteps[oldIndex].suggestedStep === false) {
        console.log('oldSteps', oldSteps)
        console.log('oldIndex', oldIndex)
        console.log(oldSteps[oldIndex])
+
+  console.log('clonedSteps', clonedSteps)
+  if (clonedSteps[oldIndex].suggestedStep === false) {
        oldSteps[oldIndex].positionIndex= newIndex
        // console.log('oldSteps[oldIndex].positionIndex= newIndex', oldSteps[oldIndex].positionIndex)
       const newSteps = oldSteps.sort((a,b) => {
@@ -181,7 +194,7 @@ graphql(updateClonedStepMutation, {
       return mutate ({
         variables: {
           ...variables
-        }, refetchQueries: ['goalDocByIdQuery']
+        }, refetchQueries: ['goalDocByIdQuery', 'allClonedStepsQuery']
       })
     }
   })

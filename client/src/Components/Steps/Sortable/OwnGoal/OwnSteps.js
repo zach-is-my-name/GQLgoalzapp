@@ -7,20 +7,25 @@ import OwnStep from './OwnStep.js'
 export const OwnSteps = SortableContainer(({goalDocId,
   toggleSuggestedSteps,
   currentGoalSteps,
-  currentGoalStepsClone,
+  currentGoalClonedSteps,
   newIndex,
   oldIndex,
   indexInMotion,
   randomColorStep,
   targetUser,
-  loggedInUser,
+  loggedInUserId,
   renderRemoveStepState,
   unrenderRemoveStepFunct,
-  getArr,}) => {
-  if (toggleSuggestedSteps === true) {
+  getArr,
+  suggestersIndex,
+  selectedSuggesterId,
+ }) => {
+
+    if (selectedSuggesterId !==loggedInUserId) {
+  // if (toggleSuggestedSteps === true) {
     return (
           <ul className="sortable-container">
-            {currentGoalStepsClone.map((stepObj, index, currentGoalStepsClone) =>
+            {currentGoalClonedSteps.map((stepObj, index, currentGoalClonedSteps) =>
               <OwnStep
                 randomColorStep={randomColorStep}
                 key={`item-${index}`}
@@ -33,9 +38,9 @@ export const OwnSteps = SortableContainer(({goalDocId,
                 indexInMotion={indexInMotion}
                 goalDocId={goalDocId}
                 toggleSuggestedSteps={toggleSuggestedSteps}
-                currentGoalStepsClone={currentGoalStepsClone}
+                currentGoalClonedSteps={currentGoalClonedSteps}
                 targetUser={targetUser}
-                loggedInUser={loggedInUser}
+                loggedInUserId={loggedInUserId}
               />
             )}
           </ul>
@@ -57,7 +62,7 @@ export const OwnSteps = SortableContainer(({goalDocId,
                     toggleSuggestedSteps={toggleSuggestedSteps}
                     currentGoalSteps={currentGoalSteps}
                     targetUser={targetUser}
-                    loggedInUser={loggedInUser}
+                    loggedInUserId={loggedInUserId}
                   />
                 )}
               </ul>

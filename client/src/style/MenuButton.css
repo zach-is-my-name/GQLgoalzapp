@@ -1,9 +1,9 @@
-.MenuButton {
+.menu-button {
   display: inline-block;
   /*border: solid 1px black;*/
 }
 
-.MenuButton-button {
+.menu-button-button {
   color: #222;
   font-weight: 600;
   border: solid #222 2px;
@@ -16,7 +16,7 @@
   cursor: pointer;
 }
 
-.MenuButton-menu {
+.menu-button-menu {
   position: absolute;
 }
 

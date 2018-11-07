@@ -7,6 +7,7 @@ import '../../../../style/ForeignGoalCurrentSteps.css'
 import SuggestStepSmart from '../../SuggestStep-smart.js'
 import SuggestRemoveStep from '../../SuggestRemoveStep-smart.js'
 import YesNoPrompt from '../../YesNoPrompt.js'
+import RemoveSuggestedStep from '../../RemoveSuggestedStep-smart.js'
 
 class ForeignStepWithButtons extends Component {
   constructor(props) {
