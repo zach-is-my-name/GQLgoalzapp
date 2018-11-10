@@ -10,25 +10,29 @@ const ForeignSteps = SortableContainer(({
         clonedSteps,
         indexInMotion,
         targetUser,
-        loggedInUser,
-        goalDocId
+        loggedInUserId,
+        goalDocId,
+        suggestersIndex,
+        selectedSuggesterId,
     }) => {
       return (
         <ul className="sortable-container">
-          {clonedSteps.map((stepObj, index) => (
-            <ForeignStep
-              key={`item-${index}`}
-              index={index}
-              stepIndex={index}
-              stepObj={stepObj}
-              id={stepObj.id}
-              newIndex={newIndex}
-              oldIndex={oldIndex}
-              indexInMotion={indexInMotion}
-              goalDocId={goalDocId}
-              targetUser={targetUser}
-              loggedInUser={loggedInUser}
-            />
+            {clonedSteps.map((stepObj, index) => (
+                <ForeignStep
+                    key={`item-${index}`}
+                    index={index}
+                    stepIndex={index}
+                    stepObj={stepObj}
+                    id={stepObj.id}
+                    newIndex={newIndex}
+                    oldIndex={oldIndex}
+                    indexInMotion={indexInMotion}
+                    goalDocId={goalDocId}
+                    targetUser={targetUser}
+                    loggedInUserId={loggedInUserId}
+                    selectedSuggesterId={selectedSuggesterId}
+                    suggestersIndex={suggestersIndex}
+                />
             ))}
 
         </ul>

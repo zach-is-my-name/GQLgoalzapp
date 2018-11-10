@@ -79,6 +79,17 @@ const goalDocByIdQuery = gql `
       }
     }`;
 
+const  allClonedStepsQuery = gql `
+ query allClonedStepsQuery($goalDocId:ID){
+   allClonedSteps(filter: {goalDoc: {id: $goalDocId}}, orderBy: positionIndex_ASC) {
+      id
+      positionIndex
+      step
+      suggestedStep
+
+    }
+  }`
+
 class AddStepSmart extends React.Component {
 
   constructor(props) {
@@ -94,10 +105,13 @@ class AddStepSmart extends React.Component {
     }
   }
 
+  componentDidMount() {
+    console.log('AddStep')
+  }
 
   render() {
     // if (!this.props.data.user) {console.warn('only logged in users can create new posts')}
-    if (this.props.loggedInUser === this.props.targetUser) {
+    if (this.props.loggedInUserId === this.props.targetUser) {
       return <AddStep
         _submitStep={this._submitStep}
         handleChange={this.handleChange}
@@ -244,7 +258,7 @@ graphql(UpdateOrCreateClonedStep, {
         variables: {
           ...variables
         },
-        refetchQueries: ['goalDocByIdQuery' ]
+        refetchQueries: ['goalDocByIdQuery', 'allClonedStepsQuery' ]
       }).catch((error) => {
         console.log(error)
       })

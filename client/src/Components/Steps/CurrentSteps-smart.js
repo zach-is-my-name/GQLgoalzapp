@@ -77,10 +77,11 @@ if (this.props.goalDocById.loading || this.props.allClonedSteps && this.props.al
             <ForeignGoalCurrentSteps
               goalDocId={this.props.goalDocId}
               targetUser={targetUser}
-              loggedInUser={loggedInUser}
+              loggedInUserId={loggedInUserId}
               steps={GoalDoc.steps}
               clonedSteps={GoalDoc.clonedSteps}
-              selfState={this.props.selfState}
+              selectedSuggesterId={this.props.selectedSuggesterId}
+              suggestersIndex={this.props.suggestersIndex}
             />
           : <OwnGoalCurrentSteps
             randomColorStep={this.props.randomColorStep}

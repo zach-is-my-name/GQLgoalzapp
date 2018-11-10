@@ -70,13 +70,13 @@ class SuggestStepSmart extends Component {
 
   render() {
 
-    if (this.props.loggedInUser && this.props.loggedInUser !== this.props.targetUser) {
+    if (this.props.loggedInUserId && this.props.loggedInUserId !== this.props.targetUser) {
       return (
         <SuggestStep _submitSuggestedStep={this._submitSuggestedStep}
           handleChange={this.handleChange}
           value={this.state.step} />
       )
-    } else if (!this.props.loggedInUser) {
+    } else if (!this.props.loggedInUserId) {
       // TODO also check if the cloned steps are owned by the user.  This becomes more clear with 'suggestions by user'
       return null
     }
@@ -92,9 +92,9 @@ class SuggestStepSmart extends Component {
   async _submitSuggestedStep(event) {
     event.preventDefault()
     // console.log(this._reorderSteps(this.props.stepIdQuery))
-    if (this.props.loggedInUser) {
+    if (this.props.loggedInUserId) {
       await this._submitSuggestedStepMutation(this._reorderSteps(this.props.clonedStepIdQuery))
-  } else if (!this.props.loggedInUser && this.state.step) {
+  } else if (!this.props.loggedInUserId && this.state.step) {
     //render create user; save step state; when create user resolves send mutation
   }
   }
@@ -138,7 +138,7 @@ class SuggestStepSmart extends Component {
           positionIndex: stepObj.positionIndex,
           suggestedStep: stepObj.suggestedStep,
           step: stepObj.step,
-          suggesterId: this.props.loggedInUser
+          suggesterId: this.props.loggedInUserId
         }
       })
     })

@@ -7,11 +7,12 @@ import gql from 'graphql-tag'
 import CurrentUser from '../Components/User/CurrentUser'
 import GlobalFeedPage from './GlobalFeedPage'
 import CurrentGoal from '../Components/Goal/CurrentGoal-smart'
-import CurrentSteps from '../Components/Steps/CurrentSteps-smart'
+import CurrentStepsSmart from '../Components/Steps/CurrentSteps-smart'
 import Notifications from '../Components/Feed/Notifications-smart'
 import TargetUser from '../Components/User/TargetUser'
 import SelectSuggesterSmart from '../Components/User/SelectSuggester-smart'
 import SelectGoal from '../Components/Goal/SelectGoal-smart'
+import SelectedSuggesterName from '../Components/User/SelectedSuggesterName'
 import InputGoalSmart from '../Components/Goal/InputGoal-smart'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons'
@@ -39,7 +40,6 @@ class UserFeedPage extends Component {
     // this.dispatchtargetUserID = this.dispatchtargetUserID.bind(this)
     this.state = {
       goalDocId: '',
-      self: false,
       suggesters: [],
       suggestersIndex: 0,
       selectedSuggesterId: '',
@@ -101,7 +101,7 @@ class UserFeedPage extends Component {
         <h2>
           {/* UserFeed */}
         </h2>
-        <TargetUser targetUserName={User.userName || ''}/>
+        {/* <TargetUser targetUserName={User.userName || ''}/> */}
         <SelectSuggesterSmart
           goalDocId={this.state.goalDocId}
           setSelf={this._setSelf}
@@ -110,6 +110,8 @@ class UserFeedPage extends Component {
           nextSuggester={this._nextSuggester}
           prevSuggester={this._prevSuggester}
         />
+        <SelectedSuggesterName selectedSuggesterName={this.state.selectedSuggesterName} />
+
         <SelectGoal
           targetUserId={User.id}
           setGoalDocId={this._setGoalDocId}
@@ -119,14 +121,13 @@ class UserFeedPage extends Component {
         {/* <InputGoal /> */}
         {
           match.params.goaldocid || this.state.goalDocId ?
-            <CurrentSteps
+            <CurrentStepsSmart
               loggedInUserId={this.props.userQuery.user ? this.props.userQuery.user.id : null}
               targetUser={User.id}
               goalDocId={match.params.goaldocid || this.state.goalDocId}
               suggestersIndex={this.state.suggestersIndex}
-              selfState={this.state.self}
               selectedSuggesterId={this.state.selectedSuggesterId}
-              selectedSuggesterName={this.state.selectedSuggeserName}
+              selectedSuggesterName={this.state.selectedSuggesterName}
             />
           : null
         }
@@ -154,12 +155,15 @@ class UserFeedPage extends Component {
  }
 
  _setSuggesters(suggesters) {
+   console.log(suggesters)
    this.setState({suggesters: [...this.state.suggesters, suggesters] })
  }
 
  _nextSuggester() {
   if (this.state.suggestersIndex < this.state.suggesters.length -1) {
     this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex + 1}))
+  } else if (this.state.suggestersIndex < this.state.suggesters.length) {
+      this.setState(prevState=> ({suggestersIndex: 0}))
   }
   // const selectedSuggesterId = this.state.suggesters[this.state.suggestersIndex].id
   //  this.setState(prevState => ({selectedSuggesterId: x  }))
@@ -169,7 +173,9 @@ class UserFeedPage extends Component {
   _prevSuggester() {
     if (this.state.suggestersIndex !== 0) {
       this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex - 1}))
-    }
+    } else if (this.state.suggestersIndex === 0) {
+        this.setState(prevState=> ({suggestersIndex: this.state.suggesters.length -1}))
+  }
   }
 }
 

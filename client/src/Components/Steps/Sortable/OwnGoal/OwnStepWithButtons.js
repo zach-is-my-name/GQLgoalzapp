@@ -76,6 +76,8 @@ class OwnStepWithButtons extends Component {
         clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
         renderRemoveStepState={this.state.renderRemoveStepState}
         unrenderRemoveStepFunction={this.unrenderRemoveStep}
+        selectedSuggesterId={this.props.selectedSuggesterId}
+        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
       />
 
       <EditButton
@@ -88,12 +90,14 @@ class OwnStepWithButtons extends Component {
         clickHandlerEdit={this.clickHandlerEdit}
         renderEditStepState={this.state.renderEditStepState}
         unrenderEditFunction={this.unrenderEdit}
+        selectedSuggesterId={this.props.selectedSuggesterId}
+        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
       />
 
       <PlusButton
         goalDocId={this.props.goalDocId}
         indexClicked={this.state.indexClicked}
-        loggedInUser={this.props.loggedInUser}
+        loggedInUserId={this.props.loggedInUserId}
         stepActivated={this.state.stepActivated}
         stepIndex={this.props.stepIndex}
         stepObj={this.props.stepObj}
@@ -102,6 +106,8 @@ class OwnStepWithButtons extends Component {
         renderAcceptStepState={this.state.renderAcceptStepState}
         unrenderAcceptStepFunction={this.unrenderAcceptStep}
         clickHandlerPlus={this.clickHandlerAdd}
+        selectedSuggesterId={this.props.selectedSuggesterId}
+        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
       />
     </div>
   )
@@ -129,6 +135,8 @@ class OwnStepWithButtons extends Component {
         clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
         renderRemoveStepState={this.state.renderRemoveStepState}
         unrenderRemoveStepFunction={this.unrenderRemoveStep}
+        selectedSuggesterId={this.props.selectedSuggesterId}
+        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
 
       />
       <EditButton
@@ -141,18 +149,22 @@ class OwnStepWithButtons extends Component {
         clickHandlerEdit={this.clickHandlerEdit}
         renderEditStepState={this.state.renderEditStepState}
         unrenderEditFunction={this.unrenderEdit}
+        selectedSuggesterId={this.props.selectedSuggesterId}
+        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
       />
 
       <PlusButton
         goalDocId={this.props.goalDocId}
         indexClicked={this.state.indexClicked}
         loggedInUser={this.props.loggedInUser}
+        loggedInUserId={this.props.loggedInUserId}
         stepActivated={this.state.stepActivated}
         stepIndex={this.props.stepIndex}
         stepObj={this.props.stepObj}
         targetUser={this.props.targetUser}
-        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
         clickHandlerPlus={this.clickHandlerAdd}
+        selectedSuggesterId={this.props.selectedSuggesterId}
+        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
       />
     </div>
       )

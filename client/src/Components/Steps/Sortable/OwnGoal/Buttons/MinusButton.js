@@ -23,53 +23,53 @@ import '../../../../../style/MinusButton.css'
         unrenderRemoveStepFunction,
         renderRejectStepState,
         unrenderRejectStepFunction,
+        selectedSuggesterId,
+        ownStepsBool
     }) => {
 
 return (
         <div className="minus-button-container">
-            <div className="row-1">
-                <li className="minus-image">
-                    <img key={`imagekey-minus${stepIndex}`}
-                        onClick={() => clickHandlerMinus(stepIndex, stepObj.id)}
-                        alt="" src={minus}/></li>
-            </div>
+            <li className="minus-image">
+                <img key={`imagekey-minus${stepIndex}`}
+                    onClick={() => clickHandlerMinus(stepIndex, stepObj.id)}
+                    alt="" src={minus}/></li>
             <div className="row-2">
                 {(toggleConfirmPrompt && (stepIndex !== null) &&
-                    (indexToRemove === stepIndex && stepObj.suggestedStep === false)) && !toggleSuggestedSteps ?
+                    (indexToRemove === stepIndex && stepObj.suggestedStep === false)) && ownStepsBool ?
                         <div className="prompt">
                             <p>Remove Step?</p>
                             <YesNoPrompt
                                 clickEventYes={clickHandlerConfirmRemove}
                                 clickEventNo={clickHandlerCancel}
-                  />
-                </div>
-              : null }
-            {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ?
-              <RemoveStep
-                stepObj={stepObj}
-                stepIndex={stepIndex}
-                idToRemove={idToRemove}
-                goalDocId={goalDocId}
-                unrenderRemoveStepFunction={unrenderRemoveStepFunction}
-                renderRemoveStepState={renderRemoveStepState}
-              />
-            : null}
+                            />
+                        </div>
+                    : null }
+                {renderRemoveStepState === true  && (indexToRemove === stepIndex)  ?
+                    <RemoveStep
+                        stepObj={stepObj}
+                        stepIndex={stepIndex}
+                        idToRemove={idToRemove}
+                        goalDocId={goalDocId}
+                        unrenderRemoveStepFunction={unrenderRemoveStepFunction}
+                        renderRemoveStepState={renderRemoveStepState}
+                    />
+                : null}
 
 
-            {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex && toggleSuggestedSteps === true))
-              ? <div className="prompt">
-                <p>Reject Step?</p>
-                <YesNoPrompt clickEventYes={clickHandlerConfirmReject} clickEventNo={clickHandlerCancel}/></div>
-              : null}
+                {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex && !ownStepsBool && stepObj.suggestedStep))
+                    ? <div className="prompt">
+                        <p>Reject Step?</p>
+                        <YesNoPrompt clickEventYes={clickHandlerConfirmReject} clickEventNo={clickHandlerCancel}/></div>
+                    : null}
 
-            {renderRejectStepState === true && (indexToRemove === stepIndex) ?
-              <RejectStep
-                idToRemove={idToRemove}
-                renderRejectStepState={renderRejectStepState}
-                goalDocId={goalDocId}
-                unrenderRejectStepFunction={unrenderRejectStepFunction}
-              /> : null}
-          </div>
+                {renderRejectStepState === true && (indexToRemove === stepIndex) ?
+                    <RejectStep
+                        idToRemove={idToRemove}
+                        renderRejectStepState={renderRejectStepState}
+                        goalDocId={goalDocId}
+                        unrenderRejectStepFunction={unrenderRejectStepFunction}
+                    /> : null}
+            </div>
         </div>
                 )
 

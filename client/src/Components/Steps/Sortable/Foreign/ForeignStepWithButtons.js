@@ -55,8 +55,10 @@ class ForeignStepWithButtons extends Component {
           unrenderRemoveSuggestedStepFunction={this.unrenderRemoveSuggesteStep}
           renderRemoveSuggestedStepState={this.state.renderRemoveSuggestedStepState}
           stepObj={this.props.stepObj}
+          selectedSuggesterId={this.props.selectedSuggesterId}
+          ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
         />
-
+        
         <EditButton
           clickHandlerSuggestEdit={this.clickHandlerSuggestEdit}
           stepIndex={this.state.stepIndex}
@@ -66,6 +68,9 @@ class ForeignStepWithButtons extends Component {
           editStepOn={this.state.editStepOn}
           activeIndexEditStep={this.state.activeIndexEditStep}
           id={this.props.id}
+          selectedSuggesterId={this.props.selectedSuggesterId}
+          ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
+          loggedInUserId={this.props.loggedInUserId}
         />
         <PlusButton
           clickHandlerSuggestAdd={this.clickHandlerSuggestAdd}
@@ -74,12 +79,14 @@ class ForeignStepWithButtons extends Component {
           indexClicked={this.state.indexClicked}
           goalDocId={this.props.goalDocId}
           targetUser={this.props.targetUser}
-          loggedInUser={this.props.loggedInUser}
+          loggedInUserId={this.props.loggedInUserId}
+          selectedSuggesterId={this.props.selectedSuggesterId}
+          ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
         />
 
         {/*Remove Suggested Step*/}
-        {this.state.toggleConfirmPrompt &&(this.props.stepIndex !== null) && (this.state.indexToRemove === this.props.stepIndex) && this.props.stepObj.suggestedStep
-          ? <div className="prompt">
+        {this.state.toggleConfirmPrompt &&(this.props.stepIndex !== null) && (this.state.indexToRemove === this.props.stepIndex) && this.props.stepObj.suggestedStep &&
+          this.props.selectedSuggesterId === this.props.loggedInUserId ? <div className="prompt">
             <p>Remove Step?</p>
             <YesNoPrompt
               clickEventYes={this.clickHandlerConfirmRemoveSuggestedStep}
@@ -96,16 +103,17 @@ class ForeignStepWithButtons extends Component {
                 goalDocId={this.props.goalDocId}
                 unrenderRemoveSuggestedStepFunction={this.unrenderRemoveSuggestedStepFunction}
                 stepObj={this.props.stepObj}
-                loggedInUser={this.props.loggedInUser}
+                loggedInUserId={this.props.loggedInUserId}
               />
             : null
             }
           </div>
           {/*Suggest Remove Step*/}
           <div className="foreign-step-suggest-remove">
-            {(this.state.toggleConfirmPrompt && (this.props.stepIndex !== null) && (this.props.indexToRemove === this.props.stepIndex) && !this.props.stepObj.suggestedStep)
-              ? <div className="prompt">
-                <p>Remove Step?</p>
+            {(this.state.toggleConfirmPrompt && (this.props.stepIndex !== null) && (this.state.indexToRemove === this.props.stepIndex) && !this.props.stepObj.suggestedStep)
+              && this.props.selectedSuggesterId === this.props.loggedInUserId ? <div className="prompt">
+
+                <p>Suggest Remove Step?</p>
                 <YesNoPrompt
                   clickEventYes={this.clickHandlerConfirmSuggestRemove}
                   clickEventNo={this.clickHandlerCancel}/>
@@ -123,13 +131,6 @@ class ForeignStepWithButtons extends Component {
           : null }
         </div>
 
-        <div>
-          {this.state.stepActivated && (this.props.stepIndex !== null) && (this.state.indexClicked === this.props.stepIndex)
-            ? <div className="foreign-step-suggest-step">
-              <SuggestStepSmart stepIndex={this.props.stepIndex} goalDocId={this.props.goalDocId} targetUser={this.props.targetUser} loggedInUser={this.props.loggedInUser}/>
-            </div>
-            : null }
-        </div>
       </div>
   )
   }

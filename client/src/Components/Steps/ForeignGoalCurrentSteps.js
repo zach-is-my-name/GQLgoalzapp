@@ -5,6 +5,7 @@ import * as actions from '../../Actions/actions.js'
 import { arrayMove} from 'react-sortable-hoc';
 import ForeignSteps from './Sortable/Foreign/ForeignSteps.js'
 import SuggestMoveStep from './SuggestMoveStep-smart.js'
+
 class ForeignGoalCurrentSteps extends Component {
   constructor(props) {
     super(props)
@@ -41,13 +42,13 @@ class ForeignGoalCurrentSteps extends Component {
 
   render() {
       let suggestMoveStep
-      if (this.state.renderMoveStep && this.props.loggedInUser) {
+      if (this.state.renderMoveStep && this.props.loggedInUserId) {
        suggestMoveStep =  <SuggestMoveStep
          _unrenderMoveStep={this._unrenderMoveStep}
          clonedSteps={this.state.movedClonedSteps}
          newIndex={this.state.newIndex} />
 
-      } else if (this.state.renderMoveStep && !this.props.loggedInUser ) {
+      } else if (this.state.renderMoveStep && !this.props.loggedInUserId ) {
         suggestMoveStep = null
       } else {
         suggestMoveStep = null
@@ -67,7 +68,9 @@ class ForeignGoalCurrentSteps extends Component {
           oldIndex={this.state.oldIndex}
           goalDocId={this.props.goalDocId}
           targetUser={this.props.targetUser}
-          loggedInUser={this.props.loggedInUser}
+          loggedInUserId={this.props.loggedInUserId}
+          selectedSuggesterId={this.props.selectedSuggesterId}
+          suggestersIndex={this.props.suggestersIndex}
         />
       </div>
       )

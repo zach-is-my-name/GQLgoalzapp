@@ -11,38 +11,40 @@ const PlusButton = ({
   stepActivated,
   indexClicked,
   stepObj,
-  toggleSuggestedSteps,
   goalDocId,
   renderAcceptStepState,
+  loggedInUserId,
   unrenderAcceptStepFunction,
   clickHandlerPlus,
+  selectedSuggesterId,
+  ownStepsBool,
 }) => {
+   //{/* <div className="row-2"> */}
+      {/*add step */}
   return (
-    <div>
+    <div className="row-2">
       <li className="plus-image"> <img key={`imageKey-plus${stepIndex}`} onClick={() => clickHandlerPlus(stepIndex)} alt="" src={plus}/> </li>
-      
-      <div className="row-2">
 
-        {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) &&
-        !stepObj.suggestedStep && !toggleSuggestedSteps) ?
-          <AddStepSmart stepIndex={stepIndex} goalDocId={goalDocId}/>
+      {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) &&
+      !stepObj.suggestedStep && ownStepsBool) ?
+        <AddStepSmart stepIndex={stepIndex} goalDocId={goalDocId}/>
+      : null}
+
+      {/*accept step */}
+      {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) && stepObj.suggestedStep &&
+      renderAcceptStepState && ownStepsBool )
+        ? <AcceptStep
+          acceptedStep={stepObj.step}
+          goalDocId={goalDocId}
+          clonedStepId={stepObj.id}
+          clonedStepIndex={stepIndex}
+          renderAcceptStepState={renderAcceptStepState}
+          unrenderAcceptStepFunction={unrenderAcceptStepFunction}
+          />
         : null}
-
-        {/*accept step */}
-        {(stepActivated && stepIndex !== null && (indexClicked === stepIndex) && stepObj.suggestedStep &&
-        renderAcceptStepState)
-          ? <AcceptStep
-            acceptedStep={stepObj.step}
-            goalDocId={goalDocId}
-            clonedStepId={stepObj.id}
-            clonedStepIndex={stepIndex}
-            renderAcceptStepState={renderAcceptStepState}
-            unrenderAcceptStepFunction={unrenderAcceptStepFunction}
-            />
-          : null}
-      </div>
+      {/* </div> */}
     </div>
-  )}
+      )}
 
 
       export default PlusButton

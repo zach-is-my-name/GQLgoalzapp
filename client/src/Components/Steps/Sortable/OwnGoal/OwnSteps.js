@@ -17,7 +17,6 @@ export const OwnSteps = SortableContainer(({goalDocId,
   renderRemoveStepState,
   unrenderRemoveStepFunct,
   getArr,
-  suggestersIndex,
   selectedSuggesterId,
  }) => {
 
@@ -63,6 +62,7 @@ export const OwnSteps = SortableContainer(({goalDocId,
                     currentGoalSteps={currentGoalSteps}
                     targetUser={targetUser}
                     loggedInUserId={loggedInUserId}
+                    selectedSuggesterId={selectedSuggesterId}
                   />
                 )}
               </ul>

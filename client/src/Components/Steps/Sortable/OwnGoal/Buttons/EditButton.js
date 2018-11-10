@@ -11,12 +11,14 @@ const EditButton = ({
   renderEditStepState,
   unrenderEditFunction,
   stepObj,
+  selectedSuggesterId,
+  ownStepsBool,
 }) => {
   return (
       <div className="row-1">
         <span style={style}>
           <li onClick={(event) => clickHandlerEdit(stepIndex, event)} key={stepIndex}>
-            {!toggleSuggestedSteps && renderEditStepState ?
+            {ownStepsBool && renderEditStepState ?
               <EditStepSmart
                 stepObj={stepObj}
                 unrenderEditFunction={unrenderEditFunction}

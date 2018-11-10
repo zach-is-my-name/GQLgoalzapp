@@ -11,6 +11,8 @@ const EditButton = ({
   editStepOn,
   activeIndexEditStep,
   id,
+  selectedSuggesterId,
+  loggedInUserId,
     }) => {
         return (
         <div className="edit-button-container">
@@ -23,7 +25,7 @@ const EditButton = ({
             :stepObj.step}</li>
 
           {/*Suggest Edit */}
-          {(editStepOn && (stepIndex !== null) && activeIndexEditStep === stepIndex)
+          {(editStepOn && (stepIndex !== null) && activeIndexEditStep === stepIndex) && loggedInUserId === selectedSuggesterId
             ? <SuggestEditStep id={id} index={stepIndex}/>
             : null}
         </div>

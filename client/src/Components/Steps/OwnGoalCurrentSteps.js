@@ -6,6 +6,7 @@ import {SortableContainer, arrayMove} from 'react-sortable-hoc';
 import {OwnSteps} from './Sortable/OwnGoal/OwnSteps.js'
 import update from 'immutability-helper';
 import MoveStep from './MoveStep.js'
+import uniqBy from 'lodash.uniqby'
 // import '../../style/OwnGoalCurrentSteps.css'
 
 class OwnGoalCurrentSteps extends Component {
@@ -33,7 +34,8 @@ class OwnGoalCurrentSteps extends Component {
       console.log('prevProps', prevProps.steps)
       console.log('this.props', this.props.steps)
       this.setState({
-        movedSteps: [...new Set(...this.props.steps, ...this.state.movedSteps)]
+       movedSteps: uniqBy([...this.props.steps, ...this.state.movedSteps], 'id')
+        // movedSteps: [...new Set(...this.props.steps, ...this.state.movedSteps)]
         // steps: [...this.props.steps, ...this.state.steps,]
       })
     }
