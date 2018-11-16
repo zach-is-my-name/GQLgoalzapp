@@ -12,7 +12,7 @@
 
 .foreign-step-suggest-remove {
   display: flex;
-  flew-flow: row wrap;
+  /* flex-flow: row wrap; */
   justify-content: center;
   width: 100%;
 
@@ -30,7 +30,10 @@
 }
 
 .yes-no-prompt-buttons {
-  margin-left: 5px;
+  /* display: flex;
+  flew-flow: column wrap;
+  justify-content: center;
+  width: 100%; */
 }
 
 .button-yes {
@@ -38,19 +41,68 @@
 }
 
 
-.foreign-step-remove-suggested-step {
+.foreign-step-remove-suggested {
   display: flex;
   flew-flow: row wrap;
   justify-content: center;
   width: 100%;
 }
 
-.foreign-step-suggest-step {
+.foreign-step-suggest {
   display: flex;
   width: 100%;
   justify-content: center;
 }
 
+.foreign-step-remove-suggested {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+}
+
+.foreign-step-remove-suggested.container {
+  display: flex;
+  flex-wrap:wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+foreign-step-remove-suggested.confirm-text p {
+  margin: 0px;
+}
+
+.foreign-step-remove-suggested.confirm-prompt {
+  display: flex;
+  flex-wrap:wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.foreign-step-suggest-remove.container {
+  display: flex;
+  flex-wrap:wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.foreign-step-suggest-remove.text p {
+  margin: 0px;
+}
+
+.foreign-step-suggest-remove.confirm-prompt {
+  display: flex;
+  flex-wrap:wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+
+.foreign-step-suggest-remove {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 
 
 .currentsteps-label {
@@ -108,7 +160,7 @@ li.minus-image {
 }
 
 li.current-step {
-    height: 30px;
+    height: 25px;
     cursor: default;
     user-select: none;
 }

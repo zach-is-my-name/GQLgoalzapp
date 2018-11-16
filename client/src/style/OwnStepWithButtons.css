@@ -1,0 +1,47 @@
+.own-step-with-buttons-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.own-step-remove .container {
+  display: flex;
+  flex-wrap:wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.own-step-remove .confirm-prompt {
+  display: flex;
+  flex-wrap:wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.own-step-remove .confirm-text {
+  margin: 0px;
+}
+
+.own-step-remove.text {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.own-step-remove.text p {
+  margin: 0 0 5px 0;
+}
+
+.yes-no-prompt-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.own-step-accept {
+  display: flex;
+  /* flex-flow: row-wrap; */
+  justify-content: center;
+  width: 100%
+}

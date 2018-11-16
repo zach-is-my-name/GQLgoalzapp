@@ -22,7 +22,7 @@ import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
 //   self.findIndex((findObj) => {return (obj.userName === findObj.userName && obj.id === findObj.id)}) === index)
 
 const goalDocByIdQuery = gql `
-query goalDocByIdQuery ($goalDocId: ID, $suggesterId: ID) {
+query goalDocByIdQuery ($goalDocId: ID) {
   GoalDoc(id: $goalDocId) {
    goal
    id
@@ -32,7 +32,8 @@ query goalDocByIdQuery ($goalDocId: ID, $suggesterId: ID) {
      suggestedStep
      id
    }
-   clonedSteps(orderBy:positionIndex_ASC, filter: {suggester: {id: $suggesterId}}) {
+   clonedSteps(orderBy:positionIndex_ASC)
+    {
      step
      positionIndex
      id
@@ -43,12 +44,13 @@ query goalDocByIdQuery ($goalDocId: ID, $suggesterId: ID) {
        userName
        id
      }
-   }
-  }
+   }  }
 }`;
 
-const  allClonedStepsQuery = gql `
- query allClonedStepsQuery($goalDocId:ID){
+
+
+const  suggesterClonedSteps = gql `
+ query suggesterClonedSteps($goalDocId:ID){
    allClonedSteps(filter: {goalDoc: {id: $goalDocId}}, orderBy: positionIndex_ASC) {
       id
       positionIndex
@@ -59,18 +61,45 @@ const  allClonedStepsQuery = gql `
   }`
 
 class CurrentStepsSmart extends Component {
+  constructor(props) {
+    super(props)
+
+  }
 
   render() {
 
-const {loading, error, GoalDoc} = this.props.goalDocById
 const {loggedInUserId, targetUser} = this.props
-let currentSteps
-
-if (this.props.goalDocById.loading || this.props.allClonedSteps && this.props.allClonedSteps.loading) {
+let suggesterClonedSteps
+let clonedSteps
+let steps
+if (this.props.goalDocById && this.props.goalDocById.loading || this.props.suggesterClonedSteps && this.props.suggesterClonedSteps.loading) {
     return <div>Loading...</div>
   }
+
+if (this.props.suggesterClonedSteps && !this.props.suggesterClonedSteps.loading) {
+    // filter out clonedStep (suggested === true && suggester !== selectedSuggesterId)
+    console.log(this.props.suggesterClonedSteps)
+    suggesterClonedSteps = this.props.suggesterClonedSteps.allClonedSteps.filter(
+      stepObj => { return  !stepObj.suggestedStep && stepObj.suggester &&
+        stepObj.suggester.id === this.props.selectedSuggesterId ||
+        !stepObj.suggestedStep && !stepObj.suggester ||
+        stepObj.suggestedStep && stepObj.suggester && stepObj.suggester.id === this.props.selectedSuggesterId})
+      } else if (this.props.suggesterClonedSteps &&
+          this.props.suggesterClonedSteps.loading){
+            suggesterClonedSteps = []
+        }
+if (this.props.goalDocById && !this.props.goalDocById.loading && this.props.goalDocById.GoalDoc) {
+  clonedSteps = this.props.goalDocById.GoalDoc.clonedSteps
+  steps = this.props.goalDocById.GoalDoc.steps
+} else {
+  clonedSteps = []
+  steps = []
+}
+
+
+
     return (
-      <div className="steps-container">
+      <div className="current-steps-smart-container">
         {
           loggedInUserId !== targetUser ?
 
@@ -78,19 +107,18 @@ if (this.props.goalDocById.loading || this.props.allClonedSteps && this.props.al
               goalDocId={this.props.goalDocId}
               targetUser={targetUser}
               loggedInUserId={loggedInUserId}
-              steps={GoalDoc.steps}
-              clonedSteps={GoalDoc.clonedSteps}
+              steps={this.props.goalDocById.GoalDoc.steps || []}
+              clonedSteps={this.props.goalDocById.GoalDoc.clonedSteps}
               selectedSuggesterId={this.props.selectedSuggesterId}
               suggestersIndex={this.props.suggestersIndex}
             />
           : <OwnGoalCurrentSteps
             randomColorStep={this.props.randomColorStep}
-            clonedSteps={this.props.allClonedSteps ? this.props.allClonedSteps.allClonedSteps : this.props.goalDocById.GoalDoc.clonedSteps}
-            steps={GoalDoc.steps}
+            clonedSteps={clonedSteps}
+            steps={steps}
             goalDocId={this.props.goalDocId}
             targetUser={targetUser}
             loggedInUserId={this.props.loggedInUserId}
-            selfState={this.props.selfState}
             selectedSuggesterId={this.props.selectedSuggesterId}
             suggestersIndex={this.props.suggestersIndex}
             />
@@ -111,8 +139,16 @@ const WithData = compose(graphql(goalDocByIdQuery,
     return  ({  variables: {goalDocId: ownProps.goalDocId, suggesterId: ownProps.selectedSuggesterId}
 })}}
 ),
-graphql(allClonedStepsQuery, {name: 'allClonedSteps',
-skip: ownProps => ownProps.selectedSuggesterId !== ownProps.loggedInUserId})
+graphql(suggesterClonedSteps, {
+  name: 'suggesterClonedSteps',
+  options: (ownProps) => {
+    return({ variables: {goalDocId: ownProps.goalDocId}})
+  },
+  skip: ownProps => ownProps.selectedSuggesterId === ownProps.loggedInUserId
+}
+
+)
+
 )(CurrentStepsSmart)
 
 export default WithData

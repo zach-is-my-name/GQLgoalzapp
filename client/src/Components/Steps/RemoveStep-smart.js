@@ -96,7 +96,7 @@ class RemoveStep extends Component {
     this._reorderClonedSteps = this._reorderClonedSteps.bind(this)
     }
 componentDidMount() {
-  this.props.unrenderRemoveSuggestedStepFunction()
+  this.props.unrenderRemoveStepFunction()
 }
 
   render() {

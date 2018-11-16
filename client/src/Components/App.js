@@ -62,6 +62,7 @@ export class App extends Component {
       return <div>Loading...</div>
 
     } else if (auth0IdToken || graphcoolToken) {
+        // TODO: if authtoken is expired, renderLoggedOut().  to do this you can check the userquery (here).  this seems like the only option because you don't have access to the server response, only the graphcool response.
         this.props.data.refetch()
         return this._renderApp()
       } else {
@@ -118,7 +119,8 @@ _renderApp() {
     window.localStorage.removeItem('auth0IdToken')
     window.localStorage.removeItem('graphcoolToken')
     console.log('Token Removed')
-    location.reload()
+    this.props.history.push('/')
+    // location.reload()
   }
 
 }

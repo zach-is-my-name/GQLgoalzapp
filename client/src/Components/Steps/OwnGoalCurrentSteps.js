@@ -16,11 +16,10 @@ class OwnGoalCurrentSteps extends Component {
       newIndex: null,
       oldIndex: null,
       indexInMotion: null,
-      toggleSuggestedSteps: true,
       movedSteps: [],
       renderMoveStep: false,
     }
-    this._toggleSuggestedSteps = this._toggleSuggestedSteps.bind(this)
+
     this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
 }
 
@@ -30,9 +29,10 @@ class OwnGoalCurrentSteps extends Component {
 
   componentDidUpdate(prevProps) {
     if (JSON.stringify(this.props.steps) !== JSON.stringify(prevProps.steps)) {
-      console.log(Boolean(this.props.steps === prevProps.steps))
-      console.log('prevProps', prevProps.steps)
-      console.log('this.props', this.props.steps)
+      // console.log('OwnGoalCurrentSteps componentDidUpdate')
+      // console.log(Boolean(this.props.steps === prevProps.steps))
+      // console.log('prevProps', prevProps.steps)
+      // console.log('this.props', this.props.steps)
       this.setState({
        movedSteps: uniqBy([...this.props.steps, ...this.state.movedSteps], 'id')
         // movedSteps: [...new Set(...this.props.steps, ...this.state.movedSteps)]
@@ -44,6 +44,10 @@ class OwnGoalCurrentSteps extends Component {
   render() {
     // console.log("this.state.steps", this.state.steps)
     // console.log("this.state.renderMoveStep", this.state.renderMoveStep)
+    // if (this.props.clonedSteps) {
+    //   let arr = this.props.clonedSteps.map(stepObj => ({step: stepObj.step, positionIndex: stepObj.positionIndex}))
+    //   console.log(arr)
+    // }
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
     return (
@@ -52,16 +56,13 @@ class OwnGoalCurrentSteps extends Component {
           {this.state.renderMoveStep ?
             <MoveStep
               _unrenderMoveStep={this._unrenderMoveStep}
-              steps={this.state.movedSteps}
+              steps={this.state.steps}
               newIndex={this.state.newIndex}
               oldIndex={this.state.oldIndex}
               clonedSteps={this.props.clonedSteps}
             /> : null}
         </div>
         <div>
-          {/* <button onClick={this._toggleSuggestedSteps}>Show/Hide Sugguested Steps */}
-          {/* </button> */}
-          {/* {this.state.toggleSuggestedSteps ? clonedSteps : steps} */}
           <OwnSteps
             onSortEnd={this.onSortEnd}
             randomColorStep={this.props.randomColorStep}
@@ -87,16 +88,12 @@ class OwnGoalCurrentSteps extends Component {
       </div>
         )
   }
- _unrenderMoveStep() {
+
+  _unrenderMoveStep() {
    this.setState({
      renderMoveStep: false
    })
  }
-  _toggleSuggestedSteps() {
-    this.setState(prevState => ({
-      toggleSuggestedSteps: !prevState.toggleSuggestedSteps
-    }))
-  }
 
  onSortEnd = ({oldIndex, newIndex}) => {
    // console.log("this.state.goalDocs", this.state.goalDocs)

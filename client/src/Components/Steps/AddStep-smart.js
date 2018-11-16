@@ -79,8 +79,9 @@ const goalDocByIdQuery = gql `
       }
     }`;
 
-const  allClonedStepsQuery = gql `
- query allClonedStepsQuery($goalDocId:ID){
+
+const  suggesterClonedSteps = gql `
+ query suggesterClonedSteps($goalDocId:ID){
    allClonedSteps(filter: {goalDoc: {id: $goalDocId}}, orderBy: positionIndex_ASC) {
       id
       positionIndex
@@ -106,7 +107,7 @@ class AddStepSmart extends React.Component {
   }
 
   componentDidMount() {
-    console.log('AddStep')
+    // console.log('AddStep')
   }
 
   render() {
@@ -258,7 +259,7 @@ graphql(UpdateOrCreateClonedStep, {
         variables: {
           ...variables
         },
-        refetchQueries: ['goalDocByIdQuery', 'allClonedStepsQuery' ]
+        refetchQueries: ['goalDocByIdQuery', 'suggesterClonedSteps' ]
       }).catch((error) => {
         console.log(error)
       })

@@ -56,7 +56,7 @@ class ForeignGoalCurrentSteps extends Component {
 
     return (
 
-      <div className="steps-container">
+      <div className="jsx-wrap">
         {suggestMoveStep}
         <ForeignSteps
           clonedSteps={this.props.clonedSteps}

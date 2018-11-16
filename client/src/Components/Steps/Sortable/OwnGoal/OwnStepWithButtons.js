@@ -2,11 +2,16 @@
 //index is passed down as stepIndex because it is restricted in react-sortable
 
 import React, {Component} from 'react';
-import YesNoPrompt from '../../YesNoPrompt.js'
 import EditButton from './Buttons/EditButton.js'
 import PlusButton from './Buttons/PlusButton.js'
 import MinusButton from './Buttons/MinusButton.js'
+import YesNoPrompt from '../../YesNoPrompt.js'
+import RemoveStep from '../../RemoveStep-smart.js'
+import RejectStep from '../../RejectStep-smart.js'
+import AcceptStep from '../../AcceptStep-smart.js'
+import AddStepSmart from '../../AddStep-smart.js'
 import '../../../../style/OwnGoalCurrentSteps.css'
+import '../../../../style/OwnStepWithButtons.css'
 
 class OwnStepWithButtons extends Component {
 
@@ -38,10 +43,12 @@ class OwnStepWithButtons extends Component {
     this.unrenderAcceptStep = this.unrenderAcceptStep.bind(this)
     this.clickHandlerConfirmReject = this.clickHandlerConfirmReject.bind(this)
     this.unrenderEdit = this.unrenderEdit.bind(this)
+    this.clickHandlerConfirmRemove = this.clickHandlerConfirmRemove.bind(this)
   }
 
   render() {
     const {stepObj, stepIndex, newIndex, oldIndex, indexInMotion} = this.props
+    const ownStepsBool = this.props.selectedSuggesterId === this.props.loggedInUserId
     // if (indexInMotion !== null &&  indexInMotion === oldIndex){
     //   this.changestepIndex(newIndex)
     // }
@@ -59,25 +66,9 @@ class OwnStepWithButtons extends Component {
       return (
     <div className="own-step-with-buttons-container">
       <MinusButton
-        clickHandlerCancel={this.clickHandlerCancel}
-        clickHandlerConfirmReject={this.clickHandlerConfirmReject}
         clickHandlerMinus={this.clickHandlerRejectStep}
-        goalDocId={this.props.goalDocId}
-        idToRemove={this.state.idToRemove}
-        indexToRemove={this.state.indexToRemove}
-        loggedInUser={this.props.loggedInUser}
-        renderRejectStepState={this.state.renderRejectStepState}
-        stepIndex={this.props.stepIndex}
         stepObj={this.props.stepObj}
-        targetUser={this.props.targetUser}
-        toggleConfirmPrompt={this.state.toggleConfirmPrompt}
-        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-        unrenderRejectStepFunction={this.unrenderRejectStep}
-        clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
-        renderRemoveStepState={this.state.renderRemoveStepState}
-        unrenderRemoveStepFunction={this.unrenderRemoveStep}
-        selectedSuggesterId={this.props.selectedSuggesterId}
-        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
+        stepIndex={this.props.stepIndex}
       />
 
       <EditButton
@@ -86,28 +77,15 @@ class OwnStepWithButtons extends Component {
         stepIndex={this.props.stepIndex}
         stepObj={this.props.stepObj}
         targetUser={this.props.targetUser}
-        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
         clickHandlerEdit={this.clickHandlerEdit}
         renderEditStepState={this.state.renderEditStepState}
         unrenderEditFunction={this.unrenderEdit}
-        selectedSuggesterId={this.props.selectedSuggesterId}
         ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
       />
 
       <PlusButton
-        goalDocId={this.props.goalDocId}
-        indexClicked={this.state.indexClicked}
-        loggedInUserId={this.props.loggedInUserId}
-        stepActivated={this.state.stepActivated}
-        stepIndex={this.props.stepIndex}
-        stepObj={this.props.stepObj}
-        targetUser={this.props.targetUser}
-        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-        renderAcceptStepState={this.state.renderAcceptStepState}
-        unrenderAcceptStepFunction={this.unrenderAcceptStep}
         clickHandlerPlus={this.clickHandlerAdd}
-        selectedSuggesterId={this.props.selectedSuggesterId}
-        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
+        stepIndex={this.props.stepIndex}
       />
     </div>
   )
@@ -119,70 +97,135 @@ class OwnStepWithButtons extends Component {
 
 
           return (
-    <div className="own-step-with-buttons-container">
-      <MinusButton
-        clickHandlerCancel={this.clickHandlerCancel}
-        clickHandlerMinus={this.clickHandlerRejectStep}
-        goalDocId={this.props.goalDocId}
-        idToRemove={this.state.idToRemove}
-        indexToRemove={this.state.indexToRemove}
-        loggedInUser={this.props.loggedInUser}
-        stepIndex={this.props.stepIndex}
-        stepObj={this.props.stepObj}
-        targetUser={this.props.targetUser}
-        toggleConfirmPrompt={this.state.toggleConfirmPrompt}
-        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-        clickHandlerConfirmRemove={this.clickHandlerConfirmRemove}
-        renderRemoveStepState={this.state.renderRemoveStepState}
-        unrenderRemoveStepFunction={this.unrenderRemoveStep}
-        selectedSuggesterId={this.props.selectedSuggesterId}
-        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
+            <div>
+              <div className="own-step-with-buttons-container">
+                <MinusButton
+                  clickHandlerMinus={this.clickHandlerRejectStep}
+                  stepIndex={this.props.stepIndex}
+                  stepObj={this.props.stepObj}
 
-      />
-      <EditButton
-        loggedInUser={this.props.loggedInUser}
-        style={style}
-        stepIndex={this.props.stepIndex}
-        stepObj={this.props.stepObj}
-        targetUser={this.props.targetUser}
-        toggleSuggestedSteps={this.props.toggleSuggestedSteps}
-        clickHandlerEdit={this.clickHandlerEdit}
-        renderEditStepState={this.state.renderEditStepState}
-        unrenderEditFunction={this.unrenderEdit}
-        selectedSuggesterId={this.props.selectedSuggesterId}
-        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
-      />
+                />
+                <EditButton
+                  loggedInUser={this.props.loggedInUser}
+                  style={style}
+                  stepIndex={this.props.stepIndex}
+                  stepObj={this.props.stepObj}
+                  targetUser={this.props.targetUser}
+                  clickHandlerEdit={this.clickHandlerEdit}
+                  renderEditStepState={this.state.renderEditStepState}
+                  unrenderEditFunction={this.unrenderEdit}
+                  selectedSuggesterId={this.props.selectedSuggesterId}
+                  ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
+                />
 
-      <PlusButton
-        goalDocId={this.props.goalDocId}
-        indexClicked={this.state.indexClicked}
-        loggedInUser={this.props.loggedInUser}
-        loggedInUserId={this.props.loggedInUserId}
-        stepActivated={this.state.stepActivated}
-        stepIndex={this.props.stepIndex}
-        stepObj={this.props.stepObj}
-        targetUser={this.props.targetUser}
-        clickHandlerPlus={this.clickHandlerAdd}
-        selectedSuggesterId={this.props.selectedSuggesterId}
-        ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
-      />
-    </div>
-      )
-      }
-      }
+                <PlusButton
+                  stepIndex={this.props.stepIndex}
+                  clickHandlerPlus={this.clickHandlerAdd}
+                />
+              </div>
 
-      clickHandlerRejectStep(stepIndex, id) {
-        console.log('rejectStep clicked')
+
+              {/******** RENDER LOGIC******/}
+              {/*remove step*/}
+              <div className='own-step-remove container'>
+                {(this.state.toggleConfirmPrompt && (this.state.indexClicked !== null) &&
+                  (this.state.indexToRemove === this.state.indexClicked &&
+                  this.props.stepObj.suggestedStep === false)) && ownStepsBool ?
+                    <div className="own-step-remove confirm-prompt">
+                      <div className="own-step-remove text">
+                        <p>Remove Step?</p>
+                        <YesNoPrompt
+                          clickEventYes={this.clickHandlerConfirmRemove}
+                          clickEventNo={this.clickHandlerCancel}
+                        />
+                      </div>
+                    </div>
+                  : null }
+
+                {this.state.renderRemoveStepState === true  && (this.state.indexToRemove === this.state.indexClicked)  ?
+                  <RemoveStep
+                    stepObj={this.props.stepObj}
+                    stepIndex={this.state.stepIndex}
+                    idToRemove={this.state.idToRemove}
+                    goalDocId={this.props.goalDocId}
+                    unrenderRemoveStepFunction={this.unrenderRemoveStep}
+                    renderRemoveStepState={this.state.renderRemoveStepState}
+                  />
+                : null}
+              </div>
+              {/*reject step*/}
+              <div className="own-step-reject container">
+                {(this.state.toggleConfirmPrompt && (this.state.stepIndex !== null) &&
+                  (this.state.indexToRemove === this.state.indexClicked &&
+                  !ownStepsBool && this.props.stepObj.suggestedStep))
+                    ?
+                      <div className="own-step-reject confirm-prompt">
+                        <div className="own-step-reject text">
+                          <p>Reject Step?</p>
+                          <YesNoPrompt clickEventYes={this.clickHandlerConfirmReject}
+                            clickEventNo={this.clickHandlerCancel}/>
+                        </div>
+                      </div>
+                    : null}
+
+                {this.state.renderRejectStepState === true &&
+                  (this.state.indexToRemove === this.state.indexClicked) ?
+                    <RejectStep
+                      idToRemove={this.state.idToRemove}
+                      renderRejectStepState={this.state.renderRejectStepState}
+                      goalDocId={this.props.goalDocId}
+                      unrenderRejectStepFunction={this.state.unrenderRejectStepFunction}
+                    /> : null}
+              </div>
+              {/*add step */}
+              { (this.state.stepActivated && this.state.stepIndex !== null &&
+                (this.state.indexClicked === this.state.stepIndex) &&
+                !this.props.stepObj.suggestedStep &&
+              this.props.selectedSuggesterId === this.props.loggedInUserId) ?
+                <div className="own-step-add">
+                  <AddStepSmart stepIndex={this.state.stepIndex}
+                    goalDocId={this.props.goalDocId}/>
+                </div>
+              : null}
+
+              {/*accept step */}
+              {/*todo use this.state.indexClicked and this.props.stepIndex as selected step indicators*/}
+              {this.state.stepActivated && this.state.stepIndex !== null &&
+                (this.state.indexClicked === this.state.stepIndex) &&
+                  this.props.stepObj.suggestedStep &&
+                this.state.renderAcceptStepState && this.props.selectedSuggesterId ===
+                this.props.loggedInUserId
+                  ?
+                    <div className="own-step-accept">
+                      <AcceptStep
+                        acceptedStep={this.props.stepObj.step}
+                        goalDocId={this.props.goalDocId}
+                        clonedStepId={this.props.stepObj.id}
+                        clonedStepIndex={this.state.stepIndex}
+                        renderAcceptStepState={this.state.renderAcceptStepState}
+                        unrenderAcceptStepFunction={this.unrenderAcceptStepFunction}
+                      />
+                    </div>
+                  : null}
+              {/* </div> */}
+
+              </div>
+  )
+  }
+  }
+
+  clickHandlerRejectStep(stepIndex, id) {
+        // console.log('rejectStep clicked', 'stepIndex', stepIndex)
         this.setState(prevState => ({
           toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
           indexClicked: stepIndex,
-          indexToRemove: stepIndex,
+          indexToRemove: this.props.stepIndex,
           idToRemove: this.props.stepObj.id
         }))
       }
 
 
-      clickHandlerAdd(stepIndex) {
+  clickHandlerAdd(stepIndex) {
     // console.log(stepIndex)
     // this.setState({})
     this.setState(prevState => ({
@@ -214,6 +257,7 @@ class OwnStepWithButtons extends Component {
       idToRemove: this.props.stepObj.id
     }))
   }
+
   clickHandlerConfirmRemove(e) {
     e.preventDefault()
     // this.unrenderRemoveStep()
@@ -231,6 +275,7 @@ class OwnStepWithButtons extends Component {
       })
     })
   }
+
   clickHandlerConfirmReject(e) {
     e.preventDefault()
     this.setState(prevState => ({
@@ -238,6 +283,7 @@ class OwnStepWithButtons extends Component {
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt
     }))
   }
+
   unrenderRejectStep() {
     console.log('unrender reject step called')
     this.setState(prevState => {

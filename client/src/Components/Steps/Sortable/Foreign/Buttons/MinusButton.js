@@ -6,21 +6,10 @@ import minus from '../../../../../style/images/minus.jpg'
 // import YesNoPrompt from '../../../YesNoPrompt.js'
 
  const MinusButton = ( {
+  stepObj,
   clickHandlerSuggestRemove,
-  toggleConfirmPrompt,
-  stepIndex,
-  indexToRemove,
-  clickHandlerConfirmSuggestRemove,
-  clickHandlerConfirmRemoveSuggestedStep,
-  clickHandlerCancel,
-  renderSuggestRemoveState,
-  renderRemoveSuggestedStepState,
-  goalDocId,
-  id,
-  unrenderSuggestRemoveStepFunction,
-  unrenderRemoveSuggestedStepFunction,
   clickHandlerRemoveSuggested,
-  stepObj
+  stepIndex,
 }) => {
   return (
     <div className="minus-button-container">

@@ -16,6 +16,7 @@
     "apollo-client": "^2.4.2",
     "apollo-link-context": "^1.0.8",
     "apollo-link-http": "^1.5.4",
+    "array-move": "^1.0.0",
     "auth0-lock": "^10.16.0",
     "bootstrap": "^4.0.0-alpha.6",
     "immutability-helper": "^2.1.2",

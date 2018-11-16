@@ -101,7 +101,7 @@ class UserFeedPage extends Component {
         <h2>
           {/* UserFeed */}
         </h2>
-        {/* <TargetUser targetUserName={User.userName || ''}/> */}
+        <TargetUser targetUserName={User.userName || ''}/>
         <SelectSuggesterSmart
           goalDocId={this.state.goalDocId}
           setSelf={this._setSelf}
@@ -155,7 +155,7 @@ class UserFeedPage extends Component {
  }
 
  _setSuggesters(suggesters) {
-   console.log(suggesters)
+   // console.log(suggesters)
    this.setState({suggesters: [...this.state.suggesters, suggesters] })
  }
 
