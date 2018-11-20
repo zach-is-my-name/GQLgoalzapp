@@ -37,7 +37,18 @@ class ForeignStepWithButtons extends Component {
     this.clickHandlerConfirmRemoveSuggestedStep = this.clickHandlerConfirmRemoveSuggestedStep.bind(this)}
 
   render() {
+    const {stepObj} = this.props
     const ownStepsBool = this.props.selectedSuggesterId === this.props.loggedInUserId
+    let style
+        if (stepObj.suggestedStep === false) {
+          style = {color: '#000000'}
+          }
+         else if (stepObj.suggestedStep && stepObj.suggestRemove) {
+          style = {color: '#ef3779', textDecoration: 'line-through'}
+          }
+          else if (stepObj.suggestedStep === true) {
+          style =  {color: '#ef3779'}
+        }
     return (
       <div className="foreign-step-with-buttons-container">
         <MinusButton
@@ -59,6 +70,7 @@ class ForeignStepWithButtons extends Component {
           selectedSuggesterId={this.props.selectedSuggesterId}
           ownStepsBool={this.props.selectedSuggesterId === this.props.loggedInUserId}
           loggedInUserId={this.props.loggedInUserId}
+          style={style}
         />
 
         <PlusButton

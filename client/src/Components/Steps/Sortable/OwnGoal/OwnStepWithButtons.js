@@ -61,7 +61,7 @@ class OwnStepWithButtons extends Component {
           }
           else if (stepObj.suggestedStep === true) {
           style =  {color: '#ef3779'}
-}
+        }
     if (stepObj.suggestedStep === true) {
       return (
     <div className="own-step-with-buttons-container">
