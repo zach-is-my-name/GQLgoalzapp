@@ -70,11 +70,11 @@ class CurrentStepsSmart extends Component {
     let clonedSteps
     let children
     let steps
-    let {loading} = this.props.goalDocById
+    // let {loading} = this.props.goalDocById
     let acceptedStep
     let goalOwnerStep
     let selectedSuggesterSuggested
-    if (loading) {
+    if (this.props.goalDocById.loading || !this.props.goalDocById.GoalDoc) {
       return <div>Loading...</div>
     } else if (this.props.selectedSuggesterId !== this.props.loggedInUserId) {
 
