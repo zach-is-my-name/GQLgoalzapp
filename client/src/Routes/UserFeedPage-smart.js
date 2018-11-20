@@ -151,7 +151,6 @@ class UserFeedPage extends Component {
 
  _setSelf() {
       this.setState(prevState=> ({suggestersIndex: 0}))
-   this.setState({})
  }
 
  _setSuggesters(suggesters) {
@@ -160,7 +159,7 @@ class UserFeedPage extends Component {
  }
 
  _nextSuggester() {
-  if (this.state.suggestersIndex < this.state.suggesters.length -1) {
+  if (this.state.suggesters.length && this.state.suggestersIndex < this.state.suggesters.length -1) {
     this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex + 1}))
   } else if (this.state.suggestersIndex < this.state.suggesters.length) {
       this.setState(prevState=> ({suggestersIndex: 0}))
@@ -171,12 +170,14 @@ class UserFeedPage extends Component {
  }
 
   _prevSuggester() {
+    if (this.state.suggesters.length > 0) {
     if (this.state.suggestersIndex !== 0) {
       this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex - 1}))
     } else if (this.state.suggestersIndex === 0) {
         this.setState(prevState=> ({suggestersIndex: this.state.suggesters.length -1}))
   }
   }
+}
 }
 
 export default compose(graphql(userQuery, {name: 'userQuery'}),

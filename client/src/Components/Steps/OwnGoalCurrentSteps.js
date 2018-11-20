@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions.js'
 import {SortableContainer, arrayMove} from 'react-sortable-hoc';
 import {OwnSteps} from './Sortable/OwnGoal/OwnSteps.js'
+import FirstStep from './FirstStep.js'
 import update from 'immutability-helper';
 import MoveStep from './MoveStep.js'
 import uniqBy from 'lodash.uniqby'
@@ -18,6 +19,7 @@ class OwnGoalCurrentSteps extends Component {
       indexInMotion: null,
       movedSteps: [],
       renderMoveStep: false,
+      showAddStepState: false,
     }
 
     this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
@@ -50,6 +52,7 @@ class OwnGoalCurrentSteps extends Component {
     // }
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
+    if (this.props.steps) {
     return (
       <div className="sortable-container">
         <div>
@@ -86,7 +89,8 @@ class OwnGoalCurrentSteps extends Component {
           />
         </div>
       </div>
-        )
+    )}
+      else { return <FirstStep showAddStepState={this.state.showAddStepState} showAddStep={this.showAddStep} goalDocId={this.props.goalDocId} />}
   }
 
   _unrenderMoveStep() {
@@ -103,6 +107,10 @@ class OwnGoalCurrentSteps extends Component {
      oldIndex: oldIndex,
    }
   }, ()  => this.setState({renderMoveStep: true}) )
+ }
+
+ showAddStep = () => {
+   this.setState({showAddStepState: true})
  }
 
 }
