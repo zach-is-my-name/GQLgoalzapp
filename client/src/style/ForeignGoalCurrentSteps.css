@@ -7,19 +7,10 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  /* border: 1px solid black */
-}
-
-.foreign-step-suggest-remove {
-  display: flex;
-  /* flex-flow: row wrap; */
-  justify-content: center;
-  width: 100%;
 
 }
 
 .prompt {
-
     display: flex;
     width: 100%;
     justify-content: center;
@@ -30,6 +21,7 @@
 }
 
 .yes-no-prompt-buttons {
+  margin-bottom: 8px;
   /* display: flex;
   flew-flow: column wrap;
   justify-content: center;
@@ -41,7 +33,7 @@
 }
 
 
-.foreign-step-remove-suggested {
+.foreign-step-button {
   display: flex;
   flew-flow: row wrap;
   justify-content: center;
@@ -54,56 +46,43 @@
   justify-content: center;
 }
 
-.foreign-step-remove-suggested {
+.foreign-step-button {
   display: flex;
   width: 100%;
   justify-content: center;
 
 }
 
-.foreign-step-remove-suggested.container {
-  display: flex;
-  flex-wrap:wrap;
-  width: 100%;
-  justify-content: center;
-}
 
-foreign-step-remove-suggested.confirm-text p {
+.foreign-step-button.text p {
   margin: 0px;
 }
 
-.foreign-step-remove-suggested.confirm-prompt {
+.foreign-step-button.confirm-prompt {
   display: flex;
   flex-wrap:wrap;
   width: 100%;
   justify-content: center;
 }
 
-.foreign-step-suggest-remove.container {
+.foreign-step-button.container {
   display: flex;
   flex-wrap:wrap;
   width: 100%;
   justify-content: center;
 }
 
-.foreign-step-suggest-remove.text p {
-  margin: 0px;
-}
-
-.foreign-step-suggest-remove.confirm-prompt {
-  display: flex;
-  flex-wrap:wrap;
-  width: 100%;
-  justify-content: center;
-}
-
-
-.foreign-step-suggest-remove {
+.foreign-step-suggest-remove-component {
   display: flex;
   width: 100%;
   justify-content: center;
 }
 
+.foreign-step-remove-suggested-component {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 
 .currentsteps-label {
     margin-left: 256px;

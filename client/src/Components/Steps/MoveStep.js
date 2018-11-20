@@ -48,16 +48,6 @@ query goalDocByIdQuery ($goalDocId: ID) {
 
 
 
-const  suggesterClonedSteps = gql `
- query suggesterClonedSteps($goalDocId:ID){
-   allClonedSteps(filter: {goalDoc: {id: $goalDocId}}, orderBy: positionIndex_ASC) {
-      id
-      positionIndex
-      step
-      suggestedStep
-
-    }
-  }`
 class MoveStep extends Component {
   constructor(props) {
     super(props)
@@ -211,7 +201,7 @@ const WithMutation = compose(graphql(updateStepMutation, {
         variables: {
           ...variables
         },
-        refetchQueries: ['goalDocByIdQuery', 'suggesterClonedSteps']
+        refetchQueries: ['goalDocByIdQuery']
       })
     }
   })

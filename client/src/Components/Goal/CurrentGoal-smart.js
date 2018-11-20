@@ -14,8 +14,8 @@ import CurrentGoal from './CurrentGoal'
 import '../../style/CurrentGoal.css'
 
 const fetchGoalDocByID = gql `
-query GoalDocByIdQuery ($varID: ID) {
-  GoalDoc(id: $varID) {
+query GoalDocByIdQuery ($goalDocId: ID) {
+  GoalDoc(id: $goalDocId) {
    goal
    id
    steps(orderBy:positionIndex_ASC) {
@@ -31,6 +31,7 @@ query GoalDocByIdQuery ($varID: ID) {
      suggestedStep
      stepsId
      suggester {
+       id
        userName
      }
    }
@@ -99,7 +100,7 @@ class CurrentGoalSmart extends Component {
     options: ({id}) => ({
       fetchPolicy: 'network-only',
       variables: {
-        varID: id
+        goalDocId: id
       }
     })
   })(CurrentGoalWithState);

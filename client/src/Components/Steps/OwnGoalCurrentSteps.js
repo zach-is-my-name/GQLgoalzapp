@@ -51,7 +51,7 @@ class OwnGoalCurrentSteps extends Component {
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
     return (
-      <div>
+      <div className="sortable-container">
         <div>
           {this.state.renderMoveStep ?
             <MoveStep

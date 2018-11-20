@@ -41,6 +41,7 @@ const goalDocByIdQuery = gql `
          suggestedStep
          stepsId
          suggester {
+           id
            userName
          }
        }

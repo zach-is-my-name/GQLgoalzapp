@@ -63,10 +63,23 @@ class CurrentStepsSmart extends Component {
 
   }
 
+  componentDidUpdate(nextProps) {
+    if (this.props.goalDocById.loading !== nextProps.goalDocById.loading && nextProps.goalDocById.loading === false && nextProps.goalDocById.networkStatus === 7){
+    console.log(nextProps.goalDocById) 
+    // if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false) {
+      console.log('CurrentSteps-smart --> refetch called')
+      nextProps.goalDocById.refetch()
+    // }
+  }
+  }
+
   render() {
-    // console.log('CurrentSteps render called')
+    console.log('this.props.goalDocById.networkStatus',this.props.goalDocById.networkStatus )
+    console.log('this.props.goalDocById.GoalDoc', !!this.props.goalDocById.GoalDoc)
+    if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false){
+    console.log('__PROBLEM__  networkStatus === 7 && !this.props.goalDocById.GoalDoc')
+    }
     const {loggedInUserId, targetUser} = this.props
-    let suggesterClonedSteps
     let clonedSteps
     let children
     let steps
@@ -76,7 +89,9 @@ class CurrentStepsSmart extends Component {
     let selectedSuggesterSuggested
     if (this.props.goalDocById.loading || !this.props.goalDocById.GoalDoc) {
       return <div>Loading...</div>
-    } else if (this.props.selectedSuggesterId !== this.props.loggedInUserId) {
+    }
+
+    else if (this.props.selectedSuggesterId !== this.props.loggedInUserId) {
 
       this.props.goalDocById.GoalDoc.clonedSteps.forEach(stepObj => {
         acceptedStep = !stepObj.suggestedStep && stepObj.suggester && stepObj.suggester.id === this.props.selectedSuggesterId
@@ -162,7 +177,8 @@ const WithData = compose(graphql(goalDocByIdQuery, {
     return ({
       variables: {
         goalDocId: ownProps.goalDocId
-      }
+      },
+      skip: ownProps=> !ownProps.goalDocId
     })
   }
 }))(CurrentStepsSmart)

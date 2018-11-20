@@ -28,6 +28,7 @@ const clonedStepsQuery = gql `
          suggestedStep
          stepsId
          suggester {
+           id
            userName
          }
        }
