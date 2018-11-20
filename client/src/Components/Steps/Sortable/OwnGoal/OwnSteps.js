@@ -20,8 +20,7 @@ export const OwnSteps = SortableContainer(({goalDocId,
   selectedSuggesterId,
  }) => {
 
-    if (selectedSuggesterId !==loggedInUserId) {
-  // if (toggleSuggestedSteps === true) {
+    if (selectedSuggesterId !== loggedInUserId) {
     return (
           <ul className="sortable-container">
             {currentGoalClonedSteps.map((stepObj, index, currentGoalClonedSteps) =>

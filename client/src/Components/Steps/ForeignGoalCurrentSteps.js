@@ -23,9 +23,9 @@ class ForeignGoalCurrentSteps extends Component {
     // move step function needs a state entry to manipulate
     // that manipulated state gets passed to the move step component and that submits its computed data
   componentDidUpdate(prevProps) {
-    if (this.props.clonedSteps !== prevProps.clonedSteps) {
-      console.log('this.props', this.props.clonedSteps)
-      console.log('prevProps', prevProps.clonedSteps)
+    if (JSON.stringify(this.props.clonedSteps) !== JSON.stringify(prevProps.clonedSteps)) {
+      // console.log('this.props', this.props.clonedSteps)
+      // console.log('prevProps', prevProps.clonedSteps)
 
 
       this.setState({
@@ -43,10 +43,13 @@ class ForeignGoalCurrentSteps extends Component {
   render() {
       let suggestMoveStep
       if (this.state.renderMoveStep && this.props.loggedInUserId) {
-       suggestMoveStep =  <SuggestMoveStep
+       suggestMoveStep =
+       <SuggestMoveStep
          _unrenderMoveStep={this._unrenderMoveStep}
          clonedSteps={this.state.movedClonedSteps}
-         newIndex={this.state.newIndex} />
+         newIndex={this.state.newIndex}
+         loggedInUserId={this.props.loggedInUserId}
+       />
 
       } else if (this.state.renderMoveStep && !this.props.loggedInUserId ) {
         suggestMoveStep = null

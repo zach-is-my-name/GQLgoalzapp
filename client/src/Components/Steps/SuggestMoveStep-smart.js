@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 
 const updateClonedStepMutation = gql `
   mutation SuggestMoveStep($id: ID!, $positionIndex: Int) {
-    updateClonedStep(id: $id, positionIndex: $positionIndex, ) {
+    updateClonedStep(id: $id, positionIndex: $positionIndex) {
       id
       positionIndex
       step
@@ -13,8 +13,8 @@ const updateClonedStepMutation = gql `
   }
 `
 const suggestMoveMutation = gql `
-  mutation SuggestMoveStep($id: ID!) {
-    updateClonedStep(id: $id, suggestMove: true ) {
+  mutation SuggestMoveStep($id: ID!, $suggesterId: ID) {
+    updateClonedStep(id: $id, suggestMove: true, suggestedStep: true, suggesterId: $suggesterId ) {
       id
       positionIndex
       step
@@ -79,7 +79,8 @@ _reorderClonedSteps() {
   const oldSteps = this.props.clonedSteps.slice()
   const newSteps = oldSteps.map((stepObj, index) => ({
       ...stepObj,
-      positionIndex: index
+      positionIndex: index,
+      suggesterId: this.props.loggedInUserId,
   }))
   return newSteps
 }
@@ -91,7 +92,8 @@ _suggestedStepMutation() {
   const id = clonedSteps[newIndex].id
   this.props.suggestMoveMutation({
     variables: {
-      id: id
+      id: id,
+      suggesterId: this.props.loggedInUserId,
     }
   })
 }

@@ -52,7 +52,7 @@ class ForeignStepWithButtons extends Component {
           stepIndex={this.state.stepIndex}
           renderSuggestEditState={this.state.renderSuggestEditState}
           stepObj={this.props.stepObj}
-          unrenderSuggestEditStepFunction={this.unrenderSuggestEditStepFunction}
+          unrenderSuggestEditStepFunction={this.unrenderSuggestEditStep}
           editStepOn={this.state.editStepOn}
           activeIndexEditStep={this.state.activeIndexEditStep}
           id={this.props.id}
@@ -72,7 +72,9 @@ class ForeignStepWithButtons extends Component {
           {this.state.toggleConfirmPrompt &&(this.props.stepIndex !== null) &&
             (this.state.indexToRemove === this.props.stepIndex) &&
             this.props.stepObj.suggestedStep &&
-            this.props.selectedSuggesterId === this.props.loggedInUserId ?
+            this.props.selectedSuggesterId === this.props.loggedInUserId &&
+            this.props.stepObj.suggester.id &&
+            this.props.stepObj.suggester.id === this.props.loggedInUserId ?
               <div className="foreign-step-remove-suggested confirm-prompt">
                 <div className="foreign-step-remove-suggested text">
                   <p>Remove Step?</p>
@@ -117,8 +119,10 @@ class ForeignStepWithButtons extends Component {
               indexToRemove={this.state.indexToRemove}
               goalDocId={this.props.goalDocId}
               id={this.props.id}
-              unrenderSuggestRemoveStepFunction={this.unrenderSuggestRemoveStepFunction}
+              unrenderSuggestRemoveStepFunction={this.unrenderSuggestRemoveStep}
               stepObj={this.props.stepObj}
+              loggedInUserId={this.props.loggedInUserId}
+              targetUser={this.props.targetUser}
             />
           </div>
         : null }
@@ -141,7 +145,7 @@ class ForeignStepWithButtons extends Component {
   }
 
   clickHandlerCancel(event) {
-    console.log('no clicked')
+    // console.log('no clicked')
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       indexToRemove: null
@@ -157,7 +161,7 @@ class ForeignStepWithButtons extends Component {
 }
 
   clickHandlerSuggestRemove(indexToRemove) {
-    console.log('index to remove', indexToRemove)
+    // console.log('index to remove', indexToRemove)
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       indexToRemove: indexToRemove,
@@ -166,7 +170,7 @@ class ForeignStepWithButtons extends Component {
   }
 
   clickHandlerConfirmSuggestRemove() {
-    console.log("clickHandler confirm ")
+    // console.log("clickHandler confirm ")
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       renderSuggestRemoveState: true,
@@ -179,6 +183,7 @@ class ForeignStepWithButtons extends Component {
     }))}
 
   clickHandlerRemoveSuggested() {
+    // console.log('remove suggested')
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       indexToRemove: indexToRemove,
@@ -187,7 +192,7 @@ class ForeignStepWithButtons extends Component {
   }
 
   clickHandlerConfirmRemoveSuggestedStep() {
-    console.log("clickHandler confirm ")
+    // console.log("clickHandler confirm ")
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       renderRemoveSuggestedStepState: true,
@@ -195,6 +200,7 @@ class ForeignStepWithButtons extends Component {
   }
 
   unrenderRemoveSuggestedStep() {
+    // console.log('unrenderRemoveSuggestedStep')
     this.setState(prevState => ({
       renderRemoveSuggestedStepState: false,
     }))

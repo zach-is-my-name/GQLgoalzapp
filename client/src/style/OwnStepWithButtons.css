@@ -4,21 +4,21 @@
   justify-content: center;
 }
 
-.own-step-remove .container {
+.own-step-remove.container {
   display: flex;
   flex-wrap:wrap;
   width: 100%;
   justify-content: center;
 }
 
-.own-step-remove .confirm-prompt {
+.own-step-remove.confirm-prompt {
   display: flex;
   flex-wrap:wrap;
   width: 100%;
   justify-content: center;
 }
 
-.own-step-remove .confirm-text {
+.own-step-remove.confirm-text {
   margin: 0px;
 }
 
@@ -33,10 +33,20 @@
   margin: 0 0 5px 0;
 }
 
+.own-step-reject.text {
+  margin: 0 0 5px 0;
+}
 .yes-no-prompt-buttons {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.own-step-reject.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center
 }
 
 .own-step-accept {

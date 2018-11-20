@@ -128,6 +128,7 @@ class AddStepSmart extends React.Component {
   async _submitStep(event) {
     event.preventDefault()
     const {stepIdQuery, clonedStepIdQuery} = this.props
+    // console.log(this._reorderSteps(stepIdQuery))
     const returnedIdArr =  await this._submitAddStepMutation(this._reorderSteps(stepIdQuery))
     const returnedId = returnedIdArr[0]
     this._submitAddClonedStepMutation(this._reorderClonedSteps(clonedStepIdQuery, returnedId))
@@ -135,7 +136,8 @@ class AddStepSmart extends React.Component {
 
   _reorderSteps(queryResult) {
     const {loading, error} = queryResult
-    const {stepIndex} = this.props.stepIndex
+    const {stepIndex} = this.props
+    console.log(stepIndex)
     if (!loading) {
       const newSteps = queryResult.allSteps.slice()
       const newStep = {
@@ -191,7 +193,7 @@ class AddStepSmart extends React.Component {
     const {loading, error } = queryResult
     if (!loading) {
     const {clonedStepIdQuery} = queryResult
-    const {stepIndex} = this.props.stepIndex
+    const {stepIndex} = this.props
     const newSteps = queryResult.allClonedSteps.slice()
       const newStep = {
         step: this.state.step,

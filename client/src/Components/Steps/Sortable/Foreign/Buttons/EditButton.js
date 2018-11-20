@@ -13,6 +13,7 @@ const EditButton = ({
   id,
   selectedSuggesterId,
   loggedInUserId,
+  targetUser,
     }) => {
         return (
         <div className="edit-button-container">
@@ -21,6 +22,8 @@ const EditButton = ({
               <SuggestEditStep
                 stepObj={stepObj}
                 unrenderSuggestEditStepFunction={unrenderSuggestEditStepFunction}
+                loggedInUserId={loggedInUserId}
+                targetUser={targetUser}
               />
             :stepObj.step}</li>
 

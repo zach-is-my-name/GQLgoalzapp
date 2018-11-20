@@ -29,6 +29,7 @@ const clonedStepsQuery = gql `
          suggestedStep
          stepsId
          suggester {
+           id
            userName
          }
        }
@@ -47,17 +48,12 @@ componentDidMount() {
 }
 
  render() {
-   if (this.props.loggedInUser) {
      this._submitRemoveSuggestedStep(this.props.idToRemove)
-   }
-   else if (!this.props.loggedInUser) {
-     // message: 'cannot remove owner x' suggestion
      return null
-   }
-   return null
 }
 
 async _submitRemoveSuggestedStep(idToRemove){
+  console.log('_submitRemoveSuggestedStep called')
   await this.props.removeClonedStepMutation({
     variables: {
       id: this.props.idToRemove

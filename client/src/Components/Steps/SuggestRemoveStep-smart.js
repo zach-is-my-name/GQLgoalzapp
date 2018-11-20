@@ -33,7 +33,9 @@ componentDidMount() {
 
 
   render() {
-    if (this.props.loggedInUser && this.props.loggedInUser !== this.props.targetUser) {
+    // console.log('SuggestRemove Rendered')
+    console.log(this.props)
+    if (this.props.loggedInUserId && this.props.loggedInUserId !== this.props.targetUser) {
       this._suggestRemoveStep()
     } else if (!this.props.loggedInUser) {
       // TODO check if user owns clonedSteps; prompt log-in or create user;  if true, resolve action; if false, onboard and give fresh clonedSteps
@@ -43,6 +45,7 @@ componentDidMount() {
   }
 
 _suggestRemoveStep() {
+    console.log('SuggestRemoveStep called')
     this.props.updateClonedStep({variables: {
       id: this.props.stepObj.id
     }})

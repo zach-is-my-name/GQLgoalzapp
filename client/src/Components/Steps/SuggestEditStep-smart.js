@@ -5,12 +5,15 @@ import gql from 'graphql-tag';
 import EditStep from './EditStep.js'
 
 const updateClonedStepMutation = gql `
-  mutation EditClonedStepMutation( $id: ID!, $step: String) {
-    updateClonedStep(id: $id, step: $step, suggestedStep: true, suggestEdit: true ) {
+  mutation EditClonedStepMutation( $id: ID!, $step: String, $suggesterId: String) {
+    updateClonedStep(id: $id, step: $step, suggestedStep: true, suggestEdit: true, suggesterId: $suggesterId) {
       id
       step
       suggestedStep
       suggestEdit
+      suggester {
+        id
+      }
     }
   }`
 
@@ -32,6 +35,7 @@ const goalDocByIdQuery = gql `
          suggestedStep
          stepsId
          suggester {
+           id
            userName
          }
        }
@@ -63,11 +67,14 @@ class SuggestEditStep extends Component {
   }
 
 async _submitEditedStep(e) {
+    console.log('submitEdited clicked')
     e.preventDefault()
-    if (this.props.loggedInUser && this.props.loggedInUser !== this.props.targetUser) {
+    if (this.props.loggedInUserId && this.props.loggedInUserId !== this.props.targetUser) {
       await this.props.updateClonedStep({variables: {
         id: this.props.stepObj.id,
-        step: this.state.editedStep
+        step: this.state.editedStep,
+        suggesterId: this.props.loggedInUserId,
+        suggestedStep: true,
       }})
       this.props.unrenderSuggestEditStepFunction()
     } else if (!this.props.loggedInUser) {

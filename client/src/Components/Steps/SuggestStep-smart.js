@@ -25,6 +25,7 @@ const updateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation 
       step
       id
       suggester{
+        id
         userName
       }
       goalDoc {
@@ -50,6 +51,7 @@ const goalDocByIdQuery = gql `
          suggestedStep
          stepsId
          suggester {
+           id
            userName
          }
        }
@@ -91,21 +93,19 @@ class SuggestStepSmart extends Component {
 
   async _submitSuggestedStep(event) {
     event.preventDefault()
-    // console.log(this._reorderSteps(this.props.stepIdQuery))
+    // console.log(this._reorderSteps(this.props.clonedStepIdQuery))
     if (this.props.loggedInUserId) {
       await this._submitSuggestedStepMutation(this._reorderSteps(this.props.clonedStepIdQuery))
   } else if (!this.props.loggedInUserId && this.state.step) {
     //render create user; save step state; when create user resolves send mutation
-  }
+    }
   }
 
   _reorderSteps(queryResult) {
     const {loading, error, allClonedSteps} = queryResult
     if (!loading) {
-      console.log('query result', allClonedSteps)
+      // console.log('query result', allClonedSteps)
       // console.log(allSteps)
-      // actions.setStepAndPositionIndex(this.state.step, this.props.index)
-      // actions.setClonedStepAndPositionIndex(this.state.step, this.props.index)
       const newStep = {
         step: this.state.step,
         suggestedStep: true,
@@ -113,6 +113,7 @@ class SuggestStepSmart extends Component {
         positionIndex: null
       }
       const stepIndex = this.props.stepIndex
+      // console.log(stepIndex)
       const newSteps = allClonedSteps.slice()
       newSteps.splice(stepIndex, 0, newStep )
       return newSteps.map((stepObj, index) => ({
@@ -123,7 +124,7 @@ class SuggestStepSmart extends Component {
   }
 
   _submitSuggestedStepMutation = async (newClonedStepsSortedByPositionIndex) => {
-    console.log(newClonedStepsSortedByPositionIndex)
+    // console.log(newClonedStepsSortedByPositionIndex)
     newClonedStepsSortedByPositionIndex.map(async (stepObj, mapIndex, array) => {
       let id
       if (stepObj.id) {
@@ -141,6 +142,7 @@ class SuggestStepSmart extends Component {
           suggesterId: this.props.loggedInUserId
         }
       })
+      // console.log(suggestStepResult)
     })
   }
 
