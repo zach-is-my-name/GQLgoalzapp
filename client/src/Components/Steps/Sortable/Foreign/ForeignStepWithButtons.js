@@ -24,6 +24,7 @@ class ForeignStepWithButtons extends Component {
       renderSuggestRemoveState: false,
       renderSuggestEditState: false,
       renderRemoveSuggestedStepState: false,
+      renderSuggestStepState: false,
     }
 
     this.clickHandlerCancel = this.clickHandlerCancel.bind(this)
@@ -34,7 +35,9 @@ class ForeignStepWithButtons extends Component {
     this.unrenderSuggestRemoveStep = this.unrenderSuggestRemoveStep.bind(this)
     this.unrenderRemoveSuggestedStep = this.unrenderRemoveSuggestedStep.bind(this)
     this.unrenderSuggestEditStep = this.unrenderSuggestEditStep.bind(this)
-    this.clickHandlerConfirmRemoveSuggestedStep = this.clickHandlerConfirmRemoveSuggestedStep.bind(this)}
+    this.clickHandlerConfirmRemoveSuggestedStep = this.clickHandlerConfirmRemoveSuggestedStep.bind(this)
+    this.unrenderSuggestStep = this.unrenderSuggestStep.bind(this)
+  }
 
   render() {
     const {stepObj} = this.props
@@ -144,13 +147,15 @@ class ForeignStepWithButtons extends Component {
         {/* </div> */}
         {/*suggest step */}
         {this.state.stepActivated && (this.state.stepIndex !== null) &&
-          (this.state.indexClicked === this.state.stepIndex) && ownStepsBool
+          (this.state.indexClicked === this.state.stepIndex) && ownStepsBool && this.state.renderSuggestStepState
             ? <div className="foreign-step-suggest">
               <SuggestStepSmart
                 stepIndex={this.state.stepIndex}
                 goalDocId={this.props.goalDocId}
                 targetUser={this.props.targetUser}
-                loggedInUserId={this.props.loggedInUserId}/>
+                loggedInUserId={this.props.loggedInUserId}
+                unrenderSuggestStepFunctiion={this.unrenderSuggestStep}
+              />
             </div>
             : null }
 
@@ -170,9 +175,19 @@ class ForeignStepWithButtons extends Component {
     this.setState(prevState => ({
       indexClicked: stepIndex,
       stepActivated: !prevState.stepActivated,
-      stepIndex: this.props.stepIndex
+      stepIndex: this.props.stepIndex,
+      renderSuggestStepState: !prevState.renderSuggestStepState,
     }))
 }
+
+  unrenderSuggestStep() {
+    this.setState({
+      renderSuggestStepState: false,
+      indexClicked: null,
+      stepActivated: false,
+      stepIndex: null,
+    })
+  }
 
   clickHandlerSuggestRemove(indexToRemove) {
     // console.log('index to remove', indexToRemove)

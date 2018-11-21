@@ -28,7 +28,8 @@ class OwnStepWithButtons extends Component {
       activeIndexEditStep: null,
       renderRemoveStepState: false,
       renderRejectStepState: false,
-      renderAcceptStepState: false
+      renderAcceptStepState: false,
+      renderAddStepState: false,
     }
 
     this.clickHandlerRemoveStep = this.clickHandlerRemoveStep.bind(this)
@@ -44,6 +45,7 @@ class OwnStepWithButtons extends Component {
     this.clickHandlerConfirmReject = this.clickHandlerConfirmReject.bind(this)
     this.unrenderEdit = this.unrenderEdit.bind(this)
     this.clickHandlerConfirmRemove = this.clickHandlerConfirmRemove.bind(this)
+    this.unrenderAddStep = this.unrenderAddStep.bind(this)
   }
 
   render() {
@@ -206,10 +208,13 @@ class OwnStepWithButtons extends Component {
               { (this.state.stepActivated && this.state.stepIndex !== null &&
                 (this.state.indexClicked === this.state.stepIndex) &&
                 !this.props.stepObj.suggestedStep &&
-              this.props.selectedSuggesterId === this.props.loggedInUserId) ?
+              this.props.selectedSuggesterId === this.props.loggedInUserId) && this.state.renderAddStepState ?
                 <div className="own-step-add">
-                  <AddStepSmart stepIndex={this.state.stepIndex}
-                    goalDocId={this.props.goalDocId}/>
+                  <AddStepSmart
+                    stepIndex={this.state.stepIndex}
+                    goalDocId={this.props.goalDocId}
+                    unrenderAddStepFunction={this.unrenderAddStep}
+                  />
                 </div>
               : null}
 
@@ -237,8 +242,18 @@ class OwnStepWithButtons extends Component {
     this.setState(prevState => ({
       indexClicked: stepIndex,
       stepActivated: !prevState.stepActivated,
-      stepIndex: this.props.stepIndex
+      stepIndex: this.props.stepIndex,
+      renderAddStepState: !prevState.renderAddStepState,
     }))
+  }
+
+  unrenderAddStep() {
+    this.setState({
+      renderAddStepState: false,
+      indexClicked: null,
+      stepActivated: false,
+      stepIndex: null,
+    })
   }
 
   clickHandlerEdit(stepIndex, event) {

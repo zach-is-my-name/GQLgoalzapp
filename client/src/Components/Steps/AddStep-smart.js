@@ -120,7 +120,8 @@ class AddStepSmart extends React.Component {
     // console.log(this._reorderSteps(stepIdQuery))
     const returnedIdArr =  await this._submitAddStepMutation(this._reorderSteps(stepIdQuery))
     const returnedId = returnedIdArr[0]
-    this._submitAddClonedStepMutation(this._reorderClonedSteps(clonedStepIdQuery, returnedId))
+    await this._submitAddClonedStepMutation(this._reorderClonedSteps(clonedStepIdQuery, returnedId))
+    this.props.unrenderAddStepFunction()
   }
 
   _reorderSteps(queryResult) {

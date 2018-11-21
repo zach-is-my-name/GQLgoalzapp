@@ -60,12 +60,19 @@ query goalDocByIdQuery ($goalDocId: ID) {
 class CurrentStepsSmart extends Component {
   constructor(props) {
     super(props)
+  }
 
+  componentDidMount() {
+    if (this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc) {
+      console.log('CurrentSteps-smart --> refetch called')
+      this.props.goalDocById.refetch()
+    }
   }
 
   componentDidUpdate(nextProps) {
-    if (this.props.goalDocById.loading !== nextProps.goalDocById.loading && nextProps.goalDocById.loading === false && nextProps.goalDocById.networkStatus === 7){
-    console.log(nextProps.goalDocById) 
+    if(this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc ||
+    nextProps.goalDocById.networkStatus === 7 && !nextProps.goalDocById.GoalDoc){
+    console.log(nextProps.goalDocById)
     // if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false) {
       console.log('CurrentSteps-smart --> refetch called')
       nextProps.goalDocById.refetch()
@@ -74,6 +81,13 @@ class CurrentStepsSmart extends Component {
   }
 
   render() {
+    if(this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc){
+    console.log(this.props.goalDocById)
+    // if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false) {
+      console.log('CurrentSteps-smart --> refetch called')
+      this.props.goalDocById.refetch()
+    // }
+  }
     console.log('this.props.goalDocById.networkStatus',this.props.goalDocById.networkStatus )
     console.log('this.props.goalDocById.GoalDoc', !!this.props.goalDocById.GoalDoc)
     if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false){

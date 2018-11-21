@@ -44,7 +44,7 @@ class SelectSuggesterSmart extends Component {
           .filter(
             (obj, index, self) => self.findIndex((findObj) => {
             return (obj.userName === findObj.userName && obj.id === findObj.id)
-          }) === index).filter(obj => obj.userName && obj.id)
+          }) === index).filter(obj => obj.userName && obj.id) || []
 
     this.props.setSuggesters(arrGoalDocSuggesters.pop())
     }

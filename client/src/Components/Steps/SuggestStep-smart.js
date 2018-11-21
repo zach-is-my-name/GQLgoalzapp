@@ -96,6 +96,7 @@ class SuggestStepSmart extends Component {
     // console.log(this._reorderSteps(this.props.clonedStepIdQuery))
     if (this.props.loggedInUserId) {
       await this._submitSuggestedStepMutation(this._reorderSteps(this.props.clonedStepIdQuery))
+      this.props.unrenderSuggestStepFunctiion()
   } else if (!this.props.loggedInUserId && this.state.step) {
     //render create user; save step state; when create user resolves send mutation
     }

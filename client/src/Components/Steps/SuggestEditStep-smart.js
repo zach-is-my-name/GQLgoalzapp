@@ -61,7 +61,7 @@ class SuggestEditStep extends Component {
         _submitEditedStep={this._submitEditedStep}
         handleChange={this._handleChange}
         value={this.state.editedStep}
-        unrenderEditFunction={this.props.unrenderEditFunction}
+        unrenderEditFunction={this.props.unrenderSuggestEditStepFunction}
       />
         )
   }
