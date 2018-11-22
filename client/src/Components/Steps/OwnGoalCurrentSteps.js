@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, {Component} from 'react';
+import SelectedSuggesterName from '../../Components/User/SelectedSuggesterName'
 import {connect} from 'react-redux';
 import * as actions from '../../Actions/actions.js'
 import {SortableContainer, arrayMove} from 'react-sortable-hoc';
@@ -8,7 +9,7 @@ import FirstStep from './FirstStep.js'
 import update from 'immutability-helper';
 import MoveStep from './MoveStep.js'
 import uniqBy from 'lodash.uniqby'
-// import '../../style/OwnGoalCurrentSteps.css'
+import '../../style/OwnGoalCurrentSteps.css'
 
 class OwnGoalCurrentSteps extends Component {
   constructor(props) {
@@ -55,6 +56,13 @@ class OwnGoalCurrentSteps extends Component {
     if (this.props.steps) {
     return (
       <div className="sortable-container">
+
+        {/* <SelectedSuggesterName
+          loggedInUserId={this.props.loggedInUserId}
+          selectedSuggesterId={this.props.selectedSuggesterId}
+          selectedSuggesterName={this.props.selectedSuggesterName}
+          />
+        */}
         <div>
           {this.state.renderMoveStep ?
             <MoveStep

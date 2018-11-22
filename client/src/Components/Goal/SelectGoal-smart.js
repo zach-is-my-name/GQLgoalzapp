@@ -33,14 +33,12 @@ class SelectGoalSmart extends React.Component {
       return <p>Error!</p>
     } else {
     return (
-      <div>
         <SelectGoalForm
           match={this.props.match}
           goalDocs={allGoalDocs}
           value={this.props.value}
           handleChange={this.props.setGoalDocId}
         />
-      </div>
       )
     }
   }

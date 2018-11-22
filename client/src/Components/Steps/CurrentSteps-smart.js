@@ -127,25 +127,29 @@ class CurrentStepsSmart extends Component {
         // console.log('clonedSteps filter', clonedSteps)
         steps = this.props.goalDocById.GoalDoc.steps
 
-        return (<div className="current-steps-smart-container">
-          {
-            loggedInUserId !== targetUser
-              ? <ForeignGoalCurrentSteps goalDocId={this.props.goalDocId}
-                targetUser={targetUser}
-                loggedInUserId={loggedInUserId}
-                clonedSteps={clonedSteps || []}
-                steps={steps || []}
-                selectedSuggesterId={this.props.selectedSuggesterId}
-                suggestersIndex={this.props.suggestersIndex}/>
-              : <OwnGoalCurrentSteps
-                randomColorStep={this.props.randomColorStep}
-                clonedSteps={clonedSteps || []}
-                steps={steps || []}
-                goalDocId={this.props.goalDocId}
-                targetUser={targetUser}
-                loggedInUserId={this.props.loggedInUserId}
-                selectedSuggesterId={this.props.selectedSuggesterId}
-                suggestersIndex={this.props.suggestersIndex}/>
+        return (
+          <div className="current-steps-smart-container">
+
+            {
+              loggedInUserId !== targetUser
+                ? <ForeignGoalCurrentSteps goalDocId={this.props.goalDocId}
+                  targetUser={targetUser}
+                  loggedInUserId={loggedInUserId}
+                  clonedSteps={clonedSteps || []}
+                  steps={steps || []}
+                  selectedSuggesterId={this.props.selectedSuggesterId}
+                  selectedSuggesterName={this.props.selectedSuggesterName}
+                  suggestersIndex={this.props.suggestersIndex}/>
+                : <OwnGoalCurrentSteps
+                  randomColorStep={this.props.randomColorStep}
+                  clonedSteps={clonedSteps || []}
+                  steps={steps || []}
+                  goalDocId={this.props.goalDocId}
+                  targetUser={targetUser}
+                  loggedInUserId={this.props.loggedInUserId}
+                  selectedSuggesterId={this.props.selectedSuggesterId}
+                  selectedSuggesterName={this.props.selectedSuggesterName}
+                  suggestersIndex={this.props.suggestersIndex}/>
           }
         </div>)
       // }
@@ -157,6 +161,12 @@ class CurrentStepsSmart extends Component {
         // console.log('clonedSteps no filter', clonedSteps)
 
         return (<div className="current-steps-smart-container">
+          {/* <SelectedSuggesterName
+            loggedInUserId={this.props.loggedInUserId}
+            selectedSuggesterId={this.props.selectedSuggesterId}
+            selectedSuggesterName={this.props.selectedSuggesterName}
+            />
+          */}
           {
             loggedInUserId !== targetUser
               ? <ForeignGoalCurrentSteps
@@ -165,6 +175,7 @@ class CurrentStepsSmart extends Component {
                 loggedInUserId={loggedInUserId}
                 clonedSteps={clonedSteps || []} steps={steps || []}
                 selectedSuggesterId={this.props.selectedSuggesterId}
+                selectedSuggesterName={this.props.selectedSuggesterName}
                 suggestersIndex={this.props.suggestersIndex}/>
               : <OwnGoalCurrentSteps
                 randomColorStep={this.props.randomColorStep}
@@ -174,6 +185,7 @@ class CurrentStepsSmart extends Component {
                 targetUser={targetUser}
                 loggedInUserId={this.props.loggedInUserId}
                 selectedSuggesterId={this.props.selectedSuggesterId}
+                selectedSuggesterName={this.props.selectedSuggesterName}
                 suggestersIndex={this.props.suggestersIndex}/>
           }
         </div>)

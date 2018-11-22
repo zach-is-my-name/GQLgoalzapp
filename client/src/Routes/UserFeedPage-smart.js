@@ -101,24 +101,28 @@ class UserFeedPage extends Component {
         <h2>
           {/* UserFeed */}
         </h2>
-        <TargetUser targetUserName={User.userName || ''}/>
-        <SelectSuggesterSmart
-          goalDocId={this.state.goalDocId}
-          setSelf={this._setSelf}
-          setSuggesters={this._setSuggesters}
-          suggesters={this.state.suggesters}
-          nextSuggester={this._nextSuggester}
-          prevSuggester={this._prevSuggester}
-        />
-        <SelectedSuggesterName selectedSuggesterName={this.state.selectedSuggesterName} />
 
-        <SelectGoal
-          targetUserId={User.id}
-          setGoalDocId={this._setGoalDocId}
-          value={this.state.goalDocId}
-          match={match}
-        />
+        <div className="userfeed suggester-container">
+          <SelectedSuggesterName
+            loggedInUserId={this.props.userQuery.user ? this.props.userQuery.user.id : null}
+            selectedSuggesterId={this.state.selectedSuggesterId}
+            selectedSuggesterName={this.state.selectedSuggesterName}
+          />
+
+          <SelectSuggesterSmart
+            goalDocId={match.params.goalDocid || this.state.goalDocId}
+            setSelf={this._setSelf}
+            setSuggesters={this._setSuggesters}
+            suggesters={this.state.suggesters}
+            nextSuggester={this._nextSuggester}
+            prevSuggester={this._prevSuggester}
+          />
+        </div>
+
+
         {/* <InputGoal /> */}
+
+
         {
           match.params.goaldocid || this.state.goalDocId ?
             <CurrentStepsSmart
@@ -137,9 +141,24 @@ class UserFeedPage extends Component {
 
         {/* <Notifications/>  */}
         {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
-        <Link className="globalfeed" to="/">
-          <span className="fas faGlobe fa-lg"> <FontAwesomeIcon icon={ faGlobe } /> </span>
-        </Link>
+        <div className="userfeed footer1 container">
+          <TargetUser targetUserName={User.userName || ''}/>
+
+          <SelectGoal
+            targetUserId={User.id}
+            setGoalDocId={this._setGoalDocId}
+            value={this.state.goalDocId}
+            match={match}
+          />
+
+        </div>
+
+        <div className="userfeed footer2 container">
+          <Link className="globalfeed" to="/">
+            <span className="fas faGlobe fa-lg"> <FontAwesomeIcon icon={ faGlobe } /> </span>
+          </Link>
+
+        </div>
       </div>
     )
   }

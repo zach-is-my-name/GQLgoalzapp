@@ -61,6 +61,7 @@ class ForeignGoalCurrentSteps extends Component {
 
       <div className="jsx-wrap">
         {suggestMoveStep}
+
         <ForeignSteps
           clonedSteps={this.props.clonedSteps}
           onSortEnd={this.onSortEnd}
@@ -74,6 +75,7 @@ class ForeignGoalCurrentSteps extends Component {
           loggedInUserId={this.props.loggedInUserId}
           selectedSuggesterId={this.props.selectedSuggesterId}
           suggestersIndex={this.props.suggestersIndex}
+          selectedSuggesterName={this.props.selectedSuggesterName}
         />
       </div>
       )

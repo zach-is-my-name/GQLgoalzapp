@@ -9,8 +9,9 @@
 
 .target-user-p {
   margin-top: 5px;
-  margin-bottom: 7px;
+  margin-bottom: 10px;
   font-family: bentonreg;
+  margin-left: 10px;
 }
 
 .fas.faCaretRight {

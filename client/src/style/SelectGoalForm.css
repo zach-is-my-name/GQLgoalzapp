@@ -1,5 +1,6 @@
 .goal-select {
-  margin-left: 813px;
+  margin-left: 10px;
+  margin-top: 2px;
     }
 
 select {
@@ -8,6 +9,7 @@ select {
       background-color: transparent;
       text-decoration: underline;
       font-family: bentonreg;
+      font-size: 16px;
     }
 
 /*js bin has goal-select 135px off edge of last letter of h1 (with same margin), this is 175*/
