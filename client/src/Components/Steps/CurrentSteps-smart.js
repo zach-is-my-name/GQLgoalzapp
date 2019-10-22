@@ -88,8 +88,8 @@ class CurrentStepsSmart extends Component {
       this.props.goalDocById.refetch()
     // }
   }
-    console.log('this.props.goalDocById.networkStatus',this.props.goalDocById.networkStatus )
-    console.log('this.props.goalDocById.GoalDoc', !!this.props.goalDocById.GoalDoc)
+    // console.log('this.props.goalDocById.networkStatus',this.props.goalDocById.networkStatus )
+    // console.log('this.props.goalDocById.GoalDoc', !!this.props.goalDocById.GoalDoc)
     if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false){
     console.log('__PROBLEM__  networkStatus === 7 && !this.props.goalDocById.GoalDoc')
     }

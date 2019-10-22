@@ -1,7 +1,6 @@
 /* eslint-disable */
 import React, {Component} from 'react';
 import {Route, Link} from 'react-router-dom';
-import {connect} from 'react-redux';
 import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
 import CurrentUser from '../Components/User/CurrentUser'
@@ -34,62 +33,66 @@ const targetUserQuery = gql `
   }
 }`
 
+const existingUserQuery = gql `
+  query existingUserQuery($urlId: ID) {
+    User(id: $urlId) {
+    id
+    }
+  }
+`
+
 class UserFeedPage extends Component {
   constructor(props) {
     super(props)
     // this.dispatchtargetUserID = this.dispatchtargetUserID.bind(this)
     this.state = {
       goalDocId: '',
+      paramUserId: '',
       suggesters: [],
       suggestersIndex: 0,
       selectedSuggesterId: '',
       selectedSuggesterName: '',
-
     }
+
     this._setGoalDocId = this._setGoalDocId.bind(this)
     this._setSelf = this._setSelf.bind(this)
     this._setSuggesters = this._setSuggesters.bind(this)
     this._nextSuggester = this._nextSuggester.bind(this)
     this._prevSuggester = this._prevSuggester.bind(this)
+    this._setGoalDocIdOnCreate = this._setGoalDocIdOnCreate.bind(this)
   }
 
-  componentDidMount() {
-    // console.log(this.props)
+async componentDidMount() {
     const {match} = this.props;
-    match.params.goaldocid ? this.setState({goalDocId: match.params.goaldocid}) : null
-    if (this.props.userQuery.user) {
-      this.setState((state, props) => {
-        return ({suggesters: [{userName: props.userQuery.user.userName, id: props.userQuery.user.id}, ...state.suggesters]})
-        // (state) => console.log(state)
-        // () =>  this.setState((state, props) => { return ({selectedSuggesterId: state.suggesters[state.suggestersIndex].id})}
-        // )
-      })
-    } else {
-      this.props.history.push('/')
-    }
+    match.params.goaldocid ? this.setState({goalDocId: match.params.goaldocid}) : null;
+    match.params.userid  ? this.setState({paramUserId: match.params.userid}) : null;
+    let existingUserId;
 
-    // match.params.userid ? this.setState(() => ({suggesters: [match.params.userid, ...this.state.suggesters] } ) ) : null
-    // this.setState(() => ({: this.state.})
-  }
+    if (!match.params.userid)   {
+        this.props.history.push('/')
+      }
+
+    if (this.props.userQuery.user && this.props.userQuery.user.id) {
+        // console.log(this.props.userQuery.user.id)
+        // console.log(this.props.userQuery.user.userName)
+        this.setState((state, props) => {
+          return ({suggesters: [{userName: props.userQuery.user.userName,
+            id: props.userQuery.user.id}, ...state.suggesters]})
+        })
+    }
+}
 
  componentDidUpdate (prevProps, prevState) {
-   // console.log('prevProps', prevProps)
-   // console.log('this.props', this.props)
-   // console.log('Bool', this.props === prevProps)
-   // console.log(this.state)
-   // if (this.props !== prevProps) {
-
    if (this.state.suggesters !== prevState.suggesters || this.state.suggestersIndex !== prevState.suggestersIndex) {
-     this.setState({selectedSuggesterId: this.state.suggesters[this.state.suggestersIndex].id,
-        selectedSuggesterName: this.state.suggesters[this.state.suggestersIndex].userName})
-     // this.setState({})
+     this.setState({
+       selectedSuggesterId: this.state.suggesters[this.state.suggestersIndex].id,
+       selectedSuggesterName: this.state.suggesters[this.state.suggestersIndex].userName})
    }
-  // console.log(prevState)
  }
 
   render() {
+    // console.log(this.props.targetUserQuery)
     const {match} = this.props;
-    // console.log(match)
     const {loading, error, User} = this.props.targetUserQuery
     if (loading) {
       return (<div>
@@ -98,10 +101,6 @@ class UserFeedPage extends Component {
     }
     return (
       <div className="userfeedpage-container">
-        <h2>
-          {/* UserFeed */}
-        </h2>
-
         <div className="userfeed suggester-container">
           <SelectedSuggesterName
             loggedInUserId={this.props.userQuery.user ? this.props.userQuery.user.id : null}
@@ -110,7 +109,7 @@ class UserFeedPage extends Component {
           />
 
           <SelectSuggesterSmart
-            goalDocId={match.params.goalDocid || this.state.goalDocId}
+            goalDocId={match.params.goaldocid || this.state.goalDocId}
             setSelf={this._setSelf}
             setSuggesters={this._setSuggesters}
             suggesters={this.state.suggesters}
@@ -118,10 +117,6 @@ class UserFeedPage extends Component {
             prevSuggester={this._prevSuggester}
           />
         </div>
-
-
-        {/* <InputGoal /> */}
-
 
         {
           match.params.goaldocid || this.state.goalDocId ?
@@ -135,12 +130,7 @@ class UserFeedPage extends Component {
             />
           : null
         }
-        {/* <CurrentGoal id={this.props.currentGoalID}/> */}
 
-        {/* <Route exact path={`${match.url}/userfeed/:userid`} component={UserFeedPage} /> */}
-
-        {/* <Notifications/>  */}
-        {/* <CurrentStepsSmart loggedInUserId={this.props.data.user.id || ""} targetUserId={match.params.userid}  /> */}
         <div className="userfeed footer1 container">
           <TargetUser targetUserName={User.userName || ''}/>
 
@@ -150,7 +140,16 @@ class UserFeedPage extends Component {
             value={this.state.goalDocId}
             match={match}
           />
+        </div>
 
+        <div className = "userfeed input-goal-container">
+        {this.props.targetUserQuery.User.id === this.props.userQuery.user.id && !this.state.goalDocId ?
+           <InputGoalSmart
+          loggedInUserId = {this.props.userQuery.user.id}
+          _setGoalDocIdOnCreate = {this._setGoalDocIdOnCreate}
+          / >
+          : null
+        }
         </div>
 
         <div className="userfeed footer2 container">
@@ -168,6 +167,10 @@ class UserFeedPage extends Component {
     event.preventDefault()
   }
 
+ _setGoalDocIdOnCreate(id) {
+   this.props.history.push(`/userfeed/${this.props.targetUserQuery}/${id}`)
+ }
+
  _setSelf() {
       this.setState(prevState=> ({suggestersIndex: 0}))
  }
@@ -178,7 +181,7 @@ class UserFeedPage extends Component {
  }
 
  _nextSuggester() {
-  if (this.state.suggesters.length && this.state.suggestersIndex < this.state.suggesters.length -1) {
+  if (this.state.suggesters.length && this.state.suggestersIndex < this.state.suggesters.length -1 && this.state.suggesters[1]) {
     this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex + 1}))
   } else if (this.state.suggestersIndex < this.state.suggesters.length) {
       this.setState(prevState=> ({suggestersIndex: 0}))
@@ -189,17 +192,18 @@ class UserFeedPage extends Component {
  }
 
   _prevSuggester() {
-    if (this.state.suggesters.length > 0) {
-    if (this.state.suggestersIndex !== 0) {
-      this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex - 1}))
-    } else if (this.state.suggestersIndex === 0) {
-        this.setState(prevState=> ({suggestersIndex: this.state.suggesters.length -1}))
-  }
+    if (this.state.suggesters.length > 0 && this.state.suggesters[1]) {
+      if (this.state.suggestersIndex !== 0) {
+        this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex - 1}))
+      } else if (this.state.suggestersIndex === 0) {
+          this.setState(prevState=> ({suggestersIndex: this.state.suggesters.length -1}))
+    }
   }
 }
 }
 
-export default compose(graphql(userQuery, {name: 'userQuery'}),
+export default compose(
+graphql(userQuery, {name: 'userQuery'}),
 graphql(targetUserQuery, {
   name: 'targetUserQuery',
   options: (ownProps) => {

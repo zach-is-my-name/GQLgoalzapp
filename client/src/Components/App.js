@@ -36,55 +36,57 @@ export const userQuery = gql `
 //           }`
 
 export class App extends Component {
-
-  /* Freecom method */
-  // async componentDidMount() {
-  //   const authToken = localStorage.getItem('auth0IdToken')
-  //
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props !== nextProps && _isLoggedIn && window.localStorage.getItem('auth0IdToken')){
-  //       this.props.dispatch(actions.setUserId(nextProps.data.user.id))
-  //       this.props.dispatch(actions.setLoginStatus())
-  //     }
-  //   }
-
-
-
-
+  constructor(props) {
+    super(props)
+    this._attemptLogin = this._attemptLogin.bind(this)
+   // this._renderApp = this._renderApp.bind(this)
+  }
   render() {
     const auth0IdToken = window.localStorage.getItem('auth0IdToken')
     const graphcoolToken = window.localStorage.getItem('graphcoolToken')
-    // console.log('id token', window.localStorage.getItem('auth0IdToken'))
+
     if (this.props.data.loading) {
-      // console.log('returned loading')
       return <div>Loading...</div>
 
     } else if (auth0IdToken || graphcoolToken) {
-        // TODO: if authtoken is expired, renderLoggedOut().  to do this you can check the userquery (here).  this seems like the only option because you don't have access to the server response, only the graphcool response.
-        this.props.data.refetch()
-        return this._renderApp()
+        // console.log('attempt login')
+        return this._attemptLogin()
+    //    return  this._attemptLogin()
       } else {
-        // console.log('returned log-out / no token')
+        // console.log('top else render logged out')
         return this.renderLoggedOut()
       }
-    }
+  }
 
   _isLoggedIn = () => {
     return this.props.data.user
   }
 
+ _attemptLogin() {
+    this.props.data.refetch()
+    if (!this.props.data.loading && this.props.data.user && this.props.data.user.userName) {
+      // console.log(this.props.data.user.userName)
+      // console.log('render app')
+      return  this._renderApp()
+    }  else {
+      // console.log('second level else | render logged out')
+      return this.renderLoggedOut()
+    }
+  }
 
-_renderApp() {
-      // console.log('returned render')
-       return (
+_renderApp = () => {
+
+      return (
        <div className="App">
          <h1 className="logo">GoalZapp</h1>
          <div className="current-user">
            {/* <CurrentUser user={this.props.data.user ? this.props.data.user.username : 'anonymous'} /> */}
          </div>
-         <MenuButton logout={this._logout} currentUser={this.props.data.user ? this.props.data.user.userName : 'anonymous' }/>
+         <MenuButton
+         logout={this._logout}
+         currentUser={this.props.data.user ? this.props.data.user.userName : 'anonymous' }
+         currentUserId={this.props.data.user.id}
+         />
          <Switch>
            <Route exact  path='/userfeed/:userid/:goaldocid' component={UserFeedPage} />
            <Route exact  path='/userfeed/:userid' component={UserFeedPage} />
@@ -95,10 +97,9 @@ _renderApp() {
          </Switch>
        </div>
      )
-
 }
 
-  renderLoggedOut() {
+  renderLoggedOut = () => {
     // console.log('renderLoggedOut()')
     return (
       <div className="App">

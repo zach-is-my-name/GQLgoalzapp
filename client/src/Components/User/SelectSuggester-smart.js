@@ -4,17 +4,6 @@ import {graphql, compose, withApollo} from 'react-apollo'
 import gql from 'graphql-tag';
 import SelectSuggester from './SelectSuggester'
 
-// const suggesterQuery = gql `
-// query suggesterQuery ($goalDocId: ID) {
-//   GoalDoc(id: $goalDocId) {
-//    clonedSteps(orderBy:positionIndex_ASC) {
-//      suggester {
-//        userName
-//        id
-//      }
-//    }
-//  }
-// `
 const suggesterQuery = gql `
 query suggesterQuery ($goalDocId: ID) {
   GoalDoc(id: $goalDocId) {
@@ -39,12 +28,12 @@ class SelectSuggesterSmart extends Component {
       // console.log('this.props.suggesterQuery', this.props.suggesterQuery)
       // console.log('prevProps.suggesterQuery', prevProps.suggesterQuery)
       let arrGoalDocSuggesters = []
-      arrGoalDocSuggesters = this.props.suggesterQuery.GoalDoc.clonedSteps.map(
+      this.props.suggesterQuery.GoalDoc ? arrGoalDocSuggesters = this.props.suggesterQuery.GoalDoc.clonedSteps.map(
           obj => ({userName: obj.suggester ? obj.suggester.userName : null, id: obj.suggester ? obj.suggester.id : null}))
           .filter(
             (obj, index, self) => self.findIndex((findObj) => {
             return (obj.userName === findObj.userName && obj.id === findObj.id)
-          }) === index).filter(obj => obj.userName && obj.id) || []
+          }) === index).filter(obj => obj.userName && obj.id) || [] : []
 
     this.props.setSuggesters(arrGoalDocSuggesters.pop())
     }

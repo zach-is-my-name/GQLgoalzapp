@@ -13,7 +13,7 @@ const owner = entry.owners === null ? 'anonymous': entry.owners.userName
 // console.log( entry.owners.userName !== null ? `username is ${entry.owners.userName}` :`no username`)
 return (
 <div>
-  {`${goal} ........ `} <span className="feed-entry-owner">  {`${owner}`} </span>
+  {`${goal} ........ `}<Link to={`/userfeed/${entry.owners.id}`}> <span className="feed-entry-owner">  {`${owner}`} </span> </Link>
   <span className="feed-entry-text-zapped-goal"> {`zapped goal`} </span>
   <Link to={`/userfeed/${entry.owners.id}/${entry.id}`}>
     <span className="feed-entry-goal"> {`${goal}`} </span>

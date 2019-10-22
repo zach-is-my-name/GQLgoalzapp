@@ -8,7 +8,8 @@ import {faUser} from '@fortawesome/free-solid-svg-icons'
 import '../../style/GlobalFeed.css'
 
 const GlobalFeed = ({
-  entries = []
+  entries = [],
+  loggedInUserId
 }) => {
 
   if (entries && entries.length) {
@@ -22,7 +23,7 @@ const GlobalFeed = ({
         }
         <div className="globalfeed-user-icon">
 
-          <Link to={`/userfeed/cjl5mkgkd0ypx0157l9c1zrxk`}>
+          <Link to={`/userfeed/${loggedInUserId}`}>
             <span className="far faUser fa-lg">
               <FontAwesomeIcon icon={faUser}/>
             </span>

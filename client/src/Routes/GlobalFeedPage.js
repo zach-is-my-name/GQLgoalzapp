@@ -1,9 +1,17 @@
 /* eslint-disable */
 import React, {Component} from 'react';
-import {graphql} from 'react-apollo'
+import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag';
 
 import GlobalFeed from '../Components/Feed/GlobalFeed'
+
+const userQuery = gql `
+  query userQuery {
+        user {
+          id
+          userName
+            }
+       }`
 
 const AllGoalDocs = gql `
   query allGoalDocs {
@@ -30,6 +38,7 @@ const {loading, error, allGoalDocs}  = this.props;
         <h4>Global Feed</h4>
         <GlobalFeed
           entries={allGoalDocs || []}
+          loggedInUserId ={this.props.userQuery.user ? this.props.userQuery.user.id : null}
         />
         {loading ? <p>loading</p>: null}
       </div>
@@ -38,12 +47,16 @@ const {loading, error, allGoalDocs}  = this.props;
 }
 
 
-const withData = graphql(AllGoalDocs, {
+const withData =
+compose(
+graphql(AllGoalDocs, {
 props: ({data: {loading, error, allGoalDocs }}) => ({
   loading,
   error,
   allGoalDocs
 })
-})(GlobalFeedPage)
+}),
+graphql(userQuery, {name: 'userQuery'})
+)(GlobalFeedPage)
 
 export default withData

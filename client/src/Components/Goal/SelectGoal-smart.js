@@ -10,8 +10,11 @@ import {connect} from 'react-redux';
 import SelectGoalForm from './Form/SelectGoalForm'
 
 const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
-  allGoalDocs(filter:
-    {owners :{id: $targetUserId}}){
+  allGoalDocs(
+    filter:
+    {owners :{id: $targetUserId}}, orderBy: updatedAt_DESC
+  )
+    {
     goal
     id
   }

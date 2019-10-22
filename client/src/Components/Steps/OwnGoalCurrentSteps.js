@@ -24,6 +24,7 @@ class OwnGoalCurrentSteps extends Component {
     }
 
     this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
+    this._unrenderAddFirstStep = this._unrenderAddFirstStep.bind(this)
 }
 
   componentDidMount() {
@@ -53,7 +54,7 @@ class OwnGoalCurrentSteps extends Component {
     // }
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
-    if (this.props.steps) {
+    if (this.props.steps.length) {
     return (
       <div className="sortable-container">
 
@@ -98,13 +99,27 @@ class OwnGoalCurrentSteps extends Component {
         </div>
       </div>
     )}
-      else { return <FirstStep showAddStepState={this.state.showAddStepState} showAddStep={this.showAddStep} goalDocId={this.props.goalDocId} />}
+      else { return <FirstStep
+        showAddStepState={this.state.showAddStepState}
+        showAddStep={this.showAddStep}
+        goalDocId={this.props.goalDocId}
+        unrenderAddFirstStep={this._unrenderAddFirstStep} />
+      }
+  }
+
+  _unrenderAddFirstStep() {
+    this.setState((prevState) => {
+      return {
+      showAddStepState: !prevState.showAddStepState
+      }
+    })
   }
 
   _unrenderMoveStep() {
-   this.setState({
-     renderMoveStep: false
-   })
+    this.showAddStep()
+   // this.setState({
+   //   renderMoveStep: false
+   // })
  }
 
  onSortEnd = ({oldIndex, newIndex}) => {
@@ -118,9 +133,12 @@ class OwnGoalCurrentSteps extends Component {
  }
 
  showAddStep = () => {
-   this.setState({showAddStepState: true})
+   this.setState((prevState) => {
+     return {
+       showAddStepState: !prevState.showAddStepState
+     }
+   })
  }
 
 }
-
 export default OwnGoalCurrentSteps;
