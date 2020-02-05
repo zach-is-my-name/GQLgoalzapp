@@ -4,6 +4,12 @@ import {connect} from 'react-redux';
 import {graphql, compose, withApollo} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
+import goalescrow from '../../abi/GoalEscrowTestVersion.json'
+import * as DeployedAddress from '../../ContractAddress.js'
+var Web3 = require('web3');
+var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
+let proxyAddress
+let ProxiedGoalEscrow
 
 const stepIdQuery = gql `
 query stepIdQuery($id:ID){
@@ -65,6 +71,7 @@ const goalDocByIdQuery = gql `
     }`;
 
  class AcceptStep extends Component {
+   proxyAddress = this.props.proxyAddress
   constructor(props) {
     super(props)
     this._submitAcceptStep = this._submitAcceptStep.bind(this)
@@ -74,6 +81,7 @@ const goalDocByIdQuery = gql `
 }
 
   componentDidMount() {
+    console.log('props.selectedAccount', this.props.selectedAccount)
     this.props.unrenderAcceptStepFunction()
     console.log('click handler accept step')
   }
@@ -87,6 +95,13 @@ const goalDocByIdQuery = gql `
   }
 
 async _submitAcceptStep(clonedStepIdQuery) {
+  ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
+  let acceptStepReceipt = await ProxiedGoalEscrow.methods.disburseOnAccept(web3.utils.toHex(this.props.goalDocId)).send({from: window.ethereum.selectedAddress})
+  .on('error', error => console.log(error))
+  console.log('acceptStepReceipt', acceptStepReceipt)
+  if (acceptStepReceipt === 'Error' || false) {
+    return
+  }
   let stepIdQueryResult
   try {
     // const id  = this.props.goalDocId

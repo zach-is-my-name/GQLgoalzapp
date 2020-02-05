@@ -16,6 +16,16 @@ import CurrentUser from './User/CurrentUser'
 import * as actions from '../Actions/actions'
 import {Link} from 'react-router-dom';
 import MenuButton from './User/MenuButton'
+import FundGoalButton from './Ethereum/FundGoalButton'
+import TokensMenuButton from './Ethereum/TokensMenuButton'
+import ContractRewardsFund from './Ethereum/ContractRewardsFund-Smart'
+import BondRewardsFund from './Ethereum/BondRewardsFund-Smart'
+var Web3 = require('web3');
+
+if (typeof window.ethereum !== 'undefined'|| (typeof window.web3 !== 'undefined')) {
+  // Web3 browser user detected. You can now use the provider.
+  const provider = window['ethereum'] || window.web3.currentProvider
+}
 
 const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
 const domain = 'userzach.auth0.com'
@@ -39,8 +49,16 @@ export class App extends Component {
   constructor(props) {
     super(props)
     this._attemptLogin = this._attemptLogin.bind(this)
-   // this._renderApp = this._renderApp.bind(this)
+    this.setProxyAddress = this.setProxyAddress.bind(this)
+    this.setUrlHasGoalDoc = this.setUrlHasGoalDoc.bind(this)
+    this.setUrlDoesNotHaveGoalDoc = this.setUrlDoesNotHaveGoalDoc.bind(this)
+  // this._renderApp = this._renderApp.bind(this)
+    this.state = {
+      proxyAddress: "",
+      urlHasGoalDoc: false,
+    }
   }
+
   render() {
     const auth0IdToken = window.localStorage.getItem('auth0IdToken')
     const graphcoolToken = window.localStorage.getItem('graphcoolToken')
@@ -53,7 +71,7 @@ export class App extends Component {
         return this._attemptLogin()
     //    return  this._attemptLogin()
       } else {
-        // console.log('top else render logged out')
+        console.log('top else render logged out')
         return this.renderLoggedOut()
       }
   }
@@ -69,7 +87,7 @@ export class App extends Component {
       // console.log('render app')
       return  this._renderApp()
     }  else {
-      // console.log('second level else | render logged out')
+      console.log('second level else | render logged out')
       return this.renderLoggedOut()
     }
   }
@@ -87,20 +105,28 @@ _renderApp = () => {
          currentUser={this.props.data.user ? this.props.data.user.userName : 'anonymous' }
          currentUserId={this.props.data.user.id}
          />
+        {this.state.proxyAddress ? <ContractRewardsFund proxyAddress={this.state.proxyAddress} /> : null }
+        {this.state.proxyAddress ? <BondRewardsFund proxyAddress={this.state.proxyAddress} /> : null }
+         <TokensMenuButton />
+        {this.state.proxyAddress && this.state.urlHasGoalDoc ? <FundGoalButton selectedAccount={window.ethereum.selectedAddress} proxyAddress={this.state.proxyAddress} /> : null }
+
          <Switch>
-           <Route exact  path='/userfeed/:userid/:goaldocid' component={UserFeedPage} />
-           <Route exact  path='/userfeed/:userid' component={UserFeedPage} />
-           <Route path='/userfeed/:userid' component={UserFeedPage} />
-           <Route exact path='/userfeed' component={UserFeedPage} />
-           <Route exact path="/" component={GlobalFeedPage}/>
-           {/* <Route path='/signup' component={CreateUser} /> */}
-         </Switch>
+           <Route exact path='/userfeed/:userid/:goaldocid' render={(props)  => <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setUrlDoesNotHaveGoalDoc setProxyAddress={this.setProxyAddress} {...props} proxyAddress={this.state.proxyAddress} />} />
+           <Route exact path='/userfeed/:userid' render={(props)  =>
+             <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props} proxyAddress={this.state.proxyAddress} urlHasGoalDoc={this.state.urlHasGoalDoc}  /> } />
+           <Route path='/userfeed/:userid' render={(props)  =>
+             <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props}  proxyAddress={this.state.proxyAddress} />} />
+           <Route exact path='/userfeed' render={(props)  =>
+             <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props}  proxyAddress={this.state.proxyAddress} />} />
+           <Route exact path="/"  render= {() => <GlobalFeedPage />}     />
+         </ Switch>
        </div>
+           /* <Route path='/signup' component={CreateUser} /> */
      )
 }
 
   renderLoggedOut = () => {
-    // console.log('renderLoggedOut()')
+    console.log('renderLoggedOut()')
     return (
       <div className="App">
         <h1>GoalZapp</h1>
@@ -124,6 +150,17 @@ _renderApp = () => {
     // location.reload()
   }
 
+  setProxyAddress(address) {
+    this.setState({proxyAddress: address})
+  }
+
+  setUrlHasGoalDoc() {
+    console.log('setUrlHasGoalDoc called')
+    this.setState( ({urlHasGoalDoc: true}))
+  }
+  setUrlDoesNotHaveGoalDoc() {
+    this.setState(({urlHasGoalDoc: false}))
+  }
 }
 
 const WithQueries =

@@ -118,7 +118,7 @@ class MoveStep extends Component {
     // console.log('clonedSteps', clonedSteps)
 
     // console.log('clonedSteps', clonedSteps)
-    if (clonedSteps[oldIndex].suggestedStep === false) {
+    if (clonedSteps[oldIndex] && clonedSteps[oldIndex].suggestedStep === false) {
       // console.log('clonedSteps[oldIndex].suggestedStep === false')
       oldSteps = arrayMove(oldSteps, oldIndex, newIndex).map((stepObj, index) => ({...stepObj, positionIndex:index }))
       // oldSteps[oldIndex].positionIndex = newIndex

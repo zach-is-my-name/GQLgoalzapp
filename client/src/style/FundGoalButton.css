@@ -1,14 +1,16 @@
-.menu-button {
-  display: inline-block;
+.FundEscrowButton.fund {
+  margin-top: 16px;
+  margin-left: 874px;
+  /* display: inline-block; */
   /*border: solid 1px black;*/
 }
 
-.menu-button-user-button {
+.menu-button-user-button.fund {
   color: #222;
   font-weight: 600;
   border: solid #222 2px;
   border-radius: 5px;
-  background-color: #83ffcd;
+  background-color: #FF3336;
   box-shadow: 4px 4px 0 #222;
   font-size: 14px;
   text-align: left;
@@ -23,6 +25,7 @@
 .menuitem-userfeed {
   color: black ;
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .menuitem-logout {

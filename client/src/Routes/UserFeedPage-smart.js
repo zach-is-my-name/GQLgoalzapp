@@ -52,6 +52,7 @@ class UserFeedPage extends Component {
       suggestersIndex: 0,
       selectedSuggesterId: '',
       selectedSuggesterName: '',
+      renderFundGoal: false,
     }
 
     this._setGoalDocId = this._setGoalDocId.bind(this)
@@ -64,6 +65,8 @@ class UserFeedPage extends Component {
 
 async componentDidMount() {
     const {match} = this.props;
+    match.params.goaldocid ? this.props.setUrlHasGoalDoc() : null
+    !match.params.goaldocid ? this.props.setUrlDoesNotHaveGoalDoc() : null 
     match.params.goaldocid ? this.setState({goalDocId: match.params.goaldocid}) : null;
     match.params.userid  ? this.setState({paramUserId: match.params.userid}) : null;
     let existingUserId;
@@ -83,6 +86,12 @@ async componentDidMount() {
 }
 
  componentDidUpdate (prevProps, prevState) {
+   if (this.props.match.params.goaldocid !== prevProps.match.params.goaldocid && this.props.match.params.goaldocid) {
+     this.props.setUrlHasGoalDoc()
+   }
+   if (this.props.match.params.goaldocid !== prevProps.match.params.goaldocid && !this.props.match.params.goaldocid) {
+    this.props.setUrlDoesNotHaveGoalDoc()
+  }
    if (this.state.suggesters !== prevState.suggesters || this.state.suggestersIndex !== prevState.suggestersIndex) {
      this.setState({
        selectedSuggesterId: this.state.suggesters[this.state.suggestersIndex].id,
@@ -101,6 +110,8 @@ async componentDidMount() {
     }
     return (
       <div className="userfeedpage-container">
+
+
         <div className="userfeed suggester-container">
           <SelectedSuggesterName
             loggedInUserId={this.props.userQuery.user ? this.props.userQuery.user.id : null}
@@ -137,8 +148,9 @@ async componentDidMount() {
           <SelectGoal
             targetUserId={User.id}
             setGoalDocId={this._setGoalDocId}
-            value={this.state.goalDocId}
+            value={this.state.goalDocId || match.params.goaldocid}
             match={match}
+            setProxyAddress={this.props.setProxyAddress}
           />
         </div>
 
@@ -147,6 +159,9 @@ async componentDidMount() {
            <InputGoalSmart
           loggedInUserId = {this.props.userQuery.user.id}
           _setGoalDocIdOnCreate = {this._setGoalDocIdOnCreate}
+          proxyAddress={this.state.proxyAddress}
+          selectedAccount={window.ethereum.selectedAddress}
+          setProxyAddress={this.props.setProxyAddress}
           / >
           : null
         }
@@ -161,14 +176,20 @@ async componentDidMount() {
       </div>
     )
   }
-
+// on change bad goaldocid
   _setGoalDocId(event) {
-    this.setState({goalDocId: event.target.value})
     event.preventDefault()
+    // console.log(event.target.value)
+    const goalDoc = JSON.parse(event.target.value)
+    // console.log(goalDoc)
+    goalDoc.newGoal && goalDoc.newGoal === 'new-goal' ? this.setState({goalDocId: ""}) : this.setState({goalDocId: goalDoc.id})
+    goalDoc.proxyAddress ?  this.props.setProxyAddress(goalDoc.proxyAddress) && this.setState({proxyAddress: goalDoc.proxyAddress}) : null
+    goalDoc.newGoal === 'new-goal' ?this.props.history.push(`/userfeed/${this.props.match.params.userid}`)  :
+    this.props.history.push(`/userfeed/${this.props.match.params.userid}/${goalDoc.id}`)
   }
 
  _setGoalDocIdOnCreate(id) {
-   this.props.history.push(`/userfeed/${this.props.targetUserQuery}/${id}`)
+   this.props.history.push(`/userfeed/${this.props.match.params.userid}/${id}`)
  }
 
  _setSelf() {
@@ -181,9 +202,13 @@ async componentDidMount() {
  }
 
  _nextSuggester() {
+   console.log('suggesters', this.state.suggesters)
+   console.log('suggesters index', this.state.suggestersIndex)
   if (this.state.suggesters.length && this.state.suggestersIndex < this.state.suggesters.length -1 && this.state.suggesters[1]) {
+    console.log('case1 triggered')
     this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex + 1}))
   } else if (this.state.suggestersIndex < this.state.suggesters.length) {
+      console.log('case2 triggered')
       this.setState(prevState=> ({suggestersIndex: 0}))
   }
   // const selectedSuggesterId = this.state.suggesters[this.state.suggestersIndex].id
@@ -207,6 +232,8 @@ graphql(userQuery, {name: 'userQuery'}),
 graphql(targetUserQuery, {
   name: 'targetUserQuery',
   options: (ownProps) => {
+    // console.log(ownProps.match.params)
+    // console.log(ownProps.match.params.userid)
     return ({
       variables: {
         targetUser: ownProps.match.params.userid

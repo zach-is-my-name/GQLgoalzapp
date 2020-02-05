@@ -95,6 +95,8 @@ class OwnGoalCurrentSteps extends Component {
             selfState={this.props.selfState}
             suggestersIndex={this.props.suggestersIndex}
             selectedSuggesterId={this.props.selectedSuggesterId}
+            proxyAddress={this.props.proxyAddress}
+            selectedAccount={window.ethereum.selectedAddress}
           />
         </div>
       </div>

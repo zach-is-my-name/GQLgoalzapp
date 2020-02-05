@@ -16,29 +16,31 @@ const GlobalFeed = ({
     return (
       <div className="globalfeed-container">
         {
-          entries.map(entry => (
-            entry
-              ? <FeedEntry key={entry.goal} entry={entry}/>
+          entries.map((entry, index) => (
+            entry ?
+            <FeedEntry key={entry.goal + `${index}` } entry={entry}/>
               : null))
         }
         <div className="globalfeed-user-icon">
-
           <Link to={`/userfeed/${loggedInUserId}`}>
             <span className="far faUser fa-lg">
               <FontAwesomeIcon icon={faUser}/>
             </span>
           </Link>
-          {/* <Switch> */}
-          {/* <Route exact path='/' component={GlobalFeed} /> */}
-          {/* <Route  exact path={`/userfeed/:userid/:goaldocid`} component={UserFeedPage}/> */}
-          {/* <Route  path={`/userfeed/:userid`} component={UserFeedPage}/> */}
-          {/* </Switch> */}
         </div>
       </div>
     )} else {
         return (
-          null
-          )
+      <div className="globalfeed-container">
+        <div className="globalfeed-user-icon">
+          <Link to={`/userfeed/${loggedInUserId}`}>
+            <span className="far faUser fa-lg">
+              <FontAwesomeIcon icon={faUser}/>
+            </span>
+          </Link>
+        </div>
+        </div>
+      )
           }
           }
         export default GlobalFeed

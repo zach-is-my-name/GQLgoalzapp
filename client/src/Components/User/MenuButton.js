@@ -15,13 +15,10 @@ handleSelection(value, event) {
 }
 
   render() {
-    // console.log(this.props.currentUser)
-    console.log(this.props.match.params)
     return (
       <Wrapper className="menu-button" onSelection={this.handleSelection}>
-        <Button className="menu-button-button">
+        <Button className="menu-button-user-button">
           {this.props.currentUser}
-          {/* {this.props.currentUser} */}
         </Button>
         <Menu className="menu-button-menu">
           <ul>

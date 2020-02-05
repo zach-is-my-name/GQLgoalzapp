@@ -155,6 +155,8 @@ class ForeignStepWithButtons extends Component {
                 targetUser={this.props.targetUser}
                 loggedInUserId={this.props.loggedInUserId}
                 unrenderSuggestStepFunctiion={this.unrenderSuggestStep}
+                proxyAddress={this.props.proxyAddress}
+                selectedAccount={this.props.selectedAccount}
               />
             </div>
             : null }

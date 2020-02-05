@@ -17,6 +17,7 @@ const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
     {
     goal
     id
+    proxyAddress
   }
 }`
 
@@ -28,7 +29,7 @@ class SelectGoalSmart extends React.Component {
     }
 
   render() {
-    const {loading, error, allGoalDocs} = this.props.goalDocQuery
+    const {loading, error, allGoalDocs} = this.props.GoalDocQuery
     if (loading) {
       return null
     } else if (error) {
@@ -37,33 +38,18 @@ class SelectGoalSmart extends React.Component {
     } else {
     return (
         <SelectGoalForm
-          match={this.props.match}
           goalDocs={allGoalDocs}
           value={this.props.value}
           handleChange={this.props.setGoalDocId}
+          setProxyAddress={this.props.setProxyAddress}
         />
       )
     }
   }
-
-  // _handleChange (event) {
-  //  this.setState({goalDocId: })
-  // }
-
-  // _selectGoal(values) {
-  //   event.preventDefault();
-  //   const goalDocId = values.goalSelector
-  //
-  //   if (values.goalSelector) {
-  //     this.props.setGoalDocId(goalDocId)
-  //     // this.props.dispatch(actions.setGoalDocID(goalDocID))
-  //   }
-  // }
 }
 
-
 const ComponentWithData = graphql(GoalDocQuery,
-{name: 'goalDocQuery'},{ options: ({targetUserId}) => ({ variables: {targetUserId: targetUserId}}),
+{name: 'GoalDocQuery'},{ options: ({targetUserId}) => ({ variables: {targetUserId: targetUserId}}),
 })(SelectGoalSmart);
 
 export default ComponentWithData

@@ -18,6 +18,8 @@ export const OwnSteps = SortableContainer(({goalDocId,
   unrenderRemoveStepFunct,
   getArr,
   selectedSuggesterId,
+  proxyAddress,
+  selectedAccount
  }) => {
 
     if (selectedSuggesterId !== loggedInUserId) {
@@ -39,6 +41,8 @@ export const OwnSteps = SortableContainer(({goalDocId,
                 currentGoalClonedSteps={currentGoalClonedSteps}
                 targetUser={targetUser}
                 loggedInUserId={loggedInUserId}
+                proxyAddress={proxyAddress}
+                selectedAccount={selectedAccount}
               />
             )}
           </ul>
@@ -62,6 +66,8 @@ export const OwnSteps = SortableContainer(({goalDocId,
                     targetUser={targetUser}
                     loggedInUserId={loggedInUserId}
                     selectedSuggesterId={selectedSuggesterId}
+                    proxyAddress={proxyAddress}
+                    selectedAccount={selectedAccount}
                   />
                 )}
               </ul>

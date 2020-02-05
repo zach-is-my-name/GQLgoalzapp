@@ -25,6 +25,7 @@ query goalDocByIdQuery ($goalDocId: ID) {
   GoalDoc(id: $goalDocId) {
    goal
    id
+   proxyAddress
    steps(orderBy:positionIndex_ASC) {
      step
      positionIndex
@@ -72,9 +73,9 @@ class CurrentStepsSmart extends Component {
   componentDidUpdate(nextProps) {
     if(this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc ||
     nextProps.goalDocById.networkStatus === 7 && !nextProps.goalDocById.GoalDoc){
-    console.log(nextProps.goalDocById)
+    // console.log(nextProps.goalDocById)
     // if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false) {
-      console.log('CurrentSteps-smart --> refetch called')
+      // console.log('CurrentSteps-smart --> refetch called')
       nextProps.goalDocById.refetch()
     // }
   }
@@ -82,9 +83,9 @@ class CurrentStepsSmart extends Component {
 
   render() {
     if(this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc){
-    console.log(this.props.goalDocById)
+    // console.log(this.props.goalDocById)
     // if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false) {
-      console.log('CurrentSteps-smart --> refetch called')
+      // console.log('CurrentSteps-smart --> refetch called')
       this.props.goalDocById.refetch()
     // }
   }
@@ -101,6 +102,7 @@ class CurrentStepsSmart extends Component {
     let acceptedStep
     let goalOwnerStep
     let selectedSuggesterSuggested
+    // !this.props.goalDocById.loading ? console.log('proxyAddress, currentSteps', this.props.goalDocById.GoalDoc) : null
     if (this.props.goalDocById.loading || !this.props.goalDocById.GoalDoc) {
       return <div>Loading...</div>
     }
@@ -124,22 +126,23 @@ class CurrentStepsSmart extends Component {
         clonedSteps = this.props.goalDocById.GoalDoc.clonedSteps.filter(stepObj => {
           return acceptedStep || goalOwnerStep  || selectedSuggesterSuggested
         })
-        // console.log('clonedSteps filter', clonedSteps)
         steps = this.props.goalDocById.GoalDoc.steps
-
         return (
           <div className="current-steps-smart-container">
 
             {
               loggedInUserId !== targetUser
-                ? <ForeignGoalCurrentSteps goalDocId={this.props.goalDocId}
+                ? <ForeignGoalCurrentSteps
+                  goalDocId={this.props.goalDocId}
                   targetUser={targetUser}
                   loggedInUserId={loggedInUserId}
                   clonedSteps={clonedSteps || []}
                   steps={steps || []}
                   selectedSuggesterId={this.props.selectedSuggesterId}
                   selectedSuggesterName={this.props.selectedSuggesterName}
-                  suggestersIndex={this.props.suggestersIndex}/>
+                  suggestersIndex={this.props.suggestersIndex}
+                  proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
+                  />
                 : <OwnGoalCurrentSteps
                   randomColorStep={this.props.randomColorStep}
                   clonedSteps={clonedSteps || []}
@@ -149,7 +152,9 @@ class CurrentStepsSmart extends Component {
                   loggedInUserId={this.props.loggedInUserId}
                   selectedSuggesterId={this.props.selectedSuggesterId}
                   selectedSuggesterName={this.props.selectedSuggesterName}
-                  suggestersIndex={this.props.suggestersIndex}/>
+                  suggestersIndex={this.props.suggestersIndex}
+                  proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
+                  />
           }
         </div>)
       // }
@@ -176,7 +181,9 @@ class CurrentStepsSmart extends Component {
                 clonedSteps={clonedSteps || []} steps={steps || []}
                 selectedSuggesterId={this.props.selectedSuggesterId}
                 selectedSuggesterName={this.props.selectedSuggesterName}
-                suggestersIndex={this.props.suggestersIndex}/>
+                suggestersIndex={this.props.suggestersIndex}
+                proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
+                />
               : <OwnGoalCurrentSteps
                 randomColorStep={this.props.randomColorStep}
                 clonedSteps={clonedSteps || []}
@@ -186,7 +193,10 @@ class CurrentStepsSmart extends Component {
                 loggedInUserId={this.props.loggedInUserId}
                 selectedSuggesterId={this.props.selectedSuggesterId}
                 selectedSuggesterName={this.props.selectedSuggesterName}
-                suggestersIndex={this.props.suggestersIndex}/>
+                suggestersIndex={this.props.suggestersIndex}
+                proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
+                />
+
           }
         </div>)
       }

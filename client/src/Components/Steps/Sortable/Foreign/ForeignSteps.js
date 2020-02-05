@@ -14,6 +14,8 @@ const ForeignSteps = SortableContainer(({
         goalDocId,
         suggestersIndex,
         selectedSuggesterId,
+        proxyAddress,
+        selectedAccount
     }) => {
       return (
         <ul className="sortable-container">
@@ -32,6 +34,8 @@ const ForeignSteps = SortableContainer(({
                     loggedInUserId={loggedInUserId}
                     selectedSuggesterId={selectedSuggesterId}
                     suggestersIndex={suggestersIndex}
+                    proxyAddress={proxyAddress}
+                    selectedAccount={selectedAccount}
                 />
             ))}
 

@@ -2,6 +2,12 @@
 import React, {Component} from 'react'
 import {graphql, compose, withApollo} from 'react-apollo';
 import gql from 'graphql-tag';
+import goalescrow from '../../abi/GoalEscrowTestVersion.json'
+import * as DeployedAddress from '../../ContractAddress.js'
+var Web3 = require('web3');
+var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
+let proxyAddress
+let  ProxiedGoalEscrow
 
 
 const clonedStepsQuery = gql `
@@ -38,6 +44,7 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
 }`
 
 class RejectStep extends Component {
+  proxyAddress = this.props.proxyAddress
   constructor(props) {
     super(props)
     this._reorderClonedSteps = this._reorderClonedSteps.bind(this)
@@ -45,10 +52,12 @@ class RejectStep extends Component {
   }
 
   componentDidMount() {
+    ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
     this.props.unrenderRejectStepFunction()
   }
 
 render() {
+  ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
   console.log('Component Rendered')
   console.log(this.props)
   if (this.props.renderRejectStepState === true) {
@@ -59,6 +68,12 @@ render() {
 }
 
 async _submitRejectStepMutation(idToRemove) {
+  let rejectStepReceipt = await ProxiedGoalEscrow.methods.returnBondsOnReject(web3.utils.toHex(this.props.goalDocId)).send({from: window.ethereum.selectedAddress})
+  .on('error', error => console.log(error))
+  console.log('rejectStepReceipt', rejectStepReceipt)
+  if (rejectStepReceipt === 'Error' || false) {
+    return
+  }
   let rejectStepResult, clonedStepsQueryResult, reorderedClonedSteps
   try {
     rejectStepResult = await this.props.removeClonedStepMutation({

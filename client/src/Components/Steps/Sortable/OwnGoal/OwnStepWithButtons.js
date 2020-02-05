@@ -117,6 +117,8 @@ class OwnStepWithButtons extends Component {
               renderRejectStepState={this.state.renderRejectStepState}
               goalDocId={this.props.goalDocId}
               unrenderRejectStepFunction={this.unrenderRejectStep}
+              proxyAddress={this.props.proxyAddress}
+              selectedAccount={this.props.selectedAccount}
             /> : null}
       </div>
 
@@ -136,6 +138,8 @@ class OwnStepWithButtons extends Component {
                 clonedStepIndex={this.state.stepIndex}
                 renderAcceptStepState={this.state.renderAcceptStepState}
                 unrenderAcceptStepFunction={this.unrenderAcceptStep}
+                proxyAddress={this.props.proxyAddress}
+                selectedAcccount={this.props.selectedAccount}
               />
             </div>
           : null}

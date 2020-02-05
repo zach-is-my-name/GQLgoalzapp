@@ -8,7 +8,7 @@ import '../../style/TargetUser.css'
 const TargetUser = ({targetUserName}) =>  {
   return (
       <div className="target-user-wrapper">
-        <p className="target-user-p"> {targetUserName}'s goal </p>
+        <p className="target-user-p"> {targetUserName}'s goal: </p>
         {/* <div className="target-user-arrows-container "> */}
         {/* <span className="fas faCaretLeft"> <FontAwesomeIcon icon={ faCaretLeft } /> </span> */}
         {/* <span className="fas faCaretRight"> <FontAwesomeIcon icon={ faCaretRight } /> </span> */}

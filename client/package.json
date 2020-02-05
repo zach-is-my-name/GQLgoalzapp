@@ -38,7 +38,8 @@
     "redux-form": "^7.4.2",
     "redux-logger": "^3.0.0",
     "redux-thunk": "^2.2.0",
-    "subscriptions-transport-ws": "^0.7.0"
+    "subscriptions-transport-ws": "^0.7.0",
+    "web3": "^1.2.1"
   },
   "scripts": {
     "start": "BROWSER=none react-scripts start",
