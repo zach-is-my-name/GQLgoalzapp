@@ -123,8 +123,8 @@ _renderApp = () => {
            <Route exact path="/"  render= {() => <GlobalFeedPage />}     />
          </ Switch>
        </div>
-           /* <Route path='/signup' component={CreateUser} /> */
            </Web3Provider>
+           /* <Route path='/signup' component={CreateUser} /> */
 
      )
 }
