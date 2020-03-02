@@ -21,6 +21,7 @@ import TokensMenuButton from './Ethereum/TokensMenuButton'
 import ContractRewardsFund from './Ethereum/ContractRewardsFund-Smart'
 import BondRewardsFund from './Ethereum/BondRewardsFund-Smart'
 var Web3 = require('web3');
+import { Web3Provider } from 'react-web3';
 
 if (typeof window.ethereum !== 'undefined'|| (typeof window.web3 !== 'undefined')) {
   // Web3 browser user detected. You can now use the provider.
@@ -95,6 +96,7 @@ export class App extends Component {
 _renderApp = () => {
 
       return (
+         <Web3Provider>
        <div className="App">
          <h1 className="logo">GoalZapp</h1>
          <div className="current-user">
@@ -122,6 +124,8 @@ _renderApp = () => {
          </ Switch>
        </div>
            /* <Route path='/signup' component={CreateUser} /> */
+           </Web3Provider>
+
      )
 }
 
