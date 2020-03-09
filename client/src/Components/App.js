@@ -12,6 +12,7 @@ import {connect} from 'react-redux';
 import UserFeedPage from '../Routes/UserFeedPage-smart'
 import GlobalFeedPage from '../Routes/GlobalFeedPage'
 import Login from './Login'
+import decode from 'jwt-decode';
 import CurrentUser from './User/CurrentUser'
 import * as actions from '../Actions/actions'
 import {Link} from 'react-router-dom';
@@ -30,6 +31,8 @@ if (typeof window.ethereum !== 'undefined'|| (typeof window.web3 !== 'undefined'
 
 const clientId = 'x8qIN6200apx5f502AMPCnjNqtCZk4CA'
 const domain = 'userzach.auth0.com'
+let  auth0IdToken
+let  graphcoolToken
 
 export const userQuery = gql `
           query userQuery {
@@ -49,7 +52,7 @@ export const userQuery = gql `
 export class App extends Component {
   constructor(props) {
     super(props)
-    this._attemptLogin = this._attemptLogin.bind(this)
+    // this._attemptLogin = this._attemptLogin.bind(this)
     this.setProxyAddress = this.setProxyAddress.bind(this)
     this.setUrlHasGoalDoc = this.setUrlHasGoalDoc.bind(this)
     this.setUrlDoesNotHaveGoalDoc = this.setUrlDoesNotHaveGoalDoc.bind(this)
@@ -60,19 +63,25 @@ export class App extends Component {
     }
   }
 
-  render() {
-    const auth0IdToken = window.localStorage.getItem('auth0IdToken')
-    const graphcoolToken = window.localStorage.getItem('graphcoolToken')
+  componentDidMount() {
+}
 
+  render() {
+  auth0IdToken = window.localStorage.getItem('auth0IdToken')
+  graphcoolToken = window.localStorage.getItem('graphcoolToken')
     if (this.props.data.loading) {
       return <div>Loading...</div>
-
-    } else if (auth0IdToken || graphcoolToken) {
-        // console.log('attempt login')
-        return this._attemptLogin()
-    //    return  this._attemptLogin()
-      } else {
-        console.log('top else render logged out')
+    } else if (auth0IdToken && isTokenExpired(auth0IdToken) || graphcoolToken && isTokenExpired(graphcoolToken)) {
+        console.log('logout')
+        return  this._logout()
+    } else if (auth0IdToken && !isTokenExpired(auth0IdToken) || graphcoolToken && !isTokenExpired(graphcoolToken)) {
+        this.props.data.refetch()
+        if (this.props.data.user) {
+          console.log('Authenticated with UserQuery')
+          return this._renderApp()
+        } else {return this.renderLoggedOut() }
+    } else {
+        console.log('call renderLoggedOut()')
         return this.renderLoggedOut()
       }
   }
@@ -81,22 +90,9 @@ export class App extends Component {
     return this.props.data.user
   }
 
- _attemptLogin() {
-    this.props.data.refetch()
-    if (!this.props.data.loading && this.props.data.user && this.props.data.user.userName) {
-      // console.log(this.props.data.user.userName)
-      // console.log('render app')
-      return  this._renderApp()
-    }  else {
-      console.log('second level else | render logged out')
-      return this.renderLoggedOut()
-    }
-  }
-
 _renderApp = () => {
-
+      console.log('_renderApp')
       return (
-         <Web3Provider>
        <div className="App">
          <h1 className="logo">GoalZapp</h1>
          <div className="current-user">
@@ -123,14 +119,13 @@ _renderApp = () => {
            <Route exact path="/"  render= {() => <GlobalFeedPage />}     />
          </ Switch>
        </div>
-           </Web3Provider>
-           /* <Route path='/signup' component={CreateUser} /> */
+           /* <R  oute path='/signup' component={CreateUser} /> */
 
      )
 }
 
   renderLoggedOut = () => {
-    console.log('renderLoggedOut()')
+    console.log('renderLoggedOut')
     return (
       <div className="App">
         <h1>GoalZapp</h1>
@@ -151,7 +146,8 @@ _renderApp = () => {
     window.localStorage.removeItem('graphcoolToken')
     console.log('Token Removed')
     this.props.history.push('/')
-    // location.reload()
+  return this.renderLoggedOut
+     // location.reload()
   }
 
   setProxyAddress(address) {
@@ -166,6 +162,22 @@ _renderApp = () => {
     this.setState(({urlHasGoalDoc: false}))
   }
 }
+
+function isTokenExpired(token) {
+  const expirationDate = getTokenExpirationDate(token);
+  return expirationDate < new Date();
+}
+
+function getTokenExpirationDate(encodedToken) {
+  const token = decode(encodedToken);
+  if (!token.exp) { return null; }
+
+  const date = new Date(0);
+  date.setUTCSeconds(token.exp);
+
+  return date;
+}
+
 
 const WithQueries =
 compose(graphql(userQuery, {

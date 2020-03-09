@@ -23,7 +23,7 @@ const signinUser = gql`
 
   constructor(props) {
     super(props)
-    this._lock = new Auth0Lock(props.clientId, props.domain)
+    this._lock = new Auth0Lock(props.clientId, props.domain, {auth: {sso: false}})
     this._handleSubmitEmailLogin = this._handleSubmitEmailLogin.bind(this)
     this.state = {
       createUserEmail: false,
@@ -42,8 +42,8 @@ const signinUser = gql`
     // console.log('componentDidMount called in LoginAuth0.js')
     if (!auth0IdToken  && !graphcoolToken) {
       this._lock.on('authenticated', (authResult) => {
-      window.localStorage.setItem('auth0IdToken', authResult.idToken, )
-      {auth:{ sso:false }}
+        {auth:{ sso:false }}
+        window.localStorage.setItem('auth0IdToken', authResult.idToken, )
       // console.log('token set')
       // console.log('Auth Token Got:', window.localStorage.getItem('auth0IdToken', authResult.idToken))
       this.props.history.push(`/`)
