@@ -1,6 +1,6 @@
 pragma solidity ^0.5.00;
 
-import "./GoalZappTokenSystem.sol";
+import "../GoalZappTokenSystem.sol";
 
 
 contract BondingCurveMock is GoalZappTokenSystem {
