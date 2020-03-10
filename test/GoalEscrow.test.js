@@ -1,5 +1,5 @@
 const helper = require('ganache-time-traveler');
-const { BN, constants, expectEvent, expectRevert } = require('../client/node_modules/openzeppelin-test-helpers');
+const { BN, constants, expectEvent, expectRevert } = require('openzeppelin-test-helpers');
 const { expect } = require('chai');
 const { ZERO_ADDRESS } = constants;
 const { advanceTimeAndBlock } = require("./advance_time_and_block.js");

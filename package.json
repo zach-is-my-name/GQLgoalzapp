@@ -1,0 +1,25 @@
+{
+  "name": "ethereum",
+  "version": "1.0.0",
+  "description": "ethereum project for goalzapp",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zach-is-my-name/GQLgoalzapp.git"
+  },
+  "author": "zach michaels",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zach-is-my-name/GQLgoalzapp/issues"
+  },
+  "homepage": "https://github.com/zach-is-my-name/GQLgoalzapp#readme",
+  "devDependencies": {
+    "openzeppelin-test-helpers": "^0.4.3"
+  }
+}
