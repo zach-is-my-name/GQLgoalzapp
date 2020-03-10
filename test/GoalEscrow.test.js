@@ -1,8 +1,8 @@
 const helper = require('ganache-time-traveler');
-const { BN, constants, expectEvent, expectRevert } = require('./helpers/openzeppelin-test-helpers');
+const { BN, constants, expectEvent, expectRevert } = require('../client/openzeppelin-test-helpers');
 const { expect } = require('chai');
 const { ZERO_ADDRESS } = constants;
-const { advanceTimeAndBlock } = require("./helpers/advance_time_and_block.js");
+const { advanceTimeAndBlock } = require("./advance_time_and_block.js");
 
 const GoalEscrowTestVersion = artifacts.require('GoalEscrowTestVersion');
 const GoalZappTokenSystem = artifacts.require('GoalZappTokenSystem');
