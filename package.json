@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/zach-is-my-name/GQLgoalzapp#readme",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "ganache-time-traveler": "^1.0.11",
     "openzeppelin-test-helpers": "^0.4.3"
   }
 }
