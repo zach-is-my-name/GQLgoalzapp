@@ -1,4 +1,4 @@
-const { expectRevert } = require('../../client/openzeppelin-test-helpers');
+const { expectRevert } = require('../../client/node_modules/openzeppelin-test-helpers');
 
 const { expect } = require('chai');
 
