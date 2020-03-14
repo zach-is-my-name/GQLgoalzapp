@@ -183,7 +183,7 @@ contract ERC20 is Protected(30), Restricted, IERC20   {
 
         _totalSupply = _totalSupply.add(amount);
         _balances[account] = _balances[account].add(amount);
-        this.setRestrictedTokens(account, amount);	
+        setRestrictedTokens(account, amount);	
         emit Transfer(address(0), account, amount);
     }
 

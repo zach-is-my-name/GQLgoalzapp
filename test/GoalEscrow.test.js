@@ -2,7 +2,7 @@ const helper = require('ganache-time-traveler');
 const { BN, constants, expectEvent, expectRevert } = require('openzeppelin-test-helpers');
 const { expect } = require('chai');
 const { ZERO_ADDRESS } = constants;
-const { advanceTimeAndBlock } = require("./advance_time_and_block.js");
+const { advanceTimeAndBlock } = require("../utils/helpers/advance_time_and_block.js");
 
 const GoalEscrowTestVersion = artifacts.require('GoalEscrowTestVersion');
 const GoalZappTokenSystem = artifacts.require('GoalZappTokenSystem');
@@ -35,16 +35,19 @@ contract('Escrow', function([master, owner, suggester]) {
     await this.tokenSystem.initialize({value: startPoolBalance, from: master});
     await this.tokenSystem.transfer(owner, initialSupply, {from: master}); 
     this.implementation = await GoalEscrowTestVersion.new();
-    this.factory = await ProxyFactory.new(this.implementation.address)    
-    let snapShot = await helper.takeSnapshot();
-    snapshotId = snapShot['result'];  })
+    this.factory = await ProxyFactory.new(this.implementation.address, this.tokenSystem.address)    
+
+    snapShot = await helper.takeSnapshot();
+    snapshotId = snapShot['result'];  
+   })
+   
+   afterEach(async () => {
+     await helper.revertToSnapshot(snapshotId);
+   });
 
     shouldBehaveLikeGoalEscrow('GoalEscrowTestVersion', master, owner, suggester);
-  })
+  });
 
-afterEach(async() => {
-   await helper.revertToSnapshot(snapshotId);
-});
  
 
 function shouldBehaveLikeGoalEscrow (errorPrefix, master, owner, suggester) {
@@ -58,7 +61,7 @@ function shouldBehaveLikeGoalEscrow (errorPrefix, master, owner, suggester) {
       let proxyAddress; 
       beforeEach(async function () {
 	await this.factory.build("Goal1", {from: owner});
-	proxyAddress = await this.factory.getProxyAddress("Goal1", owner,{from:owner}); 
+	proxyAddress = await this.factory.getProxyAddress("Goal1", owner, {from:owner}); 
 	this.proxiedEscrow = await GoalEscrowTestVersion.at(proxyAddress);
 	await this.proxiedEscrow.initMaster(this.tokenSystem.address, 30, {from: master}); 
 	})
@@ -66,7 +69,7 @@ function shouldBehaveLikeGoalEscrow (errorPrefix, master, owner, suggester) {
       context('when not approved by payer', function () { 
 	it('reverts on deposit', async function () {
 	  await expectRevert.unspecified(
-	   this.proxiedEscrow.newGoalInit(ownerBondDepositAmount,rewardDepositAmount, {from: owner})
+	   this.proxiedEscrow.newGoalInitAndFund(this.tokenSystem.address, 30, ownerBondDepositAmount, rewardDepositAmount, {from: owner})
 	  );
 	});
       });
@@ -74,7 +77,7 @@ function shouldBehaveLikeGoalEscrow (errorPrefix, master, owner, suggester) {
       describe('when approved by payer', function () {
 	beforeEach(async function () {
 	  await this.tokenSystem.approve(this.proxiedEscrow.address, MAX_UINT256, { from: owner });
-	  await this.proxiedEscrow.newGoalInit(ownerBondDepositAmount,rewardDepositAmount, {from: owner});
+	  await this.proxiedEscrow.newGoalInitAndFund(this.tokenSystem.address, 30, ownerBondDepositAmount,rewardDepositAmount, {from: owner});
 	});
 
 	it('stores the token\'s address', async function () {

@@ -27,7 +27,7 @@ contract Restricted {
     initializedEscrows[_escrowAddress] = _escrowAddress;
   }
 
-  function setRestrictedTokens (address _tokenMintRecipient, uint256 _amount) external {
+  function setRestrictedTokens (address _tokenMintRecipient, uint256 _amount) internal {
     restrictedTokens[_tokenMintRecipient] = restrictedTokens[_tokenMintRecipient].add(_amount);
   }
 

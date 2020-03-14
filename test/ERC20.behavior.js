@@ -6,8 +6,8 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
   describe('total supply', function () {
     it('returns the total amount of tokens', async function () {
 //     console.log("*THIS*******************", this)
-	console.log("THIS.TOKEN", this.token)
-      expect(await this.token.totalSupply()).to.be.bignumber.equal(initialSupply);
+//	console.log("THIS.TOKEN", this.token)
+      expect(await this.token.totalSupply()).to.be.bignumber.equal(new BN(initialSupply));
     });
   });
 
@@ -20,7 +20,7 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
 
     describe('when the requested account has some tokens', function () {
       it('returns the total amount of tokens', async function () {
-        expect(await this.token.balanceOf(initialHolder)).to.be.bignumber.equal(initialSupply);
+        expect(await this.token.balanceOf(initialHolder)).to.be.bignumber.equal(new BN(initialSupply));
       });
     });
   });
@@ -29,7 +29,6 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
 	//call 
     shouldBehaveLikeERC20Transfer(errorPrefix, initialHolder, recipient, initialSupply,
       function (from, to, value) {
-      console.log("transfer_call", value.toNumber());
         return this.token.transfer(to, value, { from });
       }
     );
@@ -57,7 +56,7 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
 
               expect(await this.token.balanceOf(tokenOwner)).to.be.bignumber.equal('0');
 
-              expect(await this.token.balanceOf(to)).to.be.bignumber.equal(amount);
+              expect(await this.token.balanceOf(to)).to.be.bignumber.equal(new BN(amount));
             });
 
             it('decreases the spender allowance', async function () {
@@ -72,7 +71,7 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
               expectEvent.inLogs(logs, 'Transfer', {
                 from: tokenOwner,
                 to: to,
-                value: amount,
+                value: new BN(amount),
               });
             });
 
@@ -82,14 +81,18 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
               expectEvent.inLogs(logs, 'Approval', {
                 owner: tokenOwner,
                 spender: spender,
-                value: await this.token.allowance(tokenOwner, spender),
+                value: new BN((await this.token.allowance(tokenOwner, spender))),
               });
             });
           });
 
           describe('when the token owner does not have enough balance', function () {
-            const amount = initialSupply.addn(1);
-
+            console.log('initialSupply ' , initialSupply)
+	    console.log('typeof initialSupply ', typeof initialSupply)
+            const amount = initialSupply + 1;
+            console.log('amount ' , amount)
+	    console.log('typeof amount ', typeof amount)
+		
             it('reverts', async function () {
               await expectRevert(this.token.transferFrom(
                 tokenOwner, to, amount, { from: spender }), 'SafeMath: subtraction overflow'
@@ -100,7 +103,7 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
 
         describe('when the spender does not have enough approved balance', function () {
           beforeEach(async function () {
-            await this.token.approve(spender, initialSupply.subn(1), { from: tokenOwner });
+            await this.token.approve(spender, (new BN (initialSupply)).subn(1), { from: tokenOwner });
           });
 
           describe('when the token owner has enough balance', function () {
@@ -114,7 +117,7 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
           });
 
           describe('when the token owner does not have enough balance', function () {
-            const amount = initialSupply.addn(1);
+            const amount = initialSupply + 1;
 
             it('reverts', async function () {
               await expectRevert(this.token.transferFrom(
@@ -166,7 +169,8 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
 function shouldBehaveLikeERC20Transfer (errorPrefix, from, to, balance, transfer) {
   describe('when the recipient is not the zero address', function () {
     describe('when the sender does not have enough balance', function () {
-      const amount = balance.addn(1);
+      let amount = balance + 1 
+      amount = new BN(amount);
       console.log("before_call", amount.toNumber());
       it('reverts', async function () {
          await expectRevert.unspecified(transfer.call(this, from, to, amount)
@@ -175,14 +179,14 @@ function shouldBehaveLikeERC20Transfer (errorPrefix, from, to, balance, transfer
     });
 
     describe('when the sender transfers all balance', function () {
-      const amount = balance;
+      let amount = balance;
 
       it('transfers the requested amount', async function () {
         await transfer.call(this, from, to, amount);
 
         expect(await this.token.balanceOf(from)).to.be.bignumber.equal('0');
 
-        expect(await this.token.balanceOf(to)).to.be.bignumber.equal(amount);
+        expect(await this.token.balanceOf(to)).to.be.bignumber.equal(new BN (amount));
       });
 
       it('emits a transfer event', async function () {
@@ -191,7 +195,7 @@ function shouldBehaveLikeERC20Transfer (errorPrefix, from, to, balance, transfer
         expectEvent.inLogs(logs, 'Transfer', {
           from,
           to,
-          value: amount,
+          value: new BN(amount),
         });
       });
     });
@@ -202,7 +206,7 @@ function shouldBehaveLikeERC20Transfer (errorPrefix, from, to, balance, transfer
       it('transfers the requested amount', async function () {
         await transfer.call(this, from, to, amount);
 
-        expect(await this.token.balanceOf(from)).to.be.bignumber.equal(balance);
+        expect(await this.token.balanceOf(from)).to.be.bignumber.equal(new BN(balance));
 
         expect(await this.token.balanceOf(to)).to.be.bignumber.equal('0');
       });
@@ -213,7 +217,7 @@ function shouldBehaveLikeERC20Transfer (errorPrefix, from, to, balance, transfer
         expectEvent.inLogs(logs, 'Transfer', {
           from,
           to,
-          value: amount,
+          value: new BN(amount),
         });
       });
     });
@@ -239,7 +243,7 @@ function shouldBehaveLikeERC20Approve (errorPrefix, owner, spender, supply, appr
         expectEvent.inLogs(logs, 'Approval', {
           owner: owner,
           spender: spender,
-          value: amount,
+          value: new BN(amount),
         });
       });
 
@@ -247,7 +251,7 @@ function shouldBehaveLikeERC20Approve (errorPrefix, owner, spender, supply, appr
         it('approves the requested amount', async function () {
           await approve.call(this, owner, spender, amount);
 
-          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(amount);
+          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(new BN(amount));
         });
       });
 
@@ -259,13 +263,13 @@ function shouldBehaveLikeERC20Approve (errorPrefix, owner, spender, supply, appr
         it('approves the requested amount and replaces the previous one', async function () {
           await approve.call(this, owner, spender, amount);
 
-          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(amount);
+          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(new BN(amount));
         });
       });
     });
 
     describe('when the sender does not have enough balance', function () {
-      const amount = supply.addn(1);
+      const amount = supply + 1;
 
       it('emits an approval event', async function () {
         const { logs } = await approve.call(this, owner, spender, amount);
@@ -273,7 +277,7 @@ function shouldBehaveLikeERC20Approve (errorPrefix, owner, spender, supply, appr
         expectEvent.inLogs(logs, 'Approval', {
           owner: owner,
           spender: spender,
-          value: amount,
+          value: new BN(amount),
         });
       });
 
@@ -281,7 +285,7 @@ function shouldBehaveLikeERC20Approve (errorPrefix, owner, spender, supply, appr
         it('approves the requested amount', async function () {
           await approve.call(this, owner, spender, amount);
 
-          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(amount);
+          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(new BN(amount));
         });
       });
 
@@ -293,7 +297,7 @@ function shouldBehaveLikeERC20Approve (errorPrefix, owner, spender, supply, appr
         it('approves the requested amount and replaces the previous one', async function () {
           await approve.call(this, owner, spender, amount);
 
-          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(amount);
+          expect(await this.token.allowance(owner, spender)).to.be.bignumber.equal(new BN(amount));
         });
       });
     });
