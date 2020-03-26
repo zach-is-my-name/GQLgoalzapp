@@ -31,7 +31,7 @@ contract Restricted {
     restrictedTokens[_tokenMintRecipient] = restrictedTokens[_tokenMintRecipient].add(_amount);
   }
 
-  function unsetRestrictedTokens (address _tokenDepositor, uint _amount) external {
+  function unsetRestrictedTokens (address _tokenDepositor, uint _amount) internal {
     restrictedTokens[_tokenDepositor] = restrictedTokens[_tokenDepositor].sub(_amount);
   } 
 
