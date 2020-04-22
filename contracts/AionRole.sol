@@ -11,11 +11,10 @@ contract AionRole is Context {
     Roles.Role private _aionAddress;
 
     constructor () internal {
-//        _addAionAddress();
     }
 
     modifier onlyAionRole() {
-        require(isAionAddress(_msgSender()), "Aion Role: caller does not have the Aion role");
+        require(isAionAddress(msg.sender), "Aion Role: caller does not have the Aion role");
         _;
     }
 
@@ -23,9 +22,9 @@ contract AionRole is Context {
         return _aionAddress.has(account);
     }
 
-    function _addAionAddress() internal {
-        _aionAddress.add(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
-        emit AionAddressAdded(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
+    function _addAionAddress(address aionAddress) internal {
+        _aionAddress.add(aionAddress);
+        emit AionAddressAdded(aionAddress);
     }
 }
 

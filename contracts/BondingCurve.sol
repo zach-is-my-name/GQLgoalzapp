@@ -54,6 +54,7 @@ contract BondingCurve is Ownable, BancorFormula, ERC20 {
     uint256 tokensToMint = calculatePurchaseReturn(_totalSupply, poolBalance, reserveRatio, msg.value);
     _totalSupply = _totalSupply.add(tokensToMint);
     _balances[msg.sender] = _balances[msg.sender].add(tokensToMint);
+    setRestrictedTokens(msg.sender, tokensToMint);    
     poolBalance = poolBalance.add(msg.value);
     emit LogMint(tokensToMint, msg.value);
     return true;

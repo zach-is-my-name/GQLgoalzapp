@@ -12,6 +12,7 @@ contract Protected is EscrowRole, AionRole {
    event TransferChecked(string message);
    event MSGSenderProtected(string message0, uint256 num, string message1, uint _amount, bool amountToSendGreaterThanZero);
    event CheckRequire(uint _amount, uint256 _protectedTokens, bool lessThanProtected);
+   event Caller(address sender);
    
     constructor (uint256 _protectionPeriod) public {
         protectionPeriod = _protectionPeriod;
@@ -31,8 +32,10 @@ contract Protected is EscrowRole, AionRole {
       protectedTokens[_address] = protectedTokens[_address].add(_amount);
      // return true;
     }
-
-    function removeTokenProtection(address _address, uint256 _amount) public onlyAionRole returns (bool) {
+ 
+    /* this function's "onlyEscrowRole" exists only in this branch for ability to test (can't run Aion system locally).  In all other versions and branches the onlyAionRole should be applied to restrict access to only the Aion contract which performs timed calls */
+    function removeTokenProtection(address _address, uint256 _amount) public onlyEscrowRole returns (bool) {
+      emit Caller(msg.sender);
       protectedTokens[_address] = protectedTokens[_address].sub(_amount);
       //return true;
     }

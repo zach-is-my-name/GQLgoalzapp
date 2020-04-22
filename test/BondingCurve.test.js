@@ -100,11 +100,11 @@ contract('BondingCurve', function(accounts) {
         let bigPrice = web3.utils.toWei(littlePrice.toString())
 
 	const startBalance = await this.bondingCurve.balanceOf.call(accounts[0]);
-        console.log("LITTLE AMOUNT", littleAmount)
-        console.log("LITTLEPOOLBALANCE", littlePoolBalance)
-	console.log("LITTLETOTALSUPPLY", littleTotalSupply)
-        console.log("LITTLEPRICE", littlePrice)
-        console.log("BIGPRICE", bigPrice)
+        //console.log("LITTLE AMOUNT", littleAmount)
+        //console.log("LITTLEPOOLBALANCE", littlePoolBalance)
+	//console.log("LITTLETOTALSUPPLY", littleTotalSupply)
+        //console.log("LITTLEPRICE", littlePrice)
+        //console.log("BIGPRICE", bigPrice)
 //	let price = poolBalance.mul(((part1.pow(exponent))).sub(new BN(1)))
 /*
 	console.log("AMOUNT", web3.utils.fromWei(amount.toString()))
@@ -121,10 +121,10 @@ contract('BondingCurve', function(accounts) {
 
 	const endBalance = await this.bondingCurve.balanceOf.call(accounts[0]);
 	let amountBought = endBalance.sub(startBalance);
-        console.log("AMOUNT BOUGHT", web3.utils.fromWei(amountBought.toString()))
-        console.log("AMOUNT REQUESTED", web3.utils.fromWei(amount.toString())) 
-        console.log("LITTLE DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", web3.utils.fromWei(amountBought.sub(amount).toString()))
-        console.log("BIG DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", amountBought.sub(amount).toString())
+        //console.log("AMOUNT BOUGHT", web3.utils.fromWei(amountBought.toString()))
+        //console.log("AMOUNT REQUESTED", web3.utils.fromWei(amount.toString())) 
+        // console.log("LITTLE DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", web3.utils.fromWei(amountBought.sub(amount).toString()))
+        //console.log("BIG DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", amountBought.sub(amount).toString())
 	expect(amountBought.sub(amount).abs()).to.be.bignumber.at.most(new BN(web3.utils.toWei("1")));
       });
       //assert.isAtMost(Math.abs(amountBought.sub(amount)), 1e3, 'able to buy tokens via fallback');
@@ -144,11 +144,11 @@ contract('BondingCurve', function(accounts) {
         let littlePrice = littlePoolBalance * ((1 + littleAmount / littleTotalSupply) ** (1 / (littleReserveRatio)) - 1);
         let bigPrice = web3.utils.toWei(littlePrice.toString())
 
-        console.log("LITTLE AMOUNT", littleAmount)
-        console.log("LITTLEPOOLBALANCE", littlePoolBalance)
-	console.log("LITTLETOTALSUPPLY", littleTotalSupply)
-        console.log("LITTLEPRICE", littlePrice)
-        console.log("BIGPRICE", bigPrice)
+        //console.log("LITTLE AMOUNT", littleAmount)
+        //console.log("LITTLEPOOLBALANCE", littlePoolBalance)
+	//console.log("LITTLETOTALSUPPLY", littleTotalSupply)
+        //console.log("LITTLEPRICE", littlePrice)
+        //console.log("BIGPRICE", bigPrice)
 
       const startBalance = await this.bondingCurve.balanceOf.call(accounts[0]);
       let buyTokens = await this.bondingCurve.buy({ from: accounts[0], value: bigPrice  });
@@ -156,10 +156,10 @@ contract('BondingCurve', function(accounts) {
 
       const endBalance = await this.bondingCurve.balanceOf.call(accounts[0]);
       let amountBought = endBalance.sub(startBalance);
-        console.log("AMOUNT BOUGHT", web3.utils.fromWei(amountBought.toString()))
-        console.log("AMOUNT REQUESTED", web3.utils.fromWei(amount.toString())) 
-        console.log("LITTLE DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", web3.utils.fromWei(amountBought.sub(amount).toString()))
-        console.log("BIG DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", amountBought.sub(amount).toString())
+        //console.log("AMOUNT BOUGHT", web3.utils.fromWei(amountBought.toString()))
+        //console.log("AMOUNT REQUESTED", web3.utils.fromWei(amount.toString())) 
+        //console.log("LITTLE DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", web3.utils.fromWei(amountBought.sub(amount).toString()))
+        //console.log("BIG DIFFERENCE AMOUNT BOUGHT / AMOUNT REQUESTED", amountBought.sub(amount).toString())
       expect(amountBought.sub(amount).abs()).to.be.bignumber.at.most(new BN(web3.utils.toWei("1")));
      // assert.isAtMost(Math.abs(amountBought.sub(amount)), 1e4, 'able to buy tokens');
       });
@@ -178,11 +178,11 @@ contract('BondingCurve', function(accounts) {
         let littlePrice = littlePoolBalance * ((1 + littleAmount / littleTotalSupply) ** (1 / (littleReserveRatio)) - 1);
         let bigPrice = web3.utils.toWei(littlePrice.toString())
 
-        console.log("LITTLE AMOUNT", littleAmount)
-        console.log("LITTLEPOOLBALANCE", littlePoolBalance)
-	console.log("LITTLETOTALSUPPLY", littleTotalSupply)
-        console.log("LITTLEPRICE", littlePrice)
-        console.log("BIGPRICE", bigPrice)
+        //console.log("LITTLE AMOUNT", littleAmount)
+        //console.log("LITTLEPOOLBALANCE", littlePoolBalance)
+	//console.log("LITTLETOTALSUPPLY", littleTotalSupply)
+        //console.log("LITTLEPRICE", littlePrice)
+        //console.log("BIGPRICE", bigPrice)
 
       const startBalance = await this.bondingCurve.balanceOf.call(accounts[0]);
       let buyTokens = await this.bondingCurve.buy({from: accounts[0], value: bigPrice});
@@ -218,12 +218,12 @@ contract('BondingCurve', function(accounts) {
 
       let endContractBalance = await web3.eth.getBalance(this.bondingCurve.address);
       
-      console.log("START CONTRACT BALANCE", web3.utils.fromWei(contractBalance))
-      console.log("SALE RETURN", web3.utils.fromWei(saleReturn));
+      //console.log("START CONTRACT BALANCE", web3.utils.fromWei(contractBalance))
+     // console.log("SALE RETURN", web3.utils.fromWei(saleReturn));
       let diff = new BN (contractBalance).sub(new BN(endContractBalance))
 //      console.log("DIFF", diff);
-      console.log("DIFF CONTRACT BALANCE", web3.utils.fromWei(diff));
-      console.log("END CONTRACT BALANCE", web3.utils.fromWei(endContractBalance));
+      //console.log("DIFF CONTRACT BALANCE", web3.utils.fromWei(diff));
+      //console.log("END CONTRACT BALANCE", web3.utils.fromWei(endContractBalance));
 	expect(saleReturn).to.be.bignumber.equal(diff); 
      // assert.equal(saleReturn.valueOf(), contractBalance - endContractBalance, // 'contract change should match sale return');
       });
@@ -272,9 +272,9 @@ contract('BondingCurve', function(accounts) {
       //console.log('sellTokens gas ', sell.receipt.gasUsed);
 
       let endContractBalance = await web3.eth.getBalance(this.bondingCurve.address);
-      console.log("CONTRACT BALANCE", web3.utils.fromWei(contractBalance));
-      console.log("END CONTRACT BALANCE", web3.utils.fromWei(endContractBalance));
-      console.log("SALE RETURN", web3.utils.fromWei(saleReturn));
+      //console.log("CONTRACT BALANCE", web3.utils.fromWei(contractBalance));
+      //console.log("END CONTRACT BALANCE", web3.utils.fromWei(endContractBalance));
+      //console.log("SALE RETURN", web3.utils.fromWei(saleReturn));
       //let diff = console.log("SALE RETURN DIFF", web3.utils.fromWei(new BN (saleReturn).sub((new BN(contractBalance).sub(new BN(endContractBalance))))));
       let diff = console.log("SALE RETURN DIFF", (new BN (saleReturn).sub((new BN(contractBalance).sub(new BN(endContractBalance))))).toString());
       

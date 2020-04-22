@@ -5,8 +5,6 @@ const { ZERO_ADDRESS } = constants;
 function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recipient, anotherAccount) {
   describe('total supply', function () {
     it('returns the total amount of tokens', async function () {
-//     console.log("*THIS*******************", this)
-//	console.log("THIS.TOKEN", this.token)
       expect(await this.token.totalSupply()).to.be.bignumber.equal(new BN(initialSupply));
     });
   });
@@ -87,11 +85,11 @@ function shouldBehaveLikeERC20 (errorPrefix, initialSupply, initialHolder, recip
           });
 
           describe('when the token owner does not have enough balance', function () {
-            console.log('initialSupply ' , initialSupply)
-	    console.log('typeof initialSupply ', typeof initialSupply)
+            //console.log('initialSupply ' , initialSupply)
+	    //console.log('typeof initialSupply ', typeof initialSupply)
             const amount = initialSupply + 1;
-            console.log('amount ' , amount)
-	    console.log('typeof amount ', typeof amount)
+            //console.log('amount ' , amount)
+	    //console.log('typeof amount ', typeof amount)
 		
             it('reverts', async function () {
               await expectRevert(this.token.transferFrom(
@@ -171,7 +169,7 @@ function shouldBehaveLikeERC20Transfer (errorPrefix, from, to, balance, transfer
     describe('when the sender does not have enough balance', function () {
       let amount = balance + 1 
       amount = new BN(amount);
-      console.log("before_call", amount.toNumber());
+      //console.log("before_call", amount.toNumber());
       it('reverts', async function () {
          await expectRevert.unspecified(transfer.call(this, from, to, amount)
         );

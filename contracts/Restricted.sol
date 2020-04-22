@@ -1,13 +1,14 @@
 pragma solidity ^0.5.0; 
 
 import "./SafeMath.sol";
+import "./EscrowRole.sol";
 
 
-contract Restricted {
+contract Restricted is EscrowRole {
   using SafeMath for uint256;
   
-  mapping (address => uint256) restrictedTokens;
-  mapping (address => address) initializedEscrows;
+  mapping (address => uint256) public restrictedTokens;
+  mapping (address => address) public initializedEscrows;
 
   event Amount(uint256 amount);
   event RestrictedTokens(uint256 restrictedTokenAmount);
@@ -31,7 +32,7 @@ contract Restricted {
     restrictedTokens[_tokenMintRecipient] = restrictedTokens[_tokenMintRecipient].add(_amount);
   }
 
-  function unsetRestrictedTokens (address _tokenDepositor, uint _amount) internal {
+  function unsetRestrictedTokens (address _tokenDepositor, uint _amount) external onlyEscrowRole {
     restrictedTokens[_tokenDepositor] = restrictedTokens[_tokenDepositor].sub(_amount);
   } 
 

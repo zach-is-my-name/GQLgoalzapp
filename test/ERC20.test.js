@@ -338,7 +338,7 @@ contract('ERC20', function ([_, initialHolder, recipient, anotherAccount]) {
       describeBurnFrom('for less amount than allowance', allowance.subn(1));
     });
   });
-
+      
   describe('_transfer', function () {
     shouldBehaveLikeERC20Transfer('ERC20', initialHolder, recipient, initialSupply, function (from, to, amount) {
       console.log("for_call", amount);
@@ -352,11 +352,11 @@ contract('ERC20', function ([_, initialHolder, recipient, anotherAccount]) {
         );
       });
     });
-  });
+  }); 
 
   describe('_approve', function () {
     shouldBehaveLikeERC20Approve('ERC20', initialHolder, recipient, initialSupply, function (owner, spender, amount) {
-      return this.token.approveInternal(owner, spender, amount);
+     return this.token.approve(spender, amount, {from: owner});
     });
 
     describe('when the owner is the zero address', function () {
@@ -365,6 +365,6 @@ contract('ERC20', function ([_, initialHolder, recipient, anotherAccount]) {
           'ERC20: approve from the zero address'
         );
       });
-    });
+    }); 
   });
 });

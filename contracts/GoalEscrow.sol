@@ -7,7 +7,7 @@ import "./ERC20.sol";
 import "./GoalOwnerRole.sol";
 import "./AionRole.sol";
 import "./EscrowRole.sol";
-import "./Restricted.sol";
+//import "./Restricted.sol";
 // interface Aion
 
 
@@ -20,13 +20,13 @@ contract Aion {
       payable returns (uint, address);
 }
 
-contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
+contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
   using SafeMath for uint256;
  // using SafeERC20 for ERC20;
 
    
-  event Deposited(address indexed payee, uint256 tokenAmount);
-  event Withdrawn(address indexed payee, uint256 tokenAmount);
+  event Deposited(address indexed suggester, uint256 tokenAmount);
+  event Withdrawn(address indexed suggester, uint256 tokenAmount);
   event StartProtection(uint256 protectionEnds, uint timeNow);
   event TimeNow(uint256 blocktime);
   event SuggestionExpires(uint256 expires);
@@ -67,7 +67,7 @@ contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
     ownerBondAmount = 1;
     suggestionDuration = _suggestionDuration;
     _token._addEscrowRole(address(this));
-    _addAionAddress();
+    _addAionAddress(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
     self = address(this);
     _initializedMaster = true;
   }
@@ -105,13 +105,13 @@ contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
  
 	         //** SUGGEST **//
                   /*only suggester*/
-  function depositOnSuggest(bytes32 _id, uint _amount, address _payee) public notGoalOwner {
+  function depositOnSuggest(bytes32 _id, uint _amount) public notGoalOwner {
     //set suggester address
     suggestedSteps[_id].suggester = msg.sender;
     //set suggester bond
     suggestedSteps[_id].suggesterBond = suggestedSteps[_id].suggesterBond.add(_amount);
     token.transferFrom(msg.sender, address(this), _amount); 
-    emit Deposited(_payee, _amount); 
+    emit Deposited(address(this), _amount); 
     //apply owner bond
     require(bondFunds >= ownerBondAmount, "Owner has insufficient bond funds");
     bondFunds = bondFunds.sub(ownerBondAmount);  
@@ -149,17 +149,17 @@ contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
     require(token.balanceOf(address(this)) >= suggesterBondRefundAmount,"Requested Suggester Bond Refund is MORE than token balance of the contract");
     //suggester
     uint256 suggesterProtectAmount = suggesterBondRefundAmount; 
-    address payee = suggestedSteps[_id].suggester;
+    address suggester = suggestedSteps[_id].suggester;
     suggestedSteps[_id].suggesterBond = 0;
     //return suggester bond 
-    token.transfer(payee, suggesterBondRefundAmount);
-    emit Withdrawn(payee, suggesterBondRefundAmount);
+    token.transfer(suggester, suggesterBondRefundAmount);
+    emit Withdrawn(suggester, suggesterBondRefundAmount);
     // remove restriction
-    unsetRestrictedTokens(payee, suggesterProtectAmount);
+    token.unsetRestrictedTokens(suggester, suggesterProtectAmount);
     //protect tokens
-    token.timeProtectTokens(payee, suggesterProtectAmount);
+    token.timeProtectTokens(suggester, suggesterProtectAmount);
     // schedule end protection 
-    schedule_removeTokenTimeProtection(payee, suggesterProtectAmount);    
+    schedule_removeTokenTimeProtection(suggester, suggesterProtectAmount);    
     //owner 
     uint256 ownerBondRefundAmount = suggestedSteps[_id].ownerBond;
     require(token.balanceOf(address(this)) >= ownerBondRefundAmount, "Broken: Contract can't afford to refund owner bond!"); 
@@ -195,22 +195,22 @@ contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
     uint256 suggesterBondRefundAmount = suggestedSteps[_id].suggesterBond;
     require(token.balanceOf(address(this)) >= suggesterBondRefundAmount, "Broken: Contract can't afford to refund suggester bond!");
     //return suggester bond
-    address payee = suggestedSteps[_id].suggester;
+    address suggester = suggestedSteps[_id].suggester;
     suggestedSteps[_id].suggesterBond = 0;
-    token.transfer(payee, suggesterBondRefundAmount);
-    emit Withdrawn(payee, suggesterBondRefundAmount);
+    token.transfer(suggester, suggesterBondRefundAmount);
+    emit Withdrawn(suggester, suggesterBondRefundAmount);
     //pay reward to suggester
     require(token.balanceOf(address(this)) >= rewardFunds.sub(rewardAmount), "Broken: Contract can't afford to pay out reward!");
     rewardFunds = rewardFunds.sub(rewardAmount);
-    token.transfer(payee, rewardAmount); 
-    emit Withdrawn(payee, rewardAmount);    
+    token.transfer(suggester, rewardAmount); 
+    emit Withdrawn(suggester, rewardAmount);    
     // remove restricted suggesterBond
-    unsetRestrictedTokens(payee, suggesterBondRefundAmount);
+    token.unsetRestrictedTokens(suggester, suggesterBondRefundAmount);
     //protect suggester tokens
     uint256 suggesterProtectAmount = suggesterBondRefundAmount.add(rewardAmount); 
-    token.timeProtectTokens(payee, suggesterProtectAmount); 
+    token.timeProtectTokens(suggester, suggesterProtectAmount); 
     //start protection clock    
-    schedule_removeTokenTimeProtection(payee, suggesterProtectAmount);    
+    schedule_removeTokenTimeProtection(suggester, suggesterProtectAmount);    
     // return owner bond 
     uint256 ownerBondRefundAmount = suggestedSteps[_id].ownerBond;
     require(token.balanceOf(address(this)) >= ownerBondRefundAmount, "Broken: Contract can't afford to refund owner bond!"); 
@@ -219,7 +219,7 @@ contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
     token.transfer(goalOwner, ownerBondRefundAmount);
     emit Withdrawn(goalOwner, ownerBondRefundAmount);
     // remove restricted owner tokens
-     unsetRestrictedTokens(goalOwner, ownerBondRefundAmount.add(rewardAmount)); 
+     token.unsetRestrictedTokens(goalOwner, ownerBondRefundAmount.add(rewardAmount)); 
     //protect owner tokens 
     token.timeProtectTokens(goalOwner, ownerProtectAmount);
     //start protection clock    
@@ -232,16 +232,16 @@ contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
     uint256 suggesterBondRefundAmount = suggestedSteps[_id].suggesterBond;
     require(token.balanceOf(address(this)) >= suggesterBondRefundAmount,"Broken: contract can't afford to refund suggester bond!");
     uint256 suggesterProtectAmount = suggesterBondRefundAmount;
-    address payee = suggestedSteps[_id].suggester;
+    address suggester = suggestedSteps[_id].suggester;
     suggestedSteps[_id].suggesterBond = 0;
-    token.transfer(payee, suggesterBondRefundAmount);
-    emit Withdrawn(payee, suggesterBondRefundAmount);
+    token.transfer(suggester, suggesterBondRefundAmount);
+    emit Withdrawn(suggester, suggesterBondRefundAmount);
     // remove restricted suggester bond
-    unsetRestrictedTokens(payee, suggesterBondRefundAmount);
+    token.unsetRestrictedTokens(suggester, suggesterBondRefundAmount);
     //protect suggester return bond
-    token.timeProtectTokens(payee, suggesterProtectAmount);
+    token.timeProtectTokens(suggester, suggesterProtectAmount);
     //start protection clock
-    schedule_removeTokenTimeProtection(payee, suggesterProtectAmount);    
+    schedule_removeTokenTimeProtection(suggester, suggesterProtectAmount);    
     //return owner bond
     uint256 ownerBondRefundAmount = suggestedSteps[_id].ownerBond;
     require(token.balanceOf(address(this)) >= ownerBondRefundAmount,"Broken: contract can't afford to refund owner bond!"); 
@@ -250,7 +250,7 @@ contract GoalEscrow is Restricted, GoalOwnerRole, EscrowRole, AionRole {
     token.transfer(goalOwner, ownerBondRefundAmount); 
     emit Withdrawn(msg.sender, ownerBondRefundAmount);
     // remove restricted goal owner bond
-    unsetRestrictedTokens(goalOwner, ownerBondRefundAmount);  
+    token.unsetRestrictedTokens(goalOwner, ownerBondRefundAmount);  
     //protect tokens
     token.timeProtectTokens(msg.sender, ownerProtectAmount);
     // start protection clock
