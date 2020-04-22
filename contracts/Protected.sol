@@ -19,11 +19,8 @@ contract Protected is EscrowRole, AionRole {
     }
 
     modifier checkProtectedTokens (uint256 amount) {
-      //emit MSGSenderProtected("amount protected", amountProtected(msg.sender), "amount to send", amount, amountProtected(msg.sender) > 0);
       if (protectedTokens[msg.sender] > 0) {
-       // emit TransferChecked("Transfer Checked!!! || Protected > 0");
         require (amount < protectedTokens[msg.sender], "your tokens are under protection period, check timeToLiftProtection() for time until you have tokens available, and/or check amountProtected to see how many of your tokens are currently under the protection period" );
-	//emit CheckRequire(amount, protectedTokens[msg.sender], amount < protectedTokens[msg.sender]);
       }
       _;
     }
@@ -34,7 +31,7 @@ contract Protected is EscrowRole, AionRole {
     }
  
     /* this function's "onlyEscrowRole" exists only in this branch for ability to test (can't run Aion system locally).  In all other versions and branches the onlyAionRole should be applied to restrict access to only the Aion contract which performs timed calls */
-    function removeTokenProtection(address _address, uint256 _amount) public onlyEscrowRole returns (bool) {
+    function removeTokenProtection(address _address, uint256 _amount) public onlyAionRole returns (bool) {
       emit Caller(msg.sender);
       protectedTokens[_address] = protectedTokens[_address].sub(_amount);
       //return true;
