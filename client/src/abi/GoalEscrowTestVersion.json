@@ -1,6 +1,6 @@
 {
   "abi":
-  [
+[
     {
       "anonymous": false,
       "inputs": [
@@ -18,9 +18,35 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Amount",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "DebugRestrictedSuggester",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "address",
-          "name": "payee",
+          "name": "suggester",
           "type": "address"
         },
         {
@@ -50,6 +76,19 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "exceedsRestrictedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ExceedsRestricted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "address",
           "name": "account",
@@ -57,6 +96,32 @@
         }
       ],
       "name": "GoalOwnerAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "restrictedTokenAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "RestrictedTokens",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "suggestedStepOwnerBond",
+          "type": "uint256"
+        }
+      ],
+      "name": "ReturnedToBondFunds",
       "type": "event"
     },
     {
@@ -123,7 +188,7 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "payee",
+          "name": "suggester",
           "type": "address"
         },
         {
@@ -153,6 +218,27 @@
     },
     {
       "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_account",
+          "type": "address"
+        }
+      ],
+      "name": "amountRestricted",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [],
       "name": "bondFunds",
       "outputs": [
@@ -170,6 +256,27 @@
       "constant": true,
       "inputs": [],
       "name": "goalOwner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "initializedEscrows",
       "outputs": [
         {
           "internalType": "address",
@@ -261,6 +368,27 @@
     },
     {
       "constant": true,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "restrictedTokens",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [],
       "name": "rewardAmount",
       "outputs": [
@@ -302,6 +430,27 @@
       ],
       "payable": false,
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_escrowAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setInitializedEscrow",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -477,54 +626,9 @@
           "internalType": "uint256",
           "name": "_amount",
           "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "_payee",
-          "type": "address"
-        }
-      ],
-      "name": "depositOnSuggestTestVersion",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "_id",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "_payee",
-          "type": "address"
         }
       ],
       "name": "depositOnSuggest",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "_id",
-          "type": "bytes32"
-        }
-      ],
-      "name": "setSuggestionTimeOutTestVersion",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
