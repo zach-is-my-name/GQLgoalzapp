@@ -6,8 +6,8 @@ import "./SafeMath.sol";
 import "./ERC20.sol";
 import "./GoalOwnerRole.sol";
 import "./AionRole.sol";
-//import "./EscrowRole.sol";
-import "./Restricted.sol";
+
+
 
 
 // interface Aion
@@ -22,7 +22,7 @@ contract Aion {
 
 contract GoalEscrowTestVersion is GoalOwnerRole {
   using SafeMath for uint256;
-  event debugWrapperIsAionAddress(bool yes); 
+
   event Deposited(address indexed suggester, uint256 tokenAmount);
   event Withdrawn(address indexed suggester, uint256 tokenAmount);
   event StartProtection(uint256 protectionEnds, uint timeNow);
@@ -30,7 +30,7 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   event SuggestionExpires(uint256 expires);
   event SuggestedStepsSuggesterBond(uint Suggester_suggesterBond);
   event ReturnedToBondFunds(uint suggestedStepOwnerBond);
-  event DebugRestrictedSuggester(uint256 amount);
+
   mapping ( bytes32 => Suggester) public suggestedSteps;
 
   struct  Suggester {
@@ -82,9 +82,6 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   
   function newGoalInitAndFund(ERC20 _token, uint256 _suggestionDuration, uint _amountBond, uint _amountReward) public {
     require(!_initializedNewGoal, "newGoalInit has already been called on this instance"); 
-    if (!_initializedMaster) {
-      initMaster(_token, _suggestionDuration);
-    }
     _addGoalOwner(msg.sender);
     goalOwner = msg.sender;
     if (_amountBond > 0 && _amountReward > 0) {
@@ -94,10 +91,10 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   }
  
   function fundEscrow (uint _amountBond, uint _amountReward) public onlyGoalOwner {
-   bondFunds = bondFunds.add(_amountBond); 
-   token.transferFrom(msg.sender, self, _amountBond);
-   rewardFunds = rewardFunds.add(_amountReward);
-   token.transferFrom(msg.sender, self, _amountReward);
+    bondFunds = bondFunds.add(_amountBond); 
+    token.transferFrom(msg.sender, self, _amountBond);
+    rewardFunds = rewardFunds.add(_amountReward);
+    token.transferFrom(msg.sender, self, _amountReward);
   } 
 
  
@@ -152,7 +149,6 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
     //return suggester bond 
     token.transfer(suggester, suggesterBondRefundAmount);
     emit Withdrawn(suggester, suggesterBondRefundAmount);
-    emit DebugRestrictedSuggester(token.amountRestricted(suggester));
     // remove restriction
     token.unsetRestrictedTokens(suggester, suggesterProtectAmount);
     //protect tokens
@@ -209,7 +205,6 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
     rewardFunds = rewardFunds.sub(rewardAmount);
     token.transfer(suggester, rewardAmount); 
     emit Withdrawn(suggester, rewardAmount);    
-    emit DebugRestrictedSuggester(token.amountRestricted(suggester));
     // remove restricted suggesterBond
     token.unsetRestrictedTokens(suggester, suggesterBondRefundAmount);
     //protect suggester tokens

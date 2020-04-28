@@ -94,7 +94,9 @@ _renderApp = () => {
       console.log('_renderApp')
       return (
        <div className="App">
+         <Link to="/">
          <h1 className="logo">GoalZapp</h1>
+         </ Link>
          <div className="current-user">
            {/* <CurrentUser user={this.props.data.user ? this.props.data.user.username : 'anonymous'} /> */}
          </div>
@@ -128,7 +130,9 @@ _renderApp = () => {
     console.log('renderLoggedOut')
     return (
       <div className="App">
+        <Link to="/">
         <h1>GoalZapp</h1>
+        </ Link>
         <br/>
 
         <div className="app-login-options">
