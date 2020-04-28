@@ -8,8 +8,6 @@ import "./GoalOwnerRole.sol";
 import "./AionRole.sol";
 
 
-
-
 // interface Aion
 contract Aion {
  //using SafeERC20 for ERC20;

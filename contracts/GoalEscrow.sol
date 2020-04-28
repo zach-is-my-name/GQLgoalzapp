@@ -6,7 +6,7 @@ import "./SafeMath.sol";
 import "./ERC20.sol";
 import "./GoalOwnerRole.sol";
 import "./AionRole.sol";
-import "./EscrowRole.sol";
+
 
 // interface Aion
 contract Aion {

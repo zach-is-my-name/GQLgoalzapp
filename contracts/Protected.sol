@@ -30,7 +30,6 @@ contract Protected is EscrowRole, AionRole {
      // return true;
     }
  
-    /* this function's "onlyEscrowRole" exists only in this branch for ability to test (can't run Aion system locally).  In all other versions and branches the onlyAionRole should be applied to restrict access to only the Aion contract which performs timed calls */
     function removeTokenProtection(address _address, uint256 _amount) public onlyAionRole returns (bool) {
       emit Caller(msg.sender);
       protectedTokens[_address] = protectedTokens[_address].sub(_amount);
