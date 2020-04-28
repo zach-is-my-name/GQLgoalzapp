@@ -7,10 +7,8 @@ import "./ERC20.sol";
 import "./GoalOwnerRole.sol";
 import "./AionRole.sol";
 import "./EscrowRole.sol";
-//import "./Restricted.sol";
+
 // interface Aion
-
-
 contract Aion {
  //using SafeERC20 for ERC20;
  
@@ -20,11 +18,9 @@ contract Aion {
       payable returns (uint, address);
 }
 
-contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
+contract GoalEscrow is GoalOwnerRole, AionRole {
   using SafeMath for uint256;
- // using SafeERC20 for ERC20;
 
-   
   event Deposited(address indexed suggester, uint256 tokenAmount);
   event Withdrawn(address indexed suggester, uint256 tokenAmount);
   event StartProtection(uint256 protectionEnds, uint timeNow);
@@ -32,6 +28,7 @@ contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
   event SuggestionExpires(uint256 expires);
   event SuggestedStepsSuggesterBond(uint Suggester_suggesterBond);
   event ReturnedToBondFunds(uint suggestedStepOwnerBond);
+
   mapping ( bytes32 => Suggester) public suggestedSteps;
 
   struct  Suggester {
@@ -55,11 +52,11 @@ contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
   address public self;
 
 
-  bool private _initializedMaster;
+  bool private _initializedImplementation;
   bool private _initializedNewGoal;
 
-  function initMaster(ERC20 _token, uint256 _suggestionDuration) public {
-    require(!_initializedMaster, "initMaster_ already called on the Escrow implementation contract");
+  function initImplementation(ERC20 _token, uint256 _suggestionDuration) public {
+    require(!_initializedImplementation, "initMaster_ already called on the Escrow implementation contract");
     require(address(_token) != address(0), "token address cannot be zero");
     require(_suggestionDuration > 0, "_suggestionDuration must be greater than 0"); 
     token = _token;
@@ -69,13 +66,13 @@ contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
     _token._addEscrowRole(address(this));
     _addAionAddress(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
     self = address(this);
-    _initializedMaster = true;
+    _initializedImplementation = true;
   }
  
   function newGoalInit(ERC20 _token, uint256 _suggestionDuration) public {
     require(!_initializedNewGoal, "newGoalInit has already been called on this instance"); 
-    if (!_initializedMaster) {
-      initMaster(_token, _suggestionDuration);
+    if (!_initializedImplementation) {
+      initImplementation(_token, _suggestionDuration);
     }
     _addGoalOwner(msg.sender);
     goalOwner = msg.sender;
@@ -84,9 +81,6 @@ contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
   
   function newGoalInitAndFund(ERC20 _token, uint256 _suggestionDuration, uint _amountBond, uint _amountReward) public {
     require(!_initializedNewGoal, "newGoalInit has already been called on this instance"); 
-    if (!_initializedMaster) {
-      initMaster(_token, _suggestionDuration);
-    }
     _addGoalOwner(msg.sender);
     goalOwner = msg.sender;
     if (_amountBond > 0 && _amountReward > 0) {
@@ -137,7 +131,7 @@ contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
     aion = Aion(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
     bytes memory data = abi.encodeWithSelector(bytes4(keccak256('returnBondsOnTimeOut(bytes32 )')),_id);
     uint callCost = 200000*1e9 + aion.serviceFee();
-    aion.ScheduleCall.value(callCost)(callTime, address(this), 0, 200000, 1e9, data, true);  
+    aion.ScheduleCall.value(callCost)(callTime, address(this), 0, 2000000, 1e9, data, true);  
   }
 
 	//** TIME OUT -- Contract disburses reward and bonds **//
@@ -188,7 +182,7 @@ contract GoalEscrow is  GoalOwnerRole, EscrowRole, AionRole {
    bytes memory data =
      abi.encodeWithSelector(bytes4(keccak256('removeTokenTimeProtection(address,uint256)')),_address, _amount);
    uint256 callCost = 200000*1e9 + aion.serviceFee();
-   aion.ScheduleCall.value(callCost)(callTime, address(this), 0, 200000, 1e9, data, true);
+   aion.ScheduleCall.value(callCost)(callTime, address(token), 0, 20000000, 1e9, data, true);
   }
 
   function disburseOnAccept(bytes32 _id) public onlyGoalOwner returns (bool) {
