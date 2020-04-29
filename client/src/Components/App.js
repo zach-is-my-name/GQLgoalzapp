@@ -21,6 +21,8 @@ import FundGoalButton from './Ethereum/FundGoalButton'
 import TokensMenuButton from './Ethereum/TokensMenuButton'
 import ContractRewardsFund from './Ethereum/ContractRewardsFund-Smart'
 import BondRewardsFund from './Ethereum/BondRewardsFund-Smart'
+import UserTokenFundsSmart from './Ethereum/UserTokenFundsSmart'
+
 var Web3 = require('web3');
 import { Web3Provider } from 'react-web3';
 
@@ -105,6 +107,7 @@ _renderApp = () => {
          currentUser={this.props.data.user ? this.props.data.user.userName : 'anonymous' }
          currentUserId={this.props.data.user.id}
          />
+        <UserTokenFundsSmart />
         {this.state.proxyAddress ? <ContractRewardsFund proxyAddress={this.state.proxyAddress} /> : null }
         {this.state.proxyAddress ? <BondRewardsFund proxyAddress={this.state.proxyAddress} /> : null }
          <TokensMenuButton />
