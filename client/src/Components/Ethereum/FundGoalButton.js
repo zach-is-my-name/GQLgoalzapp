@@ -13,7 +13,7 @@ export default class MenuButton extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      userTokenBalance: null,
+      //userTokenBalance: null,
     }
     this.handleClick = this.handleClick.bind(this)
     this.fundGoal = this.fundGoal.bind(this);
@@ -31,11 +31,10 @@ async componentDidMount() {
   }
 
   ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
-    console.log('this.props.proxyAddress')
+    //console.log('this.props.proxyAddress')
 
   let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
-  console.log('userTokenBalance ', userTokenBalance  )
-  this.setState({userTokenBalance})
+  this.props.setUserTokenBalance(userTokenBalance)
 }
 
 async componentDidUpdate(prevProps) {
@@ -43,11 +42,14 @@ async componentDidUpdate(prevProps) {
     console.log(this.props.selectedAccount)
     let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
     console.log('userTokenBalance ', userTokenBalance  )
-    this.setState({userTokenBalance})
-  if(this.props.proxyAddress && prevProps.proxyAddress !== this.props.proxyAddress)
-    ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
+    this.props.setUserTokenBalance(userTokenBalance)
   }
-}
+
+  if(this.props.proxyAddress && prevProps.proxyAddress !== this.props.proxyAddress)
+      ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
+      let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
+      this.props.setUserTokenBalance(userTokenBalance)
+  }
 
 handleClick(event) {
   event.stopPropagation()
@@ -55,34 +57,42 @@ handleClick(event) {
 }
 
 async fundGoal() {
-  if (!this.state.userTokenBalance) {
+  if (!this.props.userTokenBalance) {
     alert("You'll need to buy some tokens before you fund your goal")
     return
   }
   let bondFunds
   let rewardFunds
   rewardFunds = window.prompt("Amount of ZAPP tokens you'd like to add to this goal's reward pool")
-  rewardFunds = parseInt(rewardFunds, 10)
-  console.log("rewardFunds1", rewardFunds)
-  console.log("rewardFunds2", rewardFunds)
+  //rewardFunds = parseInt(rewardFunds, 10)
+  // console.log("rewardFunds1", rewardFunds)
+  // console.log("rewardFunds2", rewardFunds)
   bondFunds = window.prompt("Amount of ZAPP tokens you'd like to add to this goal's bond pool")
-  console.log("bondFunds", bondFunds)
-  bondFunds = parseInt(bondFunds, 10)
+  // console.log("bondFunds", bondFunds)
+  //bondFunds = parseInt(bondFunds, 10)
 
-  if (rewardFunds && bondFunds && this.props.proxyAddress) {
+  if (parseInt(rewardFunds, 10) && parseInt(bondFunds, 10) && this.props.proxyAddress) {
        if (window.confirm(explain1)) {
           if (window.confirm(explain2)) {
          window.alert(explain3)
           }
        }
-      console.log("rewardFunds Type", typeof rewardFunds)
-      console.log("bondFunds Type", typeof bondFunds)
+      // console.log("rewardFunds Type", typeof rewardFunds)
+      // console.log("bondFunds Type", typeof bondFunds)
       let totalToSend = rewardFunds + bondFunds
       totalToSend = totalToSend.toString()
       const approvalReciept = await GoalZappTokenSystem.methods.approve(this.props.proxyAddress, web3.utils.toWei(totalToSend)).send({from:window.ethereum.selectedAddress})
       console.log("approvalReciept", approvalReciept)
-      const fundReciept = await ProxiedGoalEscrow.methods.fundEscrow(bondFunds, rewardFunds).send({from: window.ethereum.selectedAddress})
+       const fundReciept = await ProxiedGoalEscrow.methods.fundEscrow(web3.utils.toWei(bondFunds), web3.utils.toWei(rewardFunds)).send({from: window.ethereum.selectedAddress})
       console.log("fundReciept",fundReciept)
+      const bondsAmount = await ProxiedGoalEscrow.methods.bondFunds().call()
+      console.log(bondsAmount.toString())
+      const rewardsFunds = await ProxiedGoalEscrow.methods.rewardFunds().call()
+      console.log(rewardsFunds.toString())
+      this.props.setBondsAmount(bondsAmount)
+      this.props.setRewardsAmount(rewardsFunds)
+      let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
+      this.setUserTokenBalance(userTokenBalance)
   }
 }
 render()  {
@@ -96,12 +106,8 @@ render()  {
           Fund Goal
         </button>
         </div>
-
-
   )
 }
-
-
 }
 
  const explain1 = "you'll see two popup windows... 1st to 'approve' the amount of tokens to send.. the 2nd to actually send them.To transfer the tokens, you'll need to click 'approve' to both...Do you want a short explanation of why all of this is necessary?"

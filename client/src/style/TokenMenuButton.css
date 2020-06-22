@@ -1,5 +1,6 @@
 .menu-button.token {
-  margin-left: 872px;
+  margin-left: 875px;
+  margin-top: 20px;
   /* display: inline-block; */
   /*border: solid 1px black;*/
 }
@@ -19,15 +20,48 @@
 
 .menu-button-menu {
   position: absolute;
+  margin-right: 30px;
+  outline: none;
 }
 
 .menuitem-userfeed {
   color: black ;
   text-decoration: underline;
   cursor: pointer;
+  outline: none;
 }
 
 .menuitem-logout {
   cursor: pointer;
   text-decoration: underline;
+}
+#root > div > div > div.menu-button.token > div > ul {
+  padding-left: 0;
+  padding-right: 10px;
+}
+
+#root > div > div > div.menu-button.token > div > ul > div:nth-child(1) {
+  margin-bottom: 10px;
+}
+
+#root > div > div > div.menu-button.token > div > ul {
+  /* padding: 2px;
+  border: 1px solid black; */
+}
+#root > div > div > div.menu-button.token > div > ul > div:nth-child(1) > form > input[type=text]:nth-child(1) {
+  width: 50%;
+  margin-top: 5px;
+}
+#root > div > div > div.menu-button.token > div > ul > div:nth-child(1) > form {
+  margin-top: 3px;
+  margin-left: 3px;
+}
+#root > div > div > div.menu-button.token > div > ul > div:nth-child(2) > form > label > input[type=text] {
+  width: 50%;
+  margin-top: 5px;
+}
+
+#root > div > div > div.menu-button.token > div > ul > div:nth-child(2) > form {
+  margin-top: 3px;
+  margin-left: 3px;
 }

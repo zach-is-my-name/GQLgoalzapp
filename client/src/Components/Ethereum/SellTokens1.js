@@ -1,5 +1,5 @@
 import React from 'react'
-import "../../style/BuyTokens.css"
+import "../../style/SellTokens.css"
 import goalescrow from '../../abi/GoalEscrowTestVersion.json'
 import goalzapptokensystem from '../../abi/GoalZappTokenSystem.json'
 import * as DeployedAddress from '../../ContractAddress.js'
@@ -13,7 +13,7 @@ let etherBalanceFromWei;
 // console.log(window)
 const GoalZappTokenSystem = new web3.eth.Contract(goalzapptokensystem.abi, DeployedAddress.GOALZAPPTOKENSYSTEM )
 
-class BuyTokens extends React.Component  {
+class SellTokens extends React.Component  {
   constructor(props) {
     super(props)
     this.state = {
@@ -27,10 +27,10 @@ class BuyTokens extends React.Component  {
     }
 
     this.handleChange = this.handleChange.bind(this)
-    this.buyTokens = this.buyTokens.bind(this)
+    this.SellTokens = this.SellTokens.bind(this)
     this.confirm = this.confirm.bind(this)
     this.cancel = this.cancel.bind(this)
-    this.calculatePurchasePrice = this.calculatePurchasePrice.bind(this)
+    this.calculateSalePrice = this.calculateSalePrice.bind(this)
     this.calculateReturnAmount = this.calculateReturnAmount.bind(this)
     this.handleSubmitTokenDenominated = this.handleSubmitTokenDenominated.bind(this)
     this.handleSubmitEtherDenominated = this.handleSubmitEtherDenominated.bind(this)
@@ -42,38 +42,43 @@ class BuyTokens extends React.Component  {
 }
 
 
-  async buyTokens(event, etherToSend) {
-    console.log('buyTokens() arg etherToSend', etherToSend)
+  async SellTokens(event, etherToSend) {
+    console.log('SellTokens() arg etherToSend', etherToSend)
     console.log('typeof etherToSend', typeof etherToSend)
     //event.preventDefault()
     if (etherBalanceFromWei > etherToSend) {
       etherToSend = etherToSend.toString()
-      let result = await GoalZappTokenSystem.methods.buy().send({from: window.ethereum.selectedAddress, value: Web3.utils.toWei(etherToSend) })
+      let result = await GoalZappTokenSystem.methods.Sell().send({from: window.ethereum.selectedAddress, value: Web3.utils.toWei(etherToSend) })
       console.log(result)
       let tokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
       this.props.setUserTokenBalance(tokenBalance)
     } else {
-      alert("Not enough ether to buy tokens")
+      alert("Not enough ether to Sell tokens")
     }
   }
 
   async confirm(event)  {
-    event.preventDefault()
+    event.preventDefaul
     let formValue = parseFloat(this.state.formValue)
     console.log('confirm() formValue type', typeof formValue)
     if (this.state.denomination === "ether") {
       if (formValue && typeof formValue === "number") {
-        this.buyTokens(event, formValue)
+        let tokensToSell = await this.calculateSalePrice(this.state.formValue)
+        if (tokensToSell <= this.props.userTokenBalance) {
+        this.SellTokens(event, await this.calculateSalePrice(this.state.formValue))
+        } else {
+          alert("You don't have enough tokens to get this much ether back.")
+          return
+        }
       } else { alert("Please Enter a valid number")}
     } else if (this.state.denomination === "tokens")  {
-
-      this.buyTokens(event, await this.calculatePurchasePrice(this.state.formValue))
+      this.SellTokens(event, this.state.formValue )
     } else {
-      alert("Error: Cannot confirm purchase without denomination")
+      alert("Error: Cannot confirm Sale without denomination")
     }
   }
 
-  async calculatePurchasePrice(value) {
+  async calculateSalePrice(value) {
     let formValue = parseFloat(value)
     if (formValue && typeof formValue === 'number') {
       let tokensDesired = formValue
@@ -84,6 +89,7 @@ class BuyTokens extends React.Component  {
       let exponent = 2
 
       let price = poolBalance * (Math.pow(((tokensDesired / totalSupply) + 1), exponent + 1) - 1)
+      let tokensRequired = totalSupply * (Math.pow((etherDesired / poolBalance) + 1),(1/(exponent + 1))) -1)
 
       return price
     }
@@ -92,7 +98,7 @@ class BuyTokens extends React.Component  {
 
   async getPriceCalcForm(value) {
     value = parseFloat(value)
-    let calcFormValue = await this.calculatePurchasePrice(value)
+    let calcFormValue = await this.calculateSalePrice(value)
     this.setState({calcFormValue})
   }
 
@@ -134,7 +140,7 @@ class BuyTokens extends React.Component  {
       let totalSupplyBN = Web3.utils.toBN(await GoalZappTokenSystem.methods.totalSupply().call())
       let reserveRatioBN = Web3.utils.toBN(333333)
       try {
-      let returnAmount = await GoalZappTokenSystem.methods.calculatePurchaseReturn(totalSupplyBN, poolBalanceBN, reserveRatioBN, etherOfferedInWei).call()
+      let returnAmount = await GoalZappTokenSystem.methods.calculateSaleReturn(totalSupplyBN, poolBalanceBN, reserveRatioBN, etherOfferedInWei).call()
       typeof returnAmount === "object" ?  console.log(returnAmount.toString()) : console.log(returnAmount)
       this.setState({calcFormValue: returnAmount})
       } catch (error) {console.log(error)}
@@ -194,30 +200,29 @@ class BuyTokens extends React.Component  {
 
   render() {
 
-
       let tokenInput = (
-        <div className="buy-tokens-enter-tokens">
+        <div className="Sell-tokens-enter-tokens">
         <form  onSubmit={this.handleSubmitTokenDenominated}>
         <input type="text" value={this.state.formValue} onChange={this.handleChange} />
-        <input disabled={this.state.renderConfirm} type="submit" value="Buy" />
+        <input disabled={this.state.renderConfirm} type="submit" value="Sell" />
         </form>
       </div>
      )
 
       let etherInput = (
-        <div className="buy-tokens-enter-ether">
+        <div className="Sell-tokens-enter-ether">
           <form onSubmit={this.handleSubmitEtherDenominated}>
             <input type="text" value={this.state.formValue} onChange={this.handleChange} />
-            <input disabled={this.state.renderConfirm} type="submit" value="Buy" />
+            <input disabled={this.state.renderConfirm} type="submit" value="Sell" />
           </form>
           </div>
         )
 
       let calc = (
-        <div className="buy-tokens-calculate">
+        <div className="Sell-tokens-calculate">
         <p>Enter token amount</p>
         <form>
-        {/*<form onSubmit={this.calculatePurchasePrice}>*/}
+        {/*<form onSubmit={this.calculateSalePrice}>*/}
           <input type="text" value={this.state.calcFormValue} onChange={this.handleChangeCalcForm} />
           <button type="button" onClick={() => this.getPriceCalcForm(this.state.calcFormValue)}>Get Price</button>
           <button type="button" onClick={() => this.calculateReturnAmount(this.state.calcFormValue)}>Token Amount</button>
@@ -226,8 +231,8 @@ class BuyTokens extends React.Component  {
       )
 
       let confirmPrompt = (
-      <div className="buy-tokens">
-      <div className="buy-tokens-confirmPrompt">
+      <div className="Sell-tokens">
+      <div className="Sell-tokens-confirmPrompt">
         <button onClick={this.confirm} className="button-yes"  value="confirm">Confirm</button>
         <button onClick={this.cancel} className="button-no" value="cancel">Cancel</button>
       </div>
@@ -235,12 +240,12 @@ class BuyTokens extends React.Component  {
       )
 
     return (
-      <div className="buy-tokens">
-        <p onClick={this.showTokenInput}>Tokens to Buy</p>
+      <div className="Sell-tokens">
+        <p onClick={this.showTokenInput}>Tokens to Sell</p>
          {this.state.showTokenInput ? tokenInput : null}
          {this.state.renderConfirm ? confirmPrompt : null}
         <p> or </p>
-        <p onClick={this.showEtherInput}>Ether to Spend</p>
+        <p onClick={this.showEtherInput}>Ether to Receive</p>
          {this.state.showEtherInput ? etherInput : null}
          {this.state.renderConfirm ? confirmPrompt : null}
         <p onClick={this.showCalc}>Calculate Token Price</p>
@@ -252,4 +257,4 @@ class BuyTokens extends React.Component  {
   }
 }
 
-export default BuyTokens
+export default SellTokens

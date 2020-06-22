@@ -52,11 +52,12 @@ contract GoalEscrow is GoalOwnerRole, AionRole {
   address public self;
 
 
-  bool private _initializedImplementation;
+  bool private _initializedMaster;
   bool private _initializedNewGoal;
 
-  function initImplementation(ERC20 _token, uint256 _suggestionDuration) public {
-    require(!_initializedImplementation, "initMaster_ already called on the Escrow implementation contract");
+  // serves as constructor; params are in flux for short term testing conveinience / long term features (reward/bond amounts, finalizized suggestion duration)
+  function initMaster(ERC20 _token, uint256 _suggestionDuration) public {
+    require(!_initializedMaster, "initMaster_ already called on the Escrow implementation contract");
     require(address(_token) != address(0), "token address cannot be zero");
     require(_suggestionDuration > 0, "_suggestionDuration must be greater than 0"); 
     token = _token;
@@ -66,13 +67,13 @@ contract GoalEscrow is GoalOwnerRole, AionRole {
     _token._addEscrowRole(address(this));
     _addAionAddress(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
     self = address(this);
-    _initializedImplementation = true;
+    _initializedMaster = true;
   }
  
   function newGoalInit(ERC20 _token, uint256 _suggestionDuration) public {
     require(!_initializedNewGoal, "newGoalInit has already been called on this instance"); 
-    if (!_initializedImplementation) {
-      initImplementation(_token, _suggestionDuration);
+    if (!_initializedMaster) {
+      initMaster(_token, _suggestionDuration);
     }
     _addGoalOwner(msg.sender);
     goalOwner = msg.sender;
@@ -81,6 +82,9 @@ contract GoalEscrow is GoalOwnerRole, AionRole {
   
   function newGoalInitAndFund(ERC20 _token, uint256 _suggestionDuration, uint _amountBond, uint _amountReward) public {
     require(!_initializedNewGoal, "newGoalInit has already been called on this instance"); 
+    if (!_initializedMaster) {
+      initMaster(_token, _suggestionDuration);
+    }
     _addGoalOwner(msg.sender);
     goalOwner = msg.sender;
     if (_amountBond > 0 && _amountReward > 0) {

@@ -25,6 +25,8 @@ class SellTokens extends React.Component  {
   event.preventDefault()
   let result = await GoalZappTokenSystem.methods.sell(this.state.formValue).send({from: selectedAddress})
   console.log(result)
+  let tokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
+  this.props.setUserTokenBalance(tokenBalance)
  }
 
 async componentDidMount() {

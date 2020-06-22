@@ -7,12 +7,18 @@ class SelectGoalForm extends Component {
   componentDidMount() {
       let selectedGoalDoc = this.props.goalDocs.find(element => element.id === this.props.value)
       selectedGoalDoc && selectedGoalDoc.proxyAddress ? this.props.setProxyAddress(selectedGoalDoc.proxyAddress, !!this.props.match.params.goaldocid) : null
+      if (this.props.value === undefined) {
+        this.props.setProxyAddress("")
+      }
   }
 
 componentDidUpdate(prevProps) {
   if (prevProps.goalDocs !== this.props.goalDocs) {
       let selectedGoalDoc = this.props.goalDocs.find(element => element.id === this.props.value)
       selectedGoalDoc && selectedGoalDoc.proxyAddress ? this.props.setProxyAddress(selectedGoalDoc.proxyAddress) : null
+  }
+  if (prevProps.value !== this.props.value && this.props.value === undefined) {
+    this.props.setProxyAddress("")
   }
 }
 

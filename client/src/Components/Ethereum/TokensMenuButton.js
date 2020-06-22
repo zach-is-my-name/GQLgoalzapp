@@ -60,11 +60,11 @@ showSellTokens() {
           <ul>
             <MenuItem className="menuitem-userfeed">
               <li onClick={this.handleBuyClick}>Buy Tokens</li>
-              {this.state.showBuyTokens ? < BuyTokens /> : null}
+              {this.state.showBuyTokens ? < BuyTokens setUserTokenBalance={this.props.setUserTokenBalance}/> : null}
             </MenuItem>
             <MenuItem className="menuitem-userfeed">
             <li onClick={this.handleSellClick}>Sell Tokens</li>
-            {this.state.showSellTokens ? <SellTokens /> : null}
+            {this.state.showSellTokens ? <SellTokens setUserTokenBalance={this.props.setUserTokenBalance}/> : null}
             </MenuItem>
           </ul>
         </Menu>

@@ -66,7 +66,7 @@ class UserFeedPage extends Component {
 async componentDidMount() {
     const {match} = this.props;
     match.params.goaldocid ? this.props.setUrlHasGoalDoc() : null
-    !match.params.goaldocid ? this.props.setUrlDoesNotHaveGoalDoc() : null 
+    !match.params.goaldocid ? this.props.setUrlDoesNotHaveGoalDoc() : null
     match.params.goaldocid ? this.setState({goalDocId: match.params.goaldocid}) : null;
     match.params.userid  ? this.setState({paramUserId: match.params.userid}) : null;
     let existingUserId;
@@ -88,6 +88,7 @@ async componentDidMount() {
  componentDidUpdate (prevProps, prevState) {
    if (this.props.match.params.goaldocid !== prevProps.match.params.goaldocid && this.props.match.params.goaldocid) {
      this.props.setUrlHasGoalDoc()
+     this.setState({goalDocId: this.props.match.params.goaldocid})
    }
    if (this.props.match.params.goaldocid !== prevProps.match.params.goaldocid && !this.props.match.params.goaldocid) {
     this.props.setUrlDoesNotHaveGoalDoc()
@@ -162,6 +163,8 @@ async componentDidMount() {
           proxyAddress={this.state.proxyAddress}
           selectedAccount={window.ethereum.selectedAddress}
           setProxyAddress={this.props.setProxyAddress}
+          setUserTokenBalance={this.props.setUserTokenBalance}
+          userTokenBalance={this.props.userTokenBalance}
           / >
           : null
         }
@@ -179,12 +182,12 @@ async componentDidMount() {
 // on change bad goaldocid
   _setGoalDocId(event) {
     event.preventDefault()
-    // console.log(event.target.value)
+    //console.log(event.target.value)
     const goalDoc = JSON.parse(event.target.value)
-    // console.log(goalDoc)
+    //console.log(goalDoc)
     goalDoc.newGoal && goalDoc.newGoal === 'new-goal' ? this.setState({goalDocId: ""}) : this.setState({goalDocId: goalDoc.id})
     goalDoc.proxyAddress ?  this.props.setProxyAddress(goalDoc.proxyAddress) && this.setState({proxyAddress: goalDoc.proxyAddress}) : null
-    goalDoc.newGoal === 'new-goal' ?this.props.history.push(`/userfeed/${this.props.match.params.userid}`)  :
+    goalDoc.newGoal === 'new-goal' ? this.props.history.push(`/userfeed/${this.props.match.params.userid}`)  :
     this.props.history.push(`/userfeed/${this.props.match.params.userid}/${goalDoc.id}`)
   }
 

@@ -58,15 +58,22 @@ export class App extends Component {
     this.setProxyAddress = this.setProxyAddress.bind(this)
     this.setUrlHasGoalDoc = this.setUrlHasGoalDoc.bind(this)
     this.setUrlDoesNotHaveGoalDoc = this.setUrlDoesNotHaveGoalDoc.bind(this)
+    this.setRewardsAmount = this.setRewardsAmount.bind(this)
+    this.setBondsAmount = this.setBondsAmount.bind(this)
+    this.setUserTokenBalance = this.setUserTokenBalance.bind(this)
   // this._renderApp = this._renderApp.bind(this)
+
     this.state = {
       proxyAddress: "",
       urlHasGoalDoc: false,
+      rewardsAmount: null,
+      bondsAmount: null,
+      userTokenBalance: null,
     }
   }
 
-  componentDidMount() {
-}
+  async componentDidMount() {
+  }
 
   render() {
   auth0IdToken = window.localStorage.getItem('auth0IdToken')
@@ -79,7 +86,7 @@ export class App extends Component {
     } else if (auth0IdToken && !isTokenExpired(auth0IdToken) || graphcoolToken && !isTokenExpired(graphcoolToken)) {
         this.props.data.refetch()
         if (this.props.data.user) {
-          console.log('Authenticated with UserQuery')
+          //console.log('Authenticated with UserQuery')
           return this._renderApp()
         } else {return this.renderLoggedOut() }
     } else {
@@ -93,7 +100,7 @@ export class App extends Component {
   }
 
 _renderApp = () => {
-      console.log('_renderApp')
+      //console.log('_renderApp')
       return (
        <div className="App">
          <Link to="/">
@@ -107,20 +114,20 @@ _renderApp = () => {
          currentUser={this.props.data.user ? this.props.data.user.userName : 'anonymous' }
          currentUserId={this.props.data.user.id}
          />
-        <UserTokenFundsSmart />
-        {this.state.proxyAddress ? <ContractRewardsFund proxyAddress={this.state.proxyAddress} /> : null }
-        {this.state.proxyAddress ? <BondRewardsFund proxyAddress={this.state.proxyAddress} /> : null }
-         <TokensMenuButton />
-        {this.state.proxyAddress && this.state.urlHasGoalDoc ? <FundGoalButton selectedAccount={window.ethereum.selectedAddress} proxyAddress={this.state.proxyAddress} /> : null }
+        <UserTokenFundsSmart setUserTokenBalance={this.setUserTokenBalance} userTokenBalance={this.state.userTokenBalance} />
+        {this.state.proxyAddress ? <ContractRewardsFund setRewardsAmount={this.setRewardsAmount} rewardsAmount={this.state.rewardsAmount} proxyAddress={this.state.proxyAddress} /> : null }
+        {this.state.proxyAddress ? <BondRewardsFund setBondsAmount={this.setBondsAmount} bondsAmount={this.state.bondsAmount} proxyAddress={this.state.proxyAddress} /> : null }
+        {this.state.proxyAddress && this.state.urlHasGoalDoc ? <FundGoalButton  userTokenBalance={this.state.userTokenBalance} setUserTokenBalance={this.setUserTokenBalance} setRewardsAmount={this.setRewardsAmount} setBondsAmount={this.setBondsAmount} selectedAccount={window.ethereum.selectedAddress} proxyAddress={this.state.proxyAddress} /> : null }
+         <TokensMenuButton userTokenBalance={this.state.userTokenBalance}  setUserTokenBalance={this.setUserTokenBalance}  />
 
          <Switch>
-           <Route exact path='/userfeed/:userid/:goaldocid' render={(props)  => <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setUrlDoesNotHaveGoalDoc setProxyAddress={this.setProxyAddress} {...props} proxyAddress={this.state.proxyAddress} />} />
+           <Route exact path='/userfeed/:userid/:goaldocid' render={(props)  => <UserFeedPage setUserTokenBalance={this.setUserTokenBalance} userTokenBalance={this.state.userTokenBalance}setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setUrlDoesNotHaveGoalDoc setProxyAddress={this.setProxyAddress} {...props} proxyAddress={this.state.proxyAddress} />} />
            <Route exact path='/userfeed/:userid' render={(props)  =>
-             <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props} proxyAddress={this.state.proxyAddress} urlHasGoalDoc={this.state.urlHasGoalDoc}  /> } />
+             <UserFeedPage setUserTokenBalance={this.setUserTokenBalance} userTokenBalance={this.state.userTokenBalance} setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props} proxyAddress={this.state.proxyAddress} urlHasGoalDoc={this.state.urlHasGoalDoc}  /> } />
            <Route path='/userfeed/:userid' render={(props)  =>
-             <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props}  proxyAddress={this.state.proxyAddress} />} />
+             <UserFeedPage setUserTokenBalance={this.setUserTokenBalance} userTokenBalance={this.state.userTokenBalance} setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props}  proxyAddress={this.state.proxyAddress} />} />
            <Route exact path='/userfeed' render={(props)  =>
-             <UserFeedPage setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props}  proxyAddress={this.state.proxyAddress} />} />
+             <UserFeedPage setUserTokenBalance={this.setUserTokenBalance} userTokenBalance={this.state.userTokenBalance} setUrlHasGoalDoc={this.setUrlHasGoalDoc} setUrlDoesNotHaveGoalDoc={this.setUrlDoesNotHaveGoalDoc} setProxyAddress={this.setProxyAddress} {...props}  proxyAddress={this.state.proxyAddress} />} />
            <Route exact path="/"  render= {() => <GlobalFeedPage />}     />
          </ Switch>
        </div>
@@ -162,17 +169,34 @@ _renderApp = () => {
   }
 
   setUrlHasGoalDoc() {
-    console.log('setUrlHasGoalDoc called')
+    //console.log('setUrlHasGoalDoc called')
     this.setState( ({urlHasGoalDoc: true}))
   }
+
   setUrlDoesNotHaveGoalDoc() {
     this.setState(({urlHasGoalDoc: false}))
   }
+
+  setRewardsAmount(rewardsAmount) {
+    this.setState({rewardsAmount})
+  }
+
+  setBondsAmount(bondsAmount) {
+    this.setState({bondsAmount})
+  }
+
+  setUserTokenBalance(userTokenBalance) {
+    this.setState({userTokenBalance: Web3.utils.fromWei(userTokenBalance)})
+  }
 }
+
 
 function isTokenExpired(token) {
   const expirationDate = getTokenExpirationDate(token);
-  return expirationDate < new Date();
+  if ( expirationDate < new Date() ) {
+    return true;
+  }
+  return false
 }
 
 function getTokenExpirationDate(encodedToken) {
