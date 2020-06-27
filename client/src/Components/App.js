@@ -84,7 +84,7 @@ export class App extends Component {
         console.log('logout')
         return  this._logout()
     } else if (auth0IdToken && !isTokenExpired(auth0IdToken) || graphcoolToken && !isTokenExpired(graphcoolToken)) {
-        this.props.data.refetch()
+        //this.props.data.refetch()
         if (this.props.data.user) {
           //console.log('Authenticated with UserQuery')
           return this._renderApp()
