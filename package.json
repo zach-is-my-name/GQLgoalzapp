@@ -25,5 +25,6 @@
     "openzeppelin-solidity": "^2.3.0-rc.3",
     "openzeppelin-test-helpers": "^0.4.3",
     "solidity-coverage": "^0.7.2"
-  }
+  },
+  "dependencies": {}
 }

@@ -55,6 +55,7 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   bool private _initializedMaster;
   bool private _initializedNewGoal;
 
+  // serves as constructor; params are in flux for short term testing conveinience / long term features (reward/bond amounts, finalizized suggestion duration)
   function initMaster(ERC20 _token, uint256 _suggestionDuration) public {
     require(!_initializedMaster, "initMaster_ already called on the Escrow implementation contract");
     require(address(_token) != address(0), "token address cannot be zero");
@@ -80,6 +81,9 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   
   function newGoalInitAndFund(ERC20 _token, uint256 _suggestionDuration, uint _amountBond, uint _amountReward) public {
     require(!_initializedNewGoal, "newGoalInit has already been called on this instance"); 
+    if (!_initializedMaster) {
+      initMaster(_token, _suggestionDuration);
+    }
     _addGoalOwner(msg.sender);
     goalOwner = msg.sender;
     if (_amountBond > 0 && _amountReward > 0) {
@@ -185,7 +189,7 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   }
   
   function testVersionRemoveTokenProtectionWrapper(address user, uint256 amount) public {
-    emit debugWrapperIsAionAddress(token.isAionAddress(msg.sender));
+    //emit debugWrapperIsAionAddress(token.isAionAddress(msg.sender));
     token.removeTokenProtection(user, amount);
   }
 

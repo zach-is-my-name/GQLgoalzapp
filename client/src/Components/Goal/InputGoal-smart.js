@@ -17,7 +17,7 @@ let proxyAddress;
 // console.log(goalzapptokensystem)
 // console.log(window)
 const GoalZappTokenSystem = new web3.eth.Contract(goalzapptokensystem.abi, DeployedAddress.GOALZAPPTOKENSYSTEM)
-let  ProxiedGoalEscrow
+let ProxiedGoalEscrow
 const ProxyFactory = new web3.eth.Contract(proxyfactory.abi, DeployedAddress.PROXYFACTORY)
 
 const goalInputMutation = gql `mutation goalInputMutation($goal: String, $ownersId: ID, $proxyAddress: String) {
@@ -39,13 +39,16 @@ const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
     proxyAddress
   }
 }`
+
  class InputGoalSmart extends React.Component {
     constructor(props) {
         super(props)
     this.handleChange = this.handleChange.bind(this);
     this.submitGoal = this.submitGoal.bind(this);
-    this.initAndFundGoal = this.initAndFundGoal.bind(this)
     this.initGoal = this.initGoal.bind(this)
+    this.postInputGoal = this.postInputGoal.bind(this)
+    this.initAndFundGoal = this.initAndFundGoal.bind(this)
+
     this.state = {
       goal : '',
       proxyAddress: "",
@@ -54,58 +57,69 @@ const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
     }
  }
 
+  async initGoal() {
+    if (this.state.proxyAddress && this.state.userTokenBalance) {
+      //console.log("init goal: has proxy address and token balance")
+      try {
+        ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.state.proxyAddress)
+        if (window.confirm("You've created a goal... would you like to fund it now?")) {
+          await this.initAndFundGoal()
+          await this.postInputGoal(this.state.goal, this.state.proxyAddress)
+          await
+          this.setState({proxyAddress: ""})
+        } else {
+          const initReciept = await ProxiedGoalEscrow.methods.newGoalInit(DeployedAddress.GOALZAPPTOKENSYSTEM, minutesToSeconds(3)).send({from:window.ethereum.selectedAddress})
+          //console.log(initReciept)
+          await this.postInputGoal(this.state.goal, this.state.proxyAddress)
+          this.setState({proxyAddress: ""})
+          let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
+          this.props.setUserTokenBalance(userTokenBalance)
+        }
+     } catch (err) {
+       console.log(err)
+      }
+   }
+   //console.log("no proxy AND token balance")
+}
+
+  postInputGoal(goal, proxyAddress) {
+      const ownersId = this.props.loggedInUserId
+      //console.log(ownersId)
+      this.props.inputGoal({variables: {goal, ownersId, proxyAddress}}).then(
+        ({data}) => {
+          //console.log("data.createGoalDoc", data.createGoalDoc)
+          this.props._setGoalDocIdOnCreate(data.createGoalDoc.id)}
+      )
+      .catch(error => {
+        console.log('there was an error sending the query', error)
+      })
+    }
 
 async submitGoal(event)  {
   event.preventDefault()
-  if (this.state.proxyAddress) {
-    alert("Something's wrong: proxyAddress already exists")
-    return
+
+  if (!this.state.proxyAddress) {
+    //console.log("no proxy address")
+    let createProxyResult = await ProxyFactory.methods.build(this.state.goal).send({from: window.ethereum.selectedAddress})
+    //console.log('createProxyResultEventsProxy', createProxyResult.events.Created.returnValues.proxy)
+    //console.log(createProxyResult)
+    let proxyAddress = await createProxyResult.events.Created.returnValues.proxy
+    this.setState({proxyAddress})
+    await this.initGoal()
+    this.setState({goal: ""})
+    //alert("Something's wrong: proxyAddress already exists")
+    //return
+  } else {
+    console.log("has proxy address")
+    await this.initGoal()
+    this.setState({goal: ""})
   }
-  const {goal} = this.state;
-  this.setState({goal:''})
-  let createProxyResult = await ProxyFactory.methods.build(goal).send({from: window.ethereum.selectedAddress})
-  console.log('createProxyResultEventsProxy', createProxyResult.events.Created.returnValues.proxy)
-  console.log(createProxyResult)
-  let proxyAddress = createProxyResult.events.Created.returnValues.proxy
-  this.setState({proxyAddress})
-  let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
-  // console.log("userTokenBalance", userTokenBalance)
-  this.setState({userTokenBalance})
-    if (this.state.proxyAddress && this.state.userTokenBalance) {
-      ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.state.proxyAddress)
-     if (window.confirm("You've created a goal... would you like to fund it now?")) {
-       this.initAndFundGoal()
-     } else {
-       this.initGoal()
-     }
-    }
-  const ownersId = this.props.loggedInUserId
-    this.props.inputGoal({variables: { goal, ownersId, proxyAddress}}).then(
-      ({data}) => {
-        // console.log("data.createGoalDoc.id", data.createGoalDoc.id)
-        this.props._setGoalDocIdOnCreate(data.createGoalDoc.id)}
-    )
-    .catch((error) => {
-      console.log('there was an error sending the query', error)
-    })
-    console.log("this.state.proxyAddress", this.state.proxyAddress)
-    // console.log("this.state.userTokenBalance", this.state.userTokenBalance)
-
- }
-
-handleChange(e) {
-  this.setState({goal: e.target.value });
-    }
-
-async initGoal(event) {
-  const initReciept = await ProxiedGoalEscrow.methods.newGoalInit(DeployedAddress.GOALZAPPTOKENSYSTEM, minutesToSeconds(3)).send({from:window.ethereum.selectedAddress})
-  console.log('initReciept',initReciept)
 }
 
-async initAndFundGoal(event) {
+async initAndFundGoal() {
   // this gets set on componentDidMount
   // wait for a transaction and a  balance (event) then proceed
-  if (!this.state.userTokenBalance) {
+  if (!this.props.userTokenBalance) {
     alert("You'll need to buy some tokens before you fund your goal")
     return
   }
@@ -114,62 +128,72 @@ async initAndFundGoal(event) {
   rewardFunds = window.prompt("Amount of ZAPP tokens you'd like to add to this goal's reward pool")
   rewardFunds = parseInt(rewardFunds, 10)
   // console.log("rewardFunds1", rewardFunds)
-  if (rewardFunds !== null) {
+  //if (rewardFunds !== null) {
     // typeof rewardFunds !== "number" || rewardFunds <= 0 ? rewardFunds = 0 && window.alert("Try again with an amount above 0") : null
-  }
+  //}
   // console.log("rewardFunds2", rewardFunds)
   bondFunds = window.prompt("Amount of ZAPP tokens you'd like to add to this goal's bond pool")
   // rewardFunds > 0 ? bondFunds = window.prompt("Amount of ZAPP tokens you'd like to add to this goal's bond pool"): null
   // console.log("bondFunds", bondFunds)
   bondFunds = parseInt(bondFunds, 10)
-    if (bondFunds !== null) {
+    //if (bondFunds !== null) {
       // typeof bondFunds !== "number" || bondFunds  <= 0 ? bondFunds = 0 && window.alert("Try again with an amount above 0") : null
+     // }
+        if (rewardFunds && bondFunds && this.state.proxyAddress) {
+             if (window.confirm(explain1)) {
+                if (window.confirm(explain2)) {
+               window.alert(explain3)
+                }
+             }
+            let totalToSend = rewardFunds + bondFunds
+            totalToSend = totalToSend.toString()
+            const approvalReciept = await GoalZappTokenSystem.methods.approve(this.state.proxyAddress, web3.utils.toWei(totalToSend)).send({from:window.ethereum.selectedAddress})
+            //console.log("approvalReciept", approvalReciept)
+             // console.log('minutesToSeconds', minutesToSeconds(2))
+            try {
+            const initAndFundReciept = await ProxiedGoalEscrow.methods.newGoalInitAndFund(DeployedAddress.GOALZAPPTOKENSYSTEM, minutesToSeconds(2), web3.utils.toWei(bondFunds.toString()), web3.utils.toWei(rewardFunds.toString())).send({from:window.ethereum.selectedAddress})
+             console.log("initAndFundReciept", initAndFundReciept)
+           } catch (err) {console.log(err)}
       }
-
-  if (rewardFunds && bondFunds && this.state.proxyAddress) {
-       if (window.confirm(explain1)) {
-          if (window.confirm(explain2)) {
-         window.alert(explain3)
-          }
-       }
-      // console.log("rewardFunds Type", typeof rewardFunds)
-      // console.log("bondFunds Type", typeof bondFunds)
-      let totalToSend = rewardFunds + bondFunds
-      totalToSend = totalToSend.toString()
-      const approvalReciept = await GoalZappTokenSystem.methods.approve(this.state.proxyAddress, web3.utils.toWei(totalToSend)).send({from:window.ethereum.selectedAddress})
-       console.log("approvalReciept", approvalReciept)
-       // console.log('minutesToSeconds', minutesToSeconds(2))
-      // const initMasterReciept = await ProxiedGoalEscrow.methods.initMaster(DeployedAddress.GOALZAPPTOKENSYSTEM, minutesToSeconds(2)).send({from:window.ethereum.selectedAddress})
-      // console.log("initMasterReciept", initMasterReciept)
-      const initAndFundReciept = await ProxiedGoalEscrow.methods.newGoalInitAndFund(DeployedAddress.GOALZAPPTOKENSYSTEM, minutesToSeconds(2), web3.utils.toWei(bondFunds.toString()), web3.utils.toWei(rewardFunds.toString())).send({from:window.ethereum.selectedAddress})
-      // const initAndFundReciept = await ProxiedGoalEscrow.methods.newGoalInitAndFund(DeployedAddress.GOALZAPPTOKENSYSTEM, minutesToSeconds(2)).send({from:window.ethereum.selectedAddress})
-       console.log("initAndFundReciept", initAndFundReciept)
-  }
    rewardFunds > 0 ? this.setState({rewardFundsToSend: rewardFunds}) : console.log("can't set state with rewardFunds", rewardFunds)
    bondFunds > 0 ? this.setState({bondFundsToSend: bondFunds}): console.log("can't set state with bondFunds", bondFunds)
-
-
 }
-        async componentDidMount() {
-          if (!window.ethereum.selectedAddress) {
-            alert('Log into metamask to continue')
-          try {
-            await window.ethereum.enable()
-          } catch (error) {
-            console.log(error)
-          }
-          }
-  ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
 
-  let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
-  // console.log('userTokenBalance ', userTokenBalance  )
-  this.setState({userTokenBalance})
+
+handleChange(e) {
+  this.setState({goal: e.target.value });
+    }
+
+async componentDidMount() {
+  try {
+    await window.ethereum.enable()
+  }
+  catch (error) {
+    console.log(error)
+  }
+
+  if (!window.ethereum.selectedAddress) {
+    alert('Log into metamask to continue')
+    try {
+      await window.ethereum.enable()
+    } catch (error) {
+      console.log(error)
+    }
+  if (!this.props.proxyAddress) {
+    this.setState({proxyAdress: ""})
+  }
+  }
+ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
+
+let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
+// console.log('userTokenBalance ', userTokenBalance  )
+this.setState({userTokenBalance})
 }
 
 async componentDidUpdate(prevProps) {
   if (prevProps.selectedAccount !== this.props.selectedAccount) {
     let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
-    console.log('userTokenBalance ', userTokenBalance  )
+    //console.log('userTokenBalance ', userTokenBalance  )
     this.setState({userTokenBalance})
   if(this.props.proxyAddress && prevProps.proxyAddress !== this.props.proxyAddress)
     ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
@@ -177,19 +201,19 @@ async componentDidUpdate(prevProps) {
 }
 
 
-    render() {
-        return (
-        <div className="goalinput-form">
-          <form onSubmit={this.submitGoal}>
-            <input type="text" id="form-text" placeholder=""
-              onChange={this.handleChange}
-              value={this.state.goal}/>
-            <input type="submit" value="ZappIt"/>
-          </form>
-        </div>
-      )
-    }
-  }
+render() {
+    return (
+    <div className="goalinput-form">
+      <form onSubmit={this.submitGoal}>
+        <input type="text" id="form-text" placeholder=""
+          onChange={this.handleChange}
+          value={this.state.goal}/>
+        <input type="submit" value="ZappIt"/>
+      </form>
+    </div>
+  )
+}
+}
 
 const InputGoalWithData =
 graphql(goalInputMutation, {
