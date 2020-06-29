@@ -11,7 +11,7 @@ import {setContext} from 'apollo-link-context'
 // })
 
 export const httpLink  = createHttpLink({
-  uri: 'https://api.graph.cool/simple/v1/cj3bp9pcdnmfd01470ryt1pyd'
+  uri: 'https://api.8base.com/ckbx087zh000207ms3ink870q'
 })
 
 const middlewareLink = setContext(() => ({
