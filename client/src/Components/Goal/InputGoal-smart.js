@@ -20,15 +20,25 @@ const GoalZappTokenSystem = new web3.eth.Contract(goalzapptokensystem.abi, Deplo
 let ProxiedGoalEscrow
 const ProxyFactory = new web3.eth.Contract(proxyfactory.abi, DeployedAddress.PROXYFACTORY)
 
-const goalInputMutation = gql `mutation goalInputMutation($goal: String, $ownersId: ID, $proxyAddress: String) {
+const goalInputMutation1 = gql `mutation goalInputMutation($goal: String, $ownersId: ID, $proxyAddress: String) {
   createGoalDoc(goal:$goal, ownersId: $ownersId, proxyAddress: $proxyAddress ) {
     goal
     id
     proxyAddress
   }
 }`
+const goalInputMutation = gql `mutation goalInputMutation($goal: String!, $ownersId: ID, $proxyAddress: String) {
+  goalDocCreate(data: {goal: $goal, owner: {connect: {id: $ownersId}}, proxyAddress: $proxyAddress}) {
+    id
+    proxyAddress
+    goal
+    owner {
+      id
+    }
+  }
+}`
 
-const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
+const GoalDocQuery1 = gql `query allGoalDocsQuery ($targetUserId: ID) {
   allGoalDocs(
     filter:
     {owners :{id: $targetUserId}}, orderBy: updatedAt_DESC
@@ -40,6 +50,16 @@ const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
   }
 }`
 
+const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
+  goalDocsList(filter: {goalDocsOfUser: {id: {equals: $targetUserId}}}) {
+    items {
+      goal
+      id
+      proxyAddress
+    }
+  }
+}
+`
  class InputGoalSmart extends React.Component {
     constructor(props) {
         super(props)

@@ -9,7 +9,7 @@ import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
 import SelectGoalForm from './Form/SelectGoalForm'
 
-const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
+const GoalDocQuery1 = gql `query allGoalDocsQuery ($targetUserId: ID) {
   allGoalDocs(
     filter:
     {owners :{id: $targetUserId}}, orderBy: updatedAt_DESC
@@ -18,6 +18,16 @@ const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
     goal
     id
     proxyAddress
+  }
+}`
+
+const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
+  goalDocsList(filter: {goalDocsOfUser: {id: {equals: $targetUserId}}}) {
+    items {
+      goal
+      id
+      proxyAddress
+    }
   }
 }`
 

@@ -15,17 +15,18 @@ import '../../style/CurrentGoal.css'
 
 const fetchGoalDocByID = gql `
 query GoalDocByIdQuery ($goalDocId: ID) {
-  GoalDoc(id: $goalDocId) {
+  goalDoc(id: $goalDocId) {
    goal
    id
    steps(orderBy:positionIndex_ASC) {
+     items {
      step
      positionIndex
      suggestedStep
      id
-   }
+    }}
    clonedSteps(orderBy:positionIndex_ASC) {
-     step
+     items {
      positionIndex
      id
      suggestedStep
@@ -34,6 +35,7 @@ query GoalDocByIdQuery ($goalDocId: ID) {
        id
        userName
      }
+    }
    }
   }
 }`;

@@ -13,18 +13,30 @@ let ProxiedGoalEscrow
 const GoalZappTokenSystem = new web3.eth.Contract(tokensystem.abi, DeployedAddress.GOALZAPPTOKENSYSTEM )
 // import '../../style/SuggestStep.css'
 
-const clonedStepIdQuery = gql `
+const clonedStepIdQuery1 = gql `
  query clonedStepIdQuery($id:ID){
    allClonedSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
       id
       positionIndex
       step
       suggestedStep
-
     }
   }`
 
-const updateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
+const clonedStepIdQuery   = gql `
+query clonedStepQuery($id: ID) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {positionIndex: ASC}) {
+    items {
+      positionIndex
+      step
+      suggestedStep
+      id
+    }
+  }
+}
+`
+
+const updateOrCreateClonedStep1 = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
     updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
     positionIndex: $positionIndex, suggestedStep: $suggestedStep,
     step: $step, suggesterId: $suggesterId }, update: {goalDocId: $goalDocId, positionIndex:
@@ -40,7 +52,38 @@ const updateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation 
       }
     }}`
 
-const goalDocByIdQuery = gql `
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+const createClonedStep = gql `
+mutation createClonedStep($goalDocId: ID, $step: String!, $positionIndex: Int, $suggestedStep: Boolean, $stepsId: String) {
+  clonedStepCreate(data: {step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, stepsId: $stepsId, clonedStepsOfGoalDoc: {connect: {id: $goalDocId}}}) {
+    step
+    id
+    positionIndex
+    stepsId
+    }
+  }`
+
+const goalDocByIdQuery1 = gql `
     query RefetchGoalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        goal
@@ -65,6 +108,32 @@ const goalDocByIdQuery = gql `
        }
       }
     }`;
+
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
 
 class SuggestStepSmart extends Component {
   constructor(props) {
@@ -225,18 +294,19 @@ export default compose(
       fetchPolicy: 'network-only'
     })
   }),
-  graphql(updateOrCreateClonedStep, {
-  name: 'updateOrCreateClonedStep',
-  props: ({updateOrCreateClonedStep}) => ({
-    updateOrCreateClonedStep({variables}) {
-      return updateOrCreateClonedStep({
-        variables: {
-          ...variables
-        },
-        refetchQueries: ['goalDocByIdQuery']
-      }).catch((error) => {
-        console.error(error)
-      })
-    }
-  })
-}))(withRouter(SuggestStepSmart))
+//   graphql(updateOrCreateClonedStep, {
+//   name: 'updateOrCreateClonedStep',
+//   props: ({updateOrCreateClonedStep}) => ({
+//     updateOrCreateClonedStep({variables}) {
+//       return updateOrCreateClonedStep({
+//         variables: {
+//           ...variables
+//         },
+//         refetchQueries: ['goalDocByIdQuery']
+//       }).catch((error) => {
+//         console.error(error)
+//       })
+//     }
+//   })
+// })
+)(withRouter(SuggestStepSmart))

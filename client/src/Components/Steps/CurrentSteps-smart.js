@@ -20,7 +20,7 @@ import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
 // const arrGoalDocSuggesters =  clonedStepsArr.map(obj => ({userName: obj.suggester.userName, id: obj.suggester.id})).filter((obj, index, self) =>
 //   self.findIndex((findObj) => {return (obj.userName === findObj.userName && obj.id === findObj.id)}) === index)
 
-const goalDocByIdQuery = gql `
+const goalDocByIdQuery1 = gql `
 query goalDocByIdQuery ($goalDocId: ID) {
   GoalDoc(id: $goalDocId) {
    goal
@@ -46,6 +46,32 @@ query goalDocByIdQuery ($goalDocId: ID) {
      }
    }  }
 }`;
+
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
 
 // const  suggesterClonedSteps = gql `
 //  query suggesterClonedSteps($goalDocId:ID){

@@ -11,7 +11,7 @@ var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 let proxyAddress
 let ProxiedGoalEscrow
 
-const stepIdQuery = gql `
+const stepIdQuery1 = gql `
 query stepIdQuery($id:ID){
   allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
      id
@@ -21,7 +21,19 @@ query stepIdQuery($id:ID){
    }
  }`
 
- const UpdateOrCreateStep = gql `
+const stepIdQuery = gql `
+query stepIdQuery($id:ID){
+  stepsList(filter: {goalDoc: {id: {equals: $Id}}}, sort: {step: ASC}) {
+      items {
+        id
+        positionIndex
+        step
+        suggestedStep
+      }
+    }
+  }`
+
+ const UpdateOrCreateStep1 = gql `
  mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean) {
    updateOrCreateStep(create: {goalDocId: $goalDocId,
    step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, }, update: {goalDocId: $goalDocId,
@@ -35,17 +47,76 @@ query stepIdQuery($id:ID){
    }
  }`
 
-const UpdateClonedStep =
-gql `mutation updateClonedStep($id: ID!, $suggestedStep: Boolean, $stepsId: String) {
-  updateClonedStep(id: $id, suggestedStep: $suggestedStep, stepsId: $stepsId) {
-    step
+const createStep = gql `
+mutation createStep(
+  $goalDocId: ID,
+  $step: String!,
+  $positionIndex: Int,
+  $suggestedStep: Boolean
+) {
+  stepCreate(data: {step: $step,
+    goalDoc: {connect: {id: $goalDocId}},
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep}) {
+    step,
+    id,
+    goalDoc {
+      id
+    }
+  }
+}
+`
+const updateStep =  gql `
+mutation updateStep(
+  $id: ID!,
+  $suggestedStep: Boolean,
+  $positionIndex: Int
+) {
+  stepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep
+  }) {
     id
+    positionIndex
     suggestedStep
-    stepsId
+    step
   }
 }`
 
-const goalDocByIdQuery = gql `
+
+
+const UpdateClonedStep1 =
+gql `mutation updateClonedStep($id: ID!, $suggestedStep: Boolean, $stepsId: String) {
+      updateClonedStep(id: $id, suggestedStep: $suggestedStep, stepsId: $stepsId) {
+        step
+        id
+        suggestedStep
+        stepsId
+  }
+}`
+
+const UpdateClonedStep = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $suggestedStep: Boolean,
+  $stepsId: String,
+  $positionIndex: Int
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+const goalDocByIdQuery1 = gql `
     query goalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        goal
@@ -69,6 +140,32 @@ const goalDocByIdQuery = gql `
        }
       }
     }`;
+
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
 
  class AcceptStep extends Component {
    proxyAddress = this.props.proxyAddress
@@ -230,24 +327,25 @@ graphql(UpdateClonedStep, {
         })
       }
     })
-}),
-graphql(UpdateOrCreateStep, {
-  name: 'updateOrCreateStep',
-  props: ({updateOrCreateStep}) => ({
-    updateOrCreateStep({variables}) {
-      return updateOrCreateStep({
-        variables: {
-          ...variables
-        }
-      ,
-      refetchQueries:['goalDocByIdQuery']
-    })
-        .catch((error) => {
-          console.log(error)
-        })
-      }
-    })
 })
+// ,
+//  graphql(UpdateOrCreateStep, {
+//    name: 'updateOrCreateStep',
+//    props: ({updateOrCreateStep}) => ({
+//     updateOrCreateStep({variables}) {
+//       return updateOrCreateStep({
+//         variables: {
+//           ...variables
+//         }
+//       ,
+//       refetchQueries:['goalDocByIdQuery']
+//     })
+//         .catch((error) => {
+//           console.log(error)
+//         })
+//       }
+//     })
+// })
 )(AcceptStep)
 
 export default withApollo(WithData)

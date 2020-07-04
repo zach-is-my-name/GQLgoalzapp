@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {graphql, compose, withApollo} from 'react-apollo';
 import gql from 'graphql-tag';
 
-const stepsQuery = gql `
+const stepsQuery1 = gql `
   query stepsQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
         goal
@@ -16,8 +16,20 @@ const stepsQuery = gql `
         }
       }
     }`
+const stepsQuery = gql `
+query stepsQuery($id:ID){
+  stepsList(filter: {goalDoc: {id: {equals: $Id}}}, sort: {step: ASC}) {
+      items {
+        id
+        positionIndex
+        step
+        suggestedStep
+      }
+    }
+  }`
 
-const clonedStepsQuery = gql `
+
+const clonedStepsQuery1 = gql `
     query clonedStepsQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
         id
@@ -34,31 +46,50 @@ const clonedStepsQuery = gql `
        }
      }}`
 
-// const stepIdQuery = gql `
-// query stepIdQuery($id:ID) {
-//   allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
-//      id
-//      positionIndex
-//      step
-//    }
-//  }`
+const clonedStepsQuery = gql `
+query clonedStepQuery($id: ID) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
+    items {
+      positionIndex
+      step
+      suggestedStep
+      id
+    }
+  }
+}
+`
 
-// const clonedStepIdQuery = gql `
-// query clonedStepIdQuery($id:ID) {
-//   allClonedSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
-//      id
-//      positionIndex
-//      step
-//    }
-//  }`
-
-const removeStepMutation = gql `mutation RemoveStepMutation($id: ID!) {
+const removeStepMutation1 = gql `mutation RemoveStepMutation($id: ID!) {
   deleteStep(id: $id) {
     step
   }
 }`
 
-const updateStepMutation = gql `mutation UpdateStepMutation($id: ID!, $positionIndex: Int) {
+const removeStepMutation = gql `mutation removeStepMutation($id: ID)  {
+  stepDelete(data: {id: $id}) {
+    success
+  }
+}
+`
+const updateStepMutation1 =  gql `
+mutation updateStep(
+  $id: ID!,
+  $suggestedStep: Boolean,
+  $positionIndex: Int
+) {
+  stepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    suggestedStep
+    step
+  }
+}`
+
+const updateStepMutation = gql `mutation updateStep($id: ID!, $positionIndex: Int) {
   updateStep(id: $id, positionIndex: $positionIndex) {
     id
     positionIndex
@@ -66,13 +97,20 @@ const updateStepMutation = gql `mutation UpdateStepMutation($id: ID!, $positionI
   }
 }`
 
-const removeClonedStepMutation = gql `mutation RemoveClonedStepMutation($id: ID!) {
+const removeClonedStepMutation1 = gql `mutation RemoveClonedStepMutation($id: ID!) {
   deleteClonedStep(id: $id) {
     step
   }
 }`
 
-const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $positionIndex: Int) {
+const removeClonedStepMutation = gql `mutation removeClonedStepMutation($id: ID)  {
+  clonedStepDelete(data: {id: $id}) {
+    success
+  }
+}
+`
+
+const updateClonedStepMutation1 = gql `mutation UpdateClonedStep($id: ID!, $positionIndex: Int) {
   updateClonedStep(id: $id, positionIndex: $positionIndex) {
     id
     positionIndex
@@ -80,13 +118,44 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
   }
 }`
 
-	const clonedStepIdByStepsIdQuery = gql `
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+	const clonedStepIdByStepsIdQuery1 = gql `
     query allClonedStepsByStepsIdQuery ($stepsId: String){
       allClonedSteps(filter: { stepsId: $stepsId}){
 	      id
 	    }
 	  } `
 
+const clonedStepIdByStepsIdQuery = gql `
+query allClonedStepsByStepsIdQuery($stepsId: String) {
+  clonedStepsList(filter: {stepsId: {equals: $stepsId}}) {
+    items {
+      id
+    }
+  }
+}
+`
+ 
 class RemoveStep extends Component {
   constructor(props) {
     super(props)

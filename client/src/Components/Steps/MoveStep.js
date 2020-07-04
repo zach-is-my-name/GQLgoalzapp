@@ -3,7 +3,8 @@ import React, {Component} from 'react'
 import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
 import arrayMove from 'array-move'
-const updateStepMutation = gql `
+
+const updateStepMutation1 = gql `
   mutation MoveStep($id: ID!, $positionIndex: Int) {
     updateStep(id: $id, positionIndex: $positionIndex) {
     id
@@ -12,7 +13,25 @@ const updateStepMutation = gql `
   }
 }`
 
-const updateClonedStepMutation = gql `mutation MoveClonedStep($id:ID!, $positionIndex: Int) {
+const updateStepMutation =  gql `
+mutation updateStep(
+  $id: ID!,
+  $suggestedStep: Boolean,
+  $positionIndex: Int
+) {
+  stepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    suggestedStep
+    step
+  }
+}`
+
+const updateClonedStepMutation1 = gql `mutation MoveClonedStep($id:ID!, $positionIndex: Int) {
   updateClonedStep(id: $id, positionIndex: $positionIndex) {
     id
     positionIndex
@@ -20,7 +39,29 @@ const updateClonedStepMutation = gql `mutation MoveClonedStep($id:ID!, $position
   }
 }`
 
-const goalDocByIdQuery = gql `
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+
+const goalDocByIdQuery1 = gql `
 query goalDocByIdQuery ($goalDocId: ID) {
   GoalDoc(id: $goalDocId) {
    goal
@@ -46,6 +87,31 @@ query goalDocByIdQuery ($goalDocId: ID) {
    }  }
 }`;
 
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
 
 
 class MoveStep extends Component {

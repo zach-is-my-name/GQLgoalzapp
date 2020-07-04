@@ -10,7 +10,7 @@ let proxyAddress
 let  ProxiedGoalEscrow
 
 
-const clonedStepsQuery = gql `
+const clonedStepsQuery1 = gql `
     query clonedStepsQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        id
@@ -27,21 +27,62 @@ const clonedStepsQuery = gql `
        }
      }}`
 
-const removeClonedStepMutation = gql `
-  mutation RemoveClonedStepMutation($id: ID!) {
+const clonedStepsQuery = gql `query clonedStepsQuery($id: ID) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
+    items {
+      positionIndex
+      step
+      suggestedStep
+      id
+    }
+  }
+}
+`
+
+const removeClonedStepMutation1 = gql `
+  mutation RemoveClonedStepMutetion($id: ID!) {
   deleteClonedStep(id: $id) {
     step
     id
   }
 }`
 
-const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $positionIndex: Int) {
+const removeClonedStepMutation = gql `mutation removeClonedStepMutation($id: ID)  {
+  clonedStepDelete(data: {id: $id}) {
+    success
+  }
+}
+`
+const updateClonedStepMutation1 = gql `mutation UpdateClonedStep($id: ID!, $positionIndex: Int) {
   updateClonedStep(id: $id, positionIndex: $positionIndex) {
     id
     positionIndex
     step
   }
 }`
+
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+
 
 class RejectStep extends Component {
   proxyAddress = this.props.proxyAddress

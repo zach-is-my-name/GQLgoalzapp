@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import * as actions  from '../../Actions/actions.js'
 
 
-const updateClonedStepMutation = gql `
+const updateClonedStepMutation1 = gql `
   mutation SuggestRemoveClonedStepMutation( $id: ID!) {
     updateClonedStep(id: $id, suggestedStep: true, suggestRemove: true) {
       id
@@ -14,6 +14,29 @@ const updateClonedStepMutation = gql `
       suggestRemove
     }
   }`
+
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep,
+    suggestRemove: true
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
 
 // const suggestRemoveStep = gql `mutation suggestRemoveStepMutation($id: ID!) {
 //   deleteClonedStep(id: $id) {

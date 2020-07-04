@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
 
-const updateClonedStepMutation = gql `
+const updateClonedStepMutation1 = gql `
   mutation SuggestMoveStep($id: ID!, $positionIndex: Int) {
     updateClonedStep(id: $id, positionIndex: $positionIndex) {
       id
@@ -12,7 +12,30 @@ const updateClonedStepMutation = gql `
     }
   }
 `
-const suggestMoveMutation = gql `
+const updateClonedStepMutation = gql ` mutation SuggestMoveStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+  $suggesterId: ID
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+    suggesterId: $suggesterId
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+const suggestMoveMutation1 = gql `
   mutation SuggestMoveStep($id: ID!, $suggesterId: ID) {
     updateClonedStep(id: $id, suggestMove: true, suggestedStep: true, suggesterId: $suggesterId ) {
       id
@@ -22,8 +45,32 @@ const suggestMoveMutation = gql `
     }
   }
 `
+const suggestMoveMutation =
+ gql ` mutation SuggestMoveStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+  $suggesterId: ID
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+    suggesterId: $suggesterId
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
 
-const goalDocByIdQuery = gql `
+const goalDocByIdQuery1 = gql `
     query goalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        goal
@@ -47,6 +94,34 @@ const goalDocByIdQuery = gql `
        }
       }
     }`;
+
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
+
+
 class SuggestMoveStep extends Component {
   constructor(props) {
     super(props)
@@ -111,7 +186,7 @@ const WithData = compose(graphql(updateClonedStepMutation, {
   })
 }), graphql(suggestMoveMutation, {
   props: ({mutate}) => ({
-    suggestMoveMutation({variables}) {
+     updateClonedStep({variables}) {
       return mutate ({
         variables: {
           ...variables

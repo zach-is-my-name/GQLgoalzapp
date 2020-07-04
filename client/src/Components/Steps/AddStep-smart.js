@@ -9,27 +9,51 @@ import AddStep from './AddStep'
 import '../../style/AddStep.css'
 
 
-const stepIdQuery = gql `
+const stepIdQuery1 = gql `
 query stepIdQuery($id:ID){
   allSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
      id
      positionIndex
      step
    }
- }`
+ }
+ `
+const stepIdQuery = gql `
+query stepIdQuery($id:ID){
+  stepsList(filter: {goalDoc: {id: {equals: $Id}}}, sort: {step: ASC}) {
+      items {
+        id
+        positionIndex
+        step
+        suggestedStep
+      }
+    }
+  }`
 
- const clonedStepIdQuery = gql `
+ const clonedStepIdQuery1 = gql `
  query clonedStepIdQuery($id:ID){
    allClonedSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
       id
       positionIndex
       step
       suggestedStep
-
     }
   }`
 
-const UpdateOrCreateStep = gql `
+const clonedStepIdQuery = gql `
+query clonedStepIdQuery($id: ID) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
+    items {
+      positionIndex
+      step
+      suggestedStep
+      id
+    }
+  }
+}
+  `
+
+const UpdateOrCreateStep1 = gql `
 mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $positionIndex: Int, $suggestedStep: Boolean) {
   updateOrCreateStep(create: {goalDocId: $goalDocId,
   step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, }, update: {goalDocId: $goalDocId,
@@ -43,7 +67,46 @@ mutation updateOrCreateStepMutation ($goalDocId:ID, $step: String!, $id: ID!, $p
   }
 }`
 
-const UpdateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID, $stepsId: String) {
+const createStep = gql `
+mutation createStep(
+  $goalDocId: ID,
+  $step: String!,
+  $positionIndex: Int,
+  $suggestedStep: Boolean
+) {
+  stepCreate(data: {step: $step,
+    goalDoc: {connect: {id: $goalDocId}},
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep}) {
+    step,
+    id,
+    goalDoc {
+      id
+    }
+  }
+}
+`
+
+const updateStep = gql `
+mutation updateStep(
+  $id: ID!,
+  $suggestedStep: Boolean,
+  $positionIndex: Int
+) {
+  stepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    suggestedStep
+    step
+  }
+}
+`
+
+const UpdateOrCreateClonedStep1 = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID, $stepsId: String) {
     updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
     positionIndex: $positionIndex,
     step: $step, suggestedStep:$suggestedStep, stepsId: $stepsId  }, update: {goalDocId: $goalDocId, positionIndex:
@@ -55,7 +118,46 @@ const UpdateOrCreateClonedStep = gql `mutation updateOrCreateClonedStepMutation 
       }
     }}`
 
-const goalDocByIdQuery = gql `
+const UpdateClonedStep = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $suggestedStep: Boolean,
+  $stepsId: String,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+const createClonedStep = gql `
+mutation createClonedStep($goalDocId: ID, $step: String!, $positionIndex: Int, $stepsId: String, $suggestedStep: Boolean) {
+  clonedStepCreate(data: {
+    step: $step,
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep,
+    stepsId: $stepsId,
+    clonedStepsOfGoalDoc: {connect: {id: $goalDocId}}}) {
+      step
+      id
+      stepsId
+      clonedStepsOfGoalDoc {
+        id
+      }
+    }
+}
+`
+
+const goalDocByIdQuery1 = gql `
     query goalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        goal
@@ -79,6 +181,33 @@ const goalDocByIdQuery = gql `
        }
       }
     }`;
+
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
+
 
 class AddStepSmart extends React.Component {
 
@@ -229,36 +358,38 @@ class AddStepSmart extends React.Component {
 }
 
 
-const AddStepWithApollo = compose(graphql(UpdateOrCreateStep, {
-  name:'updateOrCreateStep',
-  props: ({updateOrCreateStep}) => ({
-    updateOrCreateStep({variables}) {
-      return updateOrCreateStep({
-        variables: {
-          ...variables
-        },
-        refetchQueries: ['goalDocByIdQuery']
-      }).catch((error) => {
-        console.log('there was an error sending the query', error)
-      })
-    }
-  }),
-}),
-graphql(UpdateOrCreateClonedStep, {
-  name: 'updateOrCreateClonedStep',
-  props: ({updateOrCreateClonedStep}) => ({
-    updateOrCreateClonedStep({variables}) {
-      return updateOrCreateClonedStep({
-        variables: {
-          ...variables
-        },
-        refetchQueries: ['goalDocByIdQuery']
-      }).catch((error) => {
-        console.log(error)
-      })
-    }
-  })
-}), graphql(stepIdQuery, {
+const AddStepWithApollo = compose(
+//   graphql(UpdateOrCreateStep, {
+//   name:'updateOrCreateStep',
+//   props: ({updateOrCreateStep}) => ({
+//     updateOrCreateStep({variables}) {
+//       return updateOrCreateStep({
+//         variables: {
+//           ...variables
+//         },
+//         refetchQueries: ['goalDocByIdQuery']
+//       }).catch((error) => {
+//         console.log('there was an error sending the query', error)
+//       })
+//     }
+//   }),
+// }),
+// graphql(UpdateOrCreateClonedStep, {
+//   name: 'updateOrCreateClonedStep',
+//   props: ({updateOrCreateClonedStep}) => ({
+//     updateOrCreateClonedStep({variables}) {
+//       return updateOrCreateClonedStep({
+//         variables: {
+//           ...variables
+//         },
+//         refetchQueries: ['goalDocByIdQuery']
+//       }).catch((error) => {
+//         console.log(error)
+//       })
+//     }
+//   })
+// }),
+graphql(stepIdQuery, {
   name: "stepIdQuery",
   options: (ownProps) => ({
     variables: {

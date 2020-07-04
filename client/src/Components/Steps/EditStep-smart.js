@@ -6,20 +6,51 @@ import gql from 'graphql-tag';
 
 
 
-const updateStepMutation = gql `mutation  UpdateStepMutation($id: ID!, $step: String) {
+const updateStepMutation1 = gql `mutation  UpdateStepMutation($id: ID!, $step: String) {
   updateStep(id: $id, step: $step) {
     id
     step
   }
 }`
 
-const clonedStepIdQuery = gql ` query ClonedStepByIdQuery ($stepsId: String){
+const updateStepMutation =  gql `
+mutation updateStep(
+  $id: ID!,
+  $suggestedStep: Boolean,
+  $positionIndex: Int
+) {
+  stepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    suggestedStep
+    step
+  }
+}`
+
+const clonedStepIdQuery1 = gql ` query ClonedStepByIdQuery ($stepsId: String){
     allClonedSteps(filter: { stepsId: $stepsId}){
       id
     }
   }`
 
-const updateClonedStepMutation = gql `mutation  UpdateClonedStepMutation($id: ID!, $step: String) {
+const clonedStepIdQuery = gql `
+query clonedStepIdQuery($id: ID) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
+    items {
+      positionIndex
+      step
+      suggestedStep
+      id
+    }
+  }
+}
+  `
+
+const updateClonedStepMutation1 = gql `mutation  UpdateClonedStepMutation($id: ID!, $step: String) {
   updateClonedStep(id: $id, step: $step) {
     id
     step
@@ -27,7 +58,29 @@ const updateClonedStepMutation = gql `mutation  UpdateClonedStepMutation($id: ID
 }`
 // const updateClonedStepMutation = gql ``
 
-const goalDocByIdQuery = gql `
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+
+const goalDocByIdQuery1 = gql `
     query goalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        goal
@@ -51,6 +104,35 @@ const goalDocByIdQuery = gql `
        }
       }
     }`;
+
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
+
+
+
 
  class EditStepSmart extends Component {
    constructor(props) {

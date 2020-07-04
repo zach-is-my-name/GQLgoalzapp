@@ -45,10 +45,10 @@ async componentDidUpdate(prevProps) {
     this.props.setUserTokenBalance(userTokenBalance)
   }
 
-  if(this.props.proxyAddress && prevProps.proxyAddress !== this.props.proxyAddress)
-      ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
-      let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
-      this.props.setUserTokenBalance(userTokenBalance)
+  // if(this.props.proxyAddress && prevProps.proxyAddress !== this.props.proxyAddress)
+  //     ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
+  //     let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
+  //     this.props.setUserTokenBalance(userTokenBalance)
   }
 
 handleClick(event) {

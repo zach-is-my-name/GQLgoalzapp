@@ -3,14 +3,21 @@ import React, {Component} from 'react'
 import {graphql, compose, withApollo} from 'react-apollo';
 import gql from 'graphql-tag';
 
-const removeSuggestedStepMutation =  gql `mutation RemoveSuggestedStep($id:ID!){
+const removeSuggestedStepMutation1 =  gql `mutation RemoveSuggestedStep($id:ID!){
   deleteClonedStep(id: $id) {
     id
     step
   }
 }`
 
-const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $positionIndex: Int) {
+const removeSuggestedStepMutation = gql `mutation removeSuggestedStep($id: ID!)  {
+  clonedStepDelete(data: {id: $id}) {
+    success
+  }
+}
+`
+
+const updateClonedStepMutation1 = gql `mutation UpdateClonedStep($id: ID!, $positionIndex: Int) {
   updateClonedStep(id: $id, positionIndex: $positionIndex) {
     id
     positionIndex
@@ -18,7 +25,29 @@ const updateClonedStepMutation = gql `mutation UpdateClonedStep($id: ID!, $posit
   }
 }`
 
-const clonedStepsQuery = gql `
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+
+const clonedStepsQuery1 = gql `
     query clonedStepsQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
         id
@@ -34,6 +63,19 @@ const clonedStepsQuery = gql `
          }
        }
      }}`
+
+const clonedStepsQuery = gql `
+query clonedStepQuery($id: ID) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
+    items {
+      positionIndex
+      step
+      suggestedStep
+      id
+    }
+  }
+}
+`
 
 class RemoveSuggestedStep extends Component {
   constructor(props) {

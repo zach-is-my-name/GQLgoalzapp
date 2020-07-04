@@ -4,7 +4,7 @@ import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import EditStep from './EditStep.js'
 
-const updateClonedStepMutation = gql `
+const updateClonedStepMutation1 = gql `
   mutation EditClonedStepMutation( $id: ID!, $step: String, $suggesterId: String) {
     updateClonedStep(id: $id, step: $step, suggestedStep: true, suggestEdit: true, suggesterId: $suggesterId) {
       id
@@ -16,8 +16,28 @@ const updateClonedStepMutation = gql `
       }
     }
   }`
-
-const goalDocByIdQuery = gql `
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: step
+  $suggestedStep: Boolean,
+  $positionIndex: Int,
+  $stepsId: String,
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    positionIndex: $positionIndex,
+    stepsId: $stepsId,
+    suggestedStep: $suggestedStep
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
+const goalDocByIdQuery1 = gql `
     query goalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
        goal
@@ -41,6 +61,33 @@ const goalDocByIdQuery = gql `
        }
       }
     }`;
+
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
+
 class SuggestEditStep extends Component {
   constructor(props) {
     super(props)

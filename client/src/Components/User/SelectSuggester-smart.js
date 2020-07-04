@@ -4,7 +4,7 @@ import {graphql, compose, withApollo} from 'react-apollo'
 import gql from 'graphql-tag';
 import SelectSuggester from './SelectSuggester'
 
-const suggesterQuery = gql `
+const suggesterQuery1 = gql `
 query suggesterQuery ($goalDocId: ID) {
   GoalDoc(id: $goalDocId) {
     id
@@ -14,6 +14,29 @@ query suggesterQuery ($goalDocId: ID) {
        id
      }
    }
+  }
+}
+`
+const suggesterQuery = gql `
+query suggesterQuery($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+    id
+    clonedSteps(orderBy: positionIndex_ASC) {
+      items {
+        positionIndex
+        suggester {
+          suggesterOfClonedStep {
+            items {
+              id
+              suggester {
+                userName
+                id
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }`
 

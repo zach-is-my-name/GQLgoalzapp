@@ -54,13 +54,27 @@ class CreateUserAuth0 extends React.Component {
   }
 }
 
-const createUser = gql `
+const createUser1 = gql `
   mutation createUserMutation($idToken: String!, $userName: String!){
     createUser(authProvider: {auth0: {idToken: $idToken}}, userName: $userName)  {
       id
     }
   }
 `
+const createUser = gql `
+mutation createUserMutation {
+  userSignUpWithToken(
+    authProfileId: "8BASE_AUTHENTICATION_PROFILE_ID"
+    user: {
+      email: "my@email.co"
+    }
+  ) {
+    id
+  }
+}
+`
+
+
 // const createUserMutation = gql `
 //   mutation($idToken: String!, $userName: String!) {
 //     createUser(authProvider: { auth0: { idToken: $idToken } },

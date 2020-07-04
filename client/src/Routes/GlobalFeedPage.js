@@ -13,7 +13,7 @@ const userQuery = gql `
             }
        }`
 
-const AllGoalDocs = gql `
+const AllGoalDocs1 = gql `
   query allGoalDocs {
     allGoalDocs(orderBy: createdAt_DESC)
     {
@@ -26,7 +26,20 @@ const AllGoalDocs = gql `
     }
   }
   `
-
+const AllGoalDocs = gql`
+ query suggesterQuery {
+  goalDocsList(orderBy: createdAt_DESC) {
+    items {
+      goal
+      id
+      owner {
+        userName
+        id
+      }
+    }
+  }
+}
+`
 class GlobalFeedPage extends Component {
 
   render() {

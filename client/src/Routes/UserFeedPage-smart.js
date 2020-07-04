@@ -25,7 +25,7 @@ const userQuery = gql `
             }
        }`
 
-const targetUserQuery = gql `
+const targetUserQuery1 = gql `
   query targetUserQuery($targetUser: ID) {
   User(id:$targetUser) {
     userName
@@ -33,13 +33,29 @@ const targetUserQuery = gql `
   }
 }`
 
-const existingUserQuery = gql `
+const targetUserQuery = gql `
+query suggesterQuery($targetUser: ID) {
+  user(id: $targetUser) {
+    id
+    userName
+  }
+}
+`
+
+const existingUserQuery1 = gql `
   query existingUserQuery($urlId: ID) {
     User(id: $urlId) {
     id
     }
   }
 `
+  const existingUserQuery = gql 
+    `query existingUserQuery($urlId: ID) {
+    user(id: $urlId) {
+    id
+    }
+  }
+  `
 
 class UserFeedPage extends Component {
   constructor(props) {
