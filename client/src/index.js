@@ -5,7 +5,7 @@ import App from './Components/App';
 import CreateUserAuth0 from './Components/User/CreateUserAuth0';
 import {store} from './store';
 import { AppProvider } from '@8base/react-sdk';
-import AuthClient from '../auth.js';
+import AuthClient from './Components/Auth/AuthClient.js';
 import { BrowserRouter as Router, Route, Swtich } from 'react-router-dom'
 // import {ApolloProvider, ApolloClient} from 'react-apollo';
 import {ApolloProvider} from 'react-apollo';
@@ -30,20 +30,19 @@ const client = new ApolloClient({
 });
 
 // const auth = new Authroisation()
-
 ReactDOM.render(
     <ApolloProvider  client={client}>
-      <Router>
         <AppProvider
-          uri={workspaceEndpoint}
+          uri={"https://api.8base.com/ckbx087zh000207ms3ink870q"}
           authClient={AuthClient}
         >
+      <Router>
           <div>
             <Route  path='/' component={App} />
             {/* <Route component={NotFound} /> */}
           </div>
-        </AppProvider>,
       </Router>
-    </ApolloProvider>
+    </ AppProvider>
+    </ ApolloProvider>,
     document.getElementById('root')
 );

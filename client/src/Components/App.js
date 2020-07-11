@@ -11,7 +11,6 @@ import {withRouter, Switch, Route, BrowserRouter as Router} from 'react-router-d
 import {connect} from 'react-redux'
 import UserFeedPage from '../Routes/UserFeedPage-smart'
 import GlobalFeedPage from '../Routes/GlobalFeedPage'
-import Login from './Login'
 import decode from 'jwt-decode';
 import CurrentUser from './User/CurrentUser'
 import * as actions from '../Actions/actions'
@@ -19,6 +18,10 @@ import {Link} from 'react-router-dom';
 import MenuButton from './User/MenuButton'
 import FundGoalButton from './Ethereum/FundGoalButton'
 import TokensMenuButton from './Ethereum/TokensMenuButton'
+import AuthButton from './Auth/AuthButton'
+import {AuthContainer} from './Auth/AuthContainer'
+import {CallbackContainer} from './Auth/CallbackContainer'
+import {ProtectedRoute} from '../Routes/ProtectedRoute'
 import ContractRewardsFund from './Ethereum/ContractRewardsFund-Smart'
 import BondRewardsFund from './Ethereum/BondRewardsFund-Smart'
 import UserTokenFundsSmart from './Ethereum/UserTokenFundsSmart'
@@ -65,229 +68,173 @@ export class App extends Component {
       userTokenBalance: null
     }
   }
-  async componentDidMount() {}
+
   render() {
     if (this.props.data.loading) {
-      return <div >
-        Loading... < /div> } if (this.props.data.user) {
-          //console.log('Authenticated with UserQuery')
-          return this._renderApp()
-        }
-        else {return this.renderLoggedOut()}
-        _isLoggedIn = () => {return this.props.data.user}
-        _renderApp = () => {
-          return (
-          < div className = "App" > <Link to = "/" > <h1 className = "logo" > GoalZapp < /h1> < /Link > <div className = "current-user" > {
-            /*  <CurrentUser user={this.props.data.user ? this
-           * .props.data.user.username : 'anonymous'} />
-           */
-          } < /div>
-          < MenuButton logout = {
-          this._logout
-        }
-        currentUser = {
-          this.props.data.user ? this.props.data.user.userName : 'anonymous'
-        }
-        currentUserId = {
-          this.props.data.user.id
-        } >
-        < UserTokenFundsSmart setUserTokenBalance = {
-          this.setUserTokenBalance
-        }
-        userTokenBalance = {
-          this.state.userTokenBalance
-        }
-        / > {
-            this.state.proxyAddress
-              ? <ContractRewardsFund setRewardsAmount = {
-                this.setRewardsAmount
-              }
-              rewardsAmount = {
-                this.state.rewardsAmount
-              }
-              proxyAddress = {
-                this.state.proxyAddress
-              } />
-              : null
-          } {
-            this.state.proxyAddress
-              ? <BondRewardsFund setBondsAmount = {
-                this.setBondsAmount
-              }
-              bondsAmount = {
-                this.state.bondsAmount
-              }
-              proxyAddress = {
-                this.state.proxyAddress
-              } />: null
-          } {
-            this.state.proxyAddress && this.state.urlHasGoalDoc
-              ? <FundGoalButton userTokenBalance = {
-                this.state.userTokenBalance
-              }
-              setUserTokenBalance = {
-                this.setUserTokenBalance
-              }
-              setRewardsAmount = {
-                this.setRewardsAmount
-              }
-              setBondsAmount = {
-                this.setBondsAmount
-              }
-              selectedAccount = {
-                window.ethereum.selectedAddress
-              }
-              proxyAddress = {
-                this.state.proxyAddress
-              } />: null
-          } < TokensMenuButton userTokenBalance = {
-            this.state.userTokenBalance
-          }
-          setUserTokenBalance = {
-            this.setUserTokenBalance
-          } />
-          <Switch >
-          <Route exact = "exact" path = '/userfeed /: userid /: goaldocid ' render = "render" {
-            (props) => <UserFeedPage setUserTokenBalance = {
-              this.setUserTokenBalance
-            }
-            userTokenBalance = {
-              this.state.userTokenBalance
-            }
-            setUrlHasGoalDoc = {
-              this.setUrlHasGoalDoc
-            }
-            setUrlDoesNotHaveGoalDoc = {
-              this.setUrlDoesNotHaveGoalDoc
-            }
-            setUrlDoesNotHaveGoalDoc setProxyAddress = {
-              this.setProxyAddress
-            } {
-              ...props
-            }
-            proxyAddress = {
-              this.state.proxyAddress
-            } />
-          } > <Route exact = "exact" path = '/userfeed /: userid ' render = "render" {
-            (props) => <UserFeedPage setUserTokenBalance = {
-              this.setUserTokenBalance
-            }
-            userTokenBalance = {
-              this.state.userTokenBalance
-            }
-            setUrlHasGoalDoc = {
-              this.setUrlHasGoalDoc
-            }
-            setUrlDoesNotHaveGoalDoc = {
-              this.setUrlDoesNotHaveGoalDoc
-            }
-            setProxyAddress = {
-              this.setProxyAddress
-            } {
-              ...props
-            }
-            proxyAddress = {
-              this.state.proxyAddress
-            }
-            urlHasGoalDoc = {
-              this.state.urlHasGoalDoc
-            } />
-          } > <Route path = '/userfeed /: userid ' render = "render" {
-            (props) => <UserFeedPage setUserTokenBalance = {
-              this.setUserTokenBalance
-            }
-            userTokenBalance = {
-              this.state.userTokenBalance
-            }
-            setUrlHasGoalDoc = {
-              this.setUrlHasGoalDoc
-            }
-            setUrlDoesNotHaveGoalDoc = {
-              this.setUrlDoesNotHaveGoalDoc
-            }
-            setProxyAddress = {
-              this.setProxyAddress
-            } {
-              ...props
-            }
-            proxyAddress = {
-              this.state.proxyAddress
-            } />
-          } > <Route exact = "exact" path = '/userfeed
- ' render="render" {(props) => < UserFeedPage setUserTokenBalance = {
- this.setUserTokenBalance
-        }
-        userTokenBalance = {
-          this.state.userTokenBalance
-        }
-        setUrlHasGoalDoc = {
-          this.setUrlHasGoalDoc
-        }
-        setUrlDoesNotHaveGoalDoc = {
-          this.setUrlDoesNotHaveGoalDoc
-        }
-        setProxyAddress = {
-          this.setProxyAddress
-        } {
-          ...props
-        }
-        proxyAddress = {
-          this.state.proxyAddress
-        }
-        />
-    } > < Route exact = "exact"
-    path = "/
-        " render="
-        render " {() => < GlobalFeedPage / >
+      return <div> Loading... < /div>
+  }
+    if (this.props.data.user) {
+      //console.log('Authenticated with UserQuery')
+      return this._renderApp()
+      }
+      else {
+        return this.renderLoggedOut()
+      }
 
-      }
-      /> < /Switch = "Switch" > < /div>
-  / * <R oute="oute" path='/signup' component={CreateUser} *="*"/> * /
-)
-}
-        renderLoggedOut = () => {
-          console.log('renderLoggedOut')
-          return (< div className = "App" > <Link to = "/" > <h1 > GoalZapp < /h1> < /Link > <br > <div className = "app-login-options" > <AuthButton > <br > < /div> < /div >)
-        }
-        _logout = () => {
-          console.log('CLICKED LOGOUT')
-          // remove token from local storage and reload page
-          // to reset apollo client
-          this.props.history.push('/')
-          return this.renderLoggedOut
-          // location.reload()
-        }
-        setProxyAddress(address) {this.setState({proxyAddress: address})}
-        setUrlHasGoalDoc() {
-          //console.log('setUrlHasGoalDoc called')
-          this.setState(({urlHasGoalDoc: true}))
-        }
-        setUrlDoesNotHaveGoalDoc() {this.setState(({urlHasGoalDoc: false}))}
-        setRewardsAmount(rewardsAmount) {this.setState({rewardsAmount})}
-        setBondsAmount(bondsAmount) {this.setState({bondsAmount})}
-        setUserTokenBalance(userTokenBalance) {this.setState({userTokenBalance: Web3.utils.fromWei(userTokenBalance)})}
-        } function isTokenExpired(token) {
-          const expirationDate = getTokenExpirationDate(token);
-          if (expirationDate < new Date()) {
-            return true;
-          }
-          return false
-      }
-        function getTokenExpirationDate(encodedToken) {
-          const token = decode(encodedToken);
-          if (!token.exp) {
-            return null;
-          }
-          const date = new Date(0);
-          date.setUTCSeconds(token.exp);
-          return date;
-        }
-        const WithQueries = compose(graphql(userQuery, {
-          options: {
-            fetchPolicy: 'network-only'
-          }
-        }))(withRouter(App)) // graphql(currentUserName, {//   name:'currentUserName'}))(withRouter(App))//const mapStateToProps = (state, props) => {
-          // return {currentUser:
-          // state.goals.loggedInUserName} }
-        // export default connect(mapStateToProps)(WithQueries)
-export default WithQueries
+    _isLoggedIn = () => {return this.props.data.user}
+
+    _renderApp = () => {
+      return (
+
+        <div className = "App" >
+        <Link to = "/" > <h1 className = "logo" >GoalZapp</h1> </Link>
+        <MenuButton
+        logout={this._logout}
+        currentUser = { this.props.data.user ? this.props.data.user.userName : 'anonymous'}
+        currentUserId = {this.props.data.user.id}
+        />
+      <UserTokenFundsSmart setUserTokenBalance = {this.setUserTokenBalance} userTokenBalance = {this.state.userTokenBalance}
+      / >
+
+      {this.state.proxyAddress ?
+          <ContractRewardsFund
+            setRewardsAmount = {this.setRewardsAmount}
+            rewardsAmount = {this.state.rewardsAmount}
+            proxyAddress = {this.state.proxyAddress}
+          />
+            : null}
+
+        {this.state.proxyAddress ?
+          <BondRewardsFund
+            setBondsAmount = {this.setBondsAmount}
+            bondsAmount = {this.state.bondsAmount}
+            proxyAddress = {this.state.proxyAddress}
+          />
+            : null }
+
+        {this.state.proxyAddress && this.state.urlHasGoalDoc ?
+              <FundGoalButton
+                userTokenBalance = {this.state.userTokenBalance}
+                setUserTokenBalance = {this.setUserTokenBalance}
+                setRewardsAmount = {this.setRewardsAmount}
+                setBondsAmount = {this.setBondsAmount}
+                selectedAccount = {window.ethereum.selectedAddress}
+                proxyAddress = {this.state.proxyAddress}
+            />
+            : null}
+
+        <TokensMenuButton
+          userTokenBalance = {this.state.userTokenBalance}
+          setUserTokenBalance = {this.setUserTokenBalance}
+        />
+
+        <Switch>
+        <Route exact path="/auth/" component={AuthContainer} />
+        <Route path="/auth/callback" component={CallbackContainer} />
+
+        <ProtectedRoute exact path = '/userfeed /: userid /: goaldocid' render = {
+          (props) => <UserFeedPage
+          setUserTokenBalance = {this.setUserTokenBalance}
+          userTokenBalance = {this.state.userTokenBalance}
+          setUrlHasGoalDoc = {this.setUrlHasGoalDoc}
+          setUrlDoesNotHaveGoalDoc = {this.setUrlDoesNotHaveGoalDoc}
+          setProxyAddress = {this.setProxyAddress}
+          {...props}
+          proxyAddress = {this.state.proxyAddress}
+          />
+        }/>
+
+        <ProtectedRoute exact path = '/userfeed /: userid ' render = {
+          (props) =>
+            <UserFeedPage
+              setUserTokenBalance = {this.setUserTokenBalance}
+              userTokenBalance = {this.state.userTokenBalance}
+              setUrlHasGoalDoc = {this.setUrlHasGoalDoc}
+              setUrlDoesNotHaveGoalDoc = {this.setUrlDoesNotHaveGoalDoc}
+              setProxyAddress = {this.setProxyAddress}
+              {...props}
+              proxyAddress = {this.state.proxyAddress}
+              urlHasGoalDoc = {this.state.urlHasGoalDoc}
+          />
+        }/>
+
+        <ProtectedRoute path = '/userfeed /: userid' render = {
+            (props) =>
+              <UserFeedPage
+                setUserTokenBalance = {this.setUserTokenBalance}
+                userTokenBalance = {this.state.userTokenBalance}
+                setUrlHasGoalDoc = {this.setUrlHasGoalDoc}
+                setUrlDoesNotHaveGoalDoc = {this.setUrlDoesNotHaveGoalDoc}
+                setProxyAddress = {this.setProxyAddress}
+                {...props}
+                proxyAddress = {this.state.proxyAddress}
+            />
+        }/>
+
+        <ProtectedRoute exact path = '/userfeed' render= {
+          (props) =>
+            <UserFeedPage setUserTokenBalance = {this.setUserTokenBalance}
+              userTokenBalance = {this.state.userTokenBalance}
+              setUrlHasGoalDoc = {this.setUrlHasGoalDoc}
+              setUrlDoesNotHaveGoalDoc = {this.setUrlDoesNotHaveGoalDoc}
+              setProxyAddress = {this.setProxyAddress}
+              {...props}
+              proxyAddress = {this.state.proxyAddress}
+            />
+          }/>
+
+
+        <Route exact path = "/" render= {() => <GlobalFeedPage/>}/ >
+            </Switch>
+            < /div>
+   )
+ }
+ }
+   renderLoggedOut = () => {
+     console.log('renderLoggedOut')
+     return (
+     <div className = "App">
+     <Link to = "/"> <h1 > GoalZapp < /h1> < /Link>
+     <br />
+     <div className="app-login-options"> <AuthButton /> <br /> </div>
+     <Switch>
+     <Route exact path="/auth/" component={AuthContainer} />
+     <Route path="/auth/callback" component={CallbackContainer} />
+     </Switch>
+     </div>
+    )
+  }
+
+  _logout = () => {
+    this.props.history.push('/')
+    return this.renderLoggedOut
+    // location.reload()
+  }
+
+  setProxyAddress(address) {
+    this.setState({proxyAddress: address})
+  }
+
+  setUrlHasGoalDoc() {
+    //console.log('setUrlHasGoalDoc called')
+    this.setState(({urlHasGoalDoc: true}))
+  }
+
+  setUrlDoesNotHaveGoalDoc() {this.setState(({urlHasGoalDoc: false}))}
+
+  setRewardsAmount(rewardsAmount) {this.setState({rewardsAmount})}
+
+  setBondsAmount(bondsAmount) {this.setState({bondsAmount})}
+
+  setUserTokenBalance(userTokenBalance) {this.setState({userTokenBalance: Web3.utils.fromWei(userTokenBalance)})}
+  }
+
+  const WithQueries = compose(graphql(userQuery, {
+    options: {
+      fetchPolicy: 'network-only'
+    }
+  }))(withRouter(App)) // graphql(currentUserName, {//   name:'currentUserName'}))(withRouter(App))//const mapStateToProps = (state, props) => {
+    // return {currentUser:
+    // state.goals.loggedInUserName} }
+  // export default connect(mapStateToProps)(WithQueries)
+  export default WithQueries

@@ -2,15 +2,6 @@
 import {createHttpLink} from 'apollo-link-http'
 import {setContext} from 'apollo-link-context'
 
-// import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws'
-
-// const wsClient = new SubscriptionClient('wss://subscriptions.graph.cool/v1/cj30pbaza1q9j0141cxyrqrw8', {
-//   reconnect: true,
-/*  connectionParams: {
-    authToken: user.authToken,
-  }, */
-// })
-
 const userExistsCallback = () => console.log("user Exists")
 const userDoesntExistCallback = () => console.log("user Doesn't Exist")
 //redirect to login or signup page
@@ -19,13 +10,10 @@ const customFetch =  fetch("https://api.8base.com/ckbx087zh000207ms3ink870q", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem('auth0IdToken')}`
+  //  Authorization: `Bearer ${localStorage.getItem('auth0IdToken')}`
   },
-  body: JSON.stringify({ query: "{ user { id } }" })
+  //body: JSON.stringify({ query: "{ user { id } }" })
 })
-  .then(userExistsCallback)
-  .catch(userDoesntExistCallback);
-//  user has token and exists OR user
 
 
 export const httpLink  = createHttpLink({

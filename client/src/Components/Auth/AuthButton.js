@@ -1,8 +1,18 @@
 import React from 'react';
 import { withAuth } from '@8base/react-sdk';
 import { Query, graphql, compose, withApollo } from 'react-apollo';
+import gql from 'graphql-tag';
 
-import { CURRENT_USER_QUERY } from '../shared/graphql';
+const CURRENT_USER_QUERY = gql`
+  query {
+    user {
+      id
+      email
+      lastName
+      firstName
+    }
+  }
+`;
 
 class AuthButton extends React.Component {
   renderContent = ({ loading }) => {
@@ -38,4 +48,4 @@ AuthButton = compose(
   withAuth
 )(AuthButton);
 
-export { AuthButton };
+export default  AuthButton ;
