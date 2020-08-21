@@ -1,8 +1,4 @@
 .menu-button.token {
-  margin-left: 875px;
-  margin-top: 20px;
-  /* display: inline-block; */
-  /*border: solid 1px black;*/
 }
 
 .menu-button-user-button.token {
@@ -19,8 +15,6 @@
 }
 
 .menu-button-menu {
-  position: absolute;
-  margin-right: 30px;
   outline: none;
 }
 

@@ -15,46 +15,6 @@ import minus from '../../../../../style/images/minus.jpg'
     <div className="minus-button-container">
       <li className="minus-image"><img key={`imagekey-minus${stepIndex}`} onClick={(stepObj) =>
         stepObj.suggestedStep ? clickHandlerRemoveSuggested(stepIndex): clickHandlerSuggestRemove(stepIndex)} alt="" src={minus}/></li>
-
-      {/*Suggest Remove Step*/}
-      {/* {(toggleConfirmPrompt && (stepIndex !== null) && (indexToRemove === stepIndex) && !stepObj.suggestedStep)
-        ? <div className="prompt">
-          <p>Remove Step?</p>
-          <YesNoPrompt
-        clickEventYes={clickHandlerConfirmSuggestRemove}
-        clickEventNo={clickHandlerCancel}/>
-        </div>
-        : null}
-
-        {renderSuggestRemoveState ?
-        <SuggestRemoveStep
-          indexToRemove={indexToRemove}
-          goalDocId={goalDocId}
-          id={id}
-          unrenderSuggestRemoveStepFunction={unrenderSuggestRemoveStepFunction}
-          stepObj={stepObj}
-        />
-        : null }
-      */}
-      {/*Remove Suggested Step*/}
-      {/* {toggleConfirmPrompt &&(stepIndex !== null) && (indexToRemove === stepIndex) && stepObj.suggestedStep
-        ? <div className="prompt">
-          <p>Remove Step?</p>
-          <YesNoPrompt
-        clickEventYes={clickHandlerConfirmRemoveSuggestedStep}
-        clickEventNo={clickHandlerCancel}/>
-        </div>
-        : null}
-
-        {renderRemoveSuggestedStepState ?
-        <RemoveSuggestedStep
-          indexToRemove={indexToRemove}
-          idToRemove={stepObj.id}
-          goalDocId={goalDocId}
-          unrenderRemoveSuggestedStepFunction={unrenderRemoveSuggestedStepFunction}
-          stepObj={stepObj}
-        /> : null}
-      */}
     </div>
           )
           }

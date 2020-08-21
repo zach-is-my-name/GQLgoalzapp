@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom'
 class SelectGoalForm extends Component {
 
   componentDidMount() {
-      let selectedGoalDoc = this.props.goalDocs.find(element => element.id === this.props.value)
+      let selectedGoalDoc = this.props.goalDocs.goalDocsList.items.find(element => element.id === this.props.value)
       selectedGoalDoc && selectedGoalDoc.proxyAddress ? this.props.setProxyAddress(selectedGoalDoc.proxyAddress, !!this.props.match.params.goaldocid) : null
       if (this.props.value === undefined) {
         this.props.setProxyAddress("")
@@ -14,7 +14,7 @@ class SelectGoalForm extends Component {
 
 componentDidUpdate(prevProps) {
   if (prevProps.goalDocs !== this.props.goalDocs) {
-      let selectedGoalDoc = this.props.goalDocs.find(element => element.id === this.props.value)
+      let selectedGoalDoc = this.props.goalDocs.goalDocsList.items.find(element => element.id === this.props.value)
       selectedGoalDoc && selectedGoalDoc.proxyAddress ? this.props.setProxyAddress(selectedGoalDoc.proxyAddress) : null
   }
   if (prevProps.value !== this.props.value && this.props.value === undefined) {
@@ -23,16 +23,14 @@ componentDidUpdate(prevProps) {
 }
 
   render() {
-    // console.log('form', this.props)
-
-    const goalSelectInputValues = this.props.goalDocs.map((goalDoc, index) => {
+    const goalSelectInputValues = this.props.goalDocs.goalDocsList.items.map((goalDoc, index) => {
       return <option value={JSON.stringify(goalDoc)} key={goalDoc.id}> {goalDoc.goal} </option>
     });
 
 // if goal is loaded -- pre select : if goal is not loaded return null
       return (
         <form className="goal-select">
-          <select value={ JSON.stringify(this.props.goalDocs.find(element => element.id === this.props.value))} onChange={this.props.handleChange}>
+          <select value={ JSON.stringify(this.props.goalDocs.goalDocsList.items.find(element => element.id === this.props.value))} onChange={this.props.handleChange}>
             <option value={JSON.stringify({newGoal: "new-goal"})} key={null}>---New Goal---</option>
             {goalSelectInputValues}
           </select>

@@ -9,10 +9,9 @@ import * as actions from '../../Actions/actions'
 import {connect} from 'react-redux';
 import SelectGoalForm from './Form/SelectGoalForm'
 
-const GoalDocQuery1 = gql `query allGoalDocsQuery ($targetUserId: ID) {
-  allGoalDocs(
-    filter:
-    {owners :{id: $targetUserId}}, orderBy: updatedAt_DESC
+const GoalDocQuery1 = gql `query goalDocsListQuery ($targetUserId: ID) {
+  goalDocsList(
+    filter: {owners :{id: $targetUserId}}, orderBy: updatedAt_DESC
   )
     {
     goal
@@ -21,8 +20,11 @@ const GoalDocQuery1 = gql `query allGoalDocsQuery ($targetUserId: ID) {
   }
 }`
 
-const GoalDocQuery = gql `query allGoalDocsQuery ($targetUserId: ID) {
-  goalDocsList(filter: {goalDocsOfUser: {id: {equals: $targetUserId}}}) {
+const GoalDocQuery = gql `query goalDocsListQuery ($targetUserId: ID) {
+  goalDocsList(
+    filter: {goalDocsOfUser: {id: {equals: $targetUserId}}}
+  )
+  {
     items {
       goal
       id
@@ -38,28 +40,31 @@ class SelectGoalSmart extends React.Component {
     // this._handleChange = this._handleChange.bind(this);
     }
 
+
   render() {
-    const {loading, error, allGoalDocs} = this.props.GoalDocQuery
+    const {loading, error} = this.props.GoalDocQuery
     if (loading) {
       return null
     } else if (error) {
       console.error(error)
       return <p>Error!</p>
-    } else {
-    return (
+    } else if (this.props.targetUserId && !loading) {
+          return (
         <SelectGoalForm
-          goalDocs={allGoalDocs}
+          goalDocs={this.props.GoalDocQuery}
           value={this.props.value}
           handleChange={this.props.setGoalDocId}
           setProxyAddress={this.props.setProxyAddress}
         />
-      )
+    )} else {
+      return null
     }
   }
 }
 
 const ComponentWithData = graphql(GoalDocQuery,
-{name: 'GoalDocQuery'},{ options: ({targetUserId}) => ({ variables: {targetUserId: targetUserId}}),
+{name: 'GoalDocQuery', fetchPolicy:'network-only'},
+{options: (ownProps) => ({ variables: {targetUserId: ownProps.targetUserId}}),
 })(SelectGoalSmart);
 
 export default ComponentWithData

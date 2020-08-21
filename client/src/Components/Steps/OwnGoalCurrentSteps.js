@@ -21,6 +21,7 @@ class OwnGoalCurrentSteps extends Component {
       movedSteps: [],
       renderMoveStep: false,
       showAddStepState: false,
+      steps: []
     }
 
     this._unrenderMoveStep = this._unrenderMoveStep.bind(this)
@@ -28,15 +29,12 @@ class OwnGoalCurrentSteps extends Component {
 }
 
   componentDidMount() {
+    // console.log("SELECTED SUGGESTER === LOGGEDIN USER")
     this.setState({movedSteps: [ ...this.props.steps, ...this.state.movedSteps,]})
   }
 
   componentDidUpdate(prevProps) {
     if (JSON.stringify(this.props.steps) !== JSON.stringify(prevProps.steps)) {
-      // console.log('OwnGoalCurrentSteps componentDidUpdate')
-      // console.log(Boolean(this.props.steps === prevProps.steps))
-      // console.log('prevProps', prevProps.steps)
-      // console.log('this.props', this.props.steps)
       this.setState({
        movedSteps: uniqBy([...this.props.steps, ...this.state.movedSteps], 'id')
         // movedSteps: [...new Set(...this.props.steps, ...this.state.movedSteps)]
@@ -46,12 +44,6 @@ class OwnGoalCurrentSteps extends Component {
   }
 
   render() {
-    // console.log("this.state.steps", this.state.steps)
-    // console.log("this.state.renderMoveStep", this.state.renderMoveStep)
-    // if (this.props.clonedSteps) {
-    //   let arr = this.props.clonedSteps.map(stepObj => ({step: stepObj.step, positionIndex: stepObj.positionIndex}))
-    //   console.log(arr)
-    // }
     const clonedSteps = <p> Cloned Steps </p>
     const steps = <p> Steps </p>
     if (this.props.steps.length) {
@@ -65,14 +57,14 @@ class OwnGoalCurrentSteps extends Component {
           />
         */}
         <div>
-          {this.state.renderMoveStep ?
-            <MoveStep
-              _unrenderMoveStep={this._unrenderMoveStep}
-              steps={this.state.steps}
-              newIndex={this.state.newIndex}
-              oldIndex={this.state.oldIndex}
-              clonedSteps={this.props.clonedSteps}
-            /> : null}
+        {this.state.renderMoveStep ?
+          <MoveStep
+            _unrenderMoveStep={this._unrenderMoveStep}
+            steps={this.state.steps}
+            newIndex={this.state.newIndex}
+            oldIndex={this.state.oldIndex}
+            clonedSteps={this.props.clonedSteps}
+          /> : null}
         </div>
         <div>
           <OwnSteps
@@ -89,23 +81,27 @@ class OwnGoalCurrentSteps extends Component {
             indexInMotion={this.state.indexInMotion}
             toggleSuggestedSteps={this.state.toggleSuggestedSteps}
             goalDocId={this.props.goalDocId}
-            targetUser={this.props.targetUser}
+            targetUserId={this.props.targetUserId}
             loggedInUserId={this.props.loggedInUserId}
             getArr={this.getArr}
             selfState={this.props.selfState}
             suggestersIndex={this.props.suggestersIndex}
             selectedSuggesterId={this.props.selectedSuggesterId}
             proxyAddress={this.props.proxyAddress}
-            selectedAccount={window.ethereum.selectedAddress}
+            currentEthereumAccount={window.ethereum.selectedAddress}
           />
         </div>
       </div>
     )}
-      else { return <FirstStep
-        showAddStepState={this.state.showAddStepState}
-        showAddStep={this.showAddStep}
-        goalDocId={this.props.goalDocId}
-        unrenderAddFirstStep={this._unrenderAddFirstStep} />
+      else {
+        return (
+        <FirstStep
+          showAddStepState={this.state.showAddStepState}
+          showAddStep={this.showAddStep}
+          goalDocId={this.props.goalDocId}
+          unrenderAddFirstStep={this._unrenderAddFirstStep}
+          />
+      )
       }
   }
 
@@ -119,13 +115,12 @@ class OwnGoalCurrentSteps extends Component {
 
   _unrenderMoveStep() {
     this.showAddStep()
-   // this.setState({
-   //   renderMoveStep: false
-   // })
+    this.setState({
+     renderMoveStep: false
+   })
  }
 
  onSortEnd = ({oldIndex, newIndex}) => {
-   // console.log("this.state.goalDocs", this.state.goalDocs)
    this.setState(() =>  { return {
      steps: arrayMove(this.state.movedSteps, oldIndex, newIndex),
      newIndex: newIndex,

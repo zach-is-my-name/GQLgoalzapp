@@ -11,7 +11,6 @@ contract Protected is EscrowRole, AionRole {
    mapping (address => uint256) public protectedTokens;
    event TransferChecked(string message);
    event MSGSenderProtected(string message0, uint256 num, string message1, uint _amount, bool amountToSendGreaterThanZero);
-   event CheckRequire(uint _amount, uint256 _protectedTokens, bool lessThanProtected);
    event Caller(address sender);
    
     constructor (uint256 _protectionPeriod) public {

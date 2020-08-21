@@ -117,7 +117,7 @@ class ForeignStepWithButtons extends Component {
         </div>
         {/*Suggest Remove Step*/}
         <div className="foreign-step-button container">
-          {(this.state.toggleConfirmPrompt && (this.props.stepIndex !== null) && (this.state.indexToRemove === this.props.stepIndex) && !this.props.stepObj.suggestedStep)
+          {(this.state.toggleConfirmPrompt && (this.props.stepIndex !== null) && (this.state.indexToRemove === this.props.stepIndex) && !this.props.stepObj.suggestedStep && !this.props.stepObj.suggestRemove)
             && this.props.selectedSuggesterId === this.props.loggedInUserId ?
               <div className="foreign-step-button confirm-prompt">
                 <div className="foreign-step-button
@@ -139,7 +139,7 @@ class ForeignStepWithButtons extends Component {
               unrenderSuggestRemoveStepFunction={this.unrenderSuggestRemoveStep}
               stepObj={this.props.stepObj}
               loggedInUserId={this.props.loggedInUserId}
-              targetUser={this.props.targetUser}
+              targetUserId={this.props.targetUserId}
             />
           </div>
         : null }
@@ -152,11 +152,12 @@ class ForeignStepWithButtons extends Component {
               <SuggestStepSmart
                 stepIndex={this.state.stepIndex}
                 goalDocId={this.props.goalDocId}
-                targetUser={this.props.targetUser}
+                targetUserId={this.props.targetUserId}
                 loggedInUserId={this.props.loggedInUserId}
                 unrenderSuggestStepFunctiion={this.unrenderSuggestStep}
                 proxyAddress={this.props.proxyAddress}
-                selectedAccount={this.props.selectedAccount}
+                currentEthereumAccount={this.props.currentEthereumAccount}
+                currentEthereumAccount={this.props.currentEthereumAccount}
               />
             </div>
             : null }
@@ -201,7 +202,6 @@ class ForeignStepWithButtons extends Component {
   }
 
   clickHandlerConfirmSuggestRemove() {
-    // console.log("clickHandler confirm ")
     this.setState(prevState => ({
       toggleConfirmPrompt: !prevState.toggleConfirmPrompt,
       renderSuggestRemoveState: true,

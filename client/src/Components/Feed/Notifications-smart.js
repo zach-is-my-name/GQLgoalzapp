@@ -12,7 +12,7 @@ let notification
           stepObj.id)) {
             notification =  this.props.currentGoalClonedSteps.map(_stepObj => {
               // console.log('currentGoalClonedSteps for notification', _stepObj)
-            if (_stepObj.suggestedStep && this.props.loggedInUser !== this.props.targetUser) {
+            if (_stepObj.suggestedStep && this.props.loggedInUser !== this.props.targetUserId) {
               return <Notification randomColorUserName={this.props.randomColorUserName} randomColorStep={this.props.randomColorStep} user={''} step={_stepObj.step} key={_stepObj.id} id={_stepObj.id} />
             } else if (_stepObj.suggestedStep && this.props.loggedInUserID === this.props.targetUserID) {
               return <Notification randomColorUserName={this.props.randomColorUserName} randomColorStep={this.props.randomColorStep} user={_stepObj.suggester} step={_stepObj.step} key={_stepObj.id} id={_stepObj.id} />

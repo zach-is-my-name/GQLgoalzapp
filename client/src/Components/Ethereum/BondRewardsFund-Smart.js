@@ -15,25 +15,25 @@ class BondRewardsFundsSmart extends React.Component {
 
   async componentDidMount() {
     ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
-    const bondsAmount = await ProxiedGoalEscrow.methods.rewardFunds().call()
+    const bondsAmount = web3.utils.fromWei((await ProxiedGoalEscrow.methods.rewardFunds().call()))
     this.props.setBondsAmount(bondsAmount)
    }
 
  async componentDidUpdate(prevProps) {
   if (this.props.proxyAddress && prevProps.proxyAddress !== this.props.proxyAddress) {
     ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
-    const bondsAmount = await ProxiedGoalEscrow.methods.bondFunds().call()
+    const bondsAmount = web3.utils.fromWei((await ProxiedGoalEscrow.methods.rewardFunds().call()))
     this.props.setBondsAmount(bondsAmount)
   }
   if (this.props.bondsAmount && prevProps.bondsAmount !== this.props.bondsAmount) {
-    const bondsAmount = await ProxiedGoalEscrow.methods.bondFunds().call()
+    const bondsAmount = web3.utils.fromWei((await ProxiedGoalEscrow.methods.rewardFunds().call()))
     this.props.setBondsAmount(bondsAmount)
   }
  }
    render() {
     return (
       <div>
-      {this.props.bondsAmount ? <BondRewardsFund bondsAmount={web3.utils.fromWei(this.props.bondsAmount)} /> : null}
+      {this.props.bondsAmount ? <BondRewardsFund bondsAmount={(this.props.bondsAmount)} /> : null}
       </div>
     )
    }

@@ -6,19 +6,19 @@ const userExistsCallback = () => console.log("user Exists")
 const userDoesntExistCallback = () => console.log("user Doesn't Exist")
 //redirect to login or signup page
 
-const customFetch =  fetch("https://api.8base.com/ckbx087zh000207ms3ink870q", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  //  Authorization: `Bearer ${localStorage.getItem('auth0IdToken')}`
-  },
-  //body: JSON.stringify({ query: "{ user { id } }" })
-})
+// const customFetch =  fetch("https://api.8base.com/ckbx087zh000207ms3ink870q", {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   //  Authorization: `Bearer ${localStorage.getItem('auth0IdToken')}`
+//   },
+//   //body: JSON.stringify({ query: "{ user { id } }" })
+// })
 
 
-export const httpLink  = createHttpLink({
-  uri: 'https://api.8base.com/ckbx087zh000207ms3ink870q', fetch: customFetch
-})
+// export const httpLink  = createHttpLink({
+//   uri: 'https://api.8base.com/ckbx087zh000207ms3ink870q', fetch: customFetch
+// })
 
 // const middlewareLink = setContext(() => ({
 //   headers: {
@@ -26,8 +26,24 @@ export const httpLink  = createHttpLink({
 //   }
 // }))
 
-export const link = httpLink
-//export const link = middlewareLink.concat(httpLink)
+// export const link = httpLink
+
+
+const httpLink  = createHttpLink({
+  uri: 'https://api.8base.com/ckbx087zh000207ms3ink870q'
+})
+
+// const middlewareLink = setContext(() => ({
+//   headers: {
+//     // authorization: `Bearer ${localStorage.getItem('auth0IdToken')}` || `Bearer ${localStorage.getItem('graphcoolToken')}` || null
+//     authorization: `Bearer ${localStorage.getItem('auth0IdToken') || localStorage.getItem('graphcoolToken')}` ||  null
+//   }
+// }))
+
+
+
+
+export const  link = httpLink
 
 // const link = middlewareLink.concat(httpLink)
 // console.log(link)

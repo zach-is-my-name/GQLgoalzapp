@@ -1,7 +1,9 @@
 * {
   box-sizing: border-box;
 }
-
+a:link {
+  text-decoration: none;
+}
 @font-face {
     font-family: 'bentonreg';
     src: url('./fonts/bentonsans_regular-webfont.woff2') format('woff2'),
@@ -81,7 +83,6 @@ h1 {
 }
 
 .menu-button {
-  margin-left: 722px;
 }
 
 .current-user {
@@ -104,3 +105,46 @@ h1 {
   text-align: left;
   font: 13.333px Arial;
 }*/
+
+
+.menu-button .token {
+  position: absolute;
+  right: 50px;
+  top: 219px;
+}
+
+.menu-button-menu .token {
+  position: absolute;
+  right: 50px;
+  top: 247px;
+}
+
+.userTokenFunds {
+  position: absolute;
+  right: 61px;
+  top: 140px;
+}
+
+.menu-button.token .menu-button-menu {
+  /* position: absolute; */
+  right: 40px;
+  top: 250px;
+}
+
+.menu-button-user-button.fund {
+  position: absolute;
+  top: 400px;
+  right: 50px;
+}
+
+.bond-rewards {
+  position: absolute;
+  top: 325px;
+  right: 50px;
+}
+
+.contract-rewards {
+  position: absolute;
+  top: 300px;
+  right: 50px;
+}

@@ -13,7 +13,7 @@ const EditButton = ({
   id,
   selectedSuggesterId,
   loggedInUserId,
-  targetUser,
+  targetUserId,
   style,
     }) => {
         return (
@@ -25,7 +25,7 @@ const EditButton = ({
                   stepObj={stepObj}
                   unrenderSuggestEditStepFunction={unrenderSuggestEditStepFunction}
                   loggedInUserId={loggedInUserId}
-                  targetUser={targetUser}
+                  targetUserId={targetUserId}
                 />
               :stepObj.step}</li>
           </span>

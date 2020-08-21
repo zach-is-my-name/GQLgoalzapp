@@ -5,15 +5,18 @@ import gql from 'graphql-tag';
 
 import GlobalFeed from '../Components/Feed/GlobalFeed'
 
-const userQuery = gql `
-  query userQuery {
-        user {
-          id
-          userName
-            }
-       }`
+const userQuery =  gql`
+  query {
+    user {
+      id
+      email
+      lastName
+      firstName
+    }
+  }
+`;
 
-const AllGoalDocs1 = gql `
+/*const AllGoalDocs1 = gql `
   query allGoalDocs {
     allGoalDocs(orderBy: createdAt_DESC)
     {
@@ -26,6 +29,7 @@ const AllGoalDocs1 = gql `
     }
   }
   `
+  */
 const AllGoalDocs = gql`
  query suggesterQuery {
   goalDocsList(orderBy: createdAt_DESC) {
@@ -41,35 +45,43 @@ const AllGoalDocs = gql`
 }
 `
 class GlobalFeedPage extends Component {
-
   render() {
-const {loading, error, allGoalDocs}  = this.props;
-    // console.log(allGoalDocs)
+if (this.props.allGoalDocs && !this.props.allGoalDocs.loading) {
+   /*
+   if (!this.props.allGoalDocs.goalDocsList.items.length) {
+     return  (
+      <div>
 
+      </div>
+     )
+
+   }
+*/
     return(
       <div>
         <h4>Global Feed</h4>
         <GlobalFeed
-          entries={allGoalDocs || []}
-          loggedInUserId ={this.props.userQuery.user ? this.props.userQuery.user.id : null}
+          entries={this.props.allGoalDocs.goalDocsList.items || [] }
+          loggedInUserId ={this.props.loggedInUserId}
+          loggedInUserName={this.props.loggedInUserName}
         />
-        {loading ? <p>loading</p>: null}
+        {this.props.allGoalDocs.loading ? <p>loading</p>: null}
       </div>
         )
   }
+  return null
+}
 }
 
 
-const withData =
-compose(
+const withData = compose(
 graphql(AllGoalDocs, {
-props: ({data: {loading, error, allGoalDocs }}) => ({
-  loading,
-  error,
-  allGoalDocs
+  name: 'allGoalDocs',
+  options: () => (
+    {
+      fetchPolicy: 'network-only',
+    })
 })
-}),
-graphql(userQuery, {name: 'userQuery'})
 )(GlobalFeedPage)
 
 export default withData

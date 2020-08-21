@@ -4,15 +4,6 @@ import {graphql, compose} from 'react-apollo'
 import gql from 'graphql-tag'
 import arrayMove from 'array-move'
 
-const updateStepMutation1 = gql `
-  mutation MoveStep($id: ID!, $positionIndex: Int) {
-    updateStep(id: $id, positionIndex: $positionIndex) {
-    id
-    positionIndex
-    step
-  }
-}`
-
 const updateStepMutation =  gql `
 mutation updateStep(
   $id: ID!,
@@ -31,17 +22,8 @@ mutation updateStep(
   }
 }`
 
-const updateClonedStepMutation1 = gql `mutation MoveClonedStep($id:ID!, $positionIndex: Int) {
-  updateClonedStep(id: $id, positionIndex: $positionIndex) {
-    id
-    positionIndex
-    step
-  }
-}`
-
 const updateClonedStepMutation = gql ` mutation updateClonedStep(
   $id: ID!,
-  $step: step
   $suggestedStep: Boolean,
   $positionIndex: Int,
   $stepsId: String,
@@ -60,33 +42,6 @@ const updateClonedStepMutation = gql ` mutation updateClonedStep(
   }
 }
 `
-
-const goalDocByIdQuery1 = gql `
-query goalDocByIdQuery ($goalDocId: ID) {
-  GoalDoc(id: $goalDocId) {
-   goal
-   id
-   steps(orderBy:positionIndex_ASC) {
-     step
-     positionIndex
-     suggestedStep
-     id
-   }
-   clonedSteps(orderBy:positionIndex_ASC)
-    {
-     step
-     positionIndex
-     id
-     suggestedStep
-     suggestRemove
-     stepsId
-     suggester {
-       userName
-       id
-     }
-   }  }
-}`;
-
 const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
   goalDoc(id: $goalDocId) {
    goal
@@ -113,7 +68,6 @@ const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
   }
 }`
 
-
 class MoveStep extends Component {
   constructor(props) {
     super(props)
@@ -129,24 +83,24 @@ class MoveStep extends Component {
   }
 
   componentDidMount() {
-    this.props._unrenderMoveStep()
-    //unrender
+  this.props._unrenderMoveStep()
+}
+
+  componentDidUpdate(prevProps) {
+    if (this.props.steps !== prevProps.steps) {}
   }
 
   render() {
-    this._submitMoveStep(this._reorderSteps())
+    this._submitMoveStep()
     return null
   }
 
   async _submitMoveStep() {
-    // console.log('this._reorderSteps()', this._reorderSteps())
     await this._submitMoveStepMutation(this._reorderSteps())
     await this._submitMoveClonedStepMutation(this._reorderClonedSteps())
 }
 
   _submitMoveStepMutation(newStepsSortedByPositionIndex) {
-    // console.log('newStepsSortedByPositionIndex', newStepsSortedByPositionIndex)
-
     newStepsSortedByPositionIndex.map(async stepObj => {
       const updateStepResult = await this.props.updateStep({
         variables: {
@@ -154,22 +108,16 @@ class MoveStep extends Component {
           positionIndex: stepObj.positionIndex
         }
       }).catch(error => console.log(error))
-      // console.log("updateStepResult",updateStepResult)
     })
-
   }
 
-  _reorderSteps(queryResult) {
-    // const {loading, error} = queryResult
-    // if (!loading) {
-    // console.log('this.props.steps', this.props.steps)
+  _reorderSteps() {
     const newSteps = this.props.steps.slice()
 
     return newSteps.map((stepObj, index) => ({
       ...stepObj,
       positionIndex: index
     }))
-    // }
   }
 
   _reorderClonedSteps() {
@@ -177,39 +125,30 @@ class MoveStep extends Component {
     const newIndex = this.props.newIndex
     const oldIndex = this.props.oldIndex
     let oldSteps = this.props.clonedSteps.slice()
-    // console.log('oldSteps', oldSteps)
     console.log('oldIndex', oldIndex)
-    // console.log('oldSteps[oldIndex]', oldSteps[oldIndex])
     console.log('newIndex', newIndex)
-    // console.log('clonedSteps', clonedSteps)
 
-    // console.log('clonedSteps', clonedSteps)
     if (clonedSteps[oldIndex] && clonedSteps[oldIndex].suggestedStep === false) {
-      // console.log('clonedSteps[oldIndex].suggestedStep === false')
       oldSteps = arrayMove(oldSteps, oldIndex, newIndex).map((stepObj, index) => ({...stepObj, positionIndex:index }))
-      // oldSteps[oldIndex].positionIndex = newIndex
 
-      // for (let i =; oldSteps.length - 1; i++) {
-      //   oldSteps[i].positionIndex =
-      // }
       const newSteps = oldSteps.sort((a, b) => {
         if (a.positionIndex === b.positionIndex && b.suggestedStep) {
-          // console.log("a.positionIndex === b.positionIndex && b.suggestedStep")
+          console.log("a.positionIndex === b.positionIndex && b.suggestedStep")
           return 1
         }
 
         if (a.positionIndex === b.positionIndex && a.suggestedStep) {
-          // console.log("a.positionIndex === b.positionIndex && a.suggestedStep")
+          console.log("a.positionIndex === b.positionIndex && a.suggestedStep")
           return 1
         }
 
         if (a.positionIndex === b.positionIndex && !a.suggestedStep && !b.suggestedStep) {
-          // console.log("a.positionIndex === b.positionIndex && !a.suggestedStep && !b.suggestedStep")
+          console.log("a.positionIndex === b.positionIndex && !a.suggestedStep && !b.suggestedStep")
           return 1
         }
 
         if (a.positionIndex > b.positionIndex) {
-          // console.log("a.positionIndex > b.positionIndex")
+          console.log("a.positionIndex > b.positionIndex")
           return 1
         }
         if (a.positionIndex < b.positionIndex) {
@@ -219,11 +158,14 @@ class MoveStep extends Component {
         // console.log("Return 0")
         return 0
       })
-      console.log('newSteps', newSteps)
       return newSteps.map((stepObj, index) => ({
         ...stepObj,
         positionIndex: index
       }))
+    if (oldSteps !== newSteps) {
+      console.log('oldSteps', oldSteps)
+      console.log('newSteps', newSteps)
+    }
     } else {
       console.log('moveStep returned false')
       return false
@@ -231,8 +173,6 @@ class MoveStep extends Component {
   }
 
   _submitMoveClonedStepMutation(newClonedStepsSortedByPositionIndex) {
-    console.log('newClonedStepsSortedByPositionIndex', newClonedStepsSortedByPositionIndex)
-
     if (newClonedStepsSortedByPositionIndex === false) {
       return
     }
@@ -243,7 +183,6 @@ class MoveStep extends Component {
           positionIndex: stepObj.positionIndex
         }
       })
-      // console.log("updateClonedStepResult",updateClonedStepResult)
     })
 
 }

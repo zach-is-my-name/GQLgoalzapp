@@ -37,19 +37,21 @@ class ForeignGoalCurrentSteps extends Component {
 
   // set state for Move on initial render
   componentDidMount() {
+    // {console.log("SELECTED SUGGESTER !== LOGGEDIN USER")}
+
     this.setState({movedClonedSteps: this.props.clonedSteps})
   }
 
   render() {
       let suggestMoveStep
-      if (this.state.renderMoveStep && this.props.loggedInUserId) {
-       suggestMoveStep =
-       <SuggestMoveStep
-         _unrenderMoveStep={this._unrenderMoveStep}
-         clonedSteps={this.state.movedClonedSteps}
-         newIndex={this.state.newIndex}
-         loggedInUserId={this.props.loggedInUserId}
-       />
+        if (this.state.renderMoveStep && this.props.loggedInUserId) {
+         suggestMoveStep =
+         <SuggestMoveStep
+           _unrenderMoveStep={this._unrenderMoveStep}
+           clonedSteps={this.state.movedClonedSteps}
+           newIndex={this.state.newIndex}
+           loggedInUserId={this.props.loggedInUserId}
+         />
 
       } else if (this.state.renderMoveStep && !this.props.loggedInUserId ) {
         suggestMoveStep = null
@@ -58,7 +60,6 @@ class ForeignGoalCurrentSteps extends Component {
       }
 
     return (
-
       <div className="jsx-wrap">
         {suggestMoveStep}
 
@@ -71,13 +72,14 @@ class ForeignGoalCurrentSteps extends Component {
           newIndex={this.state.newIndex}
           oldIndex={this.state.oldIndex}
           goalDocId={this.props.goalDocId}
-          targetUser={this.props.targetUser}
+          targetUserId={this.props.targetUserId}
           loggedInUserId={this.props.loggedInUserId}
           selectedSuggesterId={this.props.selectedSuggesterId}
           suggestersIndex={this.props.suggestersIndex}
           selectedSuggesterName={this.props.selectedSuggesterName}
           proxyAddress={this.props.proxyAddress}
-          selectedAccount={window.ethereum.selectedAddress}
+          currentEthereumAccount={window.ethereum.selectedAddress}
+          currentEthereumAccount={this.props.currentEthereumAccount}
         />
       </div>
       )

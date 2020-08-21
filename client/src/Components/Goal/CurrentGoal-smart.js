@@ -7,6 +7,7 @@ goal selected */
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {compose} from 'react-apollo'
 import {Query, graphql} from 'react-apollo';
 import gql from 'graphql-tag';
 import * as actions from '../../Actions/actions'
@@ -70,10 +71,10 @@ class CurrentGoalSmart extends Component {
       if (this.props.goalDocById.GoalDoc !== nextProps.goalDocById.GoalDoc) {
         this.props.dispatch(actions.setGoalDoc(nextProps.goalDocById.GoalDoc))
 
-        if (nextProps.goalDocById.GoalDoc.clonedSteps.length === 0) {
-          this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.steps))
-        } else if (this.props.loggedInUser === this.props.targetUser && nextProps.goalDocById.GoalDoc.clonedSteps.length >= 1) {
-          this.props.dispatch(actions.setClonedStepsFromServer(nextProps.goalDocById.GoalDoc.clonedSteps))
+        if (nextProps.goalDocById.GoalDoc.clonedSteps.items.length === 0) {
+          this.props.dispatch(actions.cloneCurrentSteps(nextProps.goalDocById.GoalDoc.items.steps))
+        } else if (this.props.loggedInUser === this.props.targetUserId && nextProps.goalDocById.GoalDoc.clonedSteps.items.length >= 1) {
+          this.props.dispatch(actions.setClonedStepsFromServer(nextProps.goalDocById.GoalDoc.clonedSteps.items))
         }
       }
     }
@@ -87,16 +88,16 @@ class CurrentGoalSmart extends Component {
       currentGoalID: state.goals.currentGoalID,
       currentGoalSteps: state.goals.currentGoalSteps,
       loggedInUser: state.goals.loggedInUserID,
-      targetUser: state.goals.targetUserID,
+      targetUserId: state.goals.targetUserID,
       currentGoalClonedSteps: state.goals.currentGoalClonedSteps
     }
   }
 
-  const CurrentGoalWithState = connect(mapStateToProps)(CurrentGoalSmart);
+  const WithState = connect(mapStateToProps);
 
   /* GRAPHQL QUERY */
 
-  const CurrentGoalWithData = graphql(fetchGoalDocByID, {
+  const CurrentGoalWithStateAndData = compose(graphql(fetchGoalDocByID, {
     name: 'goalDocById',
     skip: (props) => !props.id,
     options: ({id}) => ({
@@ -105,6 +106,6 @@ class CurrentGoalSmart extends Component {
         goalDocId: id
       }
     })
-  })(CurrentGoalWithState);
+  }), WithState)(CurrentGoal)
 
-  export default CurrentGoalWithData
+  export default CurrentGoalWithStateAndData

@@ -44,7 +44,6 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   uint256 public bondFunds;
   uint256 public rewardAmount;
   uint256 public ownerBondAmount; 
-  uint256 public suggestionDuration;
     
   
   ERC20 public token;
@@ -61,8 +60,8 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
     require(address(_token) != address(0), "token address cannot be zero");
     require(_suggestionDuration > 0, "_suggestionDuration must be greater than 0"); 
     token = _token;
-    rewardAmount = 1;
-    ownerBondAmount = 1;
+    rewardAmount = 1 ether;
+    ownerBondAmount = 1 ether;
     suggestionDuration = _suggestionDuration;
     _token._addEscrowRole(address(this));
     self = address(this);

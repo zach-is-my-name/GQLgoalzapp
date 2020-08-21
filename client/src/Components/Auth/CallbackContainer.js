@@ -25,33 +25,40 @@ const userSignupMutation = gql`
   }
 `
 class CallbackContainer extends React.Component {
-  async handleAuthentication({ idToken, email }) {
+  async handleAuthentication({ idToken, email, firstName, lastName}) {
     /**
-     * Auth headers for communicating with the 8base API.
+     * set auth headers for communicating with the 8base API.
      */
     client.setIdToken(idToken);
     /**
-     * Check if user exists in 8base.
+     * check if user exists in 8base.
      */
     try {
-      await client.request(userQuery);
-    } catch {
+      const response = await client.request(userQuery);
+    } catch(response) {
+      console.log("userQuery request", response)
       /**
        * If user doesn't exist, an error will be
        * thrown, which then the new user can be
        * created using the authResult values.
        */
-      await client.request(userSignupMutation, {
-        user: { email: email },
+
+      const userSignupResponse = await client.request(userSignupMutation, {
+        user: {
+           email: email,
+           userName: email.substring(0, email.lastIndexOf("@")),
+           firstName: firstName,
+           lastName: lastName,
+        },
         authProfileId: process.env.REACT_APP_AUTH_PROFILE_ID,
       });
+      console.log("userSignupResponse", userSignupResponse )
     }
   }
 
   async componentDidMount() {
-    console.log("CallbackContainerRendered")
     const { auth, history } = this.props;
-    /* Get authResult from auth client after redirect */
+    /* after redirect, get authResult from auth client  */
     const authResult = await auth.authClient.getAuthorizedData();
     /* Identify or create user record using authenticated details */
     await this.handleAuthentication(authResult);

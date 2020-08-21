@@ -6,7 +6,7 @@ var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 
 const ContractRewardsFund = (props) => {
   return(
-    <div className="text">
+    <div className="contract-rewards">
     <p>Rewards Fund Balance: {props.rewardsAmount} </p>
     </div>
   )

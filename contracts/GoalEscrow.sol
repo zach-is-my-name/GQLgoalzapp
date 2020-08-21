@@ -61,8 +61,8 @@ contract GoalEscrow is GoalOwnerRole, AionRole {
     require(address(_token) != address(0), "token address cannot be zero");
     require(_suggestionDuration > 0, "_suggestionDuration must be greater than 0"); 
     token = _token;
-    rewardAmount = 1;
-    ownerBondAmount = 1;
+    rewardAmount = 1 ether;
+    ownerBondAmount = 1 ether;
     suggestionDuration = _suggestionDuration;
     _token._addEscrowRole(address(this));
     _addAionAddress(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
@@ -184,7 +184,7 @@ contract GoalEscrow is GoalOwnerRole, AionRole {
    aion = Aion(0xFcFB45679539667f7ed55FA59A15c8Cad73d9a4E);
    uint256 callTime = token.protectionPeriod().add(block.timestamp);
    bytes memory data =
-     abi.encodeWithSelector(bytes4(keccak256('removeTokenTimeProtection(address,uint256)')),_address, _amount);
+     abi.encodeWithSelector(bytes4(keccak256('removeTokenProtection(address,uint256)')),_address, _amount);
    uint256 callCost = 200000*1e9 + aion.serviceFee();
    aion.ScheduleCall.value(callCost)(callTime, address(token), 0, 20000000, 1e9, data, true);
   }

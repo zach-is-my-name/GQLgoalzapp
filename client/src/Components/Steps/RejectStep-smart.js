@@ -9,6 +9,32 @@ var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 let proxyAddress
 let  ProxiedGoalEscrow
 
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
+
 
 const clonedStepsQuery1 = gql `
     query clonedStepsQuery ($goalDocId: ID) {
@@ -63,7 +89,6 @@ const updateClonedStepMutation1 = gql `mutation UpdateClonedStep($id: ID!, $posi
 
 const updateClonedStepMutation = gql ` mutation updateClonedStep(
   $id: ID!,
-  $step: step
   $suggestedStep: Boolean,
   $positionIndex: Int,
   $stepsId: String,
@@ -97,73 +122,71 @@ class RejectStep extends Component {
     this.props.unrenderRejectStepFunction()
   }
 
-render() {
-  ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
-  console.log('Component Rendered')
-  console.log(this.props)
-  if (this.props.renderRejectStepState === true) {
-    console.log(this.props.renderRejectStep)
-    this._submitRejectStepMutation(this.props.idToRemove)
+  render() {
+    ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
+    console.log('Component Rendered')
+    console.log(this.props)
+    if (this.props.renderRejectStepState === true) {
+      console.log(this.props.renderRejectStep)
+      this._submitRejectStepMutation(this.props.idToRemove)
+    }
+    return null
   }
-  return null
-}
 
-async _submitRejectStepMutation(idToRemove) {
-  let rejectStepReceipt = await ProxiedGoalEscrow.methods.returnBondsOnReject(web3.utils.toHex(this.props.goalDocId)).send({from: window.ethereum.selectedAddress})
-  .on('error', error => console.log(error))
-  console.log('rejectStepReceipt', rejectStepReceipt)
-  if (rejectStepReceipt === 'Error' || false) {
-    return
-  }
-  let rejectStepResult, clonedStepsQueryResult, reorderedClonedSteps
-  try {
-    rejectStepResult = await this.props.removeClonedStepMutation({
-      variables: {
-        id: this.props.idToRemove
-      }
+  async _submitRejectStepMutation(idToRemove) {
+    let rejectStepReceipt = await ProxiedGoalEscrow.methods.returnBondsOnReject(web3.utils.toHex(this.props.goalDocId)).send({from: this.props.currentEthereumAccount})
+    .on('error', error => console.log(error))
+    console.log('rejectStepReceipt', rejectStepReceipt)
+    if (rejectStepReceipt === 'Error' || false) {
+      return
+    }
+    let rejectStepResult, clonedStepsQueryResult, reorderedClonedSteps
+    try {
+      rejectStepResult = await this.props.removeClonedStepMutation({
+        variables: {
+          id: this.props.idToRemove
+        }
+      })
+      } catch(error) {
+        console.log(error) }
+    try {
+      clonedStepsQueryResult = await this.props.client.query({
+      query: clonedStepsQuery, variables : {
+        goalDocId: this.props.goalDocId},
+        fetchPolicy: 'network-only'
     })
     } catch(error) {
-      console.log(error) }
-  try {
-    clonedStepsQueryResult = await this.props.client.query({
-    query: clonedStepsQuery, variables : {
-      goalDocId: this.props.goalDocId},
-      fetchPolicy: 'network-only'
-  })
-  } catch(error) {
-    console.log(error)
-  }
-
-  try {
-     reorderedClonedSteps = await this._reorderClonedSteps(clonedStepsQueryResult)
-      }
-    catch (error) {console.log(error)}
-
-  try {
-    await reorderedClonedSteps.map(async (stepObj, mapIndex) => {
-        await this.props.updateClonedStep({
-          variables: {
-            id: stepObj.id,
-            positionIndex: stepObj.positionIndex
-          }
-        })
-      })
-  } catch (error) {
       console.log(error)
     }
-}
+
+    try { reorderedClonedSteps = await this._reorderClonedSteps(clonedStepsQueryResult) }
+      catch (error) {console.log(error)}
+
+    try {
+      reorderedClonedSteps.map(async (stepObj, mapIndex) => {
+          await this.props.updateClonedStep({
+            variables: {
+              id: stepObj.id,
+              positionIndex: stepObj.positionIndex
+            }
+          })
+        })
+    } catch (error) {
+        console.log(error)
+      }
+  }
 
   _reorderClonedSteps(queryResult) {
    const {loading, error} = queryResult
    if (!loading) {
-     const newSteps = queryResult.data.GoalDoc.clonedSteps.slice()
+     const newSteps = queryResult.data.clonedStepsList.items.slice()
      return newSteps.map((stepObj, index) => ({
        ...stepObj,
        positionIndex: index,
      }))
-   }
- }
-}
+    }
+    }
+  }
 
 
 const RejectStepWithMutation =
@@ -174,7 +197,7 @@ compose(graphql(removeClonedStepMutation, {
         variables: {
           ...variables
         },
-        refetchQueries: ['clonedStepsQuery']
+        refetchQueries: ['goalDocByIdQuery']
       })
     }
   })
@@ -187,7 +210,7 @@ graphql(
           variables: {
           ...variables
       },
-      refetchQueries: [`clonedStepQuery`]
+      refetchQueries: [`goalDocByIdQuery`]
         })
       }
     })

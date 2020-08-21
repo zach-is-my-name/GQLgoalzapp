@@ -11,6 +11,17 @@
     cursor: pointer;
 }
 
+.fas.faUser.fa-lg.two  {
+    color: #ef3779;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.far.faUser.fa-lg.two  {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
 .fas.faCaretLeft {
   cursor: pointer;
 }

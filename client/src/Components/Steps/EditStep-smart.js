@@ -4,82 +4,14 @@ import EditStep from './EditStep.js'
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
 
-
-
-const updateStepMutation1 = gql `mutation  UpdateStepMutation($id: ID!, $step: String) {
+/*const updateStepMutation1 = gql `mutation  UpdateStepMutation($id: ID!, $step: String) {
   updateStep(id: $id, step: $step) {
     id
     step
   }
 }`
-
-const updateStepMutation =  gql `
-mutation updateStep(
-  $id: ID!,
-  $suggestedStep: Boolean,
-  $positionIndex: Int
-) {
-  stepUpdate(data: {
-    id: $id,
-    positionIndex: $positionIndex,
-    suggestedStep: $suggestedStep
-  }) {
-    id
-    positionIndex
-    suggestedStep
-    step
-  }
-}`
-
-const clonedStepIdQuery1 = gql ` query ClonedStepByIdQuery ($stepsId: String){
-    allClonedSteps(filter: { stepsId: $stepsId}){
-      id
-    }
-  }`
-
-const clonedStepIdQuery = gql `
-query clonedStepIdQuery($id: ID) {
-  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
-    items {
-      positionIndex
-      step
-      suggestedStep
-      id
-    }
-  }
-}
-  `
-
-const updateClonedStepMutation1 = gql `mutation  UpdateClonedStepMutation($id: ID!, $step: String) {
-  updateClonedStep(id: $id, step: $step) {
-    id
-    step
-  }
-}`
-// const updateClonedStepMutation = gql ``
-
-const updateClonedStepMutation = gql ` mutation updateClonedStep(
-  $id: ID!,
-  $step: step
-  $suggestedStep: Boolean,
-  $positionIndex: Int,
-  $stepsId: String,
-) {
-  clonedStepUpdate(data: {
-    id: $id,
-    positionIndex: $positionIndex,
-    stepsId: $stepsId,
-    suggestedStep: $suggestedStep
-  }) {
-    id
-    positionIndex
-    stepsId
-    suggestedStep
-    step
-  }
-}
-`
-
+*/
+/*
 const goalDocByIdQuery1 = gql `
     query goalDocByIdQuery ($goalDocId: ID) {
       GoalDoc(id: $goalDocId) {
@@ -104,7 +36,67 @@ const goalDocByIdQuery1 = gql `
        }
       }
     }`;
+*/
+/*
+const clonedStepIdQuery1 = gql ` query ClonedStepByIdQuery ($stepsId: String){
+    allClonedSteps(filter: { stepsId: $stepsId}){
+      id
+    }
+  }`
+*/
+/*
+const updateClonedStepMutation1 = gql `mutation  UpdateClonedStepMutation($id: ID!, $step: String) {
+  updateClonedStep(id: $id, step: $step) {
+    id
+    step
+  }
+}`
+*/
 
+const updateStepMutation =  gql `
+mutation updateStep(
+  $id: ID!,
+  $step: String
+) {
+  stepUpdate(data: {
+    id: $id,
+    step: $step
+  }) {
+    id
+    positionIndex
+    suggestedStep
+    step
+  }
+}`
+
+const clonedStepIdQuery = gql `
+query clonedStepIdQuery($id: ID) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
+    items {
+      positionIndex
+      step
+      suggestedStep
+      id
+    }
+  }
+}
+  `
+const updateClonedStepMutation = gql ` mutation updateClonedStep(
+  $id: ID!,
+  $step: String
+) {
+  clonedStepUpdate(data: {
+    id: $id,
+    step: $step
+  }) {
+    id
+    positionIndex
+    stepsId
+    suggestedStep
+    step
+  }
+}
+`
 const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
   goalDoc(id: $goalDocId) {
    goal
@@ -166,7 +158,8 @@ async  _submitEditedStep(e) {
      step: this.state.editedStep
    }})
    if (!this.props.clonedStepIdQuery.loading) {
-    const clonedStepId = this.props.clonedStepIdQuery.allClonedSteps[0].id
+     console.log(this.props.clonedStepIdQuery)
+    const clonedStepId = this.props.clonedStepIdQuery.clonedStepsList.items[0].id
     await this.props.updateClonedStep({variables : {
       id: clonedStepId,
       step: this.state.editedStep

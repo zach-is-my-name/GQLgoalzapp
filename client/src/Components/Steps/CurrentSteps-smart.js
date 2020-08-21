@@ -9,45 +9,9 @@ import * as actions from '../../Actions/actions.js'
 import '../../style/CurrentSteps.css'
 import OwnGoalCurrentSteps from './OwnGoalCurrentSteps.js'
 import ForeignGoalCurrentSteps from './ForeignGoalCurrentSteps.js'
+import {OwnerSteps} from './OwnerSteps.js'
 
-// arr.map(obj => obj.suggester.userName).filter((item, pos, self) => self.indexOf(item) == pos)
-
-// arr.filter((obj, index, self) =>
-//   self.findIndex((findObj) => {return (obj.userName === findObj.userName && obj.id === findObj.id)}) === index)
-//
-// const clonedStepsArr = result.data.GoalDoc.clonedSteps
-//
-// const arrGoalDocSuggesters =  clonedStepsArr.map(obj => ({userName: obj.suggester.userName, id: obj.suggester.id})).filter((obj, index, self) =>
-//   self.findIndex((findObj) => {return (obj.userName === findObj.userName && obj.id === findObj.id)}) === index)
-
-const goalDocByIdQuery1 = gql `
-query goalDocByIdQuery ($goalDocId: ID) {
-  GoalDoc(id: $goalDocId) {
-   goal
-   id
-   proxyAddress
-   steps(orderBy:positionIndex_ASC) {
-     step
-     positionIndex
-     suggestedStep
-     id
-   }
-   clonedSteps(orderBy:positionIndex_ASC)
-    {
-     step
-     positionIndex
-     id
-     suggestedStep
-     suggestRemove
-     stepsId
-     suggester {
-       userName
-       id
-     }
-   }  }
-}`;
-
-const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+const goalDocByIdQuery = gql `query goalDocByIdQuery ($goalDocId: ID) {
   goalDoc(id: $goalDocId) {
    goal
    id
@@ -61,9 +25,13 @@ const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
    clonedSteps(orderBy:positionIndex_ASC) {
      items {
      positionIndex
+     step
      id
-     suggestedStep
      stepsId
+     suggestedStep
+     suggestEdit
+     suggestMove
+     suggestRemove
      suggester {
        id
        userName
@@ -73,164 +41,130 @@ const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
   }
 }`
 
-// const  suggesterClonedSteps = gql `
-//  query suggesterClonedSteps($goalDocId:ID){
-//    allClonedSteps(filter: {goalDoc: {id: $goalDocId}}, orderBy: positionIndex_ASC) {
-//       id
-//       positionIndex
-//       step
-//       suggestedStep
-//
-//     }
-//   }`
 
 class CurrentStepsSmart extends Component {
   constructor(props) {
     super(props)
   }
 
-  componentDidMount() {
-    if (this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc) {
-      console.log('CurrentSteps-smart --> refetch called')
+  componentDidUpdate(prevProps) {
+    if (this.props.currentEthereumAccount && prevProps.currentEthereumAccount && this.props.currentEthereumAccount !== prevProps.currentEthereumAccount) {
       this.props.goalDocById.refetch()
     }
-  }
-
-  componentDidUpdate(nextProps) {
-    if(this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc ||
-    nextProps.goalDocById.networkStatus === 7 && !nextProps.goalDocById.GoalDoc){
-    // console.log(nextProps.goalDocById)
-    // if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false) {
-      // console.log('CurrentSteps-smart --> refetch called')
-      nextProps.goalDocById.refetch()
-    // }
-  }
   }
 
   render() {
-    if(this.props.goalDocById.networkStatus === 7 && !this.props.goalDocById.GoalDoc){
-    // console.log(this.props.goalDocById)
-    // if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false) {
-      // console.log('CurrentSteps-smart --> refetch called')
-      this.props.goalDocById.refetch()
-    // }
-  }
-    // console.log('this.props.goalDocById.networkStatus',this.props.goalDocById.networkStatus )
-    // console.log('this.props.goalDocById.GoalDoc', !!this.props.goalDocById.GoalDoc)
-    if (this.props.goalDocById.networkStatus === 7 && this.props.goalDocById.GoalDoc == false){
-    console.log('__PROBLEM__  networkStatus === 7 && !this.props.goalDocById.GoalDoc')
-    }
-    const {loggedInUserId, targetUser} = this.props
+    const {networkStatus, goalDoc, loading} = this.props.goalDocById
+    const {loggedInUserId, targetUserId, selectedSuggesterId, renderTargetUserSteps} = this.props
+
     let clonedSteps
     let children
     let steps
-    // let {loading} = this.props.goalDocById
     let acceptedStep
     let goalOwnerStep
     let selectedSuggesterSuggested
-    // !this.props.goalDocById.loading ? console.log('proxyAddress, currentSteps', this.props.goalDocById.GoalDoc) : null
-    if (this.props.goalDocById.loading || !this.props.goalDocById.GoalDoc) {
+
+    if (loading || !goalDoc || !loggedInUserId || !targetUserId || !selectedSuggesterId) {
       return <div>Loading...</div>
     }
 
-    else if (this.props.selectedSuggesterId !== this.props.loggedInUserId) {
+    else if (loggedInUserId === targetUserId) {
+      //filter out suggested steps NOT suggested by the selected suggester
+      const clonedStepsForSelectedSuggester = () => {
+        goalDoc.clonedSteps.items.forEach(stepObj => {
+          acceptedStep = !stepObj.suggestedStep && stepObj.suggester && stepObj.suggester.id === selectedSuggesterId
+          goalOwnerStep = !stepObj.suggestedStep && !stepObj.suggester
+          selectedSuggesterSuggested = stepObj.suggestedStep && stepObj.suggester && (stepObj.suggester.id === selectedSuggesterId)
+        })
 
-      this.props.goalDocById.GoalDoc.clonedSteps.forEach(stepObj => {
-        acceptedStep = !stepObj.suggestedStep && stepObj.suggester && stepObj.suggester.id === this.props.selectedSuggesterId
-        goalOwnerStep = !stepObj.suggestedStep && !stepObj.suggester
-        // console.log(stepObj.suggester.id)
-        selectedSuggesterSuggested = stepObj.suggestedStep && stepObj.suggester && (stepObj.suggester.id === this.props.selectedSuggesterId)})
-
-        console.log('acceptedStep',acceptedStep)
-        console.log('goalOwnerStep ', goalOwnerStep)
-        console.log('selectedSuggesterSuggested', selectedSuggesterSuggested )
-
-
-      // if (this.props.goalDocById && !this.props.goalDocById.loading) {
-        /*filter out clonedStep (stepObj.suggestedStep === true && stepObj.suggester.id !== selectedSuggesterId)*/
-        // console.log(this.props.suggesterClonedSteps)
-        clonedSteps = this.props.goalDocById.GoalDoc.clonedSteps.filter(stepObj => {
+        return goalDoc.clonedSteps.items.filter(stepObj => {
           return acceptedStep || goalOwnerStep  || selectedSuggesterSuggested
         })
-        steps = this.props.goalDocById.GoalDoc.steps
+      }
+
+        clonedSteps = clonedStepsForSelectedSuggester()
+        steps = goalDoc.steps.items
         return (
           <div className="current-steps-smart-container">
-
             {
-              loggedInUserId !== targetUser
-                ? <ForeignGoalCurrentSteps
+                  <OwnGoalCurrentSteps
+                    proxyAddress={this.props.proxyAddress}
+                    randomColorStep={this.props.randomColorStep}
+                    clonedSteps={clonedSteps || []}
+                    steps={steps || []}
+                    goalDocId={this.props.goalDocId}
+                    targetUserId={targetUserId}
+                    loggedInUserId={loggedInUserId}
+                    selectedSuggesterId={selectedSuggesterId}
+                    selectedSuggesterName={this.props.selectedSuggesterName}
+                    suggestersIndex={this.props.suggestersIndex}
+                    currentEthereumAccount={this.props.currentEthereumAccount}
+                    />
+            }
+        </div>
+
+    )
+    } else if (loggedInUserId !== targetUserId) {
+      /* foreign goal */
+        const clonedStepsForSelectedSuggester = () => {
+        //filter out suggested steps NOT suggested by the selected suggester
+          goalDoc.clonedSteps.items.forEach(stepObj => {
+            acceptedStep = !stepObj.suggestedStep && stepObj.suggester && stepObj.suggester.id === selectedSuggesterId
+            goalOwnerStep = !stepObj.suggestedStep && !stepObj.suggester
+            selectedSuggesterSuggested = stepObj.suggestedStep && stepObj.suggester && (stepObj.suggester.id === selectedSuggesterId)
+          })
+
+          return goalDoc.clonedSteps.items.filter(stepObj => {
+            return acceptedStep || goalOwnerStep  || selectedSuggesterSuggested
+          })
+        }
+          clonedSteps = clonedStepsForSelectedSuggester()
+          steps = goalDoc.steps.items
+
+          if (selectedSuggesterId === loggedInUserId && !renderTargetUserSteps ) {
+          return (
+            <div className="current-steps-smart-container">
+                 <ForeignGoalCurrentSteps
                   goalDocId={this.props.goalDocId}
-                  targetUser={targetUser}
+                  targetUserId={targetUserId}
                   loggedInUserId={loggedInUserId}
-                  clonedSteps={clonedSteps || []}
+                  clonedSteps={clonedSteps}
                   steps={steps || []}
-                  selectedSuggesterId={this.props.selectedSuggesterId}
+                  selectedSuggesterId={selectedSuggesterId}
                   selectedSuggesterName={this.props.selectedSuggesterName}
                   suggestersIndex={this.props.suggestersIndex}
-                  proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
+                  proxyAddress={this.props.proxyAddress}
+                  currentEthereumAccount={this.props.currentEthereumAccount}
                   />
-                : <OwnGoalCurrentSteps
+          </div>
+            )}
+             else if (selectedSuggesterId === loggedInUserId && renderTargetUserSteps){
+               return(
+            <div className="current-steps-smart-container">
+                 <OwnerSteps currentGoalSteps={steps} />
+                 </div>
+                )
+              }
+            /*
+                <OwnGoalCurrentSteps
+                  proxyAddress={goalDoc.proxyAddress}
                   randomColorStep={this.props.randomColorStep}
                   clonedSteps={clonedSteps || []}
                   steps={steps || []}
                   goalDocId={this.props.goalDocId}
-                  targetUser={targetUser}
-                  loggedInUserId={this.props.loggedInUserId}
-                  selectedSuggesterId={this.props.selectedSuggesterId}
+                  targetUserId={targetUserId}
+                  loggedInUserId={loggedInUserId}
+                  selectedSuggesterId={selectedSuggesterId}
                   selectedSuggesterName={this.props.selectedSuggesterName}
                   suggestersIndex={this.props.suggestersIndex}
-                  proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
+                  currentEthereumAccount={this.props.currentEthereumAccount}
                   />
-          }
-        </div>)
-      // }
-      return null
-    } else if (this.props.selectedSuggesterId === this.props.loggedInUserId) {
-      if (this.props.goalDocById && !this.props.goalDocById.loading && this.props.goalDocById.GoalDoc) {
-        clonedSteps = this.props.goalDocById.GoalDoc.clonedSteps
-        steps = this.props.goalDocById.GoalDoc.steps
-        // console.log('clonedSteps no filter', clonedSteps)
+                  */
+              }
 
-        return (<div className="current-steps-smart-container">
-          {/* <SelectedSuggesterName
-            loggedInUserId={this.props.loggedInUserId}
-            selectedSuggesterId={this.props.selectedSuggesterId}
-            selectedSuggesterName={this.props.selectedSuggesterName}
-            />
-          */}
-          {
-            loggedInUserId !== targetUser
-              ? <ForeignGoalCurrentSteps
-                goalDocId={this.props.goalDocId}
-                targetUser={targetUser}
-                loggedInUserId={loggedInUserId}
-                clonedSteps={clonedSteps || []} steps={steps || []}
-                selectedSuggesterId={this.props.selectedSuggesterId}
-                selectedSuggesterName={this.props.selectedSuggesterName}
-                suggestersIndex={this.props.suggestersIndex}
-                proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
-                />
-              : <OwnGoalCurrentSteps
-                randomColorStep={this.props.randomColorStep}
-                clonedSteps={clonedSteps || []}
-                steps={steps || []}
-                goalDocId={this.props.goalDocId}
-                targetUser={targetUser}
-                loggedInUserId={this.props.loggedInUserId}
-                selectedSuggesterId={this.props.selectedSuggesterId}
-                selectedSuggesterName={this.props.selectedSuggesterName}
-                suggestersIndex={this.props.suggestersIndex}
-                proxyAddress={this.props.goalDocById.GoalDoc.proxyAddress}
-                />
-
-          }
-        </div>)
-      }
-      return null
-    }
+     // console.log("currentStepsSmart hit null")
     return null
-  }
-
+}
 }
 
 const WithData = compose(graphql(goalDocByIdQuery, {
@@ -254,4 +188,3 @@ const WithData = compose(graphql(goalDocByIdQuery, {
 // ))(CurrentStepsSmart)
 
 export default WithData
-// export default connect(mapStateToProps)(CurrentStepsSmart);

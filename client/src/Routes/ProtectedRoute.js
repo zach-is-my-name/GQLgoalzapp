@@ -1,6 +1,7 @@
 import React from 'react';
 import { withAuth } from '@8base/app-provider';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
+import {compose} from 'react-apollo'
 /**
  * Depending on the props available, the rendered component
  * must be handled appropriately and then returned.
@@ -36,6 +37,7 @@ class ProtectedRoute extends React.Component {
       ...restProps
     } = this.props;
 
+
     if (isAuthorized) {
       return renderComponent(restProps);
     }
@@ -48,11 +50,11 @@ class ProtectedRoute extends React.Component {
 
   render() {
     const { component, render, ...rProps } = this.props;
-
     return <Route {...rProps} render={this.renderRoute} />;
   }
 }
 
-ProtectedRoute = withAuth(ProtectedRoute);
+ProtectedRoute = compose(
+  withAuth, withRouter) (ProtectedRoute);
 
 export { ProtectedRoute };

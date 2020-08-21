@@ -5,7 +5,7 @@ import { faCaretRight} from '@fortawesome/free-solid-svg-icons'
 import { faCaretLeft} from '@fortawesome/free-solid-svg-icons'
 import '../../style/TargetUser.css'
 
-const TargetUser = ({targetUserName}) =>  {
+const targetUserId = ({targetUserName}) =>  {
   return (
       <div className="target-user-wrapper">
         <p className="target-user-p"> {targetUserName}'s goal: </p>
@@ -16,4 +16,4 @@ const TargetUser = ({targetUserName}) =>  {
       </div>
           )
   }
-export default TargetUser
+export default targetUserId

@@ -10,7 +10,8 @@ const clientId = process.env.CLIENT_ID || process.env.REACT_APP_CLIENT_ID;
  * authentication profile that gets set up in the 8base
  * management console.
  */
-const logoutRedirectUri = `${window.location.origin}/logout`;
+ 
+const logoutRedirectUri = `${window.location.origin}/`;
 const redirectUri = `${window.location.origin}/auth/callback`;
 /**
  * There are multiple auth strategies that can be

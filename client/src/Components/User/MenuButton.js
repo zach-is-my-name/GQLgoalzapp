@@ -1,6 +1,9 @@
 import React from 'react'
+import { withAuth } from '@8base/react-sdk';
 import { Wrapper, Button, Menu, MenuItem } from 'react-aria-menubutton';
 import {withRouter, Link} from 'react-router-dom';
+import {withApollo } from 'react-apollo';
+import {compose} from 'react-apollo';
 import '../../style/MenuButton.css'
 
 class MenuButton extends React.Component {
@@ -10,12 +13,13 @@ class MenuButton extends React.Component {
 }
 
 handleSelection(value, event) {
-  console.log('handleSeleciton event', event)
-  console.log('value', value)
 }
 
   render() {
+    const { auth, client } = this.props;
+    const user = "user"
     return (
+      <div className={`menu-button ${user}`}>
       <Wrapper className="menu-button" onSelection={this.handleSelection}>
         <Button className="menu-button-user-button">
           {this.props.currentUser}
@@ -26,13 +30,19 @@ handleSelection(value, event) {
               <Link  className="menuitem-userfeed"to={`/userfeed/${this.props.currentUserId}`}>{this.props.currentUser}</Link>
             </MenuItem>
             <MenuItem className="menuitem-logout">
-              <li onClick={this.props.logout}>Logout</li>
+              <li onClick={async () => {
+          await client.clearStore();
+          auth.authClient.logout();
+        }}>Logout</li>
             </MenuItem>
           </ul>
         </Menu>
       </Wrapper>
+      </div>
     )
   }
 }
 
-export default withRouter(MenuButton)
+MenuButton = compose(withRouter, withAuth, withApollo)(MenuButton)
+
+export default MenuButton

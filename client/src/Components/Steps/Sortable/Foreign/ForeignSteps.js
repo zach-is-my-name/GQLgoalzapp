@@ -9,13 +9,13 @@ const ForeignSteps = SortableContainer(({
         oldIndex,
         clonedSteps,
         indexInMotion,
-        targetUser,
+        targetUserId,
         loggedInUserId,
         goalDocId,
         suggestersIndex,
         selectedSuggesterId,
         proxyAddress,
-        selectedAccount
+        currentEthereumAccount,
     }) => {
       return (
         <ul className="sortable-container">
@@ -30,12 +30,13 @@ const ForeignSteps = SortableContainer(({
                     oldIndex={oldIndex}
                     indexInMotion={indexInMotion}
                     goalDocId={goalDocId}
-                    targetUser={targetUser}
+                    targetUserId={targetUserId}
                     loggedInUserId={loggedInUserId}
                     selectedSuggesterId={selectedSuggesterId}
                     suggestersIndex={suggestersIndex}
                     proxyAddress={proxyAddress}
-                    selectedAccount={selectedAccount}
+                    currentEthereumAccount={currentEthereumAccount}
+                    currentEthereumAccount={currentEthereumAccount}
                 />
             ))}
 

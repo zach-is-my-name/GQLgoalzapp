@@ -3,22 +3,35 @@ import React, {Component} from 'react';
 import {graphql, compose, withApollo} from 'react-apollo';
 import gql from 'graphql-tag';
 
-const stepsQuery1 = gql `
-  query stepsQuery ($goalDocId: ID) {
-      GoalDoc(id: $goalDocId) {
-        goal
-        id
-        steps(orderBy:positionIndex_ASC) {
-          step
-          positionIndex
-          suggestedStep
-          id
-        }
-      }
-    }`
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
+
 const stepsQuery = gql `
 query stepsQuery($id:ID){
-  stepsList(filter: {goalDoc: {id: {equals: $Id}}}, sort: {step: ASC}) {
+  stepsList(filter: {stepsOfGoalDoc: {id: {equals: $id}}}, sort: {positionIndex: ASC}) {
       items {
         id
         positionIndex
@@ -28,27 +41,9 @@ query stepsQuery($id:ID){
     }
   }`
 
-
-const clonedStepsQuery1 = gql `
-    query clonedStepsQuery ($goalDocId: ID) {
-      GoalDoc(id: $goalDocId) {
-        id
-       clonedSteps(orderBy:positionIndex_ASC) {
-         step
-         positionIndex
-         id
-         suggestedStep
-         stepsId
-         suggester {
-           id
-           userName
-         }
-       }
-     }}`
-
 const clonedStepsQuery = gql `
 query clonedStepQuery($id: ID) {
-  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {step: ASC}) {
+  clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {positionIndex: ASC}) {
     items {
       positionIndex
       step
@@ -58,50 +53,28 @@ query clonedStepQuery($id: ID) {
   }
 }
 `
-
-const removeStepMutation1 = gql `mutation RemoveStepMutation($id: ID!) {
-  deleteStep(id: $id) {
-    step
-  }
-}`
-
 const removeStepMutation = gql `mutation removeStepMutation($id: ID)  {
   stepDelete(data: {id: $id}) {
     success
   }
 }
 `
-const updateStepMutation1 =  gql `
+const updateStepMutation = gql `
 mutation updateStep(
   $id: ID!,
-  $suggestedStep: Boolean,
   $positionIndex: Int
 ) {
   stepUpdate(data: {
     id: $id,
     positionIndex: $positionIndex,
-    suggestedStep: $suggestedStep
   }) {
     id
     positionIndex
     suggestedStep
     step
   }
-}`
-
-const updateStepMutation = gql `mutation updateStep($id: ID!, $positionIndex: Int) {
-  updateStep(id: $id, positionIndex: $positionIndex) {
-    id
-    positionIndex
-    step
-  }
-}`
-
-const removeClonedStepMutation1 = gql `mutation RemoveClonedStepMutation($id: ID!) {
-  deleteClonedStep(id: $id) {
-    step
-  }
-}`
+}
+`
 
 const removeClonedStepMutation = gql `mutation removeClonedStepMutation($id: ID)  {
   clonedStepDelete(data: {id: $id}) {
@@ -109,18 +82,8 @@ const removeClonedStepMutation = gql `mutation removeClonedStepMutation($id: ID)
   }
 }
 `
-
-const updateClonedStepMutation1 = gql `mutation UpdateClonedStep($id: ID!, $positionIndex: Int) {
-  updateClonedStep(id: $id, positionIndex: $positionIndex) {
-    id
-    positionIndex
-    step
-  }
-}`
-
 const updateClonedStepMutation = gql ` mutation updateClonedStep(
   $id: ID!,
-  $step: step
   $suggestedStep: Boolean,
   $positionIndex: Int,
   $stepsId: String,
@@ -139,13 +102,6 @@ const updateClonedStepMutation = gql ` mutation updateClonedStep(
   }
 }
 `
-	const clonedStepIdByStepsIdQuery1 = gql `
-    query allClonedStepsByStepsIdQuery ($stepsId: String){
-      allClonedSteps(filter: { stepsId: $stepsId}){
-	      id
-	    }
-	  } `
-
 const clonedStepIdByStepsIdQuery = gql `
 query allClonedStepsByStepsIdQuery($stepsId: String) {
   clonedStepsList(filter: {stepsId: {equals: $stepsId}}) {
@@ -155,7 +111,7 @@ query allClonedStepsByStepsIdQuery($stepsId: String) {
   }
 }
 `
- 
+
 class RemoveStep extends Component {
   constructor(props) {
     super(props)
@@ -170,10 +126,9 @@ componentDidMount() {
 }
 
   render() {
-    console.log(this.props.stepObj)
+    // console.log(this.props.stepObj)
     if (this.props.renderRemoveStepState === true) {
         this._submitRemoveSteps(this.props.idToRemove)
-        // this._submitRemoveStepMutation()
     }
       return null
   }
@@ -184,8 +139,6 @@ componentDidMount() {
   	 	  }
 
   async _submitRemoveStepMutation(idToRemove) {
-        console.log('idToRemove', idToRemove)
-        // console.log('_submitRemoveStepMutation called')
       const removeStepResult = await this.props.removeStepMutation({
         variables: {
           id: idToRemove
@@ -193,13 +146,13 @@ componentDidMount() {
       }).catch((error) => {console.log(error)})
 
       const stepsQueryResult = await this.props.client.query({
-        query:stepsQuery, variables:{
+        query: stepsQuery, variables:{
           goalDocId: this.props.goalDocId},
           fetchPolicy: 'network-only'
        }).catch(error =>  console.log(error))
 
       const reorderedSteps = await this._reorderSteps(stepsQueryResult)
-        await reorderedSteps.map(async (stepObj, mapIndex) => {
+      await reorderedSteps.map(async (stepObj, mapIndex) => {
           await this.props.updateStep({
             variables: {
               id: stepObj.id,
@@ -213,7 +166,7 @@ componentDidMount() {
     const {loading, error} = queryResult
       if (!loading) {
 
-        const newSteps = queryResult.data.GoalDoc.steps.slice()
+        const newSteps = queryResult.data.stepsList.items.slice()
         return newSteps.map((stepObj, index) => ({
           ...stepObj,
           positionIndex: index
@@ -223,7 +176,7 @@ componentDidMount() {
   _reorderClonedSteps(queryResult) {
     const {loading, error} = queryResult
       if (!loading) {
-        const newSteps = queryResult.data.GoalDoc.clonedSteps.slice()
+        const newSteps = queryResult.data.clonedStepsList.items.slice()
         return newSteps.map((stepObj, index) => ({
           ...stepObj,
           positionIndex: index
@@ -244,7 +197,7 @@ async _submitRemoveClonedStepMutation(stepsIdToRemove){
       }
 
   try {
-    clonedStepIdToRemove = clonedStepIdResult.data.allClonedSteps[0].id
+    clonedStepIdToRemove = clonedStepIdResult.data.clonedStepsList.items[0].id
     await this.props.removeClonedStepMutation({
       variables: {
         id: clonedStepIdToRemove
@@ -286,7 +239,7 @@ compose(graphql(removeStepMutation, {
         variables: {
           ...variables
         },
-        // refetchQueries: [`stepsQuery`]
+        refetchQueries: [`goalDocByIdQuery`]
       }).catch((error) => {
         console.error(error)
       })
@@ -301,7 +254,7 @@ graphql(
         variables: {
           ...variables
         },
-        refetchQueries: [`stepsQuery`]
+        refetchQueries: [`goalDocByIdQuery`]
       })
     }
   })
@@ -313,7 +266,7 @@ graphql(removeClonedStepMutation, {
         variables: {
           ...variables
         },
-        // refetchQueries: [`stepsQuery`]
+        refetchQueries: [`goalDocByIdQuery`]
       }).catch((error) => {
         console.error(error)
       })
@@ -328,15 +281,11 @@ graphql(
         variables: {
           ...variables
         },
-        refetchQueries: [`stepsQuery`]
+        refetchQueries: [`goalDocByIdQuery`]
       })
     }
   })
 })
 )(RemoveStep)
-
-// const mapStateToProps = (state, props) => {
-//   return ({idToRemove: state.goals.idToRemove})
-// }
 
 export default withApollo(RemoveStepWithMutation)

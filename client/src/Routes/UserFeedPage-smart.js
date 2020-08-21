@@ -1,7 +1,8 @@
 /* eslint-disable */
+
 import React, {Component} from 'react';
-import {Route, Link} from 'react-router-dom';
-import {graphql, compose} from 'react-apollo'
+import {Route, Link, withRouter} from 'react-router-dom';
+import {graphql, compose, withApollo} from 'react-apollo'
 import gql from 'graphql-tag'
 import CurrentUser from '../Components/User/CurrentUser'
 import GlobalFeedPage from './GlobalFeedPage'
@@ -17,246 +18,243 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 import '../style/UserFeedPage.css'
 
-const userQuery = gql `
-  query userQuery {
-        user {
-          id
-          userName
-            }
-       }`
-
-const targetUserQuery1 = gql `
-  query targetUserQuery($targetUser: ID) {
-  User(id:$targetUser) {
-    userName
-    id
-  }
-}`
 
 const targetUserQuery = gql `
-query suggesterQuery($targetUser: ID) {
-  user(id: $targetUser) {
+query targetUserQuery($targetUserId: ID) {
+  user(id: $targetUserId) {
     id
     userName
   }
 }
 `
 
-const existingUserQuery1 = gql `
-  query existingUserQuery($urlId: ID) {
-    User(id: $urlId) {
-    id
-    }
-  }
-`
-  const existingUserQuery = gql 
-    `query existingUserQuery($urlId: ID) {
-    user(id: $urlId) {
-    id
-    }
-  }
-  `
-
 class UserFeedPage extends Component {
   constructor(props) {
     super(props)
-    // this.dispatchtargetUserID = this.dispatchtargetUserID.bind(this)
     this.state = {
       goalDocId: '',
       paramUserId: '',
       suggesters: [],
       suggestersIndex: 0,
-      selectedSuggesterId: '',
-      selectedSuggesterName: '',
-      renderFundGoal: false,
+      selectedSuggesterId: "",
+      targetUserId: "",
+      targetUserName: "",
+      renderTargetUserSteps: false
     }
 
     this._setGoalDocId = this._setGoalDocId.bind(this)
-    this._setSelf = this._setSelf.bind(this)
+    this._gotoSelf = this._gotoSelf.bind(this)
     this._setSuggesters = this._setSuggesters.bind(this)
     this._nextSuggester = this._nextSuggester.bind(this)
     this._prevSuggester = this._prevSuggester.bind(this)
     this._setGoalDocIdOnCreate = this._setGoalDocIdOnCreate.bind(this)
+    this._setSelf = this._setSelf.bind(this)
+    this._renderTargetUserSteps = this._renderTargetUserSteps.bind(this)
+
   }
 
-async componentDidMount() {
-    const {match} = this.props;
-    match.params.goaldocid ? this.props.setUrlHasGoalDoc() : null
-    !match.params.goaldocid ? this.props.setUrlDoesNotHaveGoalDoc() : null
-    match.params.goaldocid ? this.setState({goalDocId: match.params.goaldocid}) : null;
-    match.params.userid  ? this.setState({paramUserId: match.params.userid}) : null;
-    let existingUserId;
+  _setSelf(targetUserId, targetUserName) {
+      const self = [{ userName: this.props.loggedInUserName, id: this.props.loggedInUserId }]
+          this.setState(state => {
+            return (
+              {
+                suggesters: [...self, ...state.suggesters],
+                targetUserName: targetUserName,
+              }
+            )
+          })
 
-    if (!match.params.userid)   {
-        this.props.history.push('/')
+      targetUserId === this.props.loggedInUserId ? this.props.renderFundGoal(): null
+  }
+
+  async componentDidMount() {
+      const {match: {params: {goaldocid: urlMatchGoalDocId, userid: urlMatchUserId }}, goalDocId } = this.props;
+      const targetUserResult  = await this.props.client.query({query: targetUserQuery, fetchPolicy: 'network-only', variables: {targetUserId: urlMatchUserId}})
+      const targetUserId = targetUserResult.data.user.id
+      const targetUserName = targetUserResult.data.user.userName
+      if (this.props.loggedInUserId && targetUserId && targetUserName) {
+        this._setSelf(targetUserId,targetUserName)
+
+         console.log("urlMatchGoalDocId ",urlMatchGoalDocId )
+
+        if (typeof urlMatchGoalDocId === "string") {
+          if (urlMatchGoalDocId.length > 25 || urlMatchGoalDocId.length < 25){
+            this.props.history.push(`/userfeed/${this.props.loggedInUserId}`)
+          }
+        }
       }
-
-    if (this.props.userQuery.user && this.props.userQuery.user.id) {
-        // console.log(this.props.userQuery.user.id)
-        // console.log(this.props.userQuery.user.userName)
-        this.setState((state, props) => {
-          return ({suggesters: [{userName: props.userQuery.user.userName,
-            id: props.userQuery.user.id}, ...state.suggesters]})
-        })
-    }
-}
-
- componentDidUpdate (prevProps, prevState) {
-   if (this.props.match.params.goaldocid !== prevProps.match.params.goaldocid && this.props.match.params.goaldocid) {
-     this.props.setUrlHasGoalDoc()
-     this.setState({goalDocId: this.props.match.params.goaldocid})
-   }
-   if (this.props.match.params.goaldocid !== prevProps.match.params.goaldocid && !this.props.match.params.goaldocid) {
-    this.props.setUrlDoesNotHaveGoalDoc()
+      this.setState({targetUserId: urlMatchUserId || targetUser.id})
+      urlMatchGoalDocId  ? this.props.setUrlHasGoalDoc() && this.setState({goalDocId: urlMatchGoalDocId}) : this.props.setUrlDoesNotHaveGoalDoc()
+      urlMatchGoalDocId  ? this.setState({goalDocId: urlMatchGoalDocId}) : null
+      urlMatchUserId ? this.setState({paramUserId: urlMatchUserId}): this.props.history.push('/')
   }
-   if (this.state.suggesters !== prevState.suggesters || this.state.suggestersIndex !== prevState.suggestersIndex) {
-     this.setState({
-       selectedSuggesterId: this.state.suggesters[this.state.suggestersIndex].id,
-       selectedSuggesterName: this.state.suggesters[this.state.suggestersIndex].userName})
-   }
- }
 
-  render() {
-    // console.log(this.props.targetUserQuery)
-    const {match} = this.props;
-    const {loading, error, User} = this.props.targetUserQuery
-    if (loading) {
-      return (<div>
-        Loading..
-      </div>)
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.suggesters.length && this.state.suggesters !== prevState.suggesters  || this.state.suggestersIndex !== prevState.suggestersIndex ) {
+      this.setState((state) => {return ({selectedSuggesterId: state.suggesters[state.suggestersIndex].id})})
     }
-    return (
+
+  }
+  render() {
+    const {match} = this.props
+    const {suggesters} = this.state
+    let renderNull =  null
+    let renderComponent =   (
+
       <div className="userfeedpage-container">
 
 
         <div className="userfeed suggester-container">
+        { this.state.goalDocId ?
           <SelectedSuggesterName
-            loggedInUserId={this.props.userQuery.user ? this.props.userQuery.user.id : null}
-            selectedSuggesterId={this.state.selectedSuggesterId}
-            selectedSuggesterName={this.state.selectedSuggesterName}
-          />
-
-          <SelectSuggesterSmart
-            goalDocId={match.params.goaldocid || this.state.goalDocId}
-            setSelf={this._setSelf}
-            setSuggesters={this._setSuggesters}
+            loggedInUserId={this.props.loggedInUserId || null}
+            selectedSuggesterId={this.state.selectedSuggesterId || null}
+            suggestersIndex={this.state.suggestersIndex}
             suggesters={this.state.suggesters}
+            targetUserId={this.state.targetUserId}
+            />
+        : null }
+
+      { this.props.loggedInUserId && this.props.loggedInUserName && this.state.goalDocId  ?
+          <SelectSuggesterSmart
+            loggedInUserName={this.props.loggedInUserName}
+            loggedInUserId={this.props.loggedInUserId}
+            goalDocId={match.params.goaldocid}
+            gotoSelf={this._gotoSelf}
+            setSuggesters={this._setSuggesters}
+            suggesters={suggesters}
             nextSuggester={this._nextSuggester}
             prevSuggester={this._prevSuggester}
+            targetUserName={this.state.targetUserName}
+            targetUserId={this.state.targetUserId}
+            renderTargetUserStepsState={this.state.renderTargetUserSteps}
+            renderTargetUserSteps={this._renderTargetUserSteps}
           />
+        : null
+      }
         </div>
-
-        {
-          match.params.goaldocid || this.state.goalDocId ?
+        { match && match.params.goaldocid || this.state.goalDocId && this.state.suggestersIndex && this.state.suggesters.length   ?
             <CurrentStepsSmart
-              loggedInUserId={this.props.userQuery.user ? this.props.userQuery.user.id : null}
-              targetUser={User.id}
-              goalDocId={match.params.goaldocid || this.state.goalDocId}
+              loggedInUserId={this.props.loggedInUserId}
+              targetUserId={this.state.targetUserId || null}
+              goalDocId={match && match.params.goaldocid || this.state.goalDocId}
               suggestersIndex={this.state.suggestersIndex}
-              selectedSuggesterId={this.state.selectedSuggesterId}
-              selectedSuggesterName={this.state.selectedSuggesterName}
+              selectedSuggesterId={this.state.selectedSuggesterId || null}
+              currentEthereumAccount={this.props.currentEthereumAccount}
+              proxyAddress={this.props.proxyAddress}
+              renderTargetUserSteps={this.state.renderTargetUserSteps}
             />
           : null
         }
-
         <div className="userfeed footer1 container">
-          <TargetUser targetUserName={User.userName || ''}/>
+          {this.state.targetUserName ?
+          <TargetUser targetUserName={this.state.targetUserName || ''}/>
+          : null
+          }
 
           <SelectGoal
-            targetUserId={User.id}
+            targetUserId={this.state.targetUserId}
             setGoalDocId={this._setGoalDocId}
-            value={this.state.goalDocId || match.params.goaldocid}
-            match={match}
+            value={this.state.goalDocId || match.params && match.params.goaldocid}
             setProxyAddress={this.props.setProxyAddress}
           />
         </div>
 
+
         <div className = "userfeed input-goal-container">
-        {this.props.targetUserQuery.User.id === this.props.userQuery.user.id && !this.state.goalDocId ?
+        {this.props.loggedInUserId && this.state.targetUserId
+          && this.state.targetUserId  === this.props.loggedInUserId && !this.state.goalDocId ?
            <InputGoalSmart
-          loggedInUserId = {this.props.userQuery.user.id}
-          _setGoalDocIdOnCreate = {this._setGoalDocIdOnCreate}
-          proxyAddress={this.state.proxyAddress}
-          selectedAccount={window.ethereum.selectedAddress}
-          setProxyAddress={this.props.setProxyAddress}
-          setUserTokenBalance={this.props.setUserTokenBalance}
-          userTokenBalance={this.props.userTokenBalance}
+            loggedInUserId = {this.props.loggedInUserId}
+            _setGoalDocIdOnCreate = {this._setGoalDocIdOnCreate}
+            proxyAddress={this.state.proxyAddress}
+            currentEthereumAccount={window.ethereum.selectedAddress}
+            setProxyAddress={this.props.setProxyAddress}
+            setUserTokenBalance={this.props.setUserTokenBalance}
+            userTokenBalance={this.props.userTokenBalance}
+            currentAccount={this.props.currentEthereumAccount}
+            setGoalDocId={this._setGoalDocId}
+            targetUserId={this.state.targetUserId}
           / >
           : null
         }
         </div>
 
         <div className="userfeed footer2 container">
-          <Link className="globalfeed" to="/">
+          <Link className="globalfeed" to="/globalfeed">
             <span className="fas faGlobe fa-lg"> <FontAwesomeIcon icon={ faGlobe } /> </span>
           </Link>
-
         </div>
       </div>
     )
+    return this.props.loggedInUserId ? renderComponent : renderNull
   }
-// on change bad goaldocid
+
   _setGoalDocId(event) {
     event.preventDefault()
-    //console.log(event.target.value)
+    const {match} = this.props
     const goalDoc = JSON.parse(event.target.value)
-    //console.log(goalDoc)
     goalDoc.newGoal && goalDoc.newGoal === 'new-goal' ? this.setState({goalDocId: ""}) : this.setState({goalDocId: goalDoc.id})
-    goalDoc.proxyAddress ?  this.props.setProxyAddress(goalDoc.proxyAddress) && this.setState({proxyAddress: goalDoc.proxyAddress}) : null
-    goalDoc.newGoal === 'new-goal' ? this.props.history.push(`/userfeed/${this.props.match.params.userid}`)  :
-    this.props.history.push(`/userfeed/${this.props.match.params.userid}/${goalDoc.id}`)
+    goalDoc.proxyAddress ? this.props.setProxyAddress(goalDoc.proxyAddress) && this.setState({proxyAddress: goalDoc.proxyAddress}) : null
+    goalDoc.newGoal === 'new-goal' ? this.props.history.push(`/userfeed/${match.params.userid}`)  :
+    this.props.history.push(`/userfeed/${match.params.userid}/${goalDoc.id}`)
   }
 
- _setGoalDocIdOnCreate(id) {
-   this.props.history.push(`/userfeed/${this.props.match.params.userid}/${id}`)
- }
-
- _setSelf() {
-      this.setState(prevState=> ({suggestersIndex: 0}))
- }
-
- _setSuggesters(suggesters) {
-   // console.log(suggesters)
-   this.setState({suggesters: [...this.state.suggesters, suggesters] })
- }
-
- _nextSuggester() {
-   console.log('suggesters', this.state.suggesters)
-   console.log('suggesters index', this.state.suggestersIndex)
-  if (this.state.suggesters.length && this.state.suggestersIndex < this.state.suggesters.length -1 && this.state.suggesters[1]) {
-    console.log('case1 triggered')
-    this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex + 1}))
-  } else if (this.state.suggestersIndex < this.state.suggesters.length) {
-      console.log('case2 triggered')
-      this.setState(prevState=> ({suggestersIndex: 0}))
+  _setGoalDocIdOnCreate(id) {
+    const {match} = this.props
+    this.setState({goalDocId: id})
+    this.props.history.push(`/userfeed/${match.params.userid}/${id}`)
   }
-  // const selectedSuggesterId = this.state.suggesters[this.state.suggestersIndex].id
-  //  this.setState(prevState => ({selectedSuggesterId: x  }))
-  //  this.setState({suggesterName: y})
- }
 
-  _prevSuggester() {
-    if (this.state.suggesters.length > 0 && this.state.suggesters[1]) {
-      if (this.state.suggestersIndex !== 0) {
-        this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex - 1}))
-      } else if (this.state.suggestersIndex === 0) {
-          this.setState(prevState=> ({suggestersIndex: this.state.suggesters.length -1}))
+  _gotoSelf() {
+    if (!this.state.renderTargetUserSteps) {
+    this.setState(() => ({suggestersIndex: 0}))
     }
   }
-}
+
+  _setSuggesters(suggesters) {
+     // console.log("suggesters param", suggesters)
+     this.setState({suggesters: [...this.state.suggesters, ...suggesters]})
+  }
+
+
+  _nextSuggester() {
+    const {suggesters, suggestersIndex, renderTargetUserSteps} = this.state
+     // console.log("nextSuggester called")
+     // console.log("suggesters = ", Boolean(suggesters))
+     // console.log("suggesters.length= ", Boolean(suggesters.length))
+     // console.log("suggestersIndex < this.state.suggesters.length -1 ", Boolean(suggestersIndex < this.state.suggesters.length -1))
+     // console.log("suggesters[1] = ", Boolean(suggesters[1]))
+     // console.log("suggesters Index", suggestersIndex)
+     // console.log("suggesters", suggesters)
+    if (!renderTargetUserSteps && suggesters && suggesters.length && (suggestersIndex < suggesters.length -1) && suggesters[1]) {
+      // console.log("should advance")
+     this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex + 1}))
+   } else if (suggestersIndex === suggesters.length -1) {
+     // console.log("end or array")
+     this.setState( () => ({suggestersIndex: 0}))
+    }
+  }
+
+  _prevSuggester() {
+    const {suggesters, suggestersIndex, renderTargetUserSteps} = this.state
+    if (!renderTargetUserSteps &&suggesters.length > 0 && suggesters[1]) {
+     if (suggestersIndex !== 0) {
+     this.setState(prevState=> ({suggestersIndex: prevState.suggestersIndex - 1}))
+       } else if (suggestersIndex === 0) {
+         this.setState(() => ({suggestersIndex: suggesters.length -1}))
+      }
+    }
+  }
+
+  _renderTargetUserSteps() {
+    this.setState(prevState => {return ({renderTargetUserSteps: !prevState.renderTargetUserSteps})})
+  }
+
 }
 
-export default compose(
-graphql(userQuery, {name: 'userQuery'}),
-graphql(targetUserQuery, {
-  name: 'targetUserQuery',
-  options: (ownProps) => {
-    // console.log(ownProps.match.params)
-    // console.log(ownProps.match.params.userid)
-    return ({
-      variables: {
-        targetUser: ownProps.match.params.userid
-      }
-    })
-  }
-}))(UserFeedPage)
+
+const _withRouter =  compose(withRouter)(UserFeedPage)
+const withQuery = withApollo(_withRouter)
+export default withQuery
+// export default _withRouter

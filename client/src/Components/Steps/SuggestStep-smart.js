@@ -13,16 +13,6 @@ let ProxiedGoalEscrow
 const GoalZappTokenSystem = new web3.eth.Contract(tokensystem.abi, DeployedAddress.GOALZAPPTOKENSYSTEM )
 // import '../../style/SuggestStep.css'
 
-const clonedStepIdQuery1 = gql `
- query clonedStepIdQuery($id:ID){
-   allClonedSteps(filter: {goalDoc: {id: $id}}, orderBy: positionIndex_ASC) {
-      id
-      positionIndex
-      step
-      suggestedStep
-    }
-  }`
-
 const clonedStepIdQuery   = gql `
 query clonedStepQuery($id: ID) {
   clonedStepsList(filter: {clonedStepsOfGoalDoc: {id: {equals: $id}}}, sort: {positionIndex: ASC}) {
@@ -35,26 +25,8 @@ query clonedStepQuery($id: ID) {
   }
 }
 `
-
-const updateOrCreateClonedStep1 = gql `mutation updateOrCreateClonedStepMutation ($goalDocId: ID, $id: ID!, $positionIndex: Int!, $step: String!, $suggestedStep: Boolean!, $suggesterId: ID!) {
-    updateOrCreateClonedStep(create: {goalDocId: $goalDocId,
-    positionIndex: $positionIndex, suggestedStep: $suggestedStep,
-    step: $step, suggesterId: $suggesterId }, update: {goalDocId: $goalDocId, positionIndex:
-    $positionIndex, id: $id, suggesterId: $suggesterId}) {
-      step
-      id
-      suggester{
-        id
-        userName
-      }
-      goalDoc {
-        id
-      }
-    }}`
-
-const updateClonedStepMutation = gql ` mutation updateClonedStep(
+const updateClonedStep = gql ` mutation updateClonedStep(
   $id: ID!,
-  $step: step
   $suggestedStep: Boolean,
   $positionIndex: Int,
   $stepsId: String,
@@ -74,40 +46,14 @@ const updateClonedStepMutation = gql ` mutation updateClonedStep(
 }
 `
 const createClonedStep = gql `
-mutation createClonedStep($goalDocId: ID, $step: String!, $positionIndex: Int, $suggestedStep: Boolean, $stepsId: String) {
-  clonedStepCreate(data: {step: $step, positionIndex: $positionIndex, suggestedStep: $suggestedStep, stepsId: $stepsId, clonedStepsOfGoalDoc: {connect: {id: $goalDocId}}}) {
+mutation createClonedStep($goalDocId: ID, $step: String!, $positionIndex: Int, $suggestedStep: Boolean, $stepsId: String, $suggester: ID) {
+  clonedStepCreate(data: {step: $step, positionIndex: $positionIndex, suggester: {connect: {id: $suggester}}, suggestedStep: $suggestedStep, stepsId: $stepsId,  clonedStepsOfGoalDoc: {connect: {id: $goalDocId}}}) {
     step
     id
     positionIndex
     stepsId
     }
   }`
-
-const goalDocByIdQuery1 = gql `
-    query RefetchGoalDocByIdQuery ($goalDocId: ID) {
-      GoalDoc(id: $goalDocId) {
-       goal
-       id
-       proxyAddress
-       steps(orderBy:positionIndex_ASC) {
-         step
-         positionIndex
-         suggestedStep
-         id
-       }
-       clonedSteps(orderBy:positionIndex_ASC) {
-         step
-         positionIndex
-         id
-         suggestedStep
-         stepsId
-         suggester {
-           id
-           userName
-         }
-       }
-      }
-    }`;
 
 const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
   goalDoc(id: $goalDocId) {
@@ -149,27 +95,20 @@ class SuggestStepSmart extends Component {
   }
 
   async componentDidMount() {
-    if (!window.ethereum.selectedAddress) {
-      alert('Log into metamask to continue')
-      try {
-        await window.ethereum.enable()
-      }
-      catch (error) {
-        console.log(error)
-      }
-    }
-
     ProxiedGoalEscrow = new web3.eth.Contract(goalescrow.abi, this.props.proxyAddress)
 
-    let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
+    const bondFunds = web3.utils.fromWei((await ProxiedGoalEscrow.methods.bondFunds().call()))
+
+    console.log('bondFunds', bondFunds)
+    let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.currentEthereumAccount).call()
     console.log('userTokenBalance ', userTokenBalance  )
     this.setState({userTokenBalance})
   }
 
   async componentDidUpdate(prevProps) {
-    if (prevProps.selectedAccount !== this. props.selectedAccount) {
-      console.log(this.props.selectedAccount)
-      let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.selectedAccount).call()
+    if (prevProps.currentEthereumAccount !== this. props.currentEthereumAccount) {
+      console.log(this.props.currentEthereumAccount)
+      let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.currentEthereumAccount).call()
       console.log('userTokenBalance ', userTokenBalance  )
       this.setState({userTokenBalance})
     if(this.props.proxyAddress && prevProps.proxyAddress !== this.props.proxyAddress)
@@ -181,7 +120,7 @@ class SuggestStepSmart extends Component {
 
   render() {
 
-    if (this.props.loggedInUserId && this.props.loggedInUserId !== this.props.targetUser) {
+    if (this.props.loggedInUserId && this.props.loggedInUserId !== this.props.targetUserId) {
       return (
         <SuggestStep _submitSuggestedStep={this._submitSuggestedStep}
           handleChange={this.handleChange}
@@ -202,12 +141,10 @@ class SuggestStepSmart extends Component {
 
   async _submitSuggestedStep(event) {
     event.preventDefault()
-    let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
+    let userTokenBalance = await GoalZappTokenSystem.methods.balanceOf(this.props.currentEthereumAccount).call()
     // console.log(this._reorderSteps(this.props.clonedStepIdQuery))
     if (this.props.loggedInUserId && userTokenBalance > 0) {
       let suggesterBond = window.prompt("Enter amout of tokens you'd like to send as bond to your suggestion. Upon resolution of your suggestion, this amount will become fully sendable and tradable without restriction.")
-      console.log(userTokenBalance)
-      console.log(typeof suggesterBond)
       if (suggesterBond <= 0) {
         return
       }
@@ -215,12 +152,12 @@ class SuggestStepSmart extends Component {
         alert("you don't own that many tokens in this address... you'll either need to buy more or transfer some in who's restriction has been lifted")
         return
       }
-    let approveReceipt = await GoalZappTokenSystem.methods.approve(this.props.proxyAddress, web3.utils.toWei(suggesterBond)).send({from:window.ethereum.selectedAddress})
+    let approveReceipt = await GoalZappTokenSystem.methods.approve(this.props.proxyAddress, web3.utils.toWei(suggesterBond)).send({from:this.props.currentEthereumAccount})
     .on('error', error  => console.log(error))
     if (approveReceipt === 'Error' || false) {
       return
     }
-    let depositOnSuggestReceipt =  await ProxiedGoalEscrow.methods.depositOnSuggestTestVersion(web3.utils.toHex(this.props.goalDocId), web3.utils.toWei(suggesterBond), this.props.proxyAddress).send({from:window.ethereum.selectedAddress})
+    let depositOnSuggestReceipt =  await ProxiedGoalEscrow.methods.depositOnSuggest(web3.utils.toHex(this.props.goalDocId), web3.utils.toWei(suggesterBond)).send({from:this.props.currentEthereumAccount})
       .on("receipt", receipt => console.log(receipt))
       .on("error", (error, receipt) => console.log(error))
       if (depositOnSuggestReceipt === "Error" || false) {
@@ -238,10 +175,8 @@ class SuggestStepSmart extends Component {
   }
 
   _reorderSteps(queryResult) {
-    const {loading, error, allClonedSteps} = queryResult
+    const {loading, error, clonedStepsList} = queryResult
     if (!loading) {
-      // console.log('query result', allClonedSteps)
-      // console.log(allSteps)
       const newStep = {
         step: this.state.step,
         suggestedStep: true,
@@ -249,9 +184,12 @@ class SuggestStepSmart extends Component {
         positionIndex: null
       }
       const stepIndex = this.props.stepIndex
-      // console.log(stepIndex)
-      const newSteps = allClonedSteps.slice()
+
+      const newSteps = clonedStepsList.items.slice()
+
       newSteps.splice(stepIndex, 0, newStep )
+      // newSteps.sort((a,b) => a.positionIndex - b.positionIndex)
+
       return newSteps.map((stepObj, index) => ({
         ...stepObj,
         positionIndex: index
@@ -260,25 +198,27 @@ class SuggestStepSmart extends Component {
   }
 
   _submitSuggestedStepMutation = async (newClonedStepsSortedByPositionIndex) => {
-    // console.log(newClonedStepsSortedByPositionIndex)
+    console.log('newClonedStepsSortedByPositionIndex', newClonedStepsSortedByPositionIndex)
     newClonedStepsSortedByPositionIndex.map(async (stepObj, mapIndex, array) => {
-      let id
-      if (stepObj.id) {
-        id = stepObj.id
-      } else {
-        id = "x"
-      }
-      const suggestStepResult = await this.props.updateOrCreateClonedStep({
+    if (stepObj.id) {
+      const updatedClonedStepResult = await this.props.updateClonedStep({
         variables: {
-          goalDocId: this.props.goalDocId,
-          id: id,
+          id: stepObj.id,
           positionIndex: stepObj.positionIndex,
-          suggestedStep: stepObj.suggestedStep,
-          step: stepObj.step,
-          suggesterId: this.props.loggedInUserId
         }
       })
-      // console.log(suggestStepResult)
+    } else {
+      const createdClonedStepResult = await this.props.createClonedStep({
+        variables: {
+          step: stepObj.step,
+          suggestedStep: stepObj.suggestedStep,
+          goalDocId: this.props.goalDocId,
+          positionIndex: stepObj.positionIndex,
+          stepsId: stepObj.stepsId,
+          suggester: this.props.loggedInUserId
+        }
+      })
+    }
     })
   }
 
@@ -294,6 +234,38 @@ export default compose(
       fetchPolicy: 'network-only'
     })
   }),
+graphql(updateClonedStep, {
+  name: 'updateClonedStep',
+  props: ({updateClonedStep}) => ({
+    updateClonedStep({variables}) {
+      return updateClonedStep({
+        variables: {
+          ...variables
+        },
+        refetchQueries: ['goalDocByIdQuery'],
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+  })
+}),
+graphql(createClonedStep, {
+  name: 'createClonedStep',
+  props: ({createClonedStep}) => ({
+    createClonedStep({variables}) {
+      return createClonedStep({
+        variables: {
+          ...variables
+        },
+        refetchQueries: ['goalDocByIdQuery'],
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
+  })
+})
+
+
 //   graphql(updateOrCreateClonedStep, {
 //   name: 'updateOrCreateClonedStep',
 //   props: ({updateOrCreateClonedStep}) => ({

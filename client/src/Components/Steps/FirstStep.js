@@ -6,7 +6,7 @@ const FirstStep = (props) => {
 
 
 const addStep = <AddStepSmart stepIndex={0} goalDocId={props.goalDocId} unrenderAddStepFunction={props.unrenderAddFirstStep}  />
-const link =  <a onClick={props.showAddStep}>Enter a step to get started... </a>
+const link =  <a onClick={props.showAddStep}>Click here, enter step... </a>
 
   return  (
     <div className="first-step-container">

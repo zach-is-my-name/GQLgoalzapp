@@ -2,7 +2,7 @@ import React from 'react';
 import { withAuth } from '@8base/react-sdk';
 import { Query, graphql, compose, withApollo } from 'react-apollo';
 import gql from 'graphql-tag';
-
+import '../../style/AuthButton.css'
 const CURRENT_USER_QUERY = gql`
   query {
     user {
@@ -15,6 +15,7 @@ const CURRENT_USER_QUERY = gql`
 `;
 
 class AuthButton extends React.Component {
+
   renderContent = ({ loading }) => {
     const { auth, client } = this.props;
 

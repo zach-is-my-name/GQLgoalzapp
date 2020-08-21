@@ -1,6 +1,7 @@
-.menu-button {
-  display: inline-block;
-  /*border: solid 1px black;*/
+.menu-button.user {
+  position: absolute;
+  right: 50px;
+  top: 75px;
 }
 
 .menu-button-user-button {
@@ -14,10 +15,14 @@
   text-align: left;
   font: 13.333px Arial;
   cursor: pointer;
+  user-select: none;
+  padding: 5px;
 }
 
 .menu-button-menu {
-  position: absolute;
+  /* margin-top: 20px; */
+  /* position: relative;
+  right: 41px; */
 }
 
 .menuitem-userfeed {
@@ -28,4 +33,9 @@
 .menuitem-logout {
   cursor: pointer;
   text-decoration: underline;
+}
+
+.menu-button.user .menu-button-menu{
+  position: absolute;
+  right: -20px;
 }

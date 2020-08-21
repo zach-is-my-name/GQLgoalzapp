@@ -51,7 +51,6 @@ class BuyTokens extends React.Component  {
       let result = await GoalZappTokenSystem.methods.buy().send({from: window.ethereum.selectedAddress, value: Web3.utils.toWei(etherToSend) })
       console.log(result)
       let tokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
-      this.props.setUserTokenBalance(tokenBalance)
     } else {
       alert("Not enough ether to buy tokens")
     }
@@ -179,13 +178,10 @@ class BuyTokens extends React.Component  {
 
 
   async componentDidMount() {
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' })
     selectedAddress = window.ethereum.selectedAddress;
     try {
-    const accounts = await window.ethereum.enable()
-    etherBalanceFromWei = web3.utils.fromWei(await web3.eth.getBalance(selectedAddress))
-    // You now have an array of accounts!
-    // Currently only ever one:
-    // ['0xFDEa65C8e26263F6d9A1B5de9555D2931A33b825']
+    etherBalanceFromWei = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]))
   } catch (error) {
     // Handle error. Likely the user rejected the login
     console.error(error)

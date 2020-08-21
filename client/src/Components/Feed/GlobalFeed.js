@@ -9,36 +9,43 @@ import '../../style/GlobalFeed.css'
 
 const GlobalFeed = ({
   entries = [],
-  loggedInUserId
+  ...props
 }) => {
-
   if (entries && entries.length) {
     return (
       <div className="globalfeed-container">
         {
           entries.map((entry, index) => (
             entry ?
-            <FeedEntry key={entry.goal + `${index}` } entry={entry}/>
+            <FeedEntry key={entry.id } entry={entry}/>
               : null))
         }
+        {props.loggedInUser && props.loggedInUserId ?
         <div className="globalfeed-user-icon">
-          <Link to={`/userfeed/${loggedInUserId}`}>
+          <Link to={`/userfeed/$/props.loggedInUserId}`}>
             <span className="far faUser fa-lg">
               <FontAwesomeIcon icon={faUser}/>
             </span>
           </Link>
         </div>
+      : null
+    }
       </div>
-    )} else {
+    )}
+    else {
+
         return (
       <div className="globalfeed-container">
+        { props.loggedInUserId ?
         <div className="globalfeed-user-icon">
-          <Link to={`/userfeed/${loggedInUserId}`}>
+          <Link to={`/userfeed/${props.loggedInUserId}`}>
             <span className="far faUser fa-lg">
               <FontAwesomeIcon icon={faUser}/>
             </span>
           </Link>
         </div>
+      : null
+        }
         </div>
       )
           }

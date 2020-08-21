@@ -5,29 +5,16 @@ import gql from 'graphql-tag';
 import * as actions  from '../../Actions/actions.js'
 
 
-const updateClonedStepMutation1 = gql `
-  mutation SuggestRemoveClonedStepMutation( $id: ID!) {
-    updateClonedStep(id: $id, suggestedStep: true, suggestRemove: true) {
-      id
-      step
-      suggestedStep
-      suggestRemove
-    }
-  }`
 
 const updateClonedStepMutation = gql ` mutation updateClonedStep(
   $id: ID!,
-  $step: step
-  $suggestedStep: Boolean,
-  $positionIndex: Int,
-  $stepsId: String,
+  $suggesterId: ID
 ) {
   clonedStepUpdate(data: {
     id: $id,
-    positionIndex: $positionIndex,
-    stepsId: $stepsId,
-    suggestedStep: $suggestedStep,
+    suggestedStep: true,
     suggestRemove: true
+    suggester: {connect: {id: $suggesterId}}
   }) {
     id
     positionIndex
@@ -37,6 +24,32 @@ const updateClonedStepMutation = gql ` mutation updateClonedStep(
   }
 }
 `
+const goalDocByIdQuery = gql `query GoalDocByIdQuery ($goalDocId: ID) {
+  goalDoc(id: $goalDocId) {
+   goal
+   id
+   steps(orderBy:positionIndex_ASC) {
+     items {
+     step
+     positionIndex
+     suggestedStep
+     id
+    }}
+   clonedSteps(orderBy:positionIndex_ASC) {
+     items {
+     positionIndex
+     id
+     suggestedStep
+     stepsId
+     suggestRemove
+     suggester {
+       id
+       userName
+     }
+    }
+   }
+  }
+}`
 
 // const suggestRemoveStep = gql `mutation suggestRemoveStepMutation($id: ID!) {
 //   deleteClonedStep(id: $id) {
@@ -50,27 +63,24 @@ class SuggestRemoveStep extends Component {
     this._suggestRemoveStep = this._suggestRemoveStep.bind(this)
   }
 
-componentDidMount() {
-    this.props.unrenderSuggestRemoveStepFunction()
-}
-
+  componentDidMount() {
+      this.props.unrenderSuggestRemoveStepFunction()
+  }
 
   render() {
-    // console.log('SuggestRemove Rendered')
-    console.log(this.props)
-    if (this.props.loggedInUserId && this.props.loggedInUserId !== this.props.targetUser) {
+    if (this.props.loggedInUserId && this.props.loggedInUserId !== this.props.targetUserId) {
       this._suggestRemoveStep()
-    } else if (!this.props.loggedInUser) {
-      // TODO check if user owns clonedSteps; prompt log-in or create user;  if true, resolve action; if false, onboard and give fresh clonedSteps
-      return null
     }
     return null
-  }
+    }
 
 _suggestRemoveStep() {
     console.log('SuggestRemoveStep called')
     this.props.updateClonedStep({variables: {
-      id: this.props.stepObj.id
+      id: this.props.stepObj.id,
+      suggesterId: this.props.loggedInUserId,
+      suggestedStep: true,
+      suggestRemove: true
     }})
 }
 }
@@ -82,7 +92,7 @@ const WithData = graphql(updateClonedStepMutation, {
       return mutate({
         variables: {
           ...variables
-        }
+        }, refetchQueries: ['goalDocByIdQuery ']
       }).catch((error) => {
         console.error(error)
       })

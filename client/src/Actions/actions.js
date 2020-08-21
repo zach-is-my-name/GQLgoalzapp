@@ -13,6 +13,7 @@ export const setGoalDocID = goalDocID => ({type: SET_GOALDOC_ID, goalDocID});
 
 export const SET_GOALDOC = 'SET_GOALDOC'
 export const setGoalDoc = goalDoc => {
+  console.log("actions/setGoalDoc() called")
   const {goal, id, steps, suggestedSteps, clonedSteps} = goalDoc
   let flatSteps = steps.map((stepObj) => {
   return  ({
@@ -202,6 +203,7 @@ export const moveStepOnClone = (newStepOrder) => {
 
 export const CLONE_CURRENT_STEPS = 'CLONE_CURRENT_STEPS'
 export const cloneCurrentSteps = (steps) => {
+  console.log("actions/cloneCurrentSteps() called")
   // console.log('cloneCurrentSteps', steps)
   let flatSteps = steps.map(step =>  ({step: step.step, suggestedStep: false, positionIndex: step.positionIndex, id: null, stepsId: step.stepsId}))
   // console.log('actions/flatSteps', flatSteps)
@@ -211,6 +213,7 @@ export const cloneCurrentSteps = (steps) => {
 
 export const SET_CLONED_STEPS_FROM_SERVER = 'SET_CLONED_STEPS_FROM_SERVER'
 export const setClonedStepsFromServer = clonedSteps => {
+    console.log("actions/setClonedStepsFromServer() called")
     let flatSteps = clonedSteps.map(clonedStepObj => ({step: clonedStepObj.step, suggestedStep: clonedStepObj.suggestedStep, positionIndex: clonedStepObj.positionIndex, stepsId: clonedStepObj.stepsId,
       suggester: clonedStepObj.suggester.userName,
       id:clonedStepObj.id}))

@@ -4,7 +4,8 @@ import React from 'react';
 import {SortableContainer} from 'react-sortable-hoc';
 import OwnStep from './OwnStep.js'
 
-export const OwnSteps = SortableContainer(({goalDocId,
+export const OwnSteps = SortableContainer(
+  ({goalDocId,
   toggleSuggestedSteps,
   currentGoalSteps,
   currentGoalClonedSteps,
@@ -12,14 +13,14 @@ export const OwnSteps = SortableContainer(({goalDocId,
   oldIndex,
   indexInMotion,
   randomColorStep,
-  targetUser,
+  targetUserId,
   loggedInUserId,
   renderRemoveStepState,
   unrenderRemoveStepFunct,
   getArr,
   selectedSuggesterId,
   proxyAddress,
-  selectedAccount
+  currentEthereumAccount
  }) => {
 
     if (selectedSuggesterId !== loggedInUserId) {
@@ -39,10 +40,10 @@ export const OwnSteps = SortableContainer(({goalDocId,
                 goalDocId={goalDocId}
                 toggleSuggestedSteps={toggleSuggestedSteps}
                 currentGoalClonedSteps={currentGoalClonedSteps}
-                targetUser={targetUser}
+                targetUserId={targetUserId}
                 loggedInUserId={loggedInUserId}
                 proxyAddress={proxyAddress}
-                selectedAccount={selectedAccount}
+                currentEthereumAccount={currentEthereumAccount}
               />
             )}
           </ul>
@@ -63,11 +64,11 @@ export const OwnSteps = SortableContainer(({goalDocId,
                     goalDocId={goalDocId}
                     toggleSuggestedSteps={toggleSuggestedSteps}
                     currentGoalSteps={currentGoalSteps}
-                    targetUser={targetUser}
+                    targetUserId={targetUserId}
                     loggedInUserId={loggedInUserId}
                     selectedSuggesterId={selectedSuggesterId}
                     proxyAddress={proxyAddress}
-                    selectedAccount={selectedAccount}
+                    currentEthereumAccount={currentEthereumAccount}
                   />
                 )}
               </ul>
