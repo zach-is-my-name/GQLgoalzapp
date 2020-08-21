@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import '../../../style/SelectGoalForm.css'
 import {withRouter} from 'react-router-dom'
 class SelectGoalForm extends Component {
-
   componentDidMount() {
       let selectedGoalDoc = this.props.goalDocs.goalDocsList.items.find(element => element.id === this.props.value)
       selectedGoalDoc && selectedGoalDoc.proxyAddress ? this.props.setProxyAddress(selectedGoalDoc.proxyAddress, !!this.props.match.params.goaldocid) : null
@@ -15,11 +14,17 @@ class SelectGoalForm extends Component {
 componentDidUpdate(prevProps) {
   if (prevProps.goalDocs !== this.props.goalDocs) {
       let selectedGoalDoc = this.props.goalDocs.goalDocsList.items.find(element => element.id === this.props.value)
+        // shortcut for manipulating form "value"
+      if (prevProps.targetUserId !== this.props.targetUserId && !selectedGoalDoc) {
+          this.props.clearGoalDoc()
+          this.props.setProxyAddress("")
+      }
       selectedGoalDoc && selectedGoalDoc.proxyAddress ? this.props.setProxyAddress(selectedGoalDoc.proxyAddress) : null
   }
   if (prevProps.value !== this.props.value && this.props.value === undefined) {
     this.props.setProxyAddress("")
   }
+
 }
 
   render() {

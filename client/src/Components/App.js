@@ -12,7 +12,6 @@ import {connect} from 'react-redux'
 import WelcomePage from '../Routes/WelcomePage'
 import UserFeedPage from '../Routes/UserFeedPage-smart'
 import GlobalFeedPage from '../Routes/GlobalFeedPage'
-import decode from 'jwt-decode';
 import CurrentUser from './User/CurrentUser'
 import * as actions from '../Actions/actions'
 import {Link} from 'react-router-dom';
@@ -66,7 +65,7 @@ export class App extends React.PureComponent {
       bondsAmount: null,
       userTokenBalance: null,
       hasProvider: false,
-      currentAccount: "",
+      currentEthereumAccount: "",
       loggedInUserId: "",
       loggedInUserName:""
     }
@@ -74,15 +73,14 @@ export class App extends React.PureComponent {
     async handleAccountsChanged  (accounts) {
       if (accounts.length === 0) {
         console.log('Please connect to MetaMask.');
-      } else if (accounts[0] !== this.state.currentAccount) {
-          this.setState({currentAccount: accounts[0]})
+      } else if (accounts[0] !== this.state.currentEthereumAccount) {
+          this.setState({currentEthereumAccount: accounts[0]})
         }
       }
 
   async componentDidMount() {
     // try {
     const userQueryResult = await this.props.client.query({query: userQuery , fetchPolicy: 'network-only', errorPolicy: 'all'})
-    console.log('userQueryResult' , userQueryResult )
   // } catch (error) {console.log(error)}
     if (userQueryResult.data.user && !this.state.loggedInUserId) {
     this.setState({loggedInUserId: userQueryResult.data.user.id, loggedInUserName: userQueryResult.data.user.userName || ''})
@@ -96,8 +94,8 @@ export class App extends React.PureComponent {
 
 
 
-    if (this.state.currentAccount) {
-      const tokenBalance = web3.utils.fromWei((await GoalZappTokenSystem.methods.balanceOf(this.state.currentAccount).call()))
+    if (this.state.currentEthereumAccount) {
+      const tokenBalance = web3.utils.fromWei((await GoalZappTokenSystem.methods.balanceOf(this.state.currentEthereumAccount).call()))
       this.setState(({userTokenBalance: tokenBalance}))
     }
 
@@ -113,8 +111,8 @@ export class App extends React.PureComponent {
         console.log('state',this.state)
         if (accounts.length === 0) {
           console.log('Please connect to MetaMask.');
-        } else if (accounts[0] !== this.state.currentAccount) {
-            this.setState({currentAccount: accounts[0]})
+        } else if (accounts[0] !== this.state.currentEthereumAccount) {
+            this.setState({currentEthereumAccount: accounts[0]})
         }
       }
 
@@ -131,8 +129,8 @@ export class App extends React.PureComponent {
           alert('Please install MetaMask!');
        }
     }
-    if (this.state.currentAccount !== prevState.currentAccount) {
-      const tokenBalance = web3.utils.fromWei((await GoalZappTokenSystem.methods.balanceOf(this.state.currentAccount).call()))
+    if (this.state.currentEthereumAccount !== prevState.currentEthereumAccount) {
+      const tokenBalance = web3.utils.fromWei((await GoalZappTokenSystem.methods.balanceOf(this.state.currentEthereumAccount).call()))
       this.setState(({userTokenBalance: tokenBalance}))
     }
   }
@@ -159,12 +157,15 @@ export class App extends React.PureComponent {
 
       { this.state.loggedInUserId ?
       <MenuButton
-      currentUser={this.state.loggedInUserName ? this.state.loggedInUserName : 'anonymous'}
-      currentUserId={this.state.loggedInUserId}
+      loggedInUserName={this.state.loggedInUserName ? this.state.loggedInUserName : 'anonymous'}
+      loggedInUserId={this.state.loggedInUserId}
       />  : null
       }
 
+    {this.state.loggedInUserId ?
     <UserTokenFunds userTokenBalance = {this.state.userTokenBalance} / >
+    : null
+    }
 
     {this.state.proxyAddress ?
         <ContractRewardsFunds
@@ -188,15 +189,19 @@ export class App extends React.PureComponent {
           setUserTokenBalance = {this.setUserTokenBalance}
           setRewardsAmount = {this.setRewardsAmount}
           setBondsAmount = {this.setBondsAmount}
-          currentEthereumAccount = {this.state.currentAccount}
+          currentEthereumAccount = {this.state.currentEthereumAccount}
           proxyAddress = {this.state.proxyAddress}
         />
           : null}
 
+      {this.state.loggedInUserId ?
       <TokensMenuButton
         userTokenBalance = {this.state.userTokenBalance}
         setUserTokenBalance = {this.setUserTokenBalance}
+        currentEthereumAccount={this.state.currentEthereumAccount}
        />
+       : null}
+
       <Switch>
       <Route exact path="/auth/" component={AuthContainer} />
       <Route path="/auth/callback" component={CallbackContainer} />
@@ -216,7 +221,7 @@ export class App extends React.PureComponent {
             {...props}
             {...this.props}
             proxyAddress = {this.state.proxyAddress}
-            currentEthereumAccount={this.state.currentAccount}
+            currentEthereumAccount={this.state.currentEthereumAccount}
             loggedInUserId = {this.state.loggedInUserId}
             loggedInUserName ={this.state.loggedInUserName}
             />
@@ -239,7 +244,7 @@ export class App extends React.PureComponent {
             {...this.props}
             proxyAddress = {this.state.proxyAddress}
             urlHasGoalDoc = {this.state.urlHasGoalDoc}
-            currentEthereumAccount={this.state.currentAccount}
+            currentEthereumAccount={this.state.currentEthereumAccount}
             loggedInUserId = {this.state.loggedInUserId}
             loggedInUserName ={this.state.loggedInUserName}
         />

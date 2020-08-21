@@ -50,7 +50,9 @@ class BuyTokens extends React.Component  {
       etherToSend = etherToSend.toString()
       let result = await GoalZappTokenSystem.methods.buy().send({from: window.ethereum.selectedAddress, value: Web3.utils.toWei(etherToSend) })
       console.log(result)
-      let tokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
+      let tokenBalance = web3.utils.fromWei(await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call())
+      this.props.setUserTokenBalance(tokenBalance)
+
     } else {
       alert("Not enough ether to buy tokens")
     }

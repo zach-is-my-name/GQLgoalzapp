@@ -35,7 +35,6 @@ class SelectSuggesterSmart extends Component {
     }
   })
 
-      console.log(suggesterQueryResult)
       if (suggesterQueryResult.data.goalDoc)  {
       const { data: { goalDoc: { clonedSteps: { items: clonedSteps } } } }  = suggesterQueryResult
       // let arrGoalDocSuggesters = []

@@ -4,6 +4,11 @@
 a:link {
   text-decoration: none;
 }
+
+*:focus {
+    outline: none;
+}
+
 @font-face {
     font-family: 'bentonreg';
     src: url('./fonts/bentonsans_regular-webfont.woff2') format('woff2'),
@@ -96,7 +101,7 @@ h1 {
 /*.logout-button {
   margin-left: 1em;
   color: #222;
-  font-weight: 600;
+  font-weight: 600;j
   border: solid #222 2px;
   border-radius: 5px;
   background-color: #83ffcd;
@@ -109,8 +114,16 @@ h1 {
 
 .menu-button .token {
   position: absolute;
+  top: 400px;
   right: 50px;
-  top: 219px;
+
+}
+
+
+.userTokenFunds {
+  position: absolute;
+  right: 50px;
+  top: 140px;
 }
 
 .menu-button-menu .token {
@@ -119,22 +132,16 @@ h1 {
   top: 247px;
 }
 
-.userTokenFunds {
-  position: absolute;
-  right: 61px;
-  top: 140px;
-}
-
 .menu-button.token .menu-button-menu {
   /* position: absolute; */
   right: 40px;
-  top: 250px;
+  top: 440px;
 }
 
 .menu-button-user-button.fund {
   position: absolute;
-  top: 400px;
   right: 50px;
+  top: 219px;
 }
 
 .bond-rewards {
@@ -147,4 +154,13 @@ h1 {
   position: absolute;
   top: 300px;
   right: 50px;
+}
+
+button.button-yes {
+  margin-left: 500px;
+  margin-right: 10px;
+}
+button.button-no {
+  margin-left: 10px;
+  margin-right: 500px;
 }

@@ -1,3 +1,29 @@
-input {
+/* input {
   width: 50%;
+} */
+
+
+.Sell-tokens-confirmPrompt {
+  width: 25px;
+}
+
+.Buy-tokens-confirmPrompt {
+  width: 25px;
+}
+
+button.button-yes {
+  margin: 0px 0px 0px 0px;
+}
+
+button.button-no {
+  margin:0px 0px 0px 0px;
+}
+
+
+#root > div > div > div.menu-button.token > div > ul > div:nth-child(2) > div > div > form > input[type=text]:nth-child(1) {
+  width: 50px;
+}
+
+#root > div > div > div.menu-button.token > div > ul > div:nth-child(1) > div > div > form > input[type=text]:nth-child(1) {
+  width: 50px;
 }

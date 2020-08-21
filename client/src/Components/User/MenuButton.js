@@ -22,12 +22,12 @@ handleSelection(value, event) {
       <div className={`menu-button ${user}`}>
       <Wrapper className="menu-button" onSelection={this.handleSelection}>
         <Button className="menu-button-user-button">
-          {this.props.currentUser}
+          {this.props.loggedInUserName}
         </Button>
         <Menu className="menu-button-menu">
           <ul>
             <MenuItem className="menuitem-userfeed">
-              <Link  className="menuitem-userfeed"to={`/userfeed/${this.props.currentUserId}`}>{this.props.currentUser}</Link>
+              <Link  className="menuitem-userfeed"to={`/userfeed/${this.props.loggedInUserId}`}>{this.props.loggedInUserName}</Link>
             </MenuItem>
             <MenuItem className="menuitem-logout">
               <li onClick={async () => {

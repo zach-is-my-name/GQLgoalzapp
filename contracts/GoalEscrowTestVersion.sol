@@ -44,6 +44,7 @@ contract GoalEscrowTestVersion is GoalOwnerRole {
   uint256 public bondFunds;
   uint256 public rewardAmount;
   uint256 public ownerBondAmount; 
+  uint256 public suggestionDuration;
     
   
   ERC20 public token;

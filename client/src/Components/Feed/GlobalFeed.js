@@ -20,9 +20,9 @@ const GlobalFeed = ({
             <FeedEntry key={entry.id } entry={entry}/>
               : null))
         }
-        {props.loggedInUser && props.loggedInUserId ?
+        {props.loggedInUserId ?
         <div className="globalfeed-user-icon">
-          <Link to={`/userfeed/$/props.loggedInUserId}`}>
+          <Link to={`/userfeed/${props.loggedInUserId}`}>
             <span className="far faUser fa-lg">
               <FontAwesomeIcon icon={faUser}/>
             </span>

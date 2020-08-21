@@ -8,7 +8,8 @@ var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 const BN = require("bn.js")
 let accounts = web3.eth.getAccounts()
 let selectedAddress;
-let etherBalanceFromWei;
+let tokenBalanceInWei;
+let protectedTokens
 // console.log(goalzapptokensystem)
 // console.log(window)
 const GoalZappTokenSystem = new web3.eth.Contract(goalzapptokensystem.abi, DeployedAddress.GOALZAPPTOKENSYSTEM )
@@ -42,18 +43,24 @@ class SellTokens extends React.Component  {
 }
 
 
-  async SellTokens(event, etherToSend) {
-    console.log('SellTokens() arg etherToSend', etherToSend)
-    console.log('typeof etherToSend', typeof etherToSend)
+  async SellTokens(event, amount) {
+    console.log('SellTokens() arg amount', amount)
+    console.log('typeof amount', typeof amount)
     //event.preventDefault()
-    if (etherBalanceFromWei > etherToSend) {
-      etherToSend = etherToSend.toString()
-      let result = await GoalZappTokenSystem.methods.Sell().send({from: window.ethereum.selectedAddress, value: Web3.utils.toWei(etherToSend) })
-      console.log(result)
-      let tokenBalance = await GoalZappTokenSystem.methods.balanceOf(window.ethereum.selectedAddress).call()
-      this.props.setUserTokenBalance(tokenBalance)
+    amount =  web3.utils.toWei(amount)
+    if (tokenBalanceInWei < amount) {
+      alert("Amount Entered exceeds available tokens")
+      return
+    }
+   if (tokenBalanceInWei < protectedTokens) {
+      alert("Amount Entered exceeds amount of tokens under protection.  Check time until protection lifts")
+      return
     } else {
-      alert("Not enough ether to Sell tokens")
+      amount = amount.toString()
+      let result = await GoalZappTokenSystem.methods.sell(amount).send({from: this.props.currentEthereumAccount })
+      console.log(result)
+      let tokenBalance = web3.utils.fromWei(await GoalZappTokenSystem.methods.balanceOf(this.props.currentEthereumAccount).call())
+      this.props.setUserTokenBalance(tokenBalance)
     }
   }
 
@@ -185,10 +192,10 @@ class SellTokens extends React.Component  {
 
 
   async componentDidMount() {
-    selectedAddress = window.ethereum.selectedAddress;
+    console.log(this.props.currentEthereumAccount)
     try {
-    const accounts = await window.ethereum.enable()
-    etherBalanceFromWei = web3.utils.fromWei(await web3.eth.getBalance(selectedAddress))
+    tokenBalanceInWei = await GoalZappTokenSystem.methods.balanceOf(this.props.currentEthereumAccount).call()
+    protectedTokens = await GoalZappTokenSystem.methods.amountProtected(this.props.currentEthereumAccount).call()
     // You now have an array of accounts!
     // Currently only ever one:
     // ['0xFDEa65C8e26263F6d9A1B5de9555D2931A33b825']

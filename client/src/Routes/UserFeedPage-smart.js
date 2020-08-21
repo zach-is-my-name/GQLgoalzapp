@@ -60,6 +60,7 @@ class UserFeedPage extends Component {
               {
                 suggesters: [...self, ...state.suggesters],
                 targetUserName: targetUserName,
+                targetUserId: targetUserId
               }
             )
           })
@@ -73,9 +74,8 @@ class UserFeedPage extends Component {
       const targetUserId = targetUserResult.data.user.id
       const targetUserName = targetUserResult.data.user.userName
       if (this.props.loggedInUserId && targetUserId && targetUserName) {
-        this._setSelf(targetUserId,targetUserName)
+        this._setSelf(targetUserId, targetUserName)
 
-         console.log("urlMatchGoalDocId ",urlMatchGoalDocId )
 
         if (typeof urlMatchGoalDocId === "string") {
           if (urlMatchGoalDocId.length > 25 || urlMatchGoalDocId.length < 25){
@@ -89,11 +89,17 @@ class UserFeedPage extends Component {
       urlMatchUserId ? this.setState({paramUserId: urlMatchUserId}): this.props.history.push('/')
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if (this.state.suggesters.length && this.state.suggesters !== prevState.suggesters  || this.state.suggestersIndex !== prevState.suggestersIndex ) {
       this.setState((state) => {return ({selectedSuggesterId: state.suggesters[state.suggestersIndex].id})})
     }
-
+    if (this.props.match.params.userid !== prevProps.match.params.userid) {
+      const targetUserResult  = await this.props.client.query({query: targetUserQuery, fetchPolicy: 'network-only', variables: {targetUserId: this.props.match.params.userid}})
+      const targetUserId = targetUserResult.data.user.id
+      const targetUserName = targetUserResult.data.user.userName
+      this.setState({targetUserName: targetUserName, targetUserId: targetUserId})
+      this.props.targetUserId === this.props.loggedInUserId ? this.props.renderFundGoal(): null
+    }
   }
   render() {
     const {match} = this.props
@@ -155,8 +161,9 @@ class UserFeedPage extends Component {
           <SelectGoal
             targetUserId={this.state.targetUserId}
             setGoalDocId={this._setGoalDocId}
-            value={this.state.goalDocId || match.params && match.params.goaldocid}
+            value={ match.params && match.params.goaldocid || this.state.goalDocId}
             setProxyAddress={this.props.setProxyAddress}
+            clearGoalDoc={this._clearGoalDoc}
           />
         </div>
 
@@ -194,10 +201,15 @@ class UserFeedPage extends Component {
     event.preventDefault()
     const {match} = this.props
     const goalDoc = JSON.parse(event.target.value)
+    console.log("goalDoc", goalDoc)
     goalDoc.newGoal && goalDoc.newGoal === 'new-goal' ? this.setState({goalDocId: ""}) : this.setState({goalDocId: goalDoc.id})
     goalDoc.proxyAddress ? this.props.setProxyAddress(goalDoc.proxyAddress) && this.setState({proxyAddress: goalDoc.proxyAddress}) : null
     goalDoc.newGoal === 'new-goal' ? this.props.history.push(`/userfeed/${match.params.userid}`)  :
     this.props.history.push(`/userfeed/${match.params.userid}/${goalDoc.id}`)
+  }
+
+  _clearGoalDoc = () => {
+    this.setState({goalDocId: ""})
   }
 
   _setGoalDocIdOnCreate(id) {

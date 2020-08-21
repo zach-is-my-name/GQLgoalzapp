@@ -80,7 +80,7 @@ async fundGoal() {
         alert('try again with a whole number, greater than 0')
         bondFunds = window.prompt("Amount of ZAPP tokens you'd like to add to this goal's bond pool")
         bondFunds = parseFloat(bondFunds, 10)
-      }  
+      }
 
 
       let totalToSend = rewardFunds + bondFunds
@@ -90,7 +90,9 @@ async fundGoal() {
       console.log('typeof totalToSend', typeof totalToSend)
       const approvalReciept = await GoalZappTokenSystem.methods.approve(this.props.proxyAddress, web3.utils.toWei(totalToSend)).send({from:this.props.currentEthereumAccount})
       console.log("approvalReciept", approvalReciept)
-       const fundReciept = await ProxiedGoalEscrow.methods.fundEscrow(web3.utils.toWei(bondFunds), web3.utils.toWei(rewardFunds)).send({from: this.props.currentEthereumAccount})
+      bondFunds = bondFunds.toString()
+      rewardFunds = rewardFunds.toString()
+      const fundReciept = await ProxiedGoalEscrow.methods.fundEscrow(web3.utils.toWei(bondFunds), web3.utils.toWei(rewardFunds)).send({from: this.props.currentEthereumAccount})
       console.log("fundReciept",fundReciept)
       const bondsAmount = await ProxiedGoalEscrow.methods.bondFunds().call()
       console.log(bondsAmount.toString())

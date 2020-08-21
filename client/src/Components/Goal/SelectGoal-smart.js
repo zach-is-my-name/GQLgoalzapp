@@ -55,6 +55,8 @@ class SelectGoalSmart extends React.Component {
           value={this.props.value}
           handleChange={this.props.setGoalDocId}
           setProxyAddress={this.props.setProxyAddress}
+          clearGoalDoc={this.props.clearGoalDoc}
+          targetUserId={this.props.targetUserId}
         />
     )} else {
       return null
